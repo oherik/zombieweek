@@ -1,2 +1,2 @@
 # zombieweek
-This is the repository for group 8 in the development of our platform game "ZomebieWeek - Lv9". Written in Java. 
+This is the repository for group 8 in the development of our platform game "ZomebieWeek - Lv9”, as part of the course TDA367 in Lp4, 2015. Written in Java. 
