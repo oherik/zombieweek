@@ -1,8 +1,8 @@
-package edu.chl.change2projectname;
+package edu.chl.zombieweek;
 
-import edu.chl.change2projectname.controller.ProjectController;
-import edu.chl.change2projectname.model.Project;
-import edu.chl.change2projectname.view.ProjectView;
+import edu.chl.zombieweek.controller.ProjectController;
+import edu.chl.zombieweek.model.Project;
+import edu.chl.zombieweek.view.ProjectView;
 import javax.swing.SwingUtilities;
 
 /*

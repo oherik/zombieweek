@@ -1,7 +1,7 @@
-package edu.chl.change2projectname.controller;
+package edu.chl.zombieweek.controller;
 
-import edu.chl.change2projectname.model.Project;
-import edu.chl.change2projectname.view.ProjectView;
+import edu.chl.zombieweek.model.Project;
+import edu.chl.zombieweek.view.ProjectView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

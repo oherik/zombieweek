@@ -1,6 +1,6 @@
-package edu.chl.change2projectname.view;
+package edu.chl.zombieweek.view;
 
-import edu.chl.change2projectname.model.Project;
+import edu.chl.zombieweek.model.Project;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
