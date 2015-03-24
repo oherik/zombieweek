@@ -4,6 +4,11 @@
 *.ear
 *.class
 
+# lyx
+*.lyx~
+*.lyx#
+
+
 # eclipse specific git ignore
 *.pydevproject
 .project
