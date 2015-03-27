@@ -15,7 +15,7 @@
  </layer>
  <layer name="Eld" width="30" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt1CEBACAMAMG1oN36KyACZEBsghOn331GRH5kXqvY1tXV1X3ojibdnwYA6hwk6Owi
+   eJzt1EERACAMxMBzgbv6wSxFQquiNwx57Du/hKT4yGk5aLdr6CZdunSf7y4T96cBAMCcAhZ967w=
   </data>
  </layer>
  <layer name="ew" width="30" height="30">
@@ -26,6 +26,11 @@
  <layer name="tesst" width="30" height="30">
   <data encoding="base64" compression="zlib">
    eJztkcsOQEAMRe39j4S1R1h7hDW+hb927SYTpNMaJHqSs5jNvW0nCBRFUZQvEr5kyjCDOSwE+9YMG9jCjqmkd4arMf9TvSYLjBw67+rdubr7EX/rHRlODr0+iGFivKWddt4ZJawY+dK8Hg7ETMouLnnUzLtvQ80828WemfrHV5kU7Jl93OUIe2bJDl9mA66NSQw=
+  </data>
+ </layer>
+ <layer name="bnm" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzkERAAAIw7DJQSH6UcHBIzHQJmyq6wEAAOC9PuoOQP4Anw==
   </data>
  </layer>
 </map>
