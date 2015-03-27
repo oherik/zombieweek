@@ -51,5 +51,18 @@ public class ZombieWeek extends ApplicationAdapter {
 		batch.end();
 
 	}
-	
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
+		//Koden nedan kan man ha om man vill att spelvärlden utökas när man resizar
+		camera.setToOrtho(false, width / 32, height / 32);
+		//Koden nedan om man vill ha statiskt.
+		//camera.setToOrtho(false, 400 / 32, 400 / 32);
+
+
+
+
+	}
 }
