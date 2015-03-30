@@ -20,12 +20,13 @@ public class ZombieWeek extends ApplicationAdapter {
 	private TiledMap tiledMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private OrthographicCamera camera;
+	private float tileSize = 32;
 
 	@Override
 	public void create () {
 		//Ladda kartan
-		tiledMap =new TmxMapLoader().load("core/assets/Map/Test_v1.tmx");
-		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/32f);
+		tiledMap =new TmxMapLoader().load("core/assets/Map/Test_v2.tmx");
+		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
 
 		//Fixa kameran
 		float width = Gdx.graphics.getWidth();
@@ -57,7 +58,7 @@ public class ZombieWeek extends ApplicationAdapter {
 		// TODO Auto-generated method stub
 
 		//Koden nedan kan man ha om man vill att spelvärlden utökas när man resizar
-		camera.setToOrtho(false, width / 32, height / 32);
+		camera.setToOrtho(false, width / tileSize, height / tileSize);
 		//Koden nedan om man vill ha statiskt.
 		//camera.setToOrtho(false, 400 / 32, 400 / 32);
 
