@@ -1,5 +1,6 @@
 package edu.chalmers.zombie;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +22,8 @@ public class PlayerTest extends Sprite {
 
     @Override
     public void draw(Batch batch){
-
+        updateLocation(Gdx.graphics.getDeltaTime());
+        super.draw(batch);
     }
 
     public void updateLocation(float deltaTime){
