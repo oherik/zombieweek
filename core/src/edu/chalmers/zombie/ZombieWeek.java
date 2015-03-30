@@ -2,12 +2,10 @@ package edu.chalmers.zombie;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -21,6 +19,8 @@ public class ZombieWeek extends ApplicationAdapter {
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private OrthographicCamera camera;
 	private float tileSize = 32;
+
+	private PlayerTest player;
 
 	@Override
 	public void create () {
@@ -36,6 +36,9 @@ public class ZombieWeek extends ApplicationAdapter {
 
 		batch = new SpriteBatch();
 		img = new Texture("core/assets/zombie.png");
+
+		//Skapa spelare
+		player = new PlayerTest(new Sprite(new Texture("core/assets/player_professional_final_version.png")));
 	}
 
 	@Override
@@ -47,10 +50,15 @@ public class ZombieWeek extends ApplicationAdapter {
 		mapRenderer.setView(camera);
 		mapRenderer.render();
 
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	//	batch.begin();
+	//	batch.draw(img, 0, 0);
+	//	batch.end();
 
+		//Rita spelare
+		player.setScale(1/tileSize);
+		mapRenderer.getBatch().begin();
+		player.draw(mapRenderer.getBatch());
+		mapRenderer.getBatch().end();
 	}
 
 	@Override
