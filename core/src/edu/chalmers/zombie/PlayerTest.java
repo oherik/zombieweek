@@ -24,8 +24,9 @@ public class PlayerTest extends Sprite {
 
     }
 
-    public void updatePlayer(float f){
-        
+    public void updateLocation(float deltaTime){
+        setX(getX() + deltaTime * v.x);
+        setY(getY() + deltaTime * v.y);
     }
 
 
