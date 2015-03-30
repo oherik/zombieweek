@@ -26,6 +26,9 @@ local.properties
 .settings/
 .loadpath
 
+#odt
+~$*
+
 # External tool builders
 .externalToolBuilders/
 
