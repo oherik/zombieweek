@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="Woodland_Tileset" tilewidth="32" tileheight="32">
+  <image source="../Tiles/Woodland_Tileset.png" trans="000000" width="512" height="512"/>
+ </tileset>
+ <layer name="Floor" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKFL+v1jLMdAwVVTVVVVVVVVVVXV5w+B7JYm
+  </data>
+ </layer>
+ <layer name="Grass" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztz4EJACEQwLBbxf2X/B0U+YIpdICsmVkb19oxcNyLoxVHK45WHK04WnG04mjF0YqjFUcrjlYcrThave6oWU4ctm3btm3//QedhLKK
+  </data>
+ </layer>
+ <layer name="Wall" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztz7ENwCAAA0FGzdwME8IMpHmkO8mlix/jzNx7Qjs1f3xLdLToaNHRoqNFR4uOFh0tOlp0tOho0dGio0VHi46ed29FBgAAADf7AN40SYk=
+  </data>
+ </layer>
+ <layer name="Lake" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztz1cNgEAURFHUAQoABYAJigGKAYoBikRGwSabDXmQ3JPc/5koAgAAAAAAAAAAgI9YJY5Su2leMpU7KuymeeHHt5SqclTbTfudRrWqU73tlCCDGtWkZuMtIRa1qk3ttlOCHOpUl7qNtwAA8IYH2y8YtA==
+  </data>
+ </layer>
+ <layer name="Flower" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztlg0OgyAMhbnAhhdweP9TbktGUt+KFGW2ZX4JiQKhr/RHQ7jwSPwM69R0RsEebSIzuD1TYc0KVCPnS3725Aedi8y6dT9K87V8s0RNp/V8ykju3HpcUBO+T+G7Niz70XLXVv3AMW2se6oV9IM+W60PhIsP5p4HuHq23qs4OO34z+KBUjxwzRPeYnDhl7u2AAEeNEq5aQu4GJ53jmHNjFBD3mrHm17Eu/6RKNXvA961Y5ZeY1HWUCPfEXeneS6RsYVkD9qVzp9FCnJ/LZNzj/ohvdseMcAz9p7ZKx7YGywwC/cd1U5rG89aDp7N0RKzXv9i1FavuuVq6Nf0toWx8NzTjrK3jlp7l7Su/4HaXZyVl6iD2u0RL9orJPZLtOZozW6rfa0+gXbnsNaM75LzRsJaTxnlm5L1L0HPlycd+xIE
+  </data>
+ </layer>
+ <layer name="Tree" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztmVkKwzAMRH2tLhdI2wt0uYB9/wNUKhUY1ybCDrXUzoP5CPhjFC1YSQjrHEhHxTnrnEmX2SY24E56zDYBXuze2s820kkkpUzy7CEmnksxUwqfsSyk0yyDSngu5THEiq6k2yyDSngu1eLI8+Ghrhipm1o+UvBRV4zUDXvNYxD/HupKYK/iW3rGSx5K5L1zzyzBVx5a/EIM4Ptgv7AF9gsAAAAAWMfLN4U1vO6yJdgDgZbR3rWyO7Z6Vxufld2x1bva2VTujtZmc+9swmyuYy2/vSC/4J9A39oCfbsNVu6Do1i5D47i7V/CE87/LYo=
+  </data>
+ </layer>
+ <layer name="Stubbe" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt1UkKACEMRFGv08P9z9dCrxVBYyzqP3ArFchQChDvqu/ODgEAAKZwz5Hhqe/NDjFIKasb9hfwYxaANoc77lAjcqjcF5Wc6GOXtdHjcDTT9ztnRmF3rcioUKeqVf162j+7ROSN6nfmCI6i+v4DjlkH9Q==
+  </data>
+ </layer>
+ <layer name="Lakeclutter" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztzrENABAABED772QENjCCHXRKleRD7ia4UgAAAAAAgNeMdOCSmQ5c0tIBtp4OAEc1HQAAvrcAeMsEIw==
+  </data>
+ </layer>
+</map>
