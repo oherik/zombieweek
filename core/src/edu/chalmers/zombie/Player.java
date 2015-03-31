@@ -8,7 +8,7 @@ public class Player implements CreatureInterface {
     private int keyID;
 
     protected Player() {
-        
+
     }
 
     public void setLastKeyPressed(int keyID) {
