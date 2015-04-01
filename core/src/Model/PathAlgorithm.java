@@ -66,12 +66,12 @@ public class PathAlgorithm {
         while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            int x = currentNode.x;
-            int y = currentNode.y;
-
             if (currentNode == this.endPos)
                 return currentElement.getPath().iterator();
             else {
+                int x = currentNode.x;
+                int y = currentNode.y;
+                closedNodes[x][y] = true;
                 for (int i = Math.max(0, x - 1); i <= Math.min(width, x + 1); i++) {
                     for (int j = Math.max(0, y - 1); j <= Math.min(height, y + 1); j++) {
                         if (!closedNodes[i][j] == true && emptyTiles.getCell(i, j) != null) {//i.e. if it's null or false and is walkable
