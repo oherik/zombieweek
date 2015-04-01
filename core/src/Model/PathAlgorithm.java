@@ -74,8 +74,9 @@ public class PathAlgorithm {
                 closedNodes[x][y] = true;
                 for (int i = Math.max(0, x - 1); i <= Math.min(width, x + 1); i++) {
                     for (int j = Math.max(0, y - 1); j <= Math.min(height, y + 1); j++) {
-                        if (!closedNodes[i][j] == true && emptyTiles.getCell(i, j) != null) {//i.e. if it's null or false and is walkable
-                            double cost = calculateCost(currentElement, i, j);
+                        if (walkableTile(closedNodes, i, j)
+                                && noCornersCut(closedNodes, currentNode, i, j)) {
+                            int cost = calculateCost(currentElement, i, j);
                             ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
                             currentPath.add(currentNode);
                             queue.add(new QueueElement(new Point(i, j), cost, currentPath));
@@ -88,6 +89,33 @@ public class PathAlgorithm {
         return null;    //No path found
     }//calculatePath
 
+    /**Checks if the node in questions is walkable
+     * @param closedNodes the matrix of closed nodes
+     * @param x     The node's x variable
+     * @param y     The node's y variable
+     * @return  true if it's walkable, false if it isn't
+     */
+    private boolean walkableTile(boolean[][] closedNodes, int x, int y){
+        return !closedNodes[x][y] == true && emptyTiles.getCell(x, y) != null;
+    }
+
+
+    /**Checks if the path is walkable, i.e. no corners are cut
+     * @param closedNodes the matrix of closed nodes
+     * @param parent    The parent element
+     * @param x     The node's x variable
+     * @param y     The node's y variable
+     * @return true if it's walkable, false if it cuts corners
+     */
+    private boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y){
+        int parentX = parent.x;
+        int parentY = parent.y;
+        if(isDiagonal(parent, x, y))
+            return walkableTile(closedNodes, parentX, y) && walkableTile(closedNodes, x, parentY);
+        else
+            return true;
+    }
+
     /**
      * Calculates the cost for a node
      * @param parent    The parent element
@@ -96,17 +124,32 @@ public class PathAlgorithm {
      * @return      The cost of the node
      */
 
-    private double calculateCost(QueueElement parent, int x, int y){
+    private int calculateCost(QueueElement parent, int x, int y){
         Point node = parent.getNode();
         int parentX = node.x;
         int parentY = node.y;
         int h = 10 * (Math.abs(endPos.x - parentX) + Math.abs(endPos.y - parentY));     //Manhattan distance
-        double g;
-        if ((parentY == parentX - 1 && parentX == parentY - 1) || (parentY == parentX - 1 && parentX == parentY + 1) || (parentY == parentX + 1 && parentX == parentY - 1) || (parentY == parentX + 1 && parentX == parentY + 1)) {       //Diagonal
+        int g;
+        if(isDiagonal(node, x, y))
             g = parent.getCost() + 14;  // 10 * sqrt(2) is approx. 14
-        } else {
+         else
             g = parent.getCost() + 10;
-        }
        return h + g;
     } // calculateCost
+
+    /** Checks if a point is diagonal to the parent
+     *
+     * @param parentNode The parent node
+     * @param x     The node's x variable
+     * @param y     The node's y variable
+     * @return true if it is diagonal, false if it isn't
+     */
+    private boolean isDiagonal(Point parentNode, int x, int y){
+        int parentX = parentNode.x;
+        int parentY = parentNode.y;
+        return ((parentY == parentX - 1 && parentX == parentY - 1) ||
+               (parentY == parentX - 1 && parentX == parentY + 1) ||
+               (parentY == parentX + 1 && parentX == parentY - 1) ||
+               (parentY == parentX + 1 && parentX == parentY + 1));
+    }
 }
