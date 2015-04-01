@@ -17,18 +17,31 @@ public class PathAlgorithm {
      * Constructor
      *
      * @param emptyTiles The current map in which the player and the zombie are
+     *  @throws NullPointerException if emptyTiles is null
      */
 
     public PathAlgorithm(TiledMapTileLayer emptyTiles) {
-        this.emptyTiles = this.emptyTiles;
+        if (emptyTiles == null)
+            throw new NullPointerException("PathAlgorithm: the layer given cannot be null");
+        this.emptyTiles = emptyTiles;
     }
 
-    /**
+    /** The start function for calculating the shortest path between two points on the map.
+     * 
      * @param startPos The starting position (normally the zombie's position)
      * @param endPos   The end position (normally the player position)
+     * @return  the shortest path as an iterator over points
+     * @throws IndexOutOfBoundsException if the start or end position is negative
+     * @throws  NullPointerException    if either of the points is null
      */
 
     public Iterator<Point> getPath(Point startPos, Point endPos) {
+        if(startPos == null || endPos == null)
+            throw new NullPointerException("PathAlgorithm: the points given cannot be null");
+        if(startPos.y<0 || startPos.x <0)
+            throw new IndexOutOfBoundsException("PathAlgorithm: the start position must be positive");
+        if(endPos.x<0 || endPos.y<0)
+            throw new IndexOutOfBoundsException("PathAlgorithm: the end position must be positive");
         this.startPos = startPos;
         this.endPos = endPos;
         return calculatePath();
