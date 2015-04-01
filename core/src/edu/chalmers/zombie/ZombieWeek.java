@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import edu.chalmers.zombie.controller.InputController;
 
 public class ZombieWeek extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -21,6 +22,8 @@ public class ZombieWeek extends ApplicationAdapter {
 	private float tileSize = 32;
 
 	private PlayerTest player;
+
+    private InputController inputController;
 
 	@Override
 	public void create () {
@@ -39,6 +42,10 @@ public class ZombieWeek extends ApplicationAdapter {
 
 		//Skapa spelare
 		player = new PlayerTest(new Sprite(new Texture("core/assets/player_professional_final_version.png")));
+
+        //Set input controller
+        inputController = new InputController();
+        Gdx.input.setInputProcessor(inputController);
 	}
 
 	@Override
@@ -65,7 +72,7 @@ public class ZombieWeek extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
 
-		//Koden nedan kan man ha om man vill att spelvärlden utökas när man resizar
+		//Koden nedan kan man ha om man vill att spelvï¿½rlden utï¿½kas nï¿½r man resizar
 		camera.setToOrtho(false, width / tileSize, height / tileSize);
 		//Koden nedan om man vill ha statiskt.
 		//camera.setToOrtho(false, 400 / 32, 400 / 32);
