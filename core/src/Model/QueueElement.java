@@ -1,6 +1,7 @@
 package Model;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /** A helper class for PathAlgorithm. It's used in the priority queue.
  * Created by Erik on 2015-04-01.
@@ -8,14 +9,23 @@ import java.awt.*;
 public class QueueElement implements Comparable<QueueElement>{
     private Point node;
     private double cost;
+    ArrayList<Point> path;
 
-    public QueueElement(Point node, double cost){
+    /**
+     *  Constructor
+     * @param node  Current node
+     * @param cost  The cost to that node
+     * @param path  The path to that node
+     */
+
+    public QueueElement(Point node, double cost, ArrayList<Point> path){
         if(node == null)
             throw new NullPointerException("QueueElement: node cannot be null");
         if(node.getX()<0 || node.getY() < 0)
             throw new IndexOutOfBoundsException("QueueElement: x and y values must be positive");
         this.node = node;
         this.cost = cost;
+        this.path = path;
     }
 
     /**
@@ -25,6 +35,14 @@ public class QueueElement implements Comparable<QueueElement>{
 
     public double getCost() {
         return cost;
+    }
+
+    /**
+     *
+     * @return the path to the node
+     */
+    public ArrayList<Point> getPath() {
+        return path;
     }
 
     /**
