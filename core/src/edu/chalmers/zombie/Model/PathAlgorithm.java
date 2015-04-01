@@ -60,26 +60,44 @@ public class PathAlgorithm {
         int width = emptyTiles.getWidth();
         int height = emptyTiles.getHeight();
         boolean[][] closedNodes = new boolean[width][height];
-
-        queue.add(new QueueElement(this.startPos, 0, new ArrayList<Point>()));
+        int[][] gCost = new int[width][height];
+        int[][] hCost = new int[width][height];
+        queue.add(new QueueElement(this.startPos, 0, 0, new ArrayList<Point>()));
 
         while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            if (currentNode == this.endPos)
+            //System.out.println(currentNode.x + ", "+ currentNode.y);
+            if (currentNode.equals(this.endPos))
                 return currentElement.getPath().iterator();
             else {
                 int x = currentNode.x;
                 int y = currentNode.y;
                 closedNodes[x][y] = true;
-                for (int i = Math.max(0, x - 1); i <= Math.min(width, x + 1); i++) {
-                    for (int j = Math.max(0, y - 1); j <= Math.min(height, y + 1); j++) {
+                for(int i = 0; i<height; i++){
+                    for(int j = 0; j<width; j ++)
+                        System.out.print(gCost[j][i] + hCost[j][i] +"\t");
+                    System.out.println("");
+                }
+                System.out.println("\n");
+                for (int i = Math.max(0, x - 1); i <= Math.min(width-1, x + 1); i++) {
+                    for (int j = Math.max(0, y - 1); j <= Math.min(height-1, y + 1); j++) {
                         if (walkableTile(closedNodes, i, j)
                                 && noCornersCut(closedNodes, currentNode, i, j)) {
-                            int cost = calculateCost(currentElement, i, j);
-                            ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
-                            currentPath.add(currentNode);
-                            queue.add(new QueueElement(new Point(i, j), cost, currentPath));
+                            int g;
+                            int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
+                            if(isDiagonal(currentNode, i, j))
+                                g = currentElement.getGCost() + 14;  // 10 * sqrt(2) is approx. 14
+                            else
+                                g = currentElement.getGCost() + 10;
+                            if(gCost[i][j]==0 || gCost[i][j] > g) {
+                                ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
+                                currentPath.add(currentNode);
+                                queue.add(new QueueElement(new Point(i, j), g, h, currentPath));
+                                gCost[i][j]=g;
+                            }
+
+                            hCost[i][j]=h;
                         }
                     }
                 }
@@ -116,26 +134,6 @@ public class PathAlgorithm {
             return true;
     }
 
-    /**
-     * Calculates the cost for a node
-     * @param parent    The parent element
-     * @param x     The node's x variable
-     * @param y     The node's y variable
-     * @return      The cost of the node
-     */
-
-    private int calculateCost(QueueElement parent, int x, int y){
-        Point node = parent.getNode();
-        int parentX = node.x;
-        int parentY = node.y;
-        int h = 10 * (Math.abs(endPos.x - parentX) + Math.abs(endPos.y - parentY));     //Manhattan distance
-        int g;
-        if(isDiagonal(node, x, y))
-            g = parent.getCost() + 14;  // 10 * sqrt(2) is approx. 14
-         else
-            g = parent.getCost() + 10;
-       return h + g;
-    } // calculateCost
 
     /** Checks if a point is diagonal to the parent
      *
@@ -147,9 +145,9 @@ public class PathAlgorithm {
     private boolean isDiagonal(Point parentNode, int x, int y){
         int parentX = parentNode.x;
         int parentY = parentNode.y;
-        return ((parentY == parentX - 1 && parentX == parentY - 1) ||
-               (parentY == parentX - 1 && parentX == parentY + 1) ||
-               (parentY == parentX + 1 && parentX == parentY - 1) ||
-               (parentY == parentX + 1 && parentX == parentY + 1));
+        return(x == parentX - 1 && y == parentY - 1) ||
+                (x == parentX - 1 && y == parentY + 1) ||
+                (x == parentX + 1 && y == parentY - 1) ||
+                (x == parentX + 1 && y == parentY + 1);
     }
 }

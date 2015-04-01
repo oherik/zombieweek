@@ -8,17 +8,18 @@ import java.util.ArrayList;
  */
 public class QueueElement implements Comparable<QueueElement>{
     private Point node;
-    private int cost;
+    private int g, h;
     ArrayList<Point> path;
 
     /**
      *  Constructor
      * @param node  Current node
-     * @param cost  The cost to that node
+     * @param g  The g cost to that node
+    * @param h  The h cost to that node
      * @param path  The path to that node
      */
 
-    public QueueElement(Point node, int cost, ArrayList<Point> path){
+    public QueueElement(Point node, int g, int h, ArrayList<Point> path){
         if(node == null)
             throw new NullPointerException("QueueElement: node cannot be null");
         if(node.getX()<0 || node.getY() < 0)
@@ -28,7 +29,16 @@ public class QueueElement implements Comparable<QueueElement>{
             this.path = new ArrayList<Point>();
         else
             this.path = path;
-        this.cost = cost;
+        this.g = g;
+        this.h= h;
+    }
+
+    public int getGCost(){
+        return g;
+    }
+
+    public int getHCost(){
+        return h;
     }
 
     /**
@@ -37,7 +47,7 @@ public class QueueElement implements Comparable<QueueElement>{
      */
 
     public int getCost() {
-        return cost;
+        return g + h;
     }
 
     /**
@@ -70,7 +80,7 @@ public class QueueElement implements Comparable<QueueElement>{
         if (otherElement == null)
             throw new NullPointerException(
                     "QueueElement: Cannot compare with something that is null");
-        return Double.compare(this.cost, otherElement.getCost());
+        return Double.compare(this.getCost(), otherElement.getCost());
     }
 
 }
