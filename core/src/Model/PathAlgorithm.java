@@ -62,14 +62,7 @@ public class PathAlgorithm {
                 for (int i = Math.max(0, x - 1); i <= Math.min(width, x + 1); i++) {
                     for (int j = Math.max(0, y - 1); j <= Math.min(height, y + 1); j++) {
                         if (!closedNodes[i][j] == true && emptyTiles.getCell(i, j) != null) {//i.e. if it's null or false and is walkable
-                            int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
-                            double g;
-                            if ((j == x - 1 && i == y - 1) || (j == x - 1 && i == y + 1) || (j == x + 1 && i == y - 1) || (j == x + 1 && i == y + 1)) {       //Diagonal
-                                g = currentElement.getCost() + 14;  // 10 * sqrt(2) is approx. 14
-                            } else {
-                                g = currentElement.getCost() + 10;
-                            }
-                            double cost = h + g;
+                            double cost = calculateCost(currentElement, i, j);
                             ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
                             currentPath.add(currentNode);
                             queue.add(new QueueElement(new Point(i, j), cost, currentPath));
@@ -81,4 +74,26 @@ public class PathAlgorithm {
         }
         return null;    //No path found
     }//calculatePath
+
+    /**
+     * Calculates the cost for a node
+     * @param parent    The parent element
+     * @param x     The node's x variable
+     * @param y     The node's y variable
+     * @return      The cost of the node
+     */
+
+    private double calculateCost(QueueElement parent, int x, int y){
+        Point node = parent.getNode();
+        int parentX = node.x;
+        int parentY = node.y;
+        int h = 10 * (Math.abs(endPos.x - parentX) + Math.abs(endPos.y - parentY));     //Manhattan distance
+        double g;
+        if ((parentY == parentX - 1 && parentX == parentY - 1) || (parentY == parentX - 1 && parentX == parentY + 1) || (parentY == parentX + 1 && parentX == parentY - 1) || (parentY == parentX + 1 && parentX == parentY + 1)) {       //Diagonal
+            g = parent.getCost() + 14;  // 10 * sqrt(2) is approx. 14
+        } else {
+            g = parent.getCost() + 10;
+        }
+       return h + g;
+    } // calculateCost
 }
