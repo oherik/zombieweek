@@ -24,8 +24,11 @@ public class QueueElement implements Comparable<QueueElement>{
         if(node.getX()<0 || node.getY() < 0)
             throw new IndexOutOfBoundsException("QueueElement: x and y values must be positive");
         this.node = node;
+        if(path == null)
+            this.path = new ArrayList<Point>();
+        else
+            this.path = path;
         this.cost = cost;
-        this.path = path;
     }
 
     /**
