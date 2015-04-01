@@ -41,17 +41,25 @@ public class PathTest extends ApplicationAdapter {
     private ShapeRenderer shapeDebugger;
     private Point start, end;
     private Pixmap pixmap;
+    private int map;
     private Texture pathTexture;
+
+
+    public PathTest(int i){
+       map = i;
+    }
 
 
 
     @Override
     public void create () {
+        if(map==1)
+            tiledMap =new TmxMapLoader().load("core/assets/Map/Test_path.tmx");
+        else  if(map==2)
+            tiledMap =new TmxMapLoader().load("core/assets/Map/Test_path_2.tmx");
+        else
+            tiledMap =new TmxMapLoader().load("core/assets/Map/Test_pat_3.tmx");
 
-        //Ladda kartan
-        //tiledMap =new TmxMapLoader().load("core/assets/Map/Test_path.tmx");
-        //tiledMap =new TmxMapLoader().load("core/assets/Map/Test_path_2.tmx");
-        tiledMap =new TmxMapLoader().load("core/assets/Map/Test_path_3.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
 
         //Fixa kameran
