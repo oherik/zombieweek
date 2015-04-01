@@ -74,7 +74,8 @@ public class PathAlgorithm {
                 closedNodes[x][y] = true;
                 for (int i = Math.max(0, x - 1); i <= Math.min(width, x + 1); i++) {
                     for (int j = Math.max(0, y - 1); j <= Math.min(height, y + 1); j++) {
-                        if (!closedNodes[i][j] == true && emptyTiles.getCell(i, j) != null) {//i.e. if it's null or false and is walkable
+                        if (walkableTile(closedNodes, i, j)
+                                && noCornersCut(closedNodes, currentNode, i, j)) {
                             double cost = calculateCost(currentElement, i, j);
                             ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
                             currentPath.add(currentNode);
@@ -87,6 +88,37 @@ public class PathAlgorithm {
         }
         return null;    //No path found
     }//calculatePath
+
+    /**Checks if the node in questions is walkable
+     * @param closedNodes the matrix of closed nodes
+     * @param x     The node's x variable
+     * @param y     The node's y variable
+     * @return  true if it's walkable, false if it isn't
+     */
+    private boolean walkableTile(boolean[][] closedNodes, int x, int y){
+        return !closedNodes[x][y] == true && emptyTiles.getCell(x, y) != null;
+    }
+
+
+    /**Checks if the path is walkable, i.e. no corners are cut
+     * @param closedNodes the matrix of closed nodes
+     * @param parent    The parent element
+     * @param x     The node's x variable
+     * @param y     The node's y variable
+     * @return true if it's walkable, false if it cuts corners
+     */
+    private boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y){
+        int parentX = parent.x;
+        int parentY = parent.y;
+
+        if(x == parentX && (y == parentY + 1 || y == parentY - 1))
+                return true;
+
+        else if (y == parentY && (x == parentX + 1 || x == parentX - 1))
+                return true;
+
+        return walkableTile(closedNodes, parentX, y) && walkableTile(closedNodes, x, parentY);
+    }
 
     /**
      * Calculates the cost for a node
