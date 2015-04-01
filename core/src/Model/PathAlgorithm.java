@@ -110,14 +110,10 @@ public class PathAlgorithm {
     private boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y){
         int parentX = parent.x;
         int parentY = parent.y;
-
-        if(x == parentX && (y == parentY + 1 || y == parentY - 1))
-                return true;
-
-        else if (y == parentY && (x == parentX + 1 || x == parentX - 1))
-                return true;
-
-        return walkableTile(closedNodes, parentX, y) && walkableTile(closedNodes, x, parentY);
+        if(isDiagonal(parentX, parentY, x, y))
+            return walkableTile(closedNodes, parentX, y) && walkableTile(closedNodes, x, parentY);
+        else
+            return true;
     }
 
     /**
@@ -134,11 +130,17 @@ public class PathAlgorithm {
         int parentY = node.y;
         int h = 10 * (Math.abs(endPos.x - parentX) + Math.abs(endPos.y - parentY));     //Manhattan distance
         double g;
-        if ((parentY == parentX - 1 && parentX == parentY - 1) || (parentY == parentX - 1 && parentX == parentY + 1) || (parentY == parentX + 1 && parentX == parentY - 1) || (parentY == parentX + 1 && parentX == parentY + 1)) {       //Diagonal
+        if(isDiagonal(parentX, parentY, x, y))
             g = parent.getCost() + 14;  // 10 * sqrt(2) is approx. 14
-        } else {
+         else
             g = parent.getCost() + 10;
-        }
        return h + g;
     } // calculateCost
+
+    private boolean isDiagonal(int parentX, int parentY, int x, int y){
+       return ((parentY == parentX - 1 && parentX == parentY - 1) ||
+               (parentY == parentX - 1 && parentX == parentY + 1) ||
+               (parentY == parentX + 1 && parentX == parentY - 1) ||
+               (parentY == parentX + 1 && parentX == parentY + 1));
+    }
 }
