@@ -61,25 +61,17 @@ public class PathAlgorithm {
         int height = emptyTiles.getHeight();
         boolean[][] closedNodes = new boolean[width][height];
         int[][] gCost = new int[width][height];
-        int[][] hCost = new int[width][height];
         queue.add(new QueueElement(this.startPos, 0, 0, new ArrayList<Point>()));
 
         while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            //System.out.println(currentNode.x + ", "+ currentNode.y);
             if (currentNode.equals(this.endPos))
                 return currentElement.getPath().iterator();
             else {
                 int x = currentNode.x;
                 int y = currentNode.y;
                 closedNodes[x][y] = true;
-                for(int i = 0; i<height; i++){
-                    for(int j = 0; j<width; j ++)
-                        System.out.print(gCost[j][i] + hCost[j][i] +"\t");
-                    System.out.println("");
-                }
-                System.out.println("\n");
                 for (int i = Math.max(0, x - 1); i <= Math.min(width-1, x + 1); i++) {
                     for (int j = Math.max(0, y - 1); j <= Math.min(height-1, y + 1); j++) {
                         if (walkableTile(closedNodes, i, j)
@@ -96,8 +88,6 @@ public class PathAlgorithm {
                                 queue.add(new QueueElement(new Point(i, j), g, h, currentPath));
                                 gCost[i][j]=g;
                             }
-
-                            hCost[i][j]=h;
                         }
                     }
                 }
