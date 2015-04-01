@@ -137,6 +137,13 @@ public class PathAlgorithm {
        return h + g;
     } // calculateCost
 
+    /** Checks if a point is diagonal to the parent
+     *
+     * @param parentNode The parent node
+     * @param x     The node's x variable
+     * @param y     The node's y variable
+     * @return true if it is diagonal, false if it isn't
+     */
     private boolean isDiagonal(Point parentNode, int x, int y){
         int parentX = parentNode.x;
         int parentY = parentNode.y;
