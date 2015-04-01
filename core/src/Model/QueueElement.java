@@ -28,7 +28,6 @@ public class QueueElement implements Comparable<QueueElement>{
     }
 
     /**
-     *
      * @return the specified node
      */
 
