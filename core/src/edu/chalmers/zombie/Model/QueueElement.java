@@ -1,4 +1,4 @@
-package Model;
+package edu.chalmers.zombie.Model;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class QueueElement implements Comparable<QueueElement>{
     private Point node;
-    private double cost;
+    private int cost;
     ArrayList<Point> path;
 
     /**
@@ -18,7 +18,7 @@ public class QueueElement implements Comparable<QueueElement>{
      * @param path  The path to that node
      */
 
-    public QueueElement(Point node, double cost, ArrayList<Point> path){
+    public QueueElement(Point node, int cost, ArrayList<Point> path){
         if(node == null)
             throw new NullPointerException("QueueElement: node cannot be null");
         if(node.getX()<0 || node.getY() < 0)
@@ -36,7 +36,7 @@ public class QueueElement implements Comparable<QueueElement>{
      * @return the cost of the path to the node
      */
 
-    public double getCost() {
+    public int getCost() {
         return cost;
     }
 

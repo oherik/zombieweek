@@ -1,4 +1,4 @@
-package Model;
+package edu.chalmers.zombie.Model;
 
 import java.awt.*;
 import java.util.*;
