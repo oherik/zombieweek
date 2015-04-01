@@ -76,7 +76,7 @@ public class PathAlgorithm {
                     for (int j = Math.max(0, y - 1); j <= Math.min(height, y + 1); j++) {
                         if (walkableTile(closedNodes, i, j)
                                 && noCornersCut(closedNodes, currentNode, i, j)) {
-                            double cost = calculateCost(currentElement, i, j);
+                            int cost = calculateCost(currentElement, i, j);
                             ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
                             currentPath.add(currentNode);
                             queue.add(new QueueElement(new Point(i, j), cost, currentPath));
@@ -124,12 +124,12 @@ public class PathAlgorithm {
      * @return      The cost of the node
      */
 
-    private double calculateCost(QueueElement parent, int x, int y){
+    private int calculateCost(QueueElement parent, int x, int y){
         Point node = parent.getNode();
         int parentX = node.x;
         int parentY = node.y;
         int h = 10 * (Math.abs(endPos.x - parentX) + Math.abs(endPos.y - parentY));     //Manhattan distance
-        double g;
+        int g;
         if(isDiagonal(parentX, parentY, x, y))
             g = parent.getCost() + 14;  // 10 * sqrt(2) is approx. 14
          else
