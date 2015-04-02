@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.testing;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import edu.chalmers.zombie.PlayerTest;
 import edu.chalmers.zombie.controller.InputController;
 
 public class CollisionTest extends ApplicationAdapter {

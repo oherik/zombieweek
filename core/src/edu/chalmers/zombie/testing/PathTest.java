@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.testing;
 
 /**
  * Created by Erik on 2015-04-01.
@@ -17,7 +17,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import edu.chalmers.zombie.PlayerTest;
 import com.badlogic.gdx.graphics.Color;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import edu.chalmers.zombie.controller.InputController;
+import edu.chalmers.zombie.testing.PlayerTest;
 
 public class ZombieWeek extends ApplicationAdapter {
 	SpriteBatch batch;

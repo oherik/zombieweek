@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.model.level;
+package edu.chalmers.zombie.testing;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;

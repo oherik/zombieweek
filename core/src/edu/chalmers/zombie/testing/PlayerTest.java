@@ -1,4 +1,4 @@
-package edu.chalmers.zombie;
+package edu.chalmers.zombie.testing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
