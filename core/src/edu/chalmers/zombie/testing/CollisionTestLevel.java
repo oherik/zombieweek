@@ -28,13 +28,13 @@ public class CollisionTestLevel {
 
     public Point coordinatesToTile(Point coordinates){
         int x = Math.round(coordinates.x / tileSize);   //Vill ha som int istället för float.
-        int y = Math.round((mapHeight * tileSize - coordinates.y) / tileSize); //Måste flippa, 0,0 är längst ner till vänster i libGDX men högst upp till vänster i Tiled
+        int y = Math.round(coordinates.y / tileSize); //Måste flippa, 0,0 är längst ner till vänster i libGDX men högst upp till vänster i Tiled
         return new Point(x,y);
     }
 
     public Point tileToCoordinates(Point tile){
         int x = Math.round(tile.x * tileSize);
-        int y = Math.round(tileSize*(mapHeight-tile.y));
+        int y = Math.round(tile.y * tileSize);
         return new Point(x,y);
     }
 

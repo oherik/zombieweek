@@ -73,7 +73,7 @@ public class PathTest extends ApplicationAdapter {
         //Skapa spelare
         player = new PlayerTest(new Sprite(new Texture("core/assets/player_professional_final_version.png")));
 
-        algo = new PathAlgorithm( (TiledMapTileLayer) tiledMap.getLayers().get("Grass"));
+      //  algo = new PathAlgorithm( (TiledMapTileLayer) tiledMap.getLayers().get("Grass"));
 
         start = new Point(1,2);
         end = new Point(5, 2);

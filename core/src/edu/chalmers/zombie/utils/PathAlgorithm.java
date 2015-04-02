@@ -110,7 +110,7 @@ public class PathAlgorithm {
      * @return  true if it's walkable, false if it isn't
      */
     private boolean walkableTile(boolean[][] closedNodes, int x, int y){
-        return !closedNodes[x][y] == true && (metaLayer.getCell(x, y) == null || !metaLayer.getCell(x, y).getTile().getProperties().equals(this.collision));
+        return !closedNodes[x][y] == true && (metaLayer.getCell(x, y) == null || (metaLayer.getCell(x,  y).getTile().getProperties().get(this.collision) == null));
     }
 
 
