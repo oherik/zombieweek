@@ -2,6 +2,8 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Direction;
 
 /**
  * Controller to handle all inputs
@@ -10,27 +12,39 @@ import com.badlogic.gdx.InputProcessor;
  */
 public class InputController implements InputProcessor{
 
+    GameModel gameModel;
+
+    public InputController(){
+
+        gameModel = new GameModel();
+
+    }
+
 
 
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode){
-            case Input.Keys.UP:
-                //move north
-                break;
-            case Input.Keys.DOWN:
-                //move south
-                break;
-            case Input.Keys.RIGHT:
-                //move east
-                break;
-            case Input.Keys.LEFT:
-                //move west
-                break;
             case Input.Keys.W:
-                //aim left
+                //move north
+                gameModel.movePlayer(Direction.NORTH);
                 break;
             case Input.Keys.S:
+                //move south
+                gameModel.movePlayer(Direction.SOUTH);
+                break;
+            case Input.Keys.D:
+                //move east
+                gameModel.movePlayer(Direction.EAST);
+                break;
+            case Input.Keys.A:
+                //move west
+                gameModel.movePlayer(Direction.WEST);
+                break;
+            case Input.Keys.UP:
+                //aim left
+                break;
+            case Input.Keys.DOWN:
                 //aim right
                 break;
             case Input.Keys.SPACE:
@@ -44,7 +58,7 @@ public class InputController implements InputProcessor{
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.W || keycode == Input.Keys.S){
+        if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
             //set aiming force to zero
         } else {return false;}
         return true;
