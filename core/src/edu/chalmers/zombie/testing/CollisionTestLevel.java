@@ -14,6 +14,7 @@ public class CollisionTestLevel {
     private TiledMap tiledMap;
     private TiledMapTileLayer meta;
     private float tileSize, mapHeight, mapWidth;
+    private String collisionString;
 
     public CollisionTestLevel(){
         tiledMap =new TmxMapLoader().load("core/assets/Map/Test_collision.tmx");    //hämta testkartan
@@ -22,6 +23,7 @@ public class CollisionTestLevel {
         tileSize = meta.getTileWidth();
         mapHeight = meta.getHeight();
         mapWidth = meta.getWidth();
+        collisionString = "collision";
     }
 
     public Point coordinatesToTile(Point coordinates){
@@ -35,4 +37,6 @@ public class CollisionTestLevel {
     public TiledMap getMap(){ return this.tiledMap; }
 
     public float getTileSize(){ return this.tileSize; }
+
+    public String getCollisionString(){ return this.collisionString;}
 }
