@@ -51,13 +51,13 @@ public class Player implements CreatureInterface {
     }
 
     @Override
-    public void setGraphic(Body body) {
+    public void setBody(Body body) {
 
         playerBody = body;
     }
 
     @Override
-    public Body getGraphic() {
+    public Body getBody() {
 
         return playerBody;
     }

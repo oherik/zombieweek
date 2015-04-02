@@ -28,7 +28,15 @@ public interface CreatureInterface {
      */
     boolean hasBeenAttacked();
 
-    void setGraphic(Body body);
+    /**
+     * A method which sets the graphical representation of the creature.
+     * @param body Body
+     */
+    void setBody(Body body);
 
-    Body getGraphic();
+    /**
+     * A method which returns the graphical representation of the creature.
+     * @return Body
+     */
+    Body getBody();
 }
