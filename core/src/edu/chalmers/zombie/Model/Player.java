@@ -1,19 +1,54 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.*;
+import edu.chalmers.zombie.utils.Constants;
+
+
+import edu.chalmers.zombie.utils.Direction;
 
 /**
  * Created by neda on 2015-03-31.
+ * Modified by Tobias
  */
 public class Player implements CreatureInterface {
 
-    private int keyID;
+    private Direction direction;
     private int killCount;
     private int lives;
     private boolean isAttacked;
     private Body playerBody;
+    private World world;
+    private int width;
+    private int height;
+    private int x;
+    private int y;
 
-    protected Player() {
+
+    protected Player(World world, int x, int y) {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+
+        width = Constants.TILE_SIZE;
+        height = Constants.TILE_SIZE;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x,y);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width, height);
+
+        FixtureDef fixDef = new FixtureDef();
+        fixDef.shape = shape;
+        fixDef.density = (float)Math.pow(width, height);
+        fixDef.restitution = .1f;
+        fixDef.friction = .5f;
+
+        playerBody = world.createBody(bodyDef);
+        playerBody.createFixture(fixDef);
+
+
 
     }
 
@@ -28,9 +63,20 @@ public class Player implements CreatureInterface {
     }
 
     @Override
-    public void move(int keyID) {
+    public void move(Direction direction) {
 
-        // TODO: use Enum and controller here
+        switch (direction){
+            case NORTH: y+=1;
+                break;
+            case SOUTH: y-=1;
+                break;
+            case WEST: x-=1;
+                break;
+            case EAST: x+=1;
+                break;
+            default:
+                break;
+        }
     }
 
     public void attack(Zombie zombie) {

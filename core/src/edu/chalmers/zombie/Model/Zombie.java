@@ -1,5 +1,7 @@
 package edu.chalmers.zombie.model;
 
+import edu.chalmers.zombie.utils.Direction;
+
 /**
  * Created by neda on 2015-03-31.
  */
@@ -19,7 +21,7 @@ public abstract class Zombie implements CreatureInterface {
     }
 
     @Override
-    public void move(int keyID) {
+    public void move(Direction direction) {
 
     }
 

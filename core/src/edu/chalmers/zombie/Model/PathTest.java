@@ -19,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import edu.chalmers.zombie.PlayerTest;
 import com.badlogic.gdx.graphics.Color;
+import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
 import java.util.Iterator;

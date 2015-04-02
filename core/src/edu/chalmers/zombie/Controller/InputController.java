@@ -6,7 +6,7 @@ import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Direction;
 
 /**
- * Controller to handle all inputs
+ * controller to handle all inputs
  *
  * Created by Tobias on 15-04-01.
  */
