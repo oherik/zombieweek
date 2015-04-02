@@ -60,7 +60,7 @@ public class PathAlgorithm {
         int width = emptyTiles.getWidth();
         int height = emptyTiles.getHeight();
         boolean[][] closedNodes = new boolean[width][height];
-        int[][] gCost = new int[width][height];
+        int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
         queue.add(new QueueElement(this.startPos, 0, 0, new ArrayList<Point>()));
 
         while (!queue.isEmpty()) {
@@ -82,11 +82,11 @@ public class PathAlgorithm {
                                 g = currentElement.getGCost() + 14;  // 10 * sqrt(2) is approx. 14
                             else
                                 g = currentElement.getGCost() + 10;
-                            if(gCost[i][j]==0 || gCost[i][j] > g) {
+                            if(gCost[i][j]< g) {        //Since the g value is below 0 this works. Otherwise it would have to be == 0 || < 0
                                 ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
                                 currentPath.add(currentNode);
                                 queue.add(new QueueElement(new Point(i, j), g, h, currentPath));
-                                gCost[i][j]=g;
+                                gCost[i][j]=-g;
                             }
                         }
                     }
