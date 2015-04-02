@@ -9,8 +9,7 @@ public abstract class Zombie implements CreatureInterface {
 
     public abstract int getSpeed();
 
-    @Override
-    public abstract void attack();
+    public abstract void attack(Player player);
 
     @Override
     public void move(int keyID) {
@@ -18,12 +17,13 @@ public abstract class Zombie implements CreatureInterface {
     }
 
     @Override
-    public boolean isKnockedOut(boolean isKnockedOut) {
-        return false;
+    public void KnockOut() {
+
+        // TODO: remove zombie
     }
 
     @Override
-    public boolean hasBeenAttacked(boolean isAttacked) {
+    public boolean hasBeenAttacked() {
         return false;
     }
 }

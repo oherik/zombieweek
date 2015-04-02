@@ -6,50 +6,45 @@ package edu.chalmers.zombie;
 public class Player implements CreatureInterface {
 
     private int keyID;
+    private int killCount;
+    private int lives;
+    private boolean isAttacked;
+    private boolean isKnockedOut;
 
     protected Player() {
 
     }
 
-    public void setLastKeyPressed(int keyID) {
+    private int getKillCount() {
 
-        this.keyID = keyID;
+        return killCount;
     }
 
-    public int getLastKeyPressed() {
+    private void incKillCount() {
 
-        return keyID;
+        killCount = killCount + 1;
     }
 
     @Override
     public void move(int keyID) {
 
-        switch (keyID) {
-            case 1: // Move avatar UP; setLastKeyPressed;
-                break;
-            case 2: // Move avatar LEFT; setLastKeyPressed;
-                break;
-            case 3: // Move avatar DOWN; setLastKeyPressed;
-                break;
-            case 4: // Move avatar RIGHT; setLastKeyPressed;
-                break;
-            default: // Do absolutely nothing
-                break;
-        }
+        // TODO: use Enum and controller here
+    }
+
+    public void attack(Zombie zombie) {
+
+        // TODO: fill in with attack of zombie instance
     }
 
     @Override
-    public void attack() {
+    public void KnockOut() {
 
+        // TODO: game over
     }
 
     @Override
-    public boolean isKnockedOut(boolean isKnockedOut) {
-        return false;
-    }
+    public boolean hasBeenAttacked() {
 
-    @Override
-    public boolean hasBeenAttacked(boolean isAttacked) {
-        return false;
+        return isAttacked;
     }
 }

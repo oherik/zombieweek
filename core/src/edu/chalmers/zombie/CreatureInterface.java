@@ -16,21 +16,13 @@ public interface CreatureInterface {
      * as well as whether the attack is effective
      * (registers attacks).
      */
-    void attack();
 
-    /**
-     * A method to check whether a creature has been
-     * knocked out depending on whether it has been
-     * attacked.
-     * @param isKnockedOut (boolean)
-     * @return true if knocked out, false if not
-     */
-    boolean isKnockedOut(boolean isKnockedOut);
+    void KnockOut();
 
     /**
      * A method to check whether a creature has been attacked.
      * @param isAttacked (boolean)
      * @return true if creature has been attacked, false if not
      */
-    boolean hasBeenAttacked(boolean isAttacked);
+    boolean hasBeenAttacked();
 }
