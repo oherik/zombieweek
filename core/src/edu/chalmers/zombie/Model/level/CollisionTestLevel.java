@@ -26,8 +26,12 @@ public class CollisionTestLevel {
 
     public Point coordinatesToTile(Point coordinates){
         int x = coordinates.x / tileSize;
-        int y =((mapHeight * tileSize - coordinates.y) / tileSize); //Måste flippa, 0,0 är längst enr till vänster i libGDX men högst upp till vänster i Tiled
+        int y =((mapHeight * tileSize - coordinates.y) / tileSize); //Måste flippa, 0,0 är längst ner till vänster i libGDX men högst upp till vänster i Tiled
         return new Point(x,y);
     }
+
+    public TiledMapTileLayer getMeta(){ return this.meta; }
+
+    public TiledMap getMap(){ return this.tiledMap; }
 
 }
