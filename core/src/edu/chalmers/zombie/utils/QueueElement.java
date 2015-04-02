@@ -1,4 +1,5 @@
-package edu.chalmers.zombie.model;
+
+package edu.chalmers.zombie.utils;
 
 import java.awt.*;
 import java.util.ArrayList;
