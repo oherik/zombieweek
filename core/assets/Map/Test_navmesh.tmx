@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="Woodland_Tileset" tilewidth="32" tileheight="32">
+  <image source="../Tiles/Woodland_Tileset.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="257" name="navmesh" tilewidth="32" tileheight="32">
+  <tile id="0">
+   <image width="32" height="32" source="../Tiles/mesh.png"/>
+  </tile>
+ </tileset>
+ <layer name="navmesh" width="15" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjZGRgYCQBIwNS9KGbgctMXACXXlLsopZeQm4kpJeY8CVkLy634AtnQuqJ0YvNjcTGL6G4JyYssLmBHL+Tm3ZpgQEtIgFB
+  </data>
+ </layer>
+ <layer name="grass" width="15" height="15">
+  <data encoding="base64" compression="zlib">
+   eJyNU9sJwEAI0xEygqO4/1Kl0A9JE/EjcKCJ8XGIiCbgCM5/3zkAob3VyaGxaSsfKeorL+yd89rE2vDqQ4oYv1mzTLypHgxH1eGZO24R97IXCJ05A7eXjN2H4yL+vaqe3c1tfLVzvg13I9f/ccUDl/4Vkg==
+  </data>
+ </layer>
+ <layer name="walls" width="15" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBh4wE0EpsRsauslxo349BKykxh7cbmFEKAkXLmRaFL0IqvHFk64zMPlV3xsdLcSa9dAAgDuPQJI
+  </data>
+ </layer>
+ <layer name="water" width="15" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYCANpAFxOhCbkagPGYSN6h3WetMo0DsSAQDeewQa
+  </data>
+ </layer>
+</map>
