@@ -12,18 +12,11 @@ import java.io.InputStreamReader;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        System.out.println("För att starta pathfindingtest, skriv 'p1', 'p2' eller 'p3' och tryck enter. \n" +
-                "För att starta kollisiontest skriv 'c'.\n Annars tryck bara enter.");
+        System.out.println("För att starta kollision-/pathfindingtest skriv 't'.\n Annars tryck bara enter.");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try{
             String s = br.readLine();
-            if(s.equals("p1"))
-                new LwjglApplication(new PathTest(1), config);
-            else if(s.equals("p2"))
-                new LwjglApplication(new PathTest(2), config);
-            else if(s.equals("p3"))
-                new LwjglApplication(new PathTest(3), config);
-            else if(s.equals("c"))
+             if(s.equals("t"))
                 new LwjglApplication(new CollisionTest(), config);
             else
                 new LwjglApplication(new ZombieWeek(), config);
