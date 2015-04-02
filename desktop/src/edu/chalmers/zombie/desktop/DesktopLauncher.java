@@ -2,6 +2,7 @@ package edu.chalmers.zombie.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import edu.chalmers.zombie.testing.CollisionTest;
 import edu.chalmers.zombie.testing.PathTest;
 import edu.chalmers.zombie.ZombieWeek;
 
@@ -11,7 +12,8 @@ import java.io.InputStreamReader;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        System.out.println("För att starta pathfindingtest, skriv 'p1', 'p2' eller 'p3' och tryck enter. Annars tryck bara enter.");
+        System.out.println("För att starta pathfindingtest, skriv 'p1', 'p2' eller 'p3' och tryck enter. \n" +
+                "För att starta kollisiontest skriv 'c'.\n Annars tryck bara enter.");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try{
             String s = br.readLine();
@@ -21,6 +23,8 @@ public class DesktopLauncher {
                 new LwjglApplication(new PathTest(2), config);
             else if(s.equals("p3"))
                 new LwjglApplication(new PathTest(3), config);
+            else if(s.equals("c"))
+                new LwjglApplication(new CollisionTest(), config);
             else
                 new LwjglApplication(new ZombieWeek(), config);
         }catch(java.io.IOException e){
