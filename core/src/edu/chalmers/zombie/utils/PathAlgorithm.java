@@ -19,6 +19,7 @@ public class PathAlgorithm {
      * Constructor
      *
      * @param metaLayer The current map in which the player and the zombie are
+     * @param collision The property for collision in the meta layer
      *  @throws NullPointerException if either of metaLayer or collision is null
      */
 
