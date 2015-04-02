@@ -1,4 +1,7 @@
-package edu.chalmers.zombie;
+package edu.chalmers.zombie.model;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * Created by neda on 2015-03-31.
@@ -21,8 +24,11 @@ public interface CreatureInterface {
 
     /**
      * A method to check whether a creature has been attacked.
-     * @param isAttacked (boolean)
      * @return true if creature has been attacked, false if not
      */
     boolean hasBeenAttacked();
+
+    void setGraphic(Body body);
+
+    Body getGraphic();
 }

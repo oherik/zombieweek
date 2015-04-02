@@ -1,4 +1,6 @@
-package edu.chalmers.zombie;
+package edu.chalmers.zombie.model;
+
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * Created by neda on 2015-03-31.
@@ -9,7 +11,7 @@ public class Player implements CreatureInterface {
     private int killCount;
     private int lives;
     private boolean isAttacked;
-    private boolean isKnockedOut;
+    private Body playerBody;
 
     protected Player() {
 
@@ -47,4 +49,18 @@ public class Player implements CreatureInterface {
 
         return isAttacked;
     }
+
+    @Override
+    public void setGraphic(Body body) {
+
+        playerBody = body;
+    }
+
+    @Override
+    public Body getGraphic() {
+
+        return playerBody;
+    }
+
+
 }
