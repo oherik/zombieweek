@@ -11,20 +11,24 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
  * This is the class which handles the path finding for the zombies. It uses A*, which is a modified version of Dijkstra's algorithm.
  */
 public class PathAlgorithm {
-    private TiledMapTileLayer emptyTiles;
+    private TiledMapTileLayer metaLayer;
     private Point startPos, endPos;
+    private String collision;
 
     /**
      * Constructor
      *
-     * @param emptyTiles The current map in which the player and the zombie are
-     *  @throws NullPointerException if emptyTiles is null
+     * @param metaLayer The current map in which the player and the zombie are
+     *  @throws NullPointerException if either of metaLayer or collision is null
      */
 
-    public PathAlgorithm(TiledMapTileLayer emptyTiles) {
-        if (emptyTiles == null)
+    public PathAlgorithm(TiledMapTileLayer metaLayer, String collision) {
+        if (metaLayer == null)
             throw new NullPointerException("PathAlgorithm: the layer given cannot be null");
-        this.emptyTiles = emptyTiles;
+        if (collision == null)
+            throw new NullPointerException("PathAlgorithm: the collision alias given cannot be null");
+        this.metaLayer = metaLayer;
+        this.collision = collision;
     }
 
     /** The start function for calculating the shortest path between two points on the map.
@@ -58,8 +62,8 @@ public class PathAlgorithm {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
         ArrayList<Point> path;
         QueueElement currentElement;
-        int width = emptyTiles.getWidth();
-        int height = emptyTiles.getHeight();
+        int width = metaLayer.getWidth();
+        int height = metaLayer.getHeight();
         boolean[][] closedNodes = new boolean[width][height];
         int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
         queue.add(new QueueElement(this.startPos, 0, 0, new ArrayList<Point>()));
@@ -105,7 +109,7 @@ public class PathAlgorithm {
      * @return  true if it's walkable, false if it isn't
      */
     private boolean walkableTile(boolean[][] closedNodes, int x, int y){
-        return !closedNodes[x][y] == true && emptyTiles.getCell(x, y) != null;
+        return !closedNodes[x][y] == true && !metaLayer.getCell(x, y).getTile().getProperties().equals(this.collision);
     }
 
 
