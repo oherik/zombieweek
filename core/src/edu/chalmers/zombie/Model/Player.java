@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.model;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -10,7 +11,7 @@ import edu.chalmers.zombie.utils.Direction;
  * Created by neda on 2015-03-31.
  * Modified by Tobias
  */
-public class Player implements CreatureInterface {
+public class Player extends Sprite implements CreatureInterface {
 
     private Direction direction;
     private int killCount;
@@ -24,10 +25,14 @@ public class Player implements CreatureInterface {
     private int y;
 
 
-    protected Player(World world, int x, int y) {
+    protected Player(Sprite sprite, World world, int x, int y) {
+        super(sprite);
+
         this.world = world;
         this.x = x;
         this.y = y;
+
+        updatePosition();
 
         width = Constants.TILE_SIZE;
         height = Constants.TILE_SIZE;
@@ -77,6 +82,13 @@ public class Player implements CreatureInterface {
             default:
                 break;
         }
+
+        updatePosition();
+    }
+
+    private void updatePosition(){
+        setY((float)y);
+        setX((float)x);
     }
 
     public void attack(Zombie zombie) {

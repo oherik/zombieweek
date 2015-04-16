@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import edu.chalmers.zombie.controller.InputController;
+import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.testing.PlayerTest;
 
 public class ZombieWeek extends ApplicationAdapter {
@@ -22,7 +23,8 @@ public class ZombieWeek extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	private float tileSize = 32;
 
-	private PlayerTest player;
+	private PlayerTest playerTest;
+    private Player player;
 
     private InputController inputController;
 
@@ -42,11 +44,16 @@ public class ZombieWeek extends ApplicationAdapter {
 		img = new Texture("core/assets/zombie.png");
 
 		//Skapa spelare
-		player = new PlayerTest(new Sprite(new Texture("core/assets/player_professional_final_version.png")));
+		playerTest = new PlayerTest(new Sprite(new Texture("core/assets/player_professional_final_version.png")));
+
+
 
         //Set input controller
         inputController = new InputController();
         Gdx.input.setInputProcessor(inputController);
+        //Gdx.input.setInputProcessor(playerTest);
+
+        player = inputController.getPlayer();
 	}
 
 	@Override
@@ -63,10 +70,15 @@ public class ZombieWeek extends ApplicationAdapter {
 	//	batch.end();
 
 		//Rita spelare
-		player.setScale(1/tileSize);
+		//playerTest.setScale(1 / tileSize);
+        player.setScale(1/tileSize);
 		mapRenderer.getBatch().begin();
-		player.draw(mapRenderer.getBatch());
-		mapRenderer.getBatch().end();
+		//playerTest.draw(mapRenderer.getBatch());
+        player.draw(mapRenderer.getBatch());
+        mapRenderer.getBatch().end();
+
+
+
 	}
 
 	@Override
@@ -82,4 +94,11 @@ public class ZombieWeek extends ApplicationAdapter {
 
 
 	}
+
+    @Override
+    public void dispose(){
+
+        playerTest.getTexture().dispose();
+
+    }
 }

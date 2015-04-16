@@ -3,6 +3,7 @@ package edu.chalmers.zombie.controller;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.utils.Direction;
 
 /**
@@ -18,6 +19,14 @@ public class InputController implements InputProcessor{
 
         gameModel = new GameModel();
 
+    }
+
+    /**
+     * Temporary method to get player
+     * @return player
+     */
+    public Player getPlayer(){
+        return gameModel.getPlayer();
     }
 
 

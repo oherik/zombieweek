@@ -1,5 +1,7 @@
 package edu.chalmers.zombie.model;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.Player;
@@ -15,9 +17,7 @@ public class GameModel {
 
     public GameModel(){
         world = new World(new Vector2(), true);
-        player = new Player(world,5,5);
-        world = new World(new Vector2(),true);
-
+        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),world,1,1);
     }
 
     public Player getPlayer(){
@@ -27,7 +27,7 @@ public class GameModel {
     public World getWorld(){return world; }
 
     public void movePlayer(Direction direction){
-        //player.move(direction);
+        player.move(direction);
     }
 
 }
