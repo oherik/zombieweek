@@ -51,7 +51,6 @@ public class ZombieWeek extends ApplicationAdapter {
         //Set input controller
         inputController = new InputController();
         Gdx.input.setInputProcessor(inputController);
-        //Gdx.input.setInputProcessor(playerTest);
 
         player = inputController.getPlayer();
 	}
@@ -60,6 +59,10 @@ public class ZombieWeek extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.position.set(player.getX() + tileSize/2, player.getY() + tileSize/2, 0); //player is tileSize/2 from origin
+        camera.update();
+
 
 //Rita kartan
 		mapRenderer.setView(camera);
