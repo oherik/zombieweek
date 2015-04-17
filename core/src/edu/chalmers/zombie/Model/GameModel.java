@@ -29,7 +29,7 @@ public class GameModel {
         currentLevel = 0;
         world = new ArrayList<World>();
         world.add( new World(new Vector2(), true));
-        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),world.get(0),1,1);
+        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),world.get(0),0,0);
         tiledMap = new ArrayList<TiledMap>();
         tiledMap.add(new TmxMapLoader().load("core/assets/Map/Test_v2.tmx"));
     }
@@ -74,4 +74,7 @@ public class GameModel {
         player.move(direction);
     }
 
+    public void setWorld(World world){
+        this.world.set(this.currentLevel, world);
+    }
 }

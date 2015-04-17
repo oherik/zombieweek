@@ -11,7 +11,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import edu.chalmers.zombie.controller.InputController;
+import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.testing.PlayerTest;
 
@@ -24,12 +26,14 @@ public class ZombieWeek extends ApplicationAdapter {
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private OrthographicCamera camera;
 	private float tileSize = 32;
+    private Box2DDebugRenderer boxDebug;
 
 
 	private PlayerTest playerTest;
     private Player player;
 
     private InputController inputController;
+    private MapController mapController;
 
 	@Override
 	public void create () {
@@ -37,9 +41,15 @@ public class ZombieWeek extends ApplicationAdapter {
         inputController = new InputController();
         Gdx.input.setInputProcessor(inputController);
 
+        //Set map controller
+        mapController = new MapController();
+
 		//Ladda första kartan
-		tiledMap = inputController.getMap(0);
+		tiledMap = mapController.getMap(0);
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
+
+        //Lägg till kollisionsobjekt
+        mapController.createObstacles("meta", "collision");
 
 		//Fixa kameran
 		float width = Gdx.graphics.getWidth();
@@ -50,13 +60,11 @@ public class ZombieWeek extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("core/assets/zombie.png");
 
-        //Skapa en box2d-World av de lagren som innehåller något.
-        metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get("meta");                //hämta data för kollision etc
-        metaLayer.setVisible(false);                                                     //ska inte ritas ut
-
-
-
         player = inputController.getPlayer();
+        player.scale(1/tileSize);
+        //Skapa en box debugger
+        boxDebug = new Box2DDebugRenderer();
+
 	}
 
 	@Override
@@ -64,7 +72,7 @@ public class ZombieWeek extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(player.getX() + tileSize/2, player.getY() + tileSize/2, 0); //player is tileSize/2 from origin
+        camera.position.set(player.getX() + tileSize/2 - tileSize/2+0.5f, player.getY() + tileSize/2- tileSize/2+0.5f, 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();
 
 
@@ -78,11 +86,13 @@ public class ZombieWeek extends ApplicationAdapter {
 
 		//Rita spelare
 		//playerTest.setScale(1 / tileSize);
-        player.setScale(1/tileSize);
 		mapRenderer.getBatch().begin();
 		//playerTest.draw(mapRenderer.getBatch());
         player.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
+
+        //rita box2d debug
+        boxDebug.render(mapController.getWorld(), camera.combined);
 
 
 

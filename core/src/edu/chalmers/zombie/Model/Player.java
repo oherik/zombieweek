@@ -39,7 +39,7 @@ public class Player extends Sprite implements CreatureInterface {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x,y);
+        bodyDef.position.set(x+0.5f,y+0.5f);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width/2/Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
@@ -58,6 +58,11 @@ public class Player extends Sprite implements CreatureInterface {
 
 
     }
+    public void scale(float scale) {
+        setSize(getWidth() * scale, getHeight() * scale);
+        updatePosition();
+    }
+
 
     private int getKillCount() {
 
