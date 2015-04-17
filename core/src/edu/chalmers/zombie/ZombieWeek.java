@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import edu.chalmers.zombie.controller.InputController;
@@ -19,9 +20,11 @@ public class ZombieWeek extends ApplicationAdapter {
 	Texture img;
 
 	private TiledMap tiledMap;
+    private TiledMapTileLayer metaLayer;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private OrthographicCamera camera;
 	private float tileSize = 32;
+
 
 	private PlayerTest playerTest;
     private Player player;
@@ -30,8 +33,12 @@ public class ZombieWeek extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		//Ladda kartan
-		tiledMap =new TmxMapLoader().load("core/assets/Map/Test_v2.tmx");
+        //Set input controller
+        inputController = new InputController();
+        Gdx.input.setInputProcessor(inputController);
+
+		//Ladda första kartan
+		tiledMap = inputController.getMap(0);
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
 
 		//Fixa kameran
@@ -43,14 +50,11 @@ public class ZombieWeek extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("core/assets/zombie.png");
 
-		//Skapa spelare
-		playerTest = new PlayerTest(new Sprite(new Texture("core/assets/player_professional_final_version.png")));
+        //Skapa en box2d-World av de lagren som innehåller något.
+        metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get("meta");                //hämta data för kollision etc
+        metaLayer.setVisible(false);                                                     //ska inte ritas ut
 
 
-
-        //Set input controller
-        inputController = new InputController();
-        Gdx.input.setInputProcessor(inputController);
 
         player = inputController.getPlayer();
 	}
@@ -101,7 +105,7 @@ public class ZombieWeek extends ApplicationAdapter {
     @Override
     public void dispose(){
 
-        playerTest.getTexture().dispose();
+        player.getTexture().dispose();
 
     }
 }
