@@ -49,6 +49,8 @@ public class Player extends Sprite implements CreatureInterface {
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
+        fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE;
 
         playerBody = world.createBody(bodyDef);
         playerBody.createFixture(fixDef);

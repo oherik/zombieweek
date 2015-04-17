@@ -35,7 +35,6 @@ public class MapController {
         metaLayer.setVisible(false);
         float tileSize = Constants.TILE_SIZE;
         float ppM = Constants.PIXELS_PER_METER;
-        short collision  = Constants.COLLISION_OBSTACLE;
 
         for(int row = 0; row < metaLayer.getHeight(); row++){       //TODO onödigt att gå igenom allt?
             for(int col = 0; col < metaLayer.getWidth(); col++){
@@ -48,7 +47,8 @@ public class MapController {
                         PolygonShape shape = new PolygonShape();
                         shape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
                         fixDef.shape = shape;
-                        fixDef.filter.categoryBits = collision;
+                        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
+                        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
                         world.createBody(bodyDef).createFixture(fixDef);
                     }
 
