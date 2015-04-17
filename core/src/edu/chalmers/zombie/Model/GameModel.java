@@ -44,6 +44,10 @@ public class GameModel {
         return tiledMap.get(levelIndex);
     }
 
+    public TiledMap getMap(){
+        return tiledMap.get(currentLevel);
+    }
+
     public TiledMap getNextMap(){
         if(this.currentLevel ==this.tiledMap.size()-1)
             throw new IndexOutOfBoundsException("GameModel: already at last indexed map");
