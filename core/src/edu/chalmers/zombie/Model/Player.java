@@ -21,11 +21,11 @@ public class Player extends Sprite implements CreatureInterface {
     private World world;
     private int width;
     private int height;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
 
 
-    protected Player(Sprite sprite, World world, int x, int y) {
+    protected Player(Sprite sprite, World world, float x, float y) {
         super(sprite);
 
         this.world = world;
@@ -39,7 +39,7 @@ public class Player extends Sprite implements CreatureInterface {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x+0.5f,y+0.5f);
+        bodyDef.position.set(x,y);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width/2/Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
