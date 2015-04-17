@@ -18,15 +18,16 @@ import java.util.ArrayList;
 public class GameModel {
 
     private Player player;
-    private World world;
+    private ArrayList<World> world;
     private ArrayList<TiledMap> tiledMap;
     private TiledMapTileLayer metaLayer;
     private int currentLevel;
 
     public GameModel(){
         currentLevel = 0;
-        world = new World(new Vector2(), true);
-        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),world,1,1);
+        world = new ArrayList<World>();
+        world.add( new World(new Vector2(), true));
+        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),world.get(0),1,1);
         tiledMap = new ArrayList<TiledMap>();
         tiledMap.add(new TmxMapLoader().load("core/assets/Map/Test_v2.tmx"));
     }
@@ -35,7 +36,7 @@ public class GameModel {
         return player;
     }
 
-    public World getWorld(){return world; }
+    public World getWorld(){return world.get(currentLevel); }
 
     public TiledMap getMap(int levelIndex){
         if(levelIndex >= tiledMap.size())
