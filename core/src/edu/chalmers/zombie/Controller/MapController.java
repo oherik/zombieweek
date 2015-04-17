@@ -15,9 +15,9 @@ import edu.chalmers.zombie.model.GameModel;
 public class MapController {
     GameModel gameModel;
 
-    public MapController(GameModel gameModel){
+    public MapController(){
 
-        this.gameModel = gameModel;
+        this.gameModel = GameModel.getInstance();
 
     }
 

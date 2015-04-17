@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.model;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -17,19 +18,24 @@ import java.util.ArrayList;
  */
 public class GameModel {
 
+    private static GameModel instance = new GameModel();
     private Player player;
     private ArrayList<World> world;
     private ArrayList<TiledMap> tiledMap;
     private TiledMapTileLayer metaLayer;
     private int currentLevel;
 
-    public GameModel(){
+    private GameModel(){
         currentLevel = 0;
         world = new ArrayList<World>();
         world.add( new World(new Vector2(), true));
         player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),world.get(0),1,1);
         tiledMap = new ArrayList<TiledMap>();
         tiledMap.add(new TmxMapLoader().load("core/assets/Map/Test_v2.tmx"));
+    }
+
+    public static GameModel getInstance( ) {
+        return instance;
     }
 
     public Player getPlayer(){

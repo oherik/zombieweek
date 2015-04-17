@@ -18,7 +18,7 @@ public class InputController implements InputProcessor{
 
     public InputController(){
 
-        gameModel = new GameModel();
+        gameModel = GameModel.getInstance();
 
     }
 
