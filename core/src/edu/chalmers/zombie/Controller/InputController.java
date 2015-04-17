@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.utils.Direction;
@@ -28,8 +29,6 @@ public class InputController implements InputProcessor{
     public Player getPlayer(){
         return gameModel.getPlayer();
     }
-
-
 
     @Override
     public boolean keyDown(int keycode) {
