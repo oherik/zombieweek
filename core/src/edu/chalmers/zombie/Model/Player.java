@@ -39,14 +39,14 @@ public class Player extends Sprite implements CreatureInterface {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x,y);
+        bodyDef.position.set(x+0.5f,y+0.5f);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width, height);
+        shape.setAsBox(width/2/Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
 
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width, height);
+        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
 

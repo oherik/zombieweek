@@ -3,11 +3,10 @@ package edu.chalmers.zombie.controller;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Created by Erik on 2015-04-17.
@@ -34,7 +33,9 @@ public class MapController {
         fixDef.friction = 0;
         TiledMapTileLayer metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName);
         metaLayer.setVisible(false);
-        float tileSize = metaLayer.getTileHeight(); //kvadratiska tiles, så det  fungerar
+        float tileSize = Constants.TILE_SIZE;
+        float ppM = Constants.PIXELS_PER_METER;
+        short collision  = Constants.COLLISION_OBSTACLE;
 
         for(int row = 0; row < metaLayer.getHeight(); row++){       //TODO onödigt att gå igenom allt?
             for(int col = 0; col < metaLayer.getWidth(); col++){
@@ -42,21 +43,19 @@ public class MapController {
                     if(currentCell != null &&
                             currentCell.getTile()!=null &&
                             currentCell.getTile().getProperties().get(collisionProperty) != null ) {     //om allt detta stämmer är det en kollisionstile
-                            bodyDef.position.set((col+0.5f) / tileSize , (row+0.5f) / tileSize); // Måste ta +0.5 då de ska vara i mitten
+                            bodyDef.position.set((col + 0.5f) * tileSize /ppM , (row + 0.5f) * tileSize /ppM);
 
-                        ChainShape chainShape = new ChainShape();
-                        Vector2[] corners = new Vector2[3];
-                        corners[0] = new Vector2(-tileSize / 2, -tileSize / 2);     //nere vänster
-                        corners[1] = new Vector2(-tileSize / 2, tileSize / 2);      //uppe vänster
-                        corners[2] = new Vector2(tileSize / 2, tileSize / 2);       //uppe höger
-                        chainShape.createChain(corners);
-                        fixDef.shape = chainShape;
+                        PolygonShape shape = new PolygonShape();
+                        shape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
+                        fixDef.shape = shape;
+                        fixDef.filter.categoryBits = collision;
                         world.createBody(bodyDef).createFixture(fixDef);
-
                     }
 
             }
         }
+
+        gameModel.setWorld(world);  //TODO oklart om det behövs
 
 
     }
