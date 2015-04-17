@@ -6,5 +6,10 @@ package edu.chalmers.zombie.utils;
 public class Constants {
 
     public static final int TILE_SIZE = 32;
-    public static final float PIXELS_PER_METER = 100;
+    public static final float PIXELS_PER_METER = 32;
+
+    //Kollisionshantering
+    public static final short COLLISION_PLAYER = 2;
+    public static final short COLLISION_OBSTACLE  = 4;
+
 }
