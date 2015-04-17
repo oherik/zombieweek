@@ -25,7 +25,7 @@ public class Player extends Sprite implements CreatureInterface {
     private int y;
 
 
-    protected Player(Sprite sprite, World world, int x, int y) {
+    public Player(Sprite sprite, World world, int x, int y) {
         super(sprite);
 
         this.world = world;
