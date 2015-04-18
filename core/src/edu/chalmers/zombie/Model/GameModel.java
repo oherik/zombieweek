@@ -103,7 +103,7 @@ public class GameModel {
      * @return  The next map in order
      * @throws  IndexOutOfBoundsException if the current map is the last
      */
-    public TiledMap getNextMap(){
+    public TiledMap getNextLevel(){
         if(this.currentLevel ==this.levels.size()-1)
             throw new IndexOutOfBoundsException("GameModel: already at last indexed map");
         currentLevel+=1;
@@ -119,7 +119,13 @@ public class GameModel {
             throw new IndexOutOfBoundsException("GameModel: already at first indexed map");
         currentLevel-=1;
         return this.levels.get(currentLevel).getMap();
+    }
 
+    /**
+     * @return  The index for the current level
+     */
+    public int getCurrentLevelIndex(){
+        return this.currentLevel;
     }
 
     /**
