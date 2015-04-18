@@ -45,7 +45,7 @@ public interface CreatureInterface {
      * A method which sets the graphical representation of the creature.
      * @param sprite Sprite
      */
-    void setBody(Sprite sprite);
+    void setSprite(Sprite sprite);
 
     /**
      * A method which returns the graphical representation of the creature.
