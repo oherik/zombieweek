@@ -59,12 +59,6 @@ public class GameModel {
         return player;
     }
 
-
-    /**
-     * @return  The current world
-     */
-    public World getWorld(){return levels.get(currentLevel).getWorld(); }
-
     /**
      * @return  The current level
      */
@@ -82,43 +76,25 @@ public class GameModel {
     }
 
     /**
-     * @return  The map specified by an index
-     * @throws  IndexOutOfBoundsException if the index is non-valid
+     * @return  The next levél in order
+     * @throws  IndexOutOfBoundsException if the current level is the last
      */
-    public TiledMap getMap(int levelIndex){
-        if(levelIndex >= levels.size())
-            throw new IndexOutOfBoundsException("GameModel: getMap index exceeds array size");
-        currentLevel = levelIndex;
-        return levels.get(levelIndex).getMap();
-    }
-
-    /**
-     * @return  The current map
-     */
-    public TiledMap getMap(){
-        return levels.get(currentLevel).getMap();
-    }
-
-    /**
-     * @return  The next map in order
-     * @throws  IndexOutOfBoundsException if the current map is the last
-     */
-    public TiledMap getNextLevel(){
+    public Level getNextLevel(){
         if(this.currentLevel ==this.levels.size()-1)
-            throw new IndexOutOfBoundsException("GameModel: already at last indexed map");
+            throw new IndexOutOfBoundsException("GameModel: already at last indexed level");
         currentLevel+=1;
-        return this.levels.get(currentLevel).getMap();
+        return this.levels.get(currentLevel);
     }
 
     /**
-     * @return  The previous map in order
+     * @return  The previous level in order
      * @throws  IndexOutOfBoundsException if the current map is the first
      */
-    public TiledMap getPreviousMap(){
+    public Level getPreviousMap(){
         if(this.currentLevel == 0)
-            throw new IndexOutOfBoundsException("GameModel: already at first indexed map");
+            throw new IndexOutOfBoundsException("GameModel: already at first indexed level");
         currentLevel-=1;
-        return this.levels.get(currentLevel).getMap();
+        return this.levels.get(currentLevel);
     }
 
     /**
