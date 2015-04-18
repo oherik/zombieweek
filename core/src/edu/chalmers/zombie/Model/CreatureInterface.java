@@ -11,7 +11,7 @@ public interface CreatureInterface {
 
     /**
      * A method which controls creature movement.
-     * @param keyID id number of key pressed
+     * @param keyID id number of key pressed        //TODO keyID?
      */
     void move(Direction direction);
 
@@ -30,14 +30,26 @@ public interface CreatureInterface {
     boolean hasBeenAttacked();
 
     /**
-     * A method which sets the graphical representation of the creature.
+     * A method which sets the physical representation of the creature.
      * @param body Body
      */
     void setBody(Body body);
 
     /**
-     * A method which returns the graphical representation of the creature.
+     * A method which returns the physical representation of the creature.
      * @return Body
      */
     Body getBody();
+
+    /**
+     * A method which sets the graphical representation of the creature.
+     * @param sprite Sprite
+     */
+    void setBody(Sprite sprite);
+
+    /**
+     * A method which returns the graphical representation of the creature.
+     * @return Sprite
+     */
+    Body getSprite();
 }
