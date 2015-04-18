@@ -23,17 +23,17 @@ public class MapController {
      * @param levelIndex    The index in which the level is stored in the model
      * @return the world which is found at the given index
      */
-    public TiledMap getMap(int levelIndex){return gameModel.getMap(levelIndex);}
+    public TiledMap getMap(int levelIndex){return gameModel.getLevel(levelIndex).getMap();}
 
     /**
      * @return the current map from the model
      */
-    public TiledMap getMap(){return gameModel.getMap();}
+    public TiledMap getMap(){return gameModel.getLevel().getMap();}
 
     /**
      * @return the current world from the model
      */
-    public World getWorld(){return gameModel.getWorld();}
+    public World getWorld(){return gameModel.getLevel().getWorld();}
 
     /**
      * This function creates all the box2d obstacles. The obstacles are (at the moment, this might change in the future)
