@@ -1,6 +1,8 @@
 package edu.chalmers.zombie.model;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -50,7 +52,7 @@ public class Player extends Sprite implements CreatureInterface {
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
 
         playerBody = world.createBody(bodyDef);
         playerBody.createFixture(fixDef);
@@ -126,6 +128,11 @@ public class Player extends Sprite implements CreatureInterface {
 
         return playerBody;
     }
+    @Override
+    public void draw(Batch batch){
+        super.draw(batch);
+        playerBody.setTransform(x+0.5f,y+0.5f,0);
 
+    }
 
 }

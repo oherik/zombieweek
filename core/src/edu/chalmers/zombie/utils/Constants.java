@@ -11,5 +11,6 @@ public class Constants {
     //Kollisionshantering
     public static final short COLLISION_PLAYER = 2;
     public static final short COLLISION_OBSTACLE  = 4;
+    public static final short COLLISION_ZOMBIE  = 8;
 
 }

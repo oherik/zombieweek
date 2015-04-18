@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.utils.ZWContactListener;
 
 import java.io.FileNotFoundException;
 
@@ -27,6 +28,7 @@ public class Level {
         if(tiledMap == null)
             throw new NullPointerException("Level: incorrect path name");
         world = new World(new Vector2(), true);
+        world.setContactListener(new ZWContactListener());
     }
 
     /**

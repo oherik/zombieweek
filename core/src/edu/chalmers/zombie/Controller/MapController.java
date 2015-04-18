@@ -54,6 +54,7 @@ public class MapController {
         World world = getWorld();
         TiledMap tiledMap = getMap();
         BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         FixtureDef fixDef = new FixtureDef();
         fixDef.restitution = .1f;
         fixDef.friction = 0;
@@ -75,7 +76,7 @@ public class MapController {
                         shape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
                         fixDef.shape = shape;
                         fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
-                        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
+                        fixDef.filter.maskBits = Constants.COLLISION_PLAYER | Constants.COLLISION_ZOMBIE;
                         world.createBody(bodyDef).createFixture(fixDef);
                     }
 
