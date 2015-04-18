@@ -20,18 +20,23 @@ public class GameModel {
 
     private static GameModel instance = new GameModel();
     private Player player;
-    private ArrayList<World> world;
-    private ArrayList<TiledMap> tiledMap;
+    private ArrayList<Level> levels;
     private TiledMapTileLayer metaLayer;
     private int currentLevel;
 
     private GameModel(){
         currentLevel = 0;
-        world = new ArrayList<World>();
-        world.add( new World(new Vector2(), true));
-        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),world.get(0),0,0);
-        tiledMap = new ArrayList<TiledMap>();
-        tiledMap.add(new TmxMapLoader().load("core/assets/Map/Test_v2.tmx"));
+        levels = new ArrayList<Level>();
+        addTestLevel();                                 //TODO debug
+        addTestPlayer();
+    }
+
+    private void addTestLevel(){
+        levels.add(new Level("core/assets/Map/Test_v2.tmx"));
+    }
+
+    private void addTestPlayer(){
+        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),levels.get(0).getWorld(),0,0);
     }
 
     public static GameModel getInstance( ) {
@@ -42,39 +47,44 @@ public class GameModel {
         return player;
     }
 
-    public World getWorld(){return world.get(currentLevel); }
+    public World getWorld(){return levels.get(currentLevel).getWorld(); }
+
+    public Level getLevel(){return levels.get(currentLevel); }
+
+    public Level getLevel(int levelIndex){
+        if(levelIndex >= levels.size())
+            throw new IndexOutOfBoundsException("GameModel: the getLevel index exceeds array size");
+        currentLevel = levelIndex;
+        return levels.get(levelIndex);
+    }
 
     public TiledMap getMap(int levelIndex){
-        if(levelIndex >= tiledMap.size())
+        if(levelIndex >= levels.size())
             throw new IndexOutOfBoundsException("GameModel: getMap index exceeds array size");
         currentLevel = levelIndex;
-        return tiledMap.get(levelIndex);
+        return levels.get(levelIndex).getMap();
     }
 
     public TiledMap getMap(){
-        return tiledMap.get(currentLevel);
+        return levels.get(currentLevel).getMap();
     }
 
     public TiledMap getNextMap(){
-        if(this.currentLevel ==this.tiledMap.size()-1)
+        if(this.currentLevel ==this.levels.size()-1)
             throw new IndexOutOfBoundsException("GameModel: already at last indexed map");
         currentLevel+=1;
-        return this.tiledMap.get(currentLevel);
+        return this.levels.get(currentLevel).getMap();
     }
 
     public TiledMap getPreviousMap(){
         if(this.currentLevel == 0)
             throw new IndexOutOfBoundsException("GameModel: already at first indexed map");
         currentLevel-=1;
-        return this.tiledMap.get(currentLevel);
+        return this.levels.get(currentLevel).getMap();
 
     }
 
     public void movePlayer(Direction direction){
         player.move(direction);
-    }
-
-    public void setWorld(World world){
-        this.world.set(this.currentLevel, world);
     }
 }
