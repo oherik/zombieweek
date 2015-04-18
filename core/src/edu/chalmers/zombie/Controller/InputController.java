@@ -3,9 +3,16 @@ package edu.chalmers.zombie.controller;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.PathAlgorithm;
+
+import java.awt.*;
+import java.util.Iterator;
 
 /**
  * controller to handle all inputs
@@ -101,4 +108,20 @@ public class InputController implements InputProcessor{
     public boolean scrolled(int amount) {
         return false;
     }
+
+    /**
+     * For debug only
+     * @param start
+     * @param end
+     * @param metaLayerName
+     * @param collisionProperty
+     */
+   private void drawPath(Point start, Point end ,String metaLayerName, String collisionProperty){       //TODO ej klar
+        World world = gameModel.getLevel().getWorld();
+        TiledMap tiledMap =  gameModel.getLevel().getMap();
+        BodyDef bodyDef = new BodyDef();
+        PathAlgorithm pA = new PathAlgorithm((TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName), collisionProperty);
+        Iterator<Point> it = pA.getPath(start, end);
+    }
+
 }
