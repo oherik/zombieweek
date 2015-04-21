@@ -23,6 +23,7 @@ public class GameModel {
     private ArrayList<Level> levels;
     private TiledMapTileLayer metaLayer;
     private int currentLevel;
+    private ArrayList<Book> books = new ArrayList<Book>();
 
 
     private GameModel(){
@@ -110,5 +111,13 @@ public class GameModel {
      */
     public void movePlayer(Direction direction){
         player.move(direction);
+    }
+
+    public ArrayList<Book> getBooks(){
+        return books;
+    }
+
+    public void addBook(Book book){
+        books.add(book);
     }
 }

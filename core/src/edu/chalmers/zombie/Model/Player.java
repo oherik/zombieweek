@@ -17,7 +17,7 @@ import edu.chalmers.zombie.utils.Direction;
  */
 public class Player extends Sprite implements CreatureInterface {
 
-    private Direction direction;
+    private Direction direction = Direction.EAST;
     private int killCount;
     private int lives;
     private boolean isAttacked;
@@ -85,7 +85,7 @@ public class Player extends Sprite implements CreatureInterface {
     public void move(Direction direction) {
 
         int speed = 7;
-
+        this.direction = direction;
         switch (direction){
             case NORTH:
                 force.y = speed;

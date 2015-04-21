@@ -14,8 +14,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
+import edu.chalmers.zombie.model.Book;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.testing.PlayerTest;
+
+import java.util.ArrayList;
 
 public class ZombieWeek extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -34,8 +38,6 @@ public class ZombieWeek extends ApplicationAdapter {
 
     private InputController inputController;
     private MapController mapController;
-
-	@Override
 	public void create () {
         //Set input controller
         inputController = new InputController();
@@ -69,6 +71,7 @@ public class ZombieWeek extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+        GameModel gameModel = GameModel.getInstance();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -88,6 +91,12 @@ public class ZombieWeek extends ApplicationAdapter {
 		//playerTest.setScale(1 / tileSize);
 		mapRenderer.getBatch().begin();
 		//playerTest.draw(mapRenderer.getBatch());
+        ArrayList<Book> books = gameModel.getBooks();
+        if (books.size() != 0) {
+            for (Book b : books) {
+                b.draw(mapRenderer.getBatch());
+            }
+        }
         player.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 
