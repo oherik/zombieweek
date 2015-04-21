@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class GameModel {
 
     private static GameModel instance = new GameModel();
     private Player player;
+    private Zombie zombie;
     private ArrayList<Level> levels;
     private TiledMapTileLayer metaLayer;
     private int currentLevel;
@@ -31,6 +33,7 @@ public class GameModel {
         levels = new ArrayList<Level>();
         addTestLevel();                                 //TODO debug
         addTestPlayer();
+        addTestZombie();
     }
 
     /**
@@ -48,6 +51,13 @@ public class GameModel {
     }
 
     /**
+     * Only for debug
+     */
+    private void addTestZombie(){
+        zombie = new ZombieTest(levels.get(0).getWorld(),2,2);
+    }
+
+    /**
      * @return  The current instance of the game model
      */
     public static GameModel getInstance( ) {
@@ -59,6 +69,10 @@ public class GameModel {
      */
     public Player getPlayer(){
         return player;
+    }
+
+    public Zombie getZombie(){
+        return zombie;
     }
 
     /**

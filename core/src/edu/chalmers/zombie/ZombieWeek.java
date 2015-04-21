@@ -17,7 +17,9 @@ import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.model.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.testing.PlayerTest;
+import edu.chalmers.zombie.testing.ZombieTest;
 
 import java.util.ArrayList;
 
@@ -35,6 +37,8 @@ public class ZombieWeek extends ApplicationAdapter {
 
 	private PlayerTest playerTest;
     private Player player;
+
+    private Zombie zombie;
 
     private InputController inputController;
     private MapController mapController;
@@ -67,6 +71,9 @@ public class ZombieWeek extends ApplicationAdapter {
         //Skapa en box debugger
         boxDebug = new Box2DDebugRenderer();
 
+        zombie = inputController.getZombie();
+
+
 	}
 
 	@Override
@@ -98,6 +105,7 @@ public class ZombieWeek extends ApplicationAdapter {
             }
         }
         player.draw(mapRenderer.getBatch());
+        zombie.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 
         //rita box2d debug

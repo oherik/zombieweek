@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
@@ -35,6 +36,14 @@ public class InputController implements InputProcessor{
      */
     public Player getPlayer(){
         return gameModel.getPlayer();
+    }
+
+    /**
+     * Temporary method to get player
+     * @return zombie
+     */
+    public Zombie getZombie(){
+        return gameModel.getZombie();
     }
 
     @Override
