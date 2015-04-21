@@ -1,11 +1,21 @@
 package edu.chalmers.zombie.model;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.utils.Direction;
 
 /**
  * Created by neda on 2015-03-31.
  */
-public abstract class Zombie implements CreatureInterface {
+public abstract class Zombie extends Entity implements CreatureInterface {
+
+    public Zombie(Sprite sprite, World world, float x, float y){
+        super(sprite,world,x,y);
+    }
+
+
 
     private boolean isAttacked;
 
