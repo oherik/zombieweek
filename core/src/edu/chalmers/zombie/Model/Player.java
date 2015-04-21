@@ -169,7 +169,7 @@ public class Player extends Sprite implements CreatureInterface {
 
     }
     public void throwBook(){
-        Book book = new Book(direction, x, y, world);
+        Book book = new Book(direction, getX(), getY(), world);
     }
 
 }
