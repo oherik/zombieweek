@@ -64,6 +64,7 @@ public class InputController implements InputProcessor{
                 break;
             case Input.Keys.SPACE:
                 //throw book
+                gameModel.getPlayer().throwBook();
                 break;
             default:
                 return false;
@@ -78,6 +79,7 @@ public class InputController implements InputProcessor{
         } else {return false;}
         return true;
     }
+
 
     @Override
     public boolean keyTyped(char character) {

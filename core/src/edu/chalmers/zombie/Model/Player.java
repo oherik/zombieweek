@@ -134,5 +134,8 @@ public class Player extends Sprite implements CreatureInterface {
         playerBody.setTransform(x+0.5f,y+0.5f,0);
 
     }
+    public void throwBook(){
+        Book book = new Book(direction, x, y, world);
+    }
 
 }
