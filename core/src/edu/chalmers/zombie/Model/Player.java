@@ -17,7 +17,6 @@ import edu.chalmers.zombie.utils.Direction;
  */
 public class Player extends Sprite implements CreatureInterface {
 
-    private Direction direction = Direction.EAST;
     private int killCount;
     private int lives;
     private boolean isAttacked;
@@ -28,6 +27,10 @@ public class Player extends Sprite implements CreatureInterface {
     private float x;
     private float y;
     private Vector2 force;
+    //Sets the player's starting direction to east so that a thrown book will have a direction.
+    private Direction direction = Direction.EAST;
+    //Holds the players speed.
+    private int speed = 0;
 
 
     protected Player(Sprite sprite, World world, float x, float y) {
@@ -85,6 +88,7 @@ public class Player extends Sprite implements CreatureInterface {
     public void move(Direction direction) {
 
         int speed = 7;
+        this.speed = speed;
         this.direction = direction;
         switch (direction){
             case NORTH:
@@ -112,18 +116,20 @@ public class Player extends Sprite implements CreatureInterface {
     public void stopX() {
 
         force.x = 0;
+        if (force.y == 0) { this.speed = 0;}
 
     }
 
     public void stopY(){
 
         force.y = 0;
+        if (force.x == 0) { this.speed = 0;}
     }
 
 
     private void updatePosition(){
         setY((float)y);
-        setX((float)x);
+        setX((float) x);
     }
 
     private void updateLocation(float deltaTime){
@@ -170,6 +176,10 @@ public class Player extends Sprite implements CreatureInterface {
     }
     public void throwBook(){
         Book book = new Book(direction, getX(), getY(), world);
+    }
+
+    public int getSpeed(){
+        return speed;
     }
 
 }

@@ -61,18 +61,20 @@ public class Book extends Sprite{
         this.y = getY() + deltaTime * force.y;
     }
     public void setInMotion(){
+        GameModel gameModel = GameModel.getInstance();
+        int speed = VELOCITY + gameModel.getPlayer().getSpeed();
         switch (direction) {
             case NORTH:
-                force.y = VELOCITY;
+                force.y = speed;
                 break;
             case SOUTH:
-                force.y = -VELOCITY;
+                force.y = -speed;
                 break;
             case WEST:
-                force.x = -VELOCITY;
+                force.x = -speed;
                 break;
             case EAST:
-                force.x = VELOCITY;
+                force.x = speed;
                 break;
             default:
                 break;
