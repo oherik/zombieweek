@@ -74,6 +74,16 @@ public class InputController implements InputProcessor{
 
     @Override
     public boolean keyUp(int keycode) {
+
+        if(keycode == Input.Keys.D || keycode == Input.Keys.A){
+            getPlayer().stopX();
+        }
+
+        if (keycode == Input.Keys.W || keycode == Input.Keys.S){
+            getPlayer().stopY();
+        }
+
+
         if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
             //set aiming force to zero
         } else {return false;}
