@@ -24,6 +24,7 @@ public class GameModel {
     private TiledMapTileLayer metaLayer;
     private int currentLevel;
 
+
     private GameModel(){
         currentLevel = 0;
         levels = new ArrayList<Level>();
