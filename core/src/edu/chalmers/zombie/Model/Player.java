@@ -1,8 +1,10 @@
 package edu.chalmers.zombie.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -25,10 +27,13 @@ public class Player extends Sprite implements CreatureInterface {
     private int height;
     private float x;
     private float y;
+    private Vector2 force;
 
 
     protected Player(Sprite sprite, World world, float x, float y) {
         super(sprite);
+
+        force = new Vector2(0,0);
 
         this.world = world;
         this.x = x;
@@ -79,25 +84,51 @@ public class Player extends Sprite implements CreatureInterface {
     @Override
     public void move(Direction direction) {
 
+        int speed = 7;
+
         switch (direction){
-            case NORTH: y+=1;
+            case NORTH:
+                force.y = speed;
+                stopX();
                 break;
-            case SOUTH: y-=1;
+            case SOUTH:
+                force.y = -speed;
+                stopX();
                 break;
-            case WEST: x-=1;
+            case WEST:
+                force.x = -speed;
+                stopY();
                 break;
-            case EAST: x+=1;
+            case EAST:
+                force.x = speed;
+                stopY();
                 break;
             default:
                 break;
         }
 
-        updatePosition();
     }
+
+    public void stopX() {
+
+        force.x = 0;
+
+    }
+
+    public void stopY(){
+
+        force.y = 0;
+    }
+
 
     private void updatePosition(){
         setY((float)y);
         setX((float)x);
+    }
+
+    private void updateLocation(float deltaTime){
+        setX(getX() + deltaTime * force.x);
+        setY(getY() + deltaTime * force.y);
     }
 
     public void attack(Zombie zombie) {
@@ -130,6 +161,9 @@ public class Player extends Sprite implements CreatureInterface {
     }
     @Override
     public void draw(Batch batch){
+        updateLocation(Gdx.graphics.getDeltaTime());
+        //updateLocation((float)0.15);
+
         super.draw(batch);
         playerBody.setTransform(x+0.5f,y+0.5f,0);
 
