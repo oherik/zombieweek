@@ -12,14 +12,13 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
-import edu.chalmers.zombie.model.Book;
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Player;
-import edu.chalmers.zombie.model.Zombie;
+import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.testing.PlayerTest;
 import edu.chalmers.zombie.testing.ZombieTest;
+import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -33,6 +32,7 @@ public class ZombieWeek extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	private float tileSize = 32;
     private Box2DDebugRenderer boxDebug;
+    private World currentWorld;
 
 
 	private PlayerTest playerTest;
@@ -51,6 +51,7 @@ public class ZombieWeek extends ApplicationAdapter {
         mapController = new MapController();
 
 		//Ladda första kartan
+        currentWorld = mapController.getWorld();
 		tiledMap = mapController.getMap(0);
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
 
@@ -81,6 +82,9 @@ public class ZombieWeek extends ApplicationAdapter {
         GameModel gameModel = GameModel.getInstance();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //Uppdatera fysik
+        currentWorld.step(Constants.TIMESTEP, 6, 2);
 
         camera.position.set(player.getX() + tileSize/2 - tileSize/2+0.5f, player.getY() + tileSize/2- tileSize/2+0.5f, 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();
@@ -133,6 +137,7 @@ public class ZombieWeek extends ApplicationAdapter {
     public void dispose(){
 
         player.getTexture().dispose();
+        currentWorld.dispose();
 
     }
 }

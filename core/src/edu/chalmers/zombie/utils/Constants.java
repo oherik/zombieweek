@@ -13,4 +13,7 @@ public class Constants {
     public static final short COLLISION_OBSTACLE  = 4;
     public static final short COLLISION_ZOMBIE  = 8;
 
+    //Fysikrhantering
+    public static final float TIMESTEP = 1/60;
+
 }
