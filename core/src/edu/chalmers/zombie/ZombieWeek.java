@@ -18,6 +18,7 @@ import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.testing.PlayerTest;
 import edu.chalmers.zombie.testing.ZombieTest;
+import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -83,8 +84,7 @@ public class ZombieWeek extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Uppdatera fysik
-        float timeStep = 1/60f;     //Logiskt med 60 bilder per sekund
-        currentWorld.step(Gdx.graphics.getDeltaTime(), 6, 2);
+        currentWorld.step(Constants.TIMESTEP, 6, 2);
 
         camera.position.set(player.getX() + tileSize/2 - tileSize/2+0.5f, player.getY() + tileSize/2- tileSize/2+0.5f, 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();
@@ -137,6 +137,7 @@ public class ZombieWeek extends ApplicationAdapter {
     public void dispose(){
 
         player.getTexture().dispose();
+        currentWorld.dispose();
 
     }
 }

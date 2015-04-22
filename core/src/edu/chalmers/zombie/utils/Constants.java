@@ -14,7 +14,7 @@ public class Constants {
     public static final short COLLISION_ZOMBIE  = 8;
 
     //Fysikrhantering
-    public static final float TIMESTEP = 1/60;
+    public static final float TIMESTEP = 1/60f;
 
     //Matematik
     public static final float PI = 3.14159265358979323846f; //Oklart om vi behöver så mycket
