@@ -15,7 +15,7 @@ import edu.chalmers.zombie.utils.Direction;
  * Created by neda on 2015-03-31.
  * Modified by Tobias
  */
-public class Player extends Sprite implements CreatureInterface {
+public class Player extends Entity implements CreatureInterface {
 
     private int killCount;
     private int lives;
@@ -30,49 +30,14 @@ public class Player extends Sprite implements CreatureInterface {
     //Sets the player's starting direction to east so that a thrown book will have a direction.
     private Direction direction = Direction.EAST;
     //Holds the players speed.
-    private int speed = 0;
+    private int speed = 7;
 
 
     protected Player(Sprite sprite, World world, float x, float y) {
-        super(sprite);
-
+        super(sprite, world, x, y);
+        killCount = 0;
         force = new Vector2(0,0);
-
-        this.world = world;
-        this.x = x;
-        this.y = y;
-
-        updatePosition();
-
-        width = Constants.TILE_SIZE;
-        height = Constants.TILE_SIZE;
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x+0.5f,y+0.5f);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
-
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = .1f;
-        fixDef.friction = .5f;
-        fixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE;
-
-        playerBody = world.createBody(bodyDef);
-        playerBody.createFixture(fixDef);
-
-
-
     }
-    public void scale(float scale) {
-        setSize(getWidth() * scale, getHeight() * scale);
-        updatePosition();
-    }
-
 
     private int getKillCount() {
 
@@ -87,8 +52,7 @@ public class Player extends Sprite implements CreatureInterface {
     @Override
     public void move(Direction direction) {
 
-        int speed = 7;
-        this.speed = speed;
+        this.speed = 7;
         this.direction = direction;
         switch (direction){
             case NORTH:
@@ -110,22 +74,27 @@ public class Player extends Sprite implements CreatureInterface {
             default:
                 break;
         }
-
+        setBodyVelocity(force);
     }
 
     public void stopX() {
 
         force.x = 0;
         if (force.y == 0) { this.speed = 0;}
-
+        setBodyVelocity(force);
     }
 
     public void stopY(){
 
         force.y = 0;
         if (force.x == 0) { this.speed = 0;}
+        setBodyVelocity(force);
     }
 
+    @Override
+    protected void setBodyVelocity(Vector2 velocity){
+        super.setBodyVelocity(velocity);
+    }
 
     private void updatePosition(){
         setY((float)y);
@@ -163,23 +132,25 @@ public class Player extends Sprite implements CreatureInterface {
     @Override
     public Body getBody() {
 
-        return playerBody;
+        return super.getBody();
     }
-    @Override
-    public void draw(Batch batch){
-        updateLocation(Gdx.graphics.getDeltaTime());
-        //updateLocation((float)0.15);
 
-        super.draw(batch);
-        playerBody.setTransform(x+0.5f,y+0.5f,0);
-
-    }
     public void throwBook(){
         Book book = new Book(direction, getX(), getY(), world);
     }
 
+
+
+    public void setX(float x){
+        this.x = x;
+    }
+
+     public void setY(float y){
+         this.y = y;
+     }
+
     public int getSpeed(){
-        return speed;
+        return this.speed;
     }
 
 }

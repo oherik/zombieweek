@@ -68,7 +68,6 @@ public class ZombieWeek extends ApplicationAdapter {
 		img = new Texture("core/assets/zombie.png");
 
         player = inputController.getPlayer();
-        player.scale(1/tileSize);
         //Skapa en box debugger
         boxDebug = new Box2DDebugRenderer();
 
@@ -86,7 +85,7 @@ public class ZombieWeek extends ApplicationAdapter {
         //Uppdatera fysik
         currentWorld.step(Constants.TIMESTEP, 6, 2);
 
-        camera.position.set(player.getX() + tileSize/2 - tileSize/2+0.5f, player.getY() + tileSize/2- tileSize/2+0.5f, 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
+        camera.position.set(player.getX(), player.getY(),0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();
 
 
@@ -109,7 +108,7 @@ public class ZombieWeek extends ApplicationAdapter {
             }
         }
         player.draw(mapRenderer.getBatch());
-        zombie.draw(mapRenderer.getBatch());
+        //zombie.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 
         //rita box2d debug
@@ -136,7 +135,7 @@ public class ZombieWeek extends ApplicationAdapter {
     @Override
     public void dispose(){
 
-        player.getTexture().dispose();
+        player.dispose();
         currentWorld.dispose();
 
     }

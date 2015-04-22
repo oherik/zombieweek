@@ -27,7 +27,7 @@ public class Level {
         tiledMap = new TmxMapLoader().load(mapPath);
         if(tiledMap == null)
             throw new NullPointerException("Level: incorrect path name");
-        world = new World(new Vector2(), true);
+        world = new World(new Vector2(0,0), true);
         world.setContactListener(new ZWContactListener());
     }
 

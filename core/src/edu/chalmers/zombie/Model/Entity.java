@@ -3,6 +3,7 @@ package edu.chalmers.zombie.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -42,7 +43,7 @@ public abstract class Entity {
         fixDef.restitution = .1f;
         fixDef.friction = .4f;
         fixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
 
         body = world.createBody(bodyDef);
         body.createFixture(fixDef);
@@ -50,19 +51,23 @@ public abstract class Entity {
 
     }
 
-
-
-    private Body getBody() {
-        return body;
+    public void scale(float scale) {
+        sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
+        updatePosition();
     }
 
 
-    private void updateLocation(float deltaTime){}
+    public Body getBody() {
+        return body;
+    }
 
-
+    protected void setBodyVelocity(Vector2 velocity){
+        this.body.setLinearVelocity(velocity);
+    }
     public void draw(Batch batch){
         updateRotation();
         sprite.draw(batch);
+        //System.out.println(sprite.getX() + " " + body.getPosition().x);
         //updateLocation(Gdx.graphics.getDeltaTime());
 
 
@@ -86,15 +91,25 @@ public abstract class Entity {
     public abstract void setX(float x);
 
     public float getX(){
-        return body.getPosition().y;
+        return body.getPosition().x;
     }
 
     public abstract void setY(float y);
 
     public float getY(){
-        return body.getPosition().x;
+        return body.getPosition().y;
     }
 
+    public void dispose(){
+        sprite.getTexture().dispose();
+    }
 
+    public float getHeight(){
+        return sprite.getHeight();
+    }
+    public float getWidth(){
+        return sprite.getWidth();
+    }
+    public abstract int getSpeed();
 
 }
