@@ -117,4 +117,7 @@ public abstract class Entity {
         this.body=body;
     }
 
+    public World getWorld(){
+        return this.world;
+    }
 }

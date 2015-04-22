@@ -141,7 +141,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     public void throwBook(){
-        Book book = new Book(direction, getX(), getY(), world);
+        Book book = new Book(direction, getX()-0.5f, getY()-0.5f, getWorld());
     }
 
 
