@@ -14,36 +14,40 @@ import edu.chalmers.zombie.utils.Direction;
  */
 public class Book extends Sprite{
     private final int VELOCITY = 10;
-        private Direction direction;
-        private Body bookBody;
-        private float x;
-        private float y;
-        private Vector2 force = new Vector2(0,0);
-        public Book(Direction d, float x, float y, World world) {
-            super(new Sprite(new Texture("core/assets/bookSprite.png")));
+    private Direction direction;
+    private Body bookBody;
+    private float x;
+    private float y;
+    private Vector2 force = new Vector2(0,0);
+    public Book(Direction d, float x, float y, World world) {
+        super(new Sprite(new Texture("core/assets/bookSprite.png")));
 
-            GameModel gameModel = GameModel.getInstance();
-            this.direction = d;
-            setPosition(x, y);
-            BodyDef bookBodyDef = new BodyDef();
-            bookBodyDef.type = BodyDef.BodyType.DynamicBody;
-            bookBodyDef.position.set(x + 0.5f, y + 0.5f);
+        GameModel gameModel = GameModel.getInstance();
 
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(gameModel.getPlayer().getHeight() / 2, gameModel.getPlayer().getWidth() / 2);
-            FixtureDef bookFixDef = new FixtureDef();
-            bookFixDef.shape = shape;
-            bookFixDef.density = (float) Math.pow(gameModel.getPlayer().getWidth(), gameModel.getPlayer().getHeight());
-            bookFixDef.restitution = 0;
-            bookFixDef.friction = 1;
-            bookFixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
-            bookFixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
-            bookBody = world.createBody(bookBodyDef);
-            bookBody.createFixture(bookFixDef);
-            gameModel.addBook(this);
-            setSize(1, 1);
-            setInMotion();
-        }
+        this.direction = d;
+        //Sets this book's position to be next to the player.
+        setPosition(x, y);
+
+        BodyDef bookBodyDef = new BodyDef();
+        bookBodyDef.type = BodyDef.BodyType.DynamicBody;
+        bookBodyDef.position.set(x + 0.5f, y + 0.5f);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(gameModel.getPlayer().getHeight() / 2, gameModel.getPlayer().getWidth() / 2);
+        FixtureDef bookFixDef = new FixtureDef();
+        bookFixDef.shape = shape;
+        bookFixDef.density = (float) Math.pow(gameModel.getPlayer().getWidth(), gameModel.getPlayer().getHeight());
+        bookFixDef.restitution = 0;
+        bookFixDef.friction = 1;
+        bookFixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
+        bookFixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        bookBody = world.createBody(bookBodyDef);
+        bookBody.createFixture(bookFixDef);
+        //Adds this book to the list of all books that exist for the renderer.
+        gameModel.addBook(this);
+        setSize(1, 1);
+        setInMotion();
+    }
     public float getX(){
         return x;
     }
@@ -57,6 +61,8 @@ public class Book extends Sprite{
         this.x = getX() + deltaTime * force.x;
         this.y = getY() + deltaTime * force.y;
     }
+
+    //Sets the books position to be next to the coordinates given.
     public void setPosition(float x, float y){
         switch (direction) {
             case NORTH:
