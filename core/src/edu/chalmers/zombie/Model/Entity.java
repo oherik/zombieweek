@@ -41,8 +41,8 @@ public abstract class Entity {
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = .1f;
         fixDef.friction = .4f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
+        fixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE;
 
         body = world.createBody(bodyDef);
         body.createFixture(fixDef);

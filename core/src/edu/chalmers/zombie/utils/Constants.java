@@ -9,9 +9,8 @@ public class Constants {
     public static final float PIXELS_PER_METER = 32;
 
     //Kollisionshantering
-    public static final short COLLISION_PLAYER = 2;
+    public static final short COLLISION_ENTITY = 2;
     public static final short COLLISION_OBSTACLE  = 4;
-    public static final short COLLISION_ZOMBIE  = 8;
 
     //Fysikrhantering
     public static final float TIMESTEP = 1/60f;
