@@ -37,6 +37,7 @@ public class Player extends Entity implements CreatureInterface {
         super(sprite, world, x, y);
         killCount = 0;
         force = new Vector2(0,0);
+        getBody().setFixedRotation(true);   //Så att spelaren inte roterar
     }
 
     private int getKillCount() {
@@ -51,23 +52,27 @@ public class Player extends Entity implements CreatureInterface {
 
     @Override
     public void move(Direction direction) {
-
+        Body body = getBody();
         this.speed = 7;
         this.direction = direction;
         switch (direction){
             case NORTH:
+                body.setTransform(body.getPosition(), 0);
                 force.y = speed;
                 stopX();
                 break;
             case SOUTH:
+                body.setTransform(body.getPosition(), Constants.PI);
                 force.y = -speed;
                 stopX();
                 break;
             case WEST:
+                body.setTransform(body.getPosition(), Constants.PI/2);
                 force.x = -speed;
                 stopY();
                 break;
             case EAST:
+                body.setTransform(body.getPosition(), -Constants.PI/2);
                 force.x = speed;
                 stopY();
                 break;
@@ -126,7 +131,7 @@ public class Player extends Entity implements CreatureInterface {
     @Override
     public void setBody(Body body) {
 
-        playerBody = body;
+       super.setBody(body);
     }
 
     @Override

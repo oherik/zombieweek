@@ -112,4 +112,9 @@ public abstract class Entity {
     }
     public abstract int getSpeed();
 
+
+    public void setBody(Body body) {
+        this.body=body;
+    }
+
 }
