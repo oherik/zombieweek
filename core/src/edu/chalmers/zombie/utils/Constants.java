@@ -16,4 +16,7 @@ public class Constants {
     //Fysikrhantering
     public static final float TIMESTEP = 1/60;
 
+    //Matematik
+    public static final float PI = 3.14159265358979323846f; //Oklart om vi behöver så mycket
+
 }

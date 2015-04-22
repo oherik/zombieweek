@@ -61,6 +61,7 @@ public abstract class Entity {
 
 
     public void draw(Batch batch){
+        updateRotation();
         sprite.draw(batch);
         //updateLocation(Gdx.graphics.getDeltaTime());
 
@@ -68,6 +69,12 @@ public abstract class Entity {
         //body.setTransform(getX()+0.5f,getY()+0.5f,0);
         updatePosition();
 
+    }
+    private void updateRotation(){
+        float angle = body.getAngle();
+        float angleDegrees = angle * 180.0f / Constants.PI;
+        sprite.setOrigin(0.5f,0.5f);
+        sprite.setRotation(angleDegrees);
     }
 
     private void updatePosition(){
