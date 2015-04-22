@@ -108,7 +108,7 @@ public class ZombieWeek extends ApplicationAdapter {
             }
         }
         player.draw(mapRenderer.getBatch());
-        //zombie.draw(mapRenderer.getBatch());
+        zombie.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 
         //rita box2d debug
