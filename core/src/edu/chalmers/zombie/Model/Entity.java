@@ -48,7 +48,6 @@ public abstract class Entity {
         body = world.createBody(bodyDef);
         body.createFixture(fixDef);
 
-
     }
 
     public void scale(float scale) {

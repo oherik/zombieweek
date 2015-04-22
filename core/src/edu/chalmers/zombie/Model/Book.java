@@ -19,16 +19,12 @@ public class Book extends Sprite{
         private float x;
         private float y;
         private Vector2 force = new Vector2(0,0);
-
         public Book(Direction d, float x, float y, World world) {
             super(new Sprite(new Texture("core/assets/bookSprite.png")));
-            this.x = x;
-            this.y = y;
-            setX(x);
-            setY(y);
-            GameModel gameModel = GameModel.getInstance();
-            //this.direction = d;
 
+            GameModel gameModel = GameModel.getInstance();
+            this.direction = d;
+            setPosition(x, y);
             BodyDef bookBodyDef = new BodyDef();
             bookBodyDef.type = BodyDef.BodyType.DynamicBody;
             bookBodyDef.position.set(x + 0.5f, y + 0.5f);
@@ -40,11 +36,12 @@ public class Book extends Sprite{
             bookFixDef.density = (float) Math.pow(gameModel.getPlayer().getWidth(), gameModel.getPlayer().getHeight());
             bookFixDef.restitution = 0;
             bookFixDef.friction = 1;
+            bookFixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
+            bookFixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
             bookBody = world.createBody(bookBodyDef);
             bookBody.createFixture(bookFixDef);
             gameModel.addBook(this);
             setSize(1, 1);
-            this.direction = d;
             setInMotion();
         }
     public float getX(){
@@ -59,6 +56,28 @@ public class Book extends Sprite{
         setY(getY() + deltaTime * force.y);
         this.x = getX() + deltaTime * force.x;
         this.y = getY() + deltaTime * force.y;
+    }
+    public void setPosition(float x, float y){
+        switch (direction) {
+            case NORTH:
+                y = y + 1f;
+                break;
+            case SOUTH:
+                y = y - 1f;
+                break;
+            case WEST:
+                x = x - 1f;
+                break;
+            case EAST:
+                x = x + 1f;
+                break;
+            default:
+                break;
+        }
+        this.x = x;
+        this.y = y;
+        setX(x);
+        setY(y);
     }
     public void setInMotion(){
         GameModel gameModel = GameModel.getInstance();
