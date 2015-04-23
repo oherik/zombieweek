@@ -7,12 +7,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /** Stores the game data. The model implements the singleton pattern
  * Created by Tobias on 15-04-02.
@@ -26,11 +29,13 @@ public class GameModel {
     private TiledMapTileLayer metaLayer;
     private int currentLevel;
     private ArrayList<Book> books = new ArrayList<Book>();
+    private Set bodiesToRemove;
 
 
     private GameModel(){
         currentLevel = 0;
         levels = new ArrayList<Level>();
+        bodiesToRemove = new HashSet<Body>();
         addTestLevel();                                 //TODO debug
         addTestPlayer();
         addTestZombie();
@@ -134,4 +139,12 @@ public class GameModel {
     public void addBook(Book book){
         books.add(book);
     }
+
+    public void addBodiesToRemove(Set<Body> bodySet){this.bodiesToRemove = bodySet; }
+
+    public void addBodyToRemove(Body body){this.bodiesToRemove.add(body); }
+
+    public void clearBodiesToRemove(){this.bodiesToRemove.clear();}
+
+    public Set<Body> getBodiesToRemove() {return this.bodiesToRemove; }
 }
