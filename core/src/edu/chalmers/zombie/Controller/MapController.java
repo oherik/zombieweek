@@ -76,7 +76,7 @@ public class MapController {
                         shape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
                         fixDef.shape = shape;
                         fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
-                        fixDef.filter.maskBits = Constants.COLLISION_ENTITY;
+                        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
                         world.createBody(bodyDef).createFixture(fixDef);
                     }
 

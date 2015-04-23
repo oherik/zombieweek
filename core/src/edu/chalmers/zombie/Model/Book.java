@@ -19,6 +19,7 @@ public class Book extends Sprite{
     private float x;
     private float y;
     private Vector2 force = new Vector2(0,0);
+    private boolean remove = false;
     public Book(Direction d, float x, float y, World world) {
         super(new Sprite(new Texture("core/assets/bookSprite.png")));
 
@@ -30,7 +31,7 @@ public class Book extends Sprite{
 
         BodyDef bookBodyDef = new BodyDef();
         bookBodyDef.type = BodyDef.BodyType.DynamicBody;
-        bookBodyDef.position.set(x + 0.5f, y + 0.5f);
+        bookBodyDef.position.set(x + 2.5f, y + 2.5f);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(gameModel.getPlayer().getHeight() / 2, gameModel.getPlayer().getWidth() / 2);
@@ -39,7 +40,7 @@ public class Book extends Sprite{
         bookFixDef.density = (float) Math.pow(gameModel.getPlayer().getWidth(), gameModel.getPlayer().getHeight());
         bookFixDef.restitution = 0;
         bookFixDef.friction = 1;
-        bookFixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
+        bookFixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
         bookFixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
         bookBody = world.createBody(bookBodyDef);
         bookBody.createFixture(bookFixDef);
@@ -47,6 +48,8 @@ public class Book extends Sprite{
         gameModel.addBook(this);
         setSize(1, 1);
         setInMotion();
+
+        bookBody.setUserData(this);
     }
     public float getX(){
         return x;
@@ -111,4 +114,14 @@ public class Book extends Sprite{
         super.draw(batch);
         bookBody.setTransform(x+0.5f,y+0.5f,0);
     }
+
+    public void markForRemoval(){
+        this.remove = true;
+    }
+
+    public boolean toRemove(){
+        return this.remove;
+    }
+
+
 }

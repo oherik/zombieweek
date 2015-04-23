@@ -43,7 +43,7 @@ public abstract class Entity {
         fixDef.restitution = .1f;
         fixDef.friction = .4f;
         fixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
 
         body = world.createBody(bodyDef);
         body.createFixture(fixDef);

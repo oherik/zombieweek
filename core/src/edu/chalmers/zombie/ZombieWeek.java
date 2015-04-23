@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.InputController;
@@ -88,6 +89,12 @@ public class ZombieWeek extends Game {
         //Uppdatera fysik
         currentWorld.step(Constants.TIMESTEP, 6, 2);
 
+        //Ta bort gamla objekt
+        for(Body b : gameModel.getBodiesToRemove()){
+            gameModel.getLevel().getWorld().destroyBody(b);
+        }
+        gameModel.clearBodiesToRemove();
+
         camera.position.set(player.getX(), player.getY(),0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();
 
@@ -106,8 +113,15 @@ public class ZombieWeek extends Game {
         //playerTest.draw(mapRenderer.getBatch());
         ArrayList<Book> books = gameModel.getBooks();
         if (books.size() != 0) {
-            for (Book b : books) {
-                b.draw(mapRenderer.getBatch());
+            for (int i = 0; i < books.size(); i++) {
+                Book b = books.get(i);
+                if(b.toRemove()) {
+                    books.remove(i);
+                    i--;
+                }
+                else {
+                   b.draw(mapRenderer.getBatch());
+                }
             }
         }
         player.draw(mapRenderer.getBatch());
