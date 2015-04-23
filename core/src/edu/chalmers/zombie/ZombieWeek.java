@@ -1,6 +1,7 @@
 package edu.chalmers.zombie;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,10 +20,11 @@ import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.testing.PlayerTest;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.view.GameScreen;
 
 import java.util.ArrayList;
 
-public class ZombieWeek extends ApplicationAdapter {
+public class ZombieWeek extends Game {
 	SpriteBatch batch;
 	Texture img;
 
@@ -43,6 +45,7 @@ public class ZombieWeek extends ApplicationAdapter {
     private InputController inputController;
     private MapController mapController;
 	public void create () {
+        setScreen(new GameScreen(this.currentWorld));
         //Set input controller
         inputController = new InputController();
         Gdx.input.setInputProcessor(inputController);
@@ -95,12 +98,12 @@ public class ZombieWeek extends ApplicationAdapter {
 
 	//	batch.begin();
 	//	batch.draw(img, 0, 0);
-	//	batch.end();
+	//	batch        .end();
 
-		//Rita spelare
-		//playerTest.setScale(1 / tileSize);
-		mapRenderer.getBatch().begin();
-		//playerTest.draw(mapRenderer.getBatch());
+        //Rita spelare
+        //playerTest.setScale(1 / tileSize);
+        mapRenderer.getBatch().begin();
+        //playerTest.draw(mapRenderer.getBatch());
         ArrayList<Book> books = gameModel.getBooks();
         if (books.size() != 0) {
             for (Book b : books) {
@@ -116,7 +119,7 @@ public class ZombieWeek extends ApplicationAdapter {
 
 
 
-	}
+    }
 
 	@Override
 	public void resize(int width, int height) {
