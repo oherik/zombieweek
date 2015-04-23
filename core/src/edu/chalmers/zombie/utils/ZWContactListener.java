@@ -11,7 +11,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 public class ZWContactListener  implements ContactListener{
 
     public void beginContact (Contact contact){     //Anropas när två saker börjar kollidera
-        System.out.println("Kollision");
+        if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PROJECTILE)
+            System.out.println("Boken träffade nåt");
+            System.out.println("Kollision");
     }
 
     public void endContact (Contact contact){       //Anropas när de inte längre kolliderar
