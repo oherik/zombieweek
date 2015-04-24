@@ -80,6 +80,22 @@ public class Book extends Sprite{
             case EAST:
                 x = x + 1f;
                 break;
+            case NORTH_EAST:
+                x = x + 1f;
+                y = y + 1f;
+                break;
+            case NORTH_WEST:
+                y = y + 1f;
+                x = x - 1f;
+                break;
+            case SOUTH_EAST:
+                x = x + 1f;
+                y = y - 1f;
+                break;
+            case SOUTH_WEST:
+                y = y - 1f;
+                x = x - 1f;
+                break;
             default:
                 break;
         }
@@ -103,6 +119,22 @@ public class Book extends Sprite{
                 break;
             case EAST:
                 force.x = speed;
+                break;
+            case NORTH_EAST:
+                force.x = speed;
+                force.y = speed;
+                break;
+            case NORTH_WEST:
+                force.x = -speed;
+                force.y = speed;
+                break;
+            case SOUTH_EAST:
+                force.x = speed;
+                force.y = -speed;
+                break;
+            case SOUTH_WEST:
+                force.x = -speed;
+                force.y = -speed;
                 break;
             default:
                 break;
