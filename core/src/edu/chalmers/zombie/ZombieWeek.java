@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -43,6 +44,12 @@ public class ZombieWeek extends ApplicationAdapter {
 
     private InputController inputController;
     private MapController mapController;
+
+    //HUD variables
+    private BitmapFont bitmapFont;
+    private SpriteBatch batchHUD;
+
+
 	public void create () {
         //Set input controller
         inputController = new InputController();
@@ -74,7 +81,9 @@ public class ZombieWeek extends ApplicationAdapter {
 
         zombie = inputController.getZombie();
 
-
+        //HUD
+        batchHUD = new SpriteBatch();
+        bitmapFont = new BitmapFont();
 	}
 
 	@Override
@@ -100,9 +109,14 @@ public class ZombieWeek extends ApplicationAdapter {
 		mapRenderer.setView(camera);
 		mapRenderer.render();
 
-	//	batch.begin();
-	//	batch.draw(img, 0, 0);
-	//	batch.end();
+
+
+		//batch.begin();
+		//batch.draw(img, 0, 0);
+		//batch.end();
+
+
+
 
 		//Rita spelare
 		//playerTest.setScale(1 / tileSize);
@@ -123,10 +137,24 @@ public class ZombieWeek extends ApplicationAdapter {
         }
         player.draw(mapRenderer.getBatch());
         zombie.draw(mapRenderer.getBatch());
+
+
+
         mapRenderer.getBatch().end();
 
         //rita box2d debug
         boxDebug.render(mapController.getWorld(), camera.combined);
+
+
+
+        //render HUD
+        String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
+        batchHUD.begin();
+        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        bitmapFont.draw(batchHUD, "Health:", 10, Gdx.graphics.getHeight()-10);
+        bitmapFont.draw(batchHUD, "Ammo:", 10, Gdx.graphics.getHeight()-25);
+        bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
+        batchHUD.end();
 
 
 
