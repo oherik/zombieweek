@@ -38,6 +38,7 @@ public class Player extends Entity implements CreatureInterface {
         super(sprite, world, x, y);
         killCount = 0;
         ammunition = 100;
+        lives = 100;
         force = new Vector2(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
     }
