@@ -149,10 +149,12 @@ public class ZombieWeek extends ApplicationAdapter {
 
         //render HUD
         String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
+        String playerHealth = "Health: " + player.getLives();
+        String playerAmmo = "Ammo: " + player.getAmmunition();
         batchHUD.begin();
         bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        bitmapFont.draw(batchHUD, "Health:", 10, Gdx.graphics.getHeight()-10);
-        bitmapFont.draw(batchHUD, "Ammo:", 10, Gdx.graphics.getHeight()-25);
+        bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
+        bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
         bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
         batchHUD.end();
 
