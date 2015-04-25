@@ -19,6 +19,7 @@ public class Player extends Entity implements CreatureInterface {
 
     private int killCount;
     private int lives;
+    private int ammunition;
     private boolean isAttacked;
     private Body playerBody;
     private World world;
@@ -36,6 +37,7 @@ public class Player extends Entity implements CreatureInterface {
     protected Player(Sprite sprite, World world, float x, float y) {
         super(sprite, world, x, y);
         killCount = 0;
+        ammunition = 100;
         force = new Vector2(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
     }
@@ -195,7 +197,24 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     public void throwBook(){
+        ammunition -= 1;
         Book book = new Book(direction, getX()-0.5f, getY()-0.5f, getWorld());
+    }
+
+    /**
+     * Get player ammunition
+     * @return ammunition
+     */
+    public int getAmmunition(){
+        return ammunition;
+    }
+
+    /**
+     * Get player lives
+     * @return lives
+     */
+    public int getLives(){
+        return lives;
     }
 
 
