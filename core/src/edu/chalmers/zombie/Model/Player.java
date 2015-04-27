@@ -196,8 +196,11 @@ public class Player extends Entity implements CreatureInterface {
 
         return super.getBody();
     }
+    public void addBook(){
+        ++ammunition;
+    }
 
-    public void throwBook(){
+    public void throwBook(){    //TODO ska bero på vinkeln  
         ammunition -= 1;
         Book book = new Book(direction, getX()-0.5f, getY()-0.5f, getWorld());
     }

@@ -54,6 +54,8 @@ public class Book extends Entity{
         super.setSprite(sprite);
         float scale = 1f / Constants.TILE_SIZE;
         super.scale(scale);
+
+        getBody().setUserData(this);
         /*
         super(new Sprite(new Texture("core/assets/bookSprite.png")));
 
