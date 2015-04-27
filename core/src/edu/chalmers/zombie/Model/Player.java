@@ -35,7 +35,7 @@ public class Player extends Entity implements CreatureInterface {
 
 
     protected Player(Sprite sprite, World world, float x, float y) {
-        super(sprite, world, x, y);
+        super(sprite, world, x, y, Constants.COLLISION_PLAYER);
         killCount = 0;
         ammunition = 100;
         lives = 100;

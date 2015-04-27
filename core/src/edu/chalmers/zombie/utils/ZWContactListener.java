@@ -20,9 +20,11 @@ public class ZWContactListener  implements ContactListener{
         this.gameModel = GameModel.getInstance();
         gameModel.clearBodiesToRemove();
         if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PROJECTILE) {
-           Book b = (Book) contact.getFixtureB().getBody().getUserData(); //TODO detta måste göras snyggare. Kanske en projectile-huvudklass?
-            gameModel.addBodyToRemove(contact.getFixtureB().getBody());
-            b.markForRemoval();
+            if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_ENTITY) {
+                Book b = (Book) contact.getFixtureB().getBody().getUserData(); //TODO detta måste göras snyggare. Kanske en projectile-huvudklass?
+                gameModel.addBodyToRemove(contact.getFixtureB().getBody());
+                b.markForRemoval();
+            }
         }
             System.out.println("Kollision");
     }

@@ -9,9 +9,11 @@ public class Constants {
     public static final float PIXELS_PER_METER = 32;
 
     //Kollisionshantering
-    public static final short COLLISION_ENTITY = 2;
-    public static final short COLLISION_OBSTACLE  = 4;
-    public static final short COLLISION_PROJECTILE  = 8;
+    public static final short COLLISION_PLAYER= 2;
+    public static final short COLLISION_ZOMBIE = 4;
+    public static final short COLLISION_PROJECTILE = 8;
+    public static final short COLLISION_ENTITY = 14;
+    public static final short COLLISION_OBSTACLE  = 16;
 
 
     //Fysikrhantering
@@ -19,5 +21,6 @@ public class Constants {
 
     //Matematik
     public static final float PI = 3.14159265358979323846f; //Oklart om vi behöver så mycket
+    public static final float SQRT_2 = 1.4142f;
 
 }
