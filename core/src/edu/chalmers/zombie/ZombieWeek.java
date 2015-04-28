@@ -169,6 +169,7 @@ public class ZombieWeek extends Game {
     }
 //=======
 
+
         //render HUD
     //String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
     //String playerHealth = "Health: " + player.getLives();

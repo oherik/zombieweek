@@ -46,6 +46,8 @@ public class GameScreen implements Screen{
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputController());
+        //Lägg till kollisionsobjekt
+        mapController.createObstacles("meta", "collision");
         //HUD
         batchHUD = new SpriteBatch();
         bitmapFont = new BitmapFont();
