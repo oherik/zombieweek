@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.model.Book;
 import edu.chalmers.zombie.model.GameModel;
@@ -23,12 +26,30 @@ public class GameScreen implements Screen{
     private OrthogonalTiledMapRenderer mapRenderer;
     private Box2DDebugRenderer boxDebug;
     private MapController mapController;
+    private float tileSize;
+    private TiledMap tiledMap;
 
-    public GameScreen(World world){
+
+
+    public GameScreen(World world, float tileSize){
         this.currentWorld = world;
+        this.tileSize = tileSize;
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+        camera = new OrthographicCamera(width, height);
+        mapController = new MapController();
+        tiledMap = mapController.getMap(0);
+        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
+        boxDebug = new Box2DDebugRenderer();
+        Gdx.input.setInputProcessor(new InputController());
     }
 
-    public void resize(int x, int y){
+    public void resize(int width, int height){
+
+        //Koden nedan kan man ha om man vill att spelv�rlden ut�kas n�r man resizar
+        camera.setToOrtho(false, width / tileSize, height / tileSize);
+        //Koden nedan om man vill ha statiskt.
+        //camera.setToOrtho(false, 400 / 32, 400 / 32);
 
     }
     public void resume(){
@@ -44,6 +65,12 @@ public class GameScreen implements Screen{
 
         //Uppdatera fysik
         currentWorld.step(Constants.TIMESTEP, 6, 2);
+
+        //Ta bort gamla objekt
+        for(Body b : gameModel.getBodiesToRemove()){
+            gameModel.getLevel().getWorld().destroyBody(b);
+        }
+        gameModel.clearBodiesToRemove();
 
         camera.position.set(gameModel.getPlayer().getX(),gameModel.getPlayer().getY(),0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();

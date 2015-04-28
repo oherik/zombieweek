@@ -46,8 +46,11 @@ public class ZombieWeek extends Game {
     private InputController inputController;
     private MapController mapController;
 	public void create () {
-        setScreen(new GameScreen(this.currentWorld));
+        mapController = new MapController();
+        currentWorld = mapController.getWorld();
+        setScreen(new GameScreen(this.currentWorld, tileSize));
         //Set input controller
+        /*
         inputController = new InputController();
         Gdx.input.setInputProcessor(inputController);
 
@@ -56,7 +59,7 @@ public class ZombieWeek extends Game {
 
 		//Ladda första kartan
         currentWorld = mapController.getWorld();
-		tiledMap = mapController.getMap(0);
+
 		mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
 
         //Lägg till kollisionsobjekt
@@ -77,11 +80,13 @@ public class ZombieWeek extends Game {
 
         zombie = inputController.getZombie();
 
-
+    */
 	}
 
 	@Override
 	public void render () {
+        super.render();
+        /*
         GameModel gameModel = GameModel.getInstance();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -131,19 +136,19 @@ public class ZombieWeek extends Game {
         //rita box2d debug
         boxDebug.render(mapController.getWorld(), camera.combined);
 
-
+    */
 
     }
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-
+    /*
 		//Koden nedan kan man ha om man vill att spelv�rlden ut�kas n�r man resizar
 		camera.setToOrtho(false, width / tileSize, height / tileSize);
 		//Koden nedan om man vill ha statiskt.
 		//camera.setToOrtho(false, 400 / 32, 400 / 32);
-
+    */
 
 
 
