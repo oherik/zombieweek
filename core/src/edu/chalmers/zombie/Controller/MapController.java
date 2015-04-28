@@ -9,7 +9,7 @@ import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
- * Controller to handle the operations on the different maps and worlds
+ * controller to handle the operations on the different maps and worlds
  * Created by Erik on 2015-04-17.
  */
 public class MapController {

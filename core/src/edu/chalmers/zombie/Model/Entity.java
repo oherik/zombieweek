@@ -18,7 +18,7 @@ public abstract class Entity {
     private int width;
     private int height;
 
-    public Entity(Sprite sprite, World world, float x, float y){
+    public Entity(Sprite sprite, World world, float x, float y, short categoryBit){
 
         width = Constants.TILE_SIZE;
         height = Constants.TILE_SIZE;
@@ -40,10 +40,10 @@ public abstract class Entity {
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape = shape;
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = .1f;
+        fixDef.restitution = 0;
         fixDef.friction = .4f;
-        fixDef.filter.categoryBits = Constants.COLLISION_ENTITY;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        fixDef.filter.categoryBits = categoryBit;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
 
         body = world.createBody(bodyDef);
         body.createFixture(fixDef);
@@ -62,6 +62,9 @@ public abstract class Entity {
 
     protected void setBodyVelocity(Vector2 velocity){
         this.body.setLinearVelocity(velocity);
+    }
+    protected void setAngularVelocity(float omega){
+        this.body.setAngularVelocity(omega);
     }
     public void draw(Batch batch){
         updateRotation();
@@ -118,5 +121,9 @@ public abstract class Entity {
 
     public World getWorld(){
         return this.world;
+    }
+
+    public void setSprite(Sprite sprite){
+        this.sprite = sprite;
     }
 }

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -28,7 +30,9 @@ public class GameScreen implements Screen{
     private MapController mapController;
     private float tileSize;
     private TiledMap tiledMap;
-
+    //HUD variables
+    private BitmapFont bitmapFont;
+    private SpriteBatch batchHUD;
 
 
     public GameScreen(World world, float tileSize){
@@ -42,6 +46,9 @@ public class GameScreen implements Screen{
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputController());
+        //HUD
+        batchHUD = new SpriteBatch();
+        bitmapFont = new BitmapFont();
     }
 
     public void resize(int width, int height){
@@ -100,7 +107,16 @@ public class GameScreen implements Screen{
 
         //rita box2d debug
         boxDebug.render(mapController.getWorld(), camera.combined);
-
+        //render HUD
+        String playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
+        String playerHealth = "Health: " + gameModel.getPlayer().getLives();
+        String playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
+        batchHUD.begin();
+        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
+        bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
+        bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
+        batchHUD.end();
     }
     public void show(){
 

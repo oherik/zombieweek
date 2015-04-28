@@ -19,6 +19,7 @@ public class Player extends Entity implements CreatureInterface {
 
     private int killCount;
     private int lives;
+    private int ammunition;
     private boolean isAttacked;
     private Body playerBody;
     private World world;
@@ -34,8 +35,10 @@ public class Player extends Entity implements CreatureInterface {
 
 
     protected Player(Sprite sprite, World world, float x, float y) {
-        super(sprite, world, x, y);
+        super(sprite, world, x, y, Constants.COLLISION_PLAYER);
         killCount = 0;
+        ammunition = 100;
+        lives = 100;
         force = new Vector2(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
     }
@@ -52,47 +55,96 @@ public class Player extends Entity implements CreatureInterface {
 
     @Override
     public void move(Direction direction) {
-        Body body = getBody();
         this.speed = 7;
-        this.direction = direction;
         switch (direction){
             case NORTH:
-                body.setTransform(body.getPosition(), 0);
                 force.y = speed;
-                stopX();
                 break;
             case SOUTH:
-                body.setTransform(body.getPosition(), Constants.PI);
                 force.y = -speed;
-                stopX();
                 break;
             case WEST:
-                body.setTransform(body.getPosition(), Constants.PI/2);
                 force.x = -speed;
-                stopY();
                 break;
             case EAST:
-                body.setTransform(body.getPosition(), -Constants.PI/2);
                 force.x = speed;
-                stopY();
                 break;
             default:
                 break;
         }
-        setBodyVelocity(force);
+        updateMovement();
     }
 
-    public void stopX() {
+    /**
+     * Updates Body rotation
+     */
+    private void updateRotation(){
+        Body body = getBody();
+        float rotation =  direction.getRotation();
+        body.setTransform(body.getPosition(), rotation);
+    }
 
+    /**
+     * @return Direction of player
+     */
+    public Direction getDirection(){
+        return direction;
+    }
+
+    /**
+     * Updates velocity, direction and rotation of body
+     */
+    private void updateMovement(){
+        setBodyVelocity(force);
+        updateDirecton();
+        updateRotation();
+    }
+
+    /**
+     * Sets Direction from variable force
+     */
+    private void updateDirecton(){
+        if(force.y > 0){
+            if (force.x > 0){
+                direction = Direction.NORTH_EAST;
+            } else if (force.x < 0){
+                direction = Direction.NORTH_WEST;
+            } else {
+                direction = Direction.NORTH;
+            }
+        } else if (force.y < 0){
+            if (force.x > 0){
+                direction = Direction.SOUTH_EAST;
+            } else if (force.x < 0){
+                direction = Direction.SOUTH_WEST;
+            } else {
+                direction = Direction.SOUTH;
+            }
+        } else {
+            if (force.x > 0){
+                direction = Direction.EAST;
+            } else if (force.x < 0){
+                direction = Direction.WEST;
+            }
+        }
+    }
+
+    /**
+     * Sets speed in x-axis to zero
+     */
+    public void stopX() {
         force.x = 0;
         if (force.y == 0) { this.speed = 0;}
-        setBodyVelocity(force);
+        updateMovement();
     }
 
+    /**
+     * Sets speed in y-axis to zero
+     */
     public void stopY(){
         force.y = 0;
         if (force.x == 0) { this.speed = 0;}
-        setBodyVelocity(force);
+        updateMovement();
     }
 
     @Override
@@ -100,11 +152,17 @@ public class Player extends Entity implements CreatureInterface {
         super.setBodyVelocity(velocity);
     }
 
+    /**
+     * Updates position of player
+     */
     private void updatePosition(){
         setY((float)y);
         setX((float) x);
     }
 
+    /**
+     * Updates location of player
+     */
     private void updateLocation(float deltaTime){
         setX(getX() + deltaTime * force.x);
         setY(getY() + deltaTime * force.y);
@@ -138,9 +196,29 @@ public class Player extends Entity implements CreatureInterface {
 
         return super.getBody();
     }
+    public void addBook(){
+        ++ammunition;
+    }
 
-    public void throwBook(){
+    public void throwBook(){    //TODO ska bero på vinkeln  
+        ammunition -= 1;
         Book book = new Book(direction, getX()-0.5f, getY()-0.5f, getWorld());
+    }
+
+    /**
+     * Get player ammunition
+     * @return ammunition
+     */
+    public int getAmmunition(){
+        return ammunition;
+    }
+
+    /**
+     * Get player lives
+     * @return lives
+     */
+    public int getLives(){
+        return lives;
     }
 
 

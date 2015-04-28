@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -45,6 +46,12 @@ public class ZombieWeek extends Game {
 
     private InputController inputController;
     private MapController mapController;
+
+    //HUD variables
+    private BitmapFont bitmapFont;
+    private SpriteBatch batchHUD;
+
+
 	public void create () {
         mapController = new MapController();
         currentWorld = mapController.getWorld();
@@ -80,7 +87,13 @@ public class ZombieWeek extends Game {
 
         zombie = inputController.getZombie();
 
+<<<<<<< HEAD
     */
+//=======
+        //HUD
+        batchHUD = new SpriteBatch();
+        bitmapFont = new BitmapFont();
+//>>>>>>> e9fd29e199e6157b4894b0ce33d3209fea933596
 	}
 
 	@Override
@@ -108,9 +121,20 @@ public class ZombieWeek extends Game {
 		mapRenderer.setView(camera);
 		mapRenderer.render();
 
+<<<<<<< HEAD
 	//	batch.begin();
 	//	batch.draw(img, 0, 0);
 	//	batch        .end();
+=======
+
+
+		//batch.begin();
+		//batch.draw(img, 0, 0);
+		//batch.end();
+
+
+
+>>>>>>> e9fd29e199e6157b4894b0ce33d3209fea933596
 
         //Rita spelare
         //playerTest.setScale(1 / tileSize);
@@ -131,6 +155,9 @@ public class ZombieWeek extends Game {
         }
         player.draw(mapRenderer.getBatch());
         zombie.draw(mapRenderer.getBatch());
+
+
+
         mapRenderer.getBatch().end();
 
         //rita box2d debug
@@ -138,7 +165,25 @@ public class ZombieWeek extends Game {
 
     */
 
+//<<<<<<< HEAD
     }
+//=======
+
+        //render HUD
+    //String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
+    //String playerHealth = "Health: " + player.getLives();
+    //String playerAmmo = "Ammo: " + player.getAmmunition();
+    //batchHUD.begin();
+    //bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+    //bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
+    //bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
+    //bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
+    //batchHUD.end();
+
+
+
+
+//>>>>>>> e9fd29e199e6157b4894b0ce33d3209fea933596
 
 	@Override
 	public void resize(int width, int height) {

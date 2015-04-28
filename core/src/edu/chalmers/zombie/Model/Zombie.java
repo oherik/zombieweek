@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 
 /**
@@ -12,7 +13,7 @@ import edu.chalmers.zombie.utils.Direction;
 public abstract class Zombie extends Entity implements CreatureInterface {
 
     public Zombie(Sprite sprite, World world, float x, float y){
-        super(sprite,world,x,y);
+        super(sprite,world,x,y, Constants.COLLISION_ZOMBIE);
     }
 
 
