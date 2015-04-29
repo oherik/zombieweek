@@ -96,6 +96,7 @@ public class GameScreen implements Screen{
         //Rita spelare
         //playerTest.setScale(1 / tileSize);
         mapRenderer.getBatch().begin();
+        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         //playerTest.draw(mapRenderer.getBatch());
         ArrayList<Book> books = gameModel.getBooks();
         if (books.size() != 0) {

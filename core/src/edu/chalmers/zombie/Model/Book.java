@@ -20,9 +20,8 @@ public class Book extends Entity{
     //Sets the player's starting direction to east so that a thrown book will have a direction.
     private Direction direction = Direction.EAST;
     private boolean remove = false;
-    int speed;
-    int velocity;
-    int omega;
+    int speed, velocity, omega;
+    float width, height;
     Sprite sprite;
 
 
@@ -36,26 +35,59 @@ public class Book extends Entity{
     private Vector2 force = new Vector2(0,0);
     private boolean remove = false;*/
     public Book(Direction d, float x, float y, World world) {
+        super(world);
+        height = Constants.TILE_SIZE/2f;
+        width = Constants.TILE_SIZE/3f;
 
-        super(new Sprite(new Texture("core/assets/bookSprite.png")), world, x, y, Constants.COLLISION_PROJECTILE);
-        this.sprite=new Sprite(new Texture("core/assets/bookSprite.png"));
-        super.scale(1 / Constants.TILE_SIZE);
+        //Set variables
         this.direction=d;
-        setPosition(x, y);
         force = new Vector2(0,0);
-        GameModel gameModel = GameModel.getInstance();
+        setPosition(x, y);
+
+        //Load body def
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(this.x+0.5f,this.y+0.5f);
+
+        //Load shape
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
+        //Load fixture def
+        FixtureDef fixDef = new FixtureDef();
+        fixDef.shape = shape;
+        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
+        fixDef.restitution = 0;
+        fixDef.friction = 8f;
+        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        //Set body
+        super.setBody(bodyDef, fixDef);
+
+
+
+
         velocity = 7;
         omega= 10;
-        speed = gameModel.getPlayer().getSpeed();
+
         setInMotion();
-        getBody().setTransform(this.x, this.y, getBody().getAngle());
-        Fixture fix =   getBody().getFixtureList().get(0);
+
+        GameModel gameModel = GameModel.getInstance();  //TODO mÃ¥ste ha en controller
+        speed = gameModel.getPlayer().getSpeed();
         gameModel.addBook(this);
+
+
+        //Load sprite
+        sprite = new Sprite(new Texture("core/assets/bookSprite.png"));
+        sprite.setSize(width, height);
         super.setSprite(sprite);
-        float scale = 1f / Constants.TILE_SIZE;
-        super.scale(scale);
+        super.scale(1f/Constants.TILE_SIZE);
+
+
+      //  getBody().setTransform(this.x-0.5f, this.y-0.5f, getBody().getAngle());
 
         getBody().setUserData(this);
+
+
         /*
         super(new Sprite(new Texture("core/assets/bookSprite.png")));
 
@@ -120,7 +152,7 @@ public class Book extends Entity{
 
 
     private void updateLocation(float deltaTime){
-//TODO behövs?
+//TODO behï¿½vs?
 
 
 

@@ -18,18 +18,27 @@ public abstract class Entity {
     private int width;
     private int height;
 
-    public Entity(Sprite sprite, World world, float x, float y, short categoryBit){
+    public Entity(World world){
+        width = Constants.TILE_SIZE;
+        height = Constants.TILE_SIZE;
+        this.world = world;
+    }
+
+    public Entity(Sprite sprite, World world, float x, float y){
 
         width = Constants.TILE_SIZE;
         height = Constants.TILE_SIZE;
 
         this.sprite = sprite;
+
         sprite.setX(x);
         sprite.setY(y);
-        sprite.setSize(width * 1/Constants.TILE_SIZE, height * 1/Constants.TILE_SIZE);
+
+        //sprite.setSize(width * 1/Constants.TILE_SIZE, height * 1/Constants.TILE_SIZE);
 
         this.world = world;
 
+        /* //todo KAN TAS BORT TROLIGTVIS
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x+0.5f,y+0.5f);
@@ -42,19 +51,21 @@ public abstract class Entity {
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = .4f;
-        fixDef.filter.categoryBits = categoryBit;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        */
 
-        body = world.createBody(bodyDef);
-        body.createFixture(fixDef);
 
+    }
+
+    public void setBody(BodyDef bodyDef, FixtureDef fixDef ){
+        this.body = world.createBody(bodyDef);
+        this.body.createFixture(fixDef);
     }
 
     public void scale(float scale) {
         sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
         updatePosition();
     }
-
 
     public Body getBody() {
         return body;
@@ -80,13 +91,13 @@ public abstract class Entity {
     private void updateRotation(){
         float angle = body.getAngle();
         float angleDegrees = angle * 180.0f / Constants.PI;
-        sprite.setOrigin(0.5f,0.5f);
+        sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
         sprite.setRotation(angleDegrees);
     }
 
     private void updatePosition(){
-        sprite.setY(body.getPosition().y-0.5f);
-        sprite.setX(body.getPosition().x-0.5f);
+        sprite.setY(body.getPosition().y-sprite.getWidth() / 2f);
+        sprite.setX(body.getPosition().x-sprite.getHeight() / 2f);
     }
 
 
