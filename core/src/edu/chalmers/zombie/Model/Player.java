@@ -34,6 +34,8 @@ public class Player extends Entity implements CreatureInterface {
     //Holds the players speed.
     private int speed = 7;
 
+    private Thread keyThread; //Keeps track of key releases
+
 
     protected Player(Sprite sprite, World world, float x, float y) {
         super(sprite, world, x, y);
@@ -116,10 +118,13 @@ public class Player extends Entity implements CreatureInterface {
         return direction;
     }
 
+
+
     /**
      * Updates velocity, direction and rotation of body
      */
     private void updateMovement(){
+
         setBodyVelocity(force);
         updateDirecton();
         updateRotation();
@@ -154,13 +159,47 @@ public class Player extends Entity implements CreatureInterface {
         }
     }
 
+
+
+    /**
+     * Method that checks if keys are released simultaneously
+     */
+    private void checkSimultaneousRelease(){
+
+        final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
+
+        if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
+
+                //Keys were released at the same time (thread is sleeping/waiting)
+                updateMovement();
+
+        } else {
+
+            keyThread = new Thread() {
+                public void run() {
+
+                    try {
+                        keyThread.sleep(timeSensitiveness); //waiting for new key release
+                        updateMovement(); //no more key released
+                    } catch (InterruptedException e) {
+                        System.out.println("------ Key thread interrupted -------\n" + e);
+                    }
+                    //keyThread.interrupt();
+
+                }
+            };
+
+            keyThread.start();
+        }
+    }
+
     /**
      * Sets speed in x-axis to zero
      */
     public void stopX() {
         force.x = 0;
         if (force.y == 0) { this.speed = 0;}
-        updateMovement();
+        checkSimultaneousRelease();
     }
 
     /**
@@ -169,7 +208,7 @@ public class Player extends Entity implements CreatureInterface {
     public void stopY(){
         force.y = 0;
         if (force.x == 0) { this.speed = 0;}
-        updateMovement();
+        checkSimultaneousRelease();
     }
 
     @Override
