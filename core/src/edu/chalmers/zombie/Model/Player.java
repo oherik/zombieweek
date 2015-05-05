@@ -1,10 +1,6 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.utils.Constants;
@@ -60,7 +56,7 @@ public class Player extends Entity implements CreatureInterface {
 
         //Set body
         super.setBody(bodyDef, fixDef);
-        super.scale(1f / Constants.TILE_SIZE);
+        super.scaleSprite(1f / Constants.TILE_SIZE);
         super.setSprite(sprite);
         killCount = 0;
         ammunition = 100;
@@ -263,6 +259,9 @@ public class Player extends Entity implements CreatureInterface {
         ++ammunition;
     }
 
+    /**
+     * Since the ammunition count can't be negative it checks if it's >0 before decreasing it
+     */
     public void decreaseAmmunition(){
         if(ammunition>0)
             ammunition--;

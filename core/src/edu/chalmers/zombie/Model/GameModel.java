@@ -31,14 +31,16 @@ public class GameModel {
     private ArrayList<Book> books = new ArrayList<Book>();
     private Set bodiesToRemove;
 
-
+    /**
+     * Initializes the game model
+     */
     private GameModel(){
         currentLevel = 0;
         levels = new ArrayList<Level>();
         bodiesToRemove = new HashSet<Body>();
         addTestLevel();                                 //TODO debug
-        addTestPlayer();
-        addTestZombie();
+        addTestPlayer();                                //TODO debug
+        addTestZombie();                                //TODO debug
     }
 
     /**

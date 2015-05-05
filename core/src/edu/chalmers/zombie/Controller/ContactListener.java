@@ -14,11 +14,12 @@ import java.util.Set;
  */
 public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener {
 
-
-    private GameModel gameModel;
-
+    /**
+     * Decides what to do when two objects start colliding
+     * @param contact   The contact between two objects
+     */
     public void beginContact (Contact contact){     //Anropas när två saker börjar kollidera
-        this.gameModel = GameModel.getInstance();
+        GameModel gameModel = GameModel.getInstance();
         gameModel.clearBodiesToRemove();
         if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PROJECTILE) {
             if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_PLAYER) {

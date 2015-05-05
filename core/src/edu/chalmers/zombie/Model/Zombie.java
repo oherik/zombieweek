@@ -1,7 +1,5 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -15,6 +13,13 @@ import edu.chalmers.zombie.utils.Direction;
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 
+    /**
+     * Creates a new zombie
+     * @param sprite    Which sprite to use
+     * @param world     In which world to create it
+     * @param x     The zombie's x coordinate
+     * @param y     The zombie's y coordinate
+     */
     public Zombie(Sprite sprite, World world, float x, float y){
         super(sprite,world,x,y);
         int width = Constants.TILE_SIZE;
@@ -40,7 +45,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //Set body
         super.setBody(bodyDef, fixDef);
 
-        super.scale(1f / Constants.TILE_SIZE);
+        super.scaleSprite(1f / Constants.TILE_SIZE);
 
     }
 

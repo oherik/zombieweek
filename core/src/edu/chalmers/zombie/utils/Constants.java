@@ -16,7 +16,7 @@ public class Constants {
     public static final short COLLISION_OBSTACLE  = 16;
 
 
-    //Fysikrhantering
+    //Fysikhantering
     public static final float TIMESTEP = 1/60f;
 
     //Matematik

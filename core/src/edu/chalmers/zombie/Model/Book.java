@@ -1,12 +1,9 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 
@@ -25,22 +22,22 @@ public class Book extends Entity{
     Sprite sprite;
 
 
-
-    /*
-    private final int VELOCITY = 10;
-    private Direction direction;
-    private Body bookBody;
-    private float x;
-    private float y;
-    private Vector2 force = new Vector2(0,0);
-    private boolean remove = false;*/
-    public Book(Direction d, float x, float y, World world, int intialSpeed) {
+    /**
+     * Creates a book in front of the player. Since it uses vectors the speed of the book will depend on the player's speed.
+     * @param d The player's direction
+     * @param x The player's x position
+     * @param y The player's y position
+     * @param world In which world to create the physical representation of the book
+     * @param initialSpeed  The speed which to add to the throwing speed
+     */
+    public Book(Direction d, float x, float y, World world, int initialSpeed) {
         super(world);
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
 
         //Set variables
         this.direction=d;
+        this.speed = initialSpeed;
         force = new Vector2(0,0);
         setPosition(x, y);
 
@@ -52,6 +49,7 @@ public class Book extends Entity{
         //Load shape
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
+
         //Load fixture def
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape = shape;
@@ -60,69 +58,23 @@ public class Book extends Entity{
         fixDef.friction = 8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+
         //Set body
         super.setBody(bodyDef, fixDef);
-
-
-
-
         velocity = 7;
         omega= 10;
 
         setInMotion();
 
-        speed = intialSpeed;
-
         //Load sprite
         sprite = new Sprite(new Texture("core/assets/bookSprite.png"));
         sprite.setSize(width, height);
         super.setSprite(sprite);
-        super.scale(1f/Constants.TILE_SIZE);
-
-
-      //  getBody().setTransform(this.x-0.5f, this.y-0.5f, getBody().getAngle());
+        super.scaleSprite(1f / Constants.TILE_SIZE);
 
         getBody().setUserData(this);
-
-
-        /*
-        super(new Sprite(new Texture("core/assets/bookSprite.png")));
-
-        GameModel gameModel = GameModel.getInstance();
-
-        this.direction = d;
-        //Sets this book's position to be in front of the player.
-        setPosition(x,y);
-
-        BodyDef bookBodyDef = new BodyDef();
-        bookBodyDef.type = BodyDef.BodyType.DynamicBody;
-        System.out.println(x + " " + y + "  " + this.x + " " + this.y);
-        bookBodyDef.position.set(this.x, this.y);
-
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(gameModel.getPlayer().getHeight() / 2, gameModel.getPlayer().getWidth() / 2);
-        FixtureDef bookFixDef = new FixtureDef();
-        bookFixDef.shape = shape;
-        bookFixDef.density = (float) Math.pow(gameModel.getPlayer().getWidth(), gameModel.getPlayer().getHeight());
-        bookFixDef.restitution = 0;
-        bookFixDef.friction = 0.1f;
-        bookFixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
-        bookFixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
-        bookFixDef.isSensor = false;
-        bookBody = world.createBody(bookBodyDef);
-        bookBody.createFixture(bookFixDef);
-
-        bookBody.setSleepingAllowed(false);
-        //Adds this book to the list of all books that exist for the renderer.
-        gameModel.addBook(this);
-        setSize(1, 1);
-        setInMotion();
-
-        bookBody.setUserData(this);
-        bookBody.setSleepingAllowed(false);*/
-
     }
+
     public float getX(){
         return x;
     }
@@ -164,7 +116,10 @@ public class Book extends Entity{
     }
 
 
-    //Sets the books position to be next to the coordinates given.
+    /**
+     * Sets the books position to be in front of the coordinates given.
+     */
+
     public void setPosition(float x, float y){
         float distance = 1.5f;
         switch (direction) {
@@ -205,101 +160,61 @@ public class Book extends Entity{
         setY(y);
     }
 
+    /**
+     *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
+     */
     public void setInMotion(){
         switch(direction){
-        case NORTH:
-        force.y = speed +   velocity;
-        break;
-        case SOUTH:
-        force.y = -speed - velocity;
-        break;
-        case WEST:
-        force.x = -speed-velocity;
-        break;
-        case EAST:
-        force.x = speed+velocity;
-        break;
-        case NORTH_EAST:
-        force.x = Constants.SQRT_2*(speed+velocity);
-        force.y = Constants.SQRT_2*(speed+velocity);
-        break;
-        case NORTH_WEST:
-        force.x = Constants.SQRT_2*(-speed-velocity);
-        force.y =  Constants.SQRT_2*(speed+velocity);
-        break;
-        case SOUTH_EAST:
-        force.x = Constants.SQRT_2*(speed+velocity);
-        force.y =Constants.SQRT_2*(-speed-velocity);
-        break;
-        case SOUTH_WEST:
-        force.x = Constants.SQRT_2*(-speed-velocity);
-        force.y =  Constants.SQRT_2*(-speed-velocity);
-        break;
-        default:
-        break;
-    }
-    setBodyVelocity(force);
-    setAngularVelocity(omega);
-}
-    /*public void setInMotion(){
-        GameModel gameModel = GameModel.getInstance();
-        int speed = VELOCITY + gameModel.getPlayer().getSpeed();
-        switch (direction) {
             case NORTH:
-                force.y = speed;
+                force.y = speed + velocity;
                 break;
             case SOUTH:
-                force.y = -speed;
+                force.y = -speed - velocity;
                 break;
             case WEST:
-                force.x = -speed;
+                force.x = -speed - velocity;
                 break;
             case EAST:
-                force.x = speed;
+                force.x = speed + velocity;
                 break;
             case NORTH_EAST:
-                force.x = speed;
-                force.y = speed;
+                force.x = Constants.SQRT_2*(speed+velocity);
+                force.y = Constants.SQRT_2*(speed+velocity);
                 break;
             case NORTH_WEST:
-                force.x = -speed;
-                force.y = speed;
+                force.x = Constants.SQRT_2*(-speed-velocity);
+                force.y =  Constants.SQRT_2*(speed+velocity);
                 break;
             case SOUTH_EAST:
-                force.x = speed;
-                force.y = -speed;
+                force.x = Constants.SQRT_2*(speed+velocity);
+                force.y =Constants.SQRT_2*(-speed-velocity);
                 break;
             case SOUTH_WEST:
-                force.x = -speed;
-                force.y = -speed;
+                force.x = Constants.SQRT_2*(-speed-velocity);
+                force.y =  Constants.SQRT_2*(-speed-velocity);
                 break;
             default:
                 break;
         }
-        bookBody.setAwake(true);
-        System.out.println(bookBody.isAwake());
-        System.out.println(force);
-        setPosition(0,0); //TODO test
-        bookBody.setLinearVelocity(force);
-        bookBody.setAngularVelocity(10);
-        bookBody.setAwake(true);
+        setBodyVelocity(force);
+        setAngularVelocity(omega);
     }
-    public void draw(Batch batch) {
-        updateLocation(Gdx.graphics.getDeltaTime());
-        //updateLocation((float)0.15);
-        super.draw(batch);
-        bookBody.setTransform(x+0.5f,y+0.5f,0);
-    }*/
 
     @Override
     public void setX(float x) {
-
+        //TODO empty
     }
 
+    /**
+     * Sets this book to be removed in the next world update
+     */
     public void markForRemoval(){
         this.remove = true;
     }
 
+    /**
+     * @return True if the books shall be removed, false if not
+     */
     public boolean toRemove(){
         return this.remove;
     }

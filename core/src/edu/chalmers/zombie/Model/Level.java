@@ -16,8 +16,9 @@ public class Level {
     private TiledMap tiledMap;
 
     /**
-     * The constructor
+     * Creates a new level based on a tiled map and a Box2D world
      * @param mapPath   The file path to the map
+     * @throws NullPointerException if the path name is incorrect or not found
      */
     public Level(String mapPath){
         if(mapPath == null)
@@ -37,7 +38,7 @@ public class Level {
     }
 
     /**
-     * @return the level's box2d World
+     * @return the level's Box2D World
      */
     public World getWorld(){
         return this.world;

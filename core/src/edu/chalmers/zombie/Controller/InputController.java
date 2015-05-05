@@ -25,10 +25,11 @@ public class InputController implements InputProcessor{
 
     GameModel gameModel;
 
+    /**
+     * Constructor. Initializes the game model
+     */
     public InputController(){
-
         gameModel = GameModel.getInstance();
-
     }
 
     /**
@@ -47,6 +48,11 @@ public class InputController implements InputProcessor{
         return gameModel.getZombie();
     }
 
+    /**
+     * Decides what to do when the player presses a key.
+     * @param keycode   The key pressed
+     * @return  True if successful, false if not
+     */
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode){
@@ -87,6 +93,11 @@ public class InputController implements InputProcessor{
         return true;
     }
 
+    /**
+     * Decides what to do when the player releases a key
+     * @param keycode   The key released
+     * @return True if successful, false if not
+     */
     @Override
     public boolean keyUp(int keycode) {
 
@@ -98,13 +109,11 @@ public class InputController implements InputProcessor{
             getPlayer().stopY();
         }
 
-
         if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
             //set aiming force to zero
         } else {return false;}
         return true;
     }
-
 
     @Override
     public boolean keyTyped(char character) {

@@ -18,112 +18,149 @@ public abstract class Entity {
     private int width;
     private int height;
 
+    /**
+     * Creates an entity without a sprite
+     * @param world The world in which to create it
+     */
     public Entity(World world){
-        width = Constants.TILE_SIZE;
-        height = Constants.TILE_SIZE;
+        this.width = Constants.TILE_SIZE;
+        this.height = Constants.TILE_SIZE;
         this.world = world;
     }
 
+    /**
+     * Creates an entity with a sprite
+     * @param sprite    The sprite that will be used
+     * @param world     The world in which to create it
+     * @param x         The sprite's x coordinate
+     * @param y         The sprite's y coordinate
+     */
     public Entity(Sprite sprite, World world, float x, float y){
-
-        width = Constants.TILE_SIZE;
-        height = Constants.TILE_SIZE;
-
+        this.width = Constants.TILE_SIZE;
+        this.height = Constants.TILE_SIZE;
         this.sprite = sprite;
-
         sprite.setX(x);
         sprite.setY(y);
-
-        //sprite.setSize(width * 1/Constants.TILE_SIZE, height * 1/Constants.TILE_SIZE);
-
         this.world = world;
-
-        /* //todo KAN TAS BORT TROLIGTVIS
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x+0.5f,y+0.5f);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
-
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = 0;
-        fixDef.friction = .4f;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
-        */
-
-
     }
 
+    /**
+     * Sets a body to use as a Box2D body
+     * @param bodyDef   The body's body definition
+     * @param fixDef    The body's fixture definition
+     */
     public void setBody(BodyDef bodyDef, FixtureDef fixDef ){
         this.body = world.createBody(bodyDef);
         this.body.createFixture(fixDef);
     }
 
-    public void scale(float scale) {
+    /**
+     * Scales the sprite
+     * @param scale How the sprite should be scaled
+     */
+    public void scaleSprite(float scale) {
         sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
         updatePosition();
     }
 
+    /**
+     * @return The entity's body
+     */
     public Body getBody() {
         return body;
     }
 
+    /**
+     * Makes the body move linearly
+     * @param velocity  The body's new velocity
+     */
     protected void setBodyVelocity(Vector2 velocity){
         this.body.setLinearVelocity(velocity);
     }
+
+    /**
+     * Maked the body rotate
+     * @param omega The angular velocity
+     */
     protected void setAngularVelocity(float omega){
         this.body.setAngularVelocity(omega);
     }
+
+    /**
+     * Draws the sprite
+     * @param batch The sprite batch in which to draw it
+     */
     public void draw(Batch batch){
         updateRotation();
         sprite.draw(batch);
-        //System.out.println(sprite.getX() + " " + body.getPosition().x);
-        //updateLocation(Gdx.graphics.getDeltaTime());
-
-
-        //body.setTransform(getX()+0.5f,getY()+0.5f,0);
         updatePosition();
-
     }
+
+    /**
+     * Updates the sprite's rotation based on the angle of the body
+     */
     private void updateRotation(){
         float angle = body.getAngle();
         float angleDegrees = angle * 180.0f / Constants.PI;
-        sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
+        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
         sprite.setRotation(angleDegrees);
     }
 
+    /**
+     * Updates the sprite's position based on the position of the body.
+     */
     private void updatePosition(){
-        sprite.setY(body.getPosition().y-sprite.getWidth() / 2f);
-        sprite.setX(body.getPosition().x-sprite.getHeight() / 2f);
+        sprite.setY(body.getPosition().y - sprite.getWidth() / 2f);
+        sprite.setX(body.getPosition().x - sprite.getHeight() / 2f);
     }
 
-
+    /**
+     * Set the body's x position
+     * @param x The new x coordinate
+     */
     public abstract void setX(float x);
 
+    /**
+     * @return The body's x position
+     */
     public float getX(){
         return body.getPosition().x;
     }
 
+    /**
+     * Set the body's x position
+     * @param y The new y coordinate
+     */
     public abstract void setY(float y);
 
+    /**
+     * @return The body's y position
+     */
     public float getY(){
         return body.getPosition().y;
     }
 
+    /**
+     * Disposes the sprite
+     */
     public void dispose(){
         sprite.getTexture().dispose();
     }
 
+    /**
+     * @return The sprite's height
+     */
     public float getHeight(){
         return sprite.getHeight();
     }
+
+    /**
+     * @return The sprite's width
+     */
     public float getWidth(){
         return sprite.getWidth();
     }
-    public abstract int getSpeed();
+    public abstract int getSpeed(); //TODO empty
 
 
     public void setBody(Body body) {
