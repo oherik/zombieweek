@@ -15,8 +15,8 @@ public abstract class Entity {
     private Sprite sprite;
     private Body body;
     private World world;
-    private int width;
-    private int height;
+    private int width; //TODO: delete?
+    private int height; //TODO: delete?
 
     /**
      * Creates an entity without a sprite
@@ -118,7 +118,9 @@ public abstract class Entity {
      * Set the body's x position
      * @param x The new x coordinate
      */
-    public abstract void setX(float x);
+    public void setX(float x){
+        //TODO: delete?
+    }
 
     /**
      * @return The body's x position
@@ -131,7 +133,9 @@ public abstract class Entity {
      * Set the body's x position
      * @param y The new y coordinate
      */
-    public abstract void setY(float y);
+    public void setY(float y){
+        //TODO: delete?
+    }
 
     /**
      * @return The body's y position
