@@ -55,7 +55,7 @@ public class Level {
      * @param e The entity which body will be destroyed
      */
     public void destroyBody(Entity e){
-        getWorld().destroyBody(e.getBody());
+        e.removeBody();
     }
 
     /**
@@ -64,6 +64,7 @@ public class Level {
      */
     public void destroyBody(Body b){
         getWorld().destroyBody(b);
+        b=null;
     }
 
     public Point coordinatesToTile(Point coordinates){
