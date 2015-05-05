@@ -114,13 +114,6 @@ public abstract class Entity {
         sprite.setX(body.getPosition().x - sprite.getHeight() / 2f);
     }
 
-    /**
-     * Set the body's x position
-     * @param x The new x coordinate
-     */
-    public void setX(float x){
-        //TODO: delete?
-    }
 
     /**
      * @return The body's x position
@@ -129,13 +122,6 @@ public abstract class Entity {
         return body.getPosition().x;
     }
 
-    /**
-     * Set the body's x position
-     * @param y The new y coordinate
-     */
-    public void setY(float y){
-        //TODO: delete?
-    }
 
     /**
      * @return The body's y position
