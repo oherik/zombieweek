@@ -174,4 +174,8 @@ public abstract class Entity {
     public void setSprite(Sprite sprite){
         this.sprite = sprite;
     }
+
+    public void removeBody(){
+        this.world.destroyBody(body);
+        this.body = null;}
 }
