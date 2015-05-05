@@ -175,7 +175,7 @@ public class Player extends Entity implements CreatureInterface {
                 public void run() {
                     try {
                         keyThread.sleep(timeSensitiveness); //waiting for new key release
-                        if(getWorld().isLocked())     //TODO hack för att inte krascha
+                        //if(getWorld().isLocked())     //TODO hack för att inte krascha
                              updateMovement(); //no more key released
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);
