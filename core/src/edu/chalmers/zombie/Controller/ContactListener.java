@@ -21,15 +21,13 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
         this.gameModel = GameModel.getInstance();
         gameModel.clearBodiesToRemove();
         if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PROJECTILE) {
-            System.out.println("bok");
             if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_PLAYER) {
                 Book b = (Book) contact.getFixtureB().getBody().getUserData(); //TODO detta måste göras snyggare. Kanske en projectile-huvudklass?
                 gameModel.addBodyToRemove(contact.getFixtureB().getBody());
                 b.markForRemoval();
-                gameModel.getPlayer().addBook();
+                gameModel.getPlayer().increaseAmmunition();
             }
         }
-            System.out.println("Kollision");
     }
 
     public void endContact (Contact contact){       //Anropas när de inte längre kolliderar
