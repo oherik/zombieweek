@@ -34,7 +34,7 @@ public class Book extends Entity{
     private float y;
     private Vector2 force = new Vector2(0,0);
     private boolean remove = false;*/
-    public Book(Direction d, float x, float y, World world) {
+    public Book(Direction d, float x, float y, World world, int intialSpeed) {
         super(world);
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
@@ -71,10 +71,7 @@ public class Book extends Entity{
 
         setInMotion();
 
-        GameModel gameModel = GameModel.getInstance();  //TODO måste ha en controller
-        speed = gameModel.getPlayer().getSpeed();
-        gameModel.addBook(this);
-
+        speed = intialSpeed;
 
         //Load sprite
         sprite = new Sprite(new Texture("core/assets/bookSprite.png"));

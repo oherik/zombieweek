@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.model.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.model.Zombie;
@@ -73,7 +74,12 @@ public class InputController implements InputProcessor{
                 break;
             case Input.Keys.SPACE:
                 //throw book
-                gameModel.getPlayer().throwBook();
+                Player player = gameModel.getPlayer();
+                player.decreaseAmmunition();
+                if(player.getAmmunition()>0) {
+                    Book book = new Book(player.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getSpeed());
+                    gameModel.addBook(book);
+                }
                 break;
             default:
                 return false;
