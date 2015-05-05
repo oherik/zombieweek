@@ -13,7 +13,7 @@ import edu.chalmers.zombie.utils.Direction;
  * Created by neda on 2015-03-31.
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
-
+    private boolean isKnockedOut;
     /**
      * Creates a new zombie
      * @param sprite    Which sprite to use
@@ -40,13 +40,16 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = .8f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
+        fixDef.filter.categoryBits = Constants.COLLISION_ZOMBIE;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
 
         //Set body
         super.setBody(bodyDef, fixDef);
+        super.getBody().setUserData(this);
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
+
+        isKnockedOut = false;
 
     }
 
@@ -70,12 +73,18 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     }
 
+    /**
+     * Changes the sprite to a sleeping one
+     */
     @Override
     public void KnockOut() {
-
+        isKnockedOut = true;
         // TODO: remove zombie
     }
 
+    public boolean isKnockedOut(){
+        return isKnockedOut;
+    }
     @Override
     public boolean hasBeenAttacked() {
 

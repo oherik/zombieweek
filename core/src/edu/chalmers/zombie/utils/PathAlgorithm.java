@@ -72,8 +72,10 @@ public class PathAlgorithm {
         while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            if (currentNode.equals(this.endPos))
+            if (currentNode.equals(this.endPos)) {
+                currentElement.getPath().add(currentNode);
                 return currentElement.getPath().iterator();
+            }
             else {
                 int x = currentNode.x;
                 int y = currentNode.y;

@@ -9,6 +9,9 @@ import edu.chalmers.zombie.controller.ContactListener;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The general model for storing a specific level. The level contains a tiled map, which is the graphical representation of the level, and a box2d World which handles the physics.
@@ -19,6 +22,7 @@ public class Level {
     private World world;
     private TiledMap tiledMap;
     private float tileSize;
+    private ArrayList zombies;
 
     /**
      * Creates a new level based on a tiled map and a Box2D world
@@ -34,7 +38,33 @@ public class Level {
         world = new World(new Vector2(0,0), true);
         world.setContactListener(new ContactListener());
         tileSize = (float) Constants.TILE_SIZE;
+        zombies = new ArrayList<Zombie>();
     }
+
+    /**
+     * @return The level's zombies
+     */
+    public ArrayList<Zombie> getZombies(){
+        return zombies;
+    }
+
+    /**
+     * Adds a zombie
+     * @param z A zombie
+     */
+    public void addZombie(Zombie z){
+        zombies.add(z);
+    }
+
+    /**
+     * Removes a zombie
+     * @param z A zombie to remove
+     */
+    public void removeZombie(Zombie z){
+        z.dispose();
+        zombies.remove(z);
+    }
+
 
     /**
      * @return the level's map
