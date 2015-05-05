@@ -106,15 +106,22 @@ public class GameScreen implements Screen{
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         //playerTest.draw(mapRenderer.getBatch());
-        removeEntities();
+
         ArrayList<Book> books = gameModel.getBooks();
         for (int i = 0; i<books.size(); i++) {
             Book b = books.get(i);
+            long lifeTime = 5000; //life time for book in millisec
+            if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime){
+                gameModel.addEntityToRemove(b);
+                b.markForRemoval();
+            }
             if(b.toRemove())
                 books.remove(i); //Förenklad forsats skulle göra detta svårt
             else
                 b.draw(mapRenderer.getBatch());
         }
+
+        removeEntities();
 
         gameModel.getPlayer().draw(mapRenderer.getBatch());
         gameModel.getZombie().draw(mapRenderer.getBatch());
