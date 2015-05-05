@@ -41,6 +41,7 @@ public class GameScreen implements Screen{
     //HUD variables
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
+    private Sprite tiledMapPainting;
 
     //För testa av path finding //TODO debug
     private PathAlgorithm pathFinding;
@@ -59,6 +60,11 @@ public class GameScreen implements Screen{
         camera = new OrthographicCamera(width, height);
         mapController = new MapController();
         tiledMap = mapController.getMap(0);
+        /*--- test ---*/
+        tiledMapPainting = mapController.getMapPainting(0); //TODO test
+        float scale= 1f/tileSize;
+        tiledMapPainting.setSize(tiledMapPainting.getWidth() * scale, tiledMapPainting.getHeight() * scale);
+        /*--- end test ---*/
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputController());
@@ -112,12 +118,13 @@ public class GameScreen implements Screen{
 
 //Rita kartan
         mapRenderer.setView(camera);
-        mapRenderer.render();
+        //mapRenderer.render();
         steps++;
         mapRenderer.getBatch().begin();
+
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         //playerTest.draw(mapRenderer.getBatch());
-
+        tiledMapPainting.draw(mapRenderer.getBatch());
         ArrayList<Book> books = gameModel.getBooks();
         for (int i = 0; i<books.size(); i++) {
             Book b = books.get(i);

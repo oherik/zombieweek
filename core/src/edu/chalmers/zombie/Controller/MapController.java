@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
@@ -95,6 +96,11 @@ public class MapController {
     public Level getLevel(int levelIndex){
        return gameModel.getLevel(levelIndex);
     }
+
+    public Sprite getMapPainting(int levelIndex){
+        return gameModel.getLevel(levelIndex).getMapPainting();
+    }
+
     public void setPlayerFriction(Body b, int levelIndex ){
         FrictionJointDef jointDef = new FrictionJointDef();
         jointDef.initialize(b, getLevel(levelIndex).getGround(),new Vector2(0,0));

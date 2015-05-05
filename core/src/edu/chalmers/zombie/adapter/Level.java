@@ -1,5 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
@@ -25,13 +27,14 @@ public class Level {
     private float tileSize;
     private ArrayList zombies;
     private Body ground;
+    private Sprite mapPainting;
     /**
      * Creates a new level based on a tiled map and a Box2D world
      * @param mapPath   The file path to the map
      * @throws NullPointerException if the path name is incorrect or not found
      */
-    public Level(String mapPath){
-        if(mapPath == null)
+    public Level(String mapPath, String mapPaintingPath){
+        if(mapPath == null || mapPaintingPath == null)
             throw new NullPointerException("Level: no path name recieved");
         tiledMap = new TmxMapLoader().load(mapPath);
         if(tiledMap == null)
@@ -42,6 +45,7 @@ public class Level {
         zombies = new ArrayList<Zombie>();
         BodyDef bd =new BodyDef();
         ground = world.createBody(bd);  //Behövs för friktion
+        mapPainting = new Sprite(new Texture(mapPaintingPath));
     }
 
     public Body getGround(){
@@ -104,15 +108,10 @@ public class Level {
         b=null;
     }
 
-    public Point coordinatesToTile(Point coordinates){
-        int x = Math.round(coordinates.x / tileSize);   //Vill ha som int istället för float.
-        int y = Math.round(coordinates.y / tileSize); //Måste flippa, 0,0 är längst ner till vänster i libGDX men högst upp till vänster i Tiled
-        return new Point(x,y);
-    }
-
-    public Point tileToCoordinates(Point tile){
-        int x = Math.round(tile.x * tileSize);
-        int y = Math.round(tile.y * tileSize);
-        return new Point(x,y);
+    /**
+     * @return The map painting
+     */
+    public Sprite getMapPainting(){
+        return mapPainting;
     }
 }
