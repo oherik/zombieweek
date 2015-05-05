@@ -50,6 +50,7 @@ public class GameScreen implements Screen{
     private int steps;
 
     public GameScreen(World world, float tileSize){
+
         this.currentWorld = world;
         this.tileSize = tileSize;
         float width = Gdx.graphics.getWidth();
@@ -102,12 +103,6 @@ public class GameScreen implements Screen{
         mapRenderer.setView(camera);
         mapRenderer.render();
         steps++;
-        //	batch.begin();
-        //	batch.draw(img, 0, 0);
-        //	batch        .end();
-
-        //Rita spelare
-        //playerTest.setScale(1 / tileSize);
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         //playerTest.draw(mapRenderer.getBatch());
@@ -193,7 +188,8 @@ public class GameScreen implements Screen{
 
     }
     public void dispose(){
-
+        GameModel.getInstance().getPlayer().dispose();
+        currentWorld.dispose();
     }
 
     /**
