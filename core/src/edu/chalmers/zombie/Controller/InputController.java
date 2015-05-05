@@ -85,6 +85,7 @@ public class InputController implements InputProcessor{
                 if(player.getAmmunition()>0) {
                     Book book = new Book(player.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getSpeed());
                     gameModel.addBook(book);
+                    
                 }
                 break;
             default:

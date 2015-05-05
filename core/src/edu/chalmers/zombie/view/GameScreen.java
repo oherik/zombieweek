@@ -73,6 +73,13 @@ public class GameScreen implements Screen{
         TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMap().getLayers().get("meta");
         pathFinding = new PathAlgorithm(meta, "collision");
         /*---SLUTTEST---*/
+
+        //Friktionstest //TODO
+        mapController.setPlayerFriction(GameModel.getInstance().getPlayer().getBody(), GameModel.getInstance().getCurrentLevelIndex());
+        for(Zombie z : GameModel.getInstance().getZombies())
+        if(z.getBody()!=null)
+            mapController.setZombieFriction(z.getBody(), GameModel.getInstance().getCurrentLevelIndex());
+
     }
 
     public void resize(int width, int height){

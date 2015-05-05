@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.ContactListener;
 import edu.chalmers.zombie.utils.Constants;
@@ -23,7 +24,7 @@ public class Level {
     private TiledMap tiledMap;
     private float tileSize;
     private ArrayList zombies;
-
+    private Body ground;
     /**
      * Creates a new level based on a tiled map and a Box2D world
      * @param mapPath   The file path to the map
@@ -39,6 +40,12 @@ public class Level {
         world.setContactListener(new ContactListener());
         tileSize = (float) Constants.TILE_SIZE;
         zombies = new ArrayList<Zombie>();
+        BodyDef bd =new BodyDef();
+        ground = world.createBody(bd);  //Behövs för friktion
+    }
+
+    public Body getGround(){
+        return  ground;
     }
 
     /**

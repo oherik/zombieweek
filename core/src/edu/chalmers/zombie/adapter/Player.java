@@ -62,6 +62,8 @@ public class Player extends Entity implements CreatureInterface {
         lives = 100;
         force = new Vector2(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
+
+
     }
 
     private int getKillCount() {
