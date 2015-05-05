@@ -21,6 +21,7 @@ public class Book extends Entity {
     int speed, velocity, omega;
     float width, height;
     Sprite sprite;
+    private long timeCreated;
 
 
     /**
@@ -74,6 +75,9 @@ public class Book extends Entity {
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
         getBody().setUserData(this);
+
+        //Set system time created
+        timeCreated = System.currentTimeMillis();
     }
 
     public float getX(){
@@ -219,6 +223,11 @@ public class Book extends Entity {
     public boolean toRemove(){
         return this.remove;
     }
+
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+
 
 
 }
