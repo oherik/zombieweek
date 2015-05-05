@@ -36,6 +36,7 @@ public class GameScreen implements Screen{
 
 
     public GameScreen(World world, float tileSize){
+
         this.currentWorld = world;
         this.tileSize = tileSize;
         float width = Gdx.graphics.getWidth();
@@ -88,7 +89,6 @@ public class GameScreen implements Screen{
 //Rita kartan
         mapRenderer.setView(camera);
         mapRenderer.render();
-
         //	batch.begin();
         //	batch.draw(img, 0, 0);
         //	batch        .end();
@@ -127,6 +127,7 @@ public class GameScreen implements Screen{
 
     }
     public void dispose(){
-
+        GameModel.getInstance().getPlayer().dispose();
+        currentWorld.dispose();
     }
 }
