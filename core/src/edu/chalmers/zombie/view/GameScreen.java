@@ -164,7 +164,10 @@ public class GameScreen implements Screen{
 
     }
 
-    private void updateZombiePaths(){
+    /**
+     * Updates the zombie paths to the player.
+     */
+    private void updateZombiePaths(){   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?
         GameModel gameModel = GameModel.getInstance();
         for(Zombie z : gameModel.getZombies()) {
             Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));

@@ -143,6 +143,9 @@ public class GameModel {
 
     public Set<Entity> getEntitiesToRemove() {return this.entitiesToRemove; }
 
+    /**
+     * @return The current level's zombies
+     */
     public ArrayList<Zombie> getZombies(){
         return getLevel().getZombies();
     }
