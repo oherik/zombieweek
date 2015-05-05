@@ -23,7 +23,6 @@ public class Player extends Entity implements CreatureInterface {
     private int ammunition;
     private boolean isAttacked;
     private Body playerBody;
-    private World world;
     private int width;
     private int height;
     private float x;
@@ -108,7 +107,7 @@ public class Player extends Entity implements CreatureInterface {
     private void updateRotation(){
         Body body = getBody();
         float rotation =  direction.getRotation();
-        body.setTransform(body.getPosition(), rotation);
+        body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
     }
 
     /**
@@ -177,10 +176,10 @@ public class Player extends Entity implements CreatureInterface {
 
             keyThread = new Thread() {
                 public void run() {
-
                     try {
                         keyThread.sleep(timeSensitiveness); //waiting for new key release
-                        updateMovement(); //no more key released
+                        if(getWorld().isLocked())     //TODO hack för att inte krascha
+                             updateMovement(); //no more key released
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);
                     }

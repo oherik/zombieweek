@@ -75,11 +75,7 @@ public class GameScreen implements Screen{
         //Uppdatera fysik
         currentWorld.step(Constants.TIMESTEP, 6, 2);
 
-        //Ta bort gamla objekt
-        for(Body b : gameModel.getBodiesToRemove()){
-            gameModel.getLevel().getWorld().destroyBody(b);
-        }
-        gameModel.clearBodiesToRemove();
+
 
         camera.position.set(gameModel.getPlayer().getX(),gameModel.getPlayer().getY(),0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();
@@ -98,12 +94,16 @@ public class GameScreen implements Screen{
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         //playerTest.draw(mapRenderer.getBatch());
+        removeEntities();
         ArrayList<Book> books = gameModel.getBooks();
-        if (books.size() != 0) {
-            for (Book b : books) {
+        for (int i = 0; i<books.size(); i++) {
+            Book b = books.get(i);
+            if(b.toRemove())
+                books.remove(i); //Förenklad forsats skulle göra detta svårt
+            else
                 b.draw(mapRenderer.getBatch());
-            }
         }
+
         gameModel.getPlayer().draw(mapRenderer.getBatch());
         gameModel.getZombie().draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
@@ -128,6 +128,15 @@ public class GameScreen implements Screen{
 
     }
     public void dispose(){
+
+    }
+
+    private void removeEntities(){
+        GameModel gameModel = GameModel.getInstance();
+        for(Body b : gameModel.getBodiesToRemove()){
+            gameModel.getLevel().getWorld().destroyBody(b);
+        }
+        gameModel.clearBodiesToRemove();
 
     }
 }
