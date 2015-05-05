@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.model.Player;
-import edu.chalmers.zombie.model.Zombie;
+import edu.chalmers.zombie.adapter.Player;
+import edu.chalmers.zombie.adapter.Zombie;
 
 /**
  * Created by Tobias on 15-04-21.

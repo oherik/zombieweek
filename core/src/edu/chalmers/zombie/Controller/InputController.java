@@ -6,10 +6,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.model.Book;
+import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Player;
-import edu.chalmers.zombie.model.Zombie;
+import edu.chalmers.zombie.adapter.Player;
+import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 

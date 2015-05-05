@@ -1,15 +1,8 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.model.Player;
+import com.badlogic.gdx.graphics.Texture;       //TODO debug
+import com.badlogic.gdx.graphics.g2d.Sprite;    //TODO debug
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
 
@@ -26,10 +19,9 @@ public class GameModel {
     private Player player;
     private Zombie zombie;
     private ArrayList<Level> levels;
-    private TiledMapTileLayer metaLayer;
     private int currentLevel;
     private ArrayList<Book> books = new ArrayList<Book>();
-    private Set bodiesToRemove;
+    private Set entitiesToRemove;
 
     /**
      * Initializes the game model
@@ -37,7 +29,7 @@ public class GameModel {
     private GameModel(){
         currentLevel = 0;
         levels = new ArrayList<Level>();
-        bodiesToRemove = new HashSet<Body>();
+        entitiesToRemove = new HashSet<Entity>();
         addTestLevel();                                 //TODO debug
         addTestPlayer();                                //TODO debug
         addTestZombie();                                //TODO debug
@@ -142,11 +134,11 @@ public class GameModel {
         books.add(book);
     }
 
-    public void addBodiesToRemove(Set<Body> bodySet){this.bodiesToRemove = bodySet; }
+    public void addEntitiesToRemove(Set<Entity> entitySet){this.entitiesToRemove = entitySet; }
 
-    public void addBodyToRemove(Body body){this.bodiesToRemove.add(body); }
+    public void addEntityToRemove(Entity entity){this.entitiesToRemove.add(entity); }
 
-    public void clearBodiesToRemove(){this.bodiesToRemove.clear();}
+    public void clearEntitiesToRemove(){this.entitiesToRemove.clear();}
 
-    public Set<Body> getBodiesToRemove() {return this.bodiesToRemove; }
+    public Set<Entity> getEntitiesToRemove() {return this.entitiesToRemove; }
 }

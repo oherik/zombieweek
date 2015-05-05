@@ -1,30 +1,21 @@
 package edu.chalmers.zombie;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.adapter.Player;
+import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
-import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.testing.PlayerTest;
-import edu.chalmers.zombie.testing.ZombieTest;
-import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.view.GameScreen;
-
-import java.util.ArrayList;
 
 public class ZombieWeek extends Game {
 	SpriteBatch batch;
@@ -108,10 +99,10 @@ public class ZombieWeek extends Game {
         currentWorld.step(Constants.TIMESTEP, 6, 2);
 
         //Ta bort gamla objekt
-        for(Body b : gameModel.getBodiesToRemove()){
+        for(Body b : gameModel.getEntitiesToRemove()){
             gameModel.getLevel().getWorld().destroyBody(b);
         }
-        gameModel.clearBodiesToRemove();
+        gameModel.clearEntitiesToRemove();
 
         camera.position.set(player.getX(), player.getY(),0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();

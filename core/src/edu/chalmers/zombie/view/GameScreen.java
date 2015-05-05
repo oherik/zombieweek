@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
-import edu.chalmers.zombie.model.Book;
+import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -131,12 +131,15 @@ public class GameScreen implements Screen{
 
     }
 
+    /**
+     * Removes the entity bodies from the world if necessary
+     */
     private void removeEntities(){
         GameModel gameModel = GameModel.getInstance();
-        for(Body b : gameModel.getBodiesToRemove()){
-            gameModel.getLevel().getWorld().destroyBody(b);
+        for(Entity e: gameModel.getEntitiesToRemove()){
+            gameModel.getLevel().destroyBody(e);
         }
-        gameModel.clearBodiesToRemove();
+        gameModel.clearEntitiesToRemove();
 
     }
 }
