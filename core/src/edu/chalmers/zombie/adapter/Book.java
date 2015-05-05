@@ -12,10 +12,7 @@ import edu.chalmers.zombie.utils.Direction;
  * Created by daniel on 4/21/2015.
  */
 public class Book extends Entity {
-    private float x;
-    private float y;
     private Vector2 force;
-    //Sets the player's starting direction to east so that a thrown book will have a direction.
     private Direction direction;
     private boolean remove = false;
     int speed, velocity, omega;
@@ -40,12 +37,14 @@ public class Book extends Entity {
         this.direction=d;
         this.speed = initialSpeed;
         force = new Vector2(0,0);
-        setPosition(x, y);
+
+        //Update position to be in front of player
+        Vector2 position = getUpdatedPosition(x,y);
 
         //Load body def
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(this.x+0.5f,this.y+0.5f);
+        bodyDef.position.set(position.x+0.5f,position.y+0.5f);
 
         //Load shape
         PolygonShape shape = new PolygonShape();
@@ -79,18 +78,7 @@ public class Book extends Entity {
         timeCreated = System.currentTimeMillis();
     }
 
-    public float getX(){
-        return x;
-    }
 
-    @Override
-    public void setY(float y) {
-
-    }
-
-    public float getY(){
-        return y;
-    }
 
     @Override
     public int getSpeed() {
@@ -108,48 +96,49 @@ public class Book extends Entity {
 
 
     /**
-     * Sets the books position to be in front of the coordinates given.
+     * Get updated position to be in front of the coordinates given.
+     * @return The new position for the book
      */
-
-    public void setPosition(float x, float y){
+    public Vector2 getUpdatedPosition(float x, float y){
         float distance = 1.5f;
+        Vector2 position = new Vector2(x,y);
         switch (direction) {
             case NORTH:
-                y = y + distance;
+                position.y = position.y + distance;
                 break;
             case SOUTH:
-                y = y - distance;
+                position.y = position.y - distance;
                 break;
             case WEST:
-                x = x - distance;
+                position.x = position.x - distance;
                 break;
             case EAST:
-                x = x + distance;
+                position.x = position.x + distance;
                 break;
             case NORTH_EAST:
-                x =x + distance;
-                y = y + distance;
+                position.x = position.x + distance;
+                position.y = position.y + distance;
                 break;
             case NORTH_WEST:
-                y = y + distance;
-                x = x - distance;
+                position.y = position.y + distance;
+                position.x = position.x - distance;
                 break;
             case SOUTH_EAST:
-                x = x + distance;
-                y = y - distance;
+                position.x = position.x + distance;
+                position.y = position.y - distance;
                 break;
             case SOUTH_WEST:
-                y = y - distance;
-                x = x - distance;
+                position.y = position.y - distance;
+                position.x = position.x - distance;
                 break;
             default:
                 break;
         }
-        this.x = x;
-        this.y = y;
-        setX(x);
-        setY(y);
+
+        return position;
+
     }
+
 
     /**
      *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
@@ -191,10 +180,7 @@ public class Book extends Entity {
         setAngularVelocity(omega);
     }
 
-    @Override
-    public void setX(float x) {
-        //TODO empty
-    }
+
 
     /**
      * Sets this book to be removed in the next world update

@@ -22,11 +22,9 @@ public class Player extends Entity implements CreatureInterface {
     private Body playerBody;
     private int width;
     private int height;
-    private float x;
-    private float y;
     private Vector2 force;
     //Sets the player's starting direction to east so that a thrown book will have a direction.
-    private Direction direction = Direction.EAST;
+    private Direction direction = Direction.NORTH;
     //Holds the players speed.
     private int speed = 7;
 
@@ -216,8 +214,8 @@ public class Player extends Entity implements CreatureInterface {
      * Updates position of player
      */
     private void updatePosition(){
-        setY((float)y);
-        setX((float) x);
+        //setY((float)y);
+        //setX((float) x);
     }
 
     /**
@@ -288,15 +286,6 @@ public class Player extends Entity implements CreatureInterface {
         return lives;
     }
 
-
-
-    public void setX(float x){
-        this.x = x;
-    }
-
-     public void setY(float y){
-         this.y = y;
-     }
 
     public int getSpeed(){
         return this.speed;
