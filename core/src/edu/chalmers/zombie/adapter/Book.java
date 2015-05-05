@@ -16,11 +16,10 @@ public class Book extends Entity {
     private float y;
     private Vector2 force;
     //Sets the player's starting direction to east so that a thrown book will have a direction.
-    private Direction direction = Direction.EAST;
+    private Direction direction;
     private boolean remove = false;
     int speed, velocity, omega;
     float width, height;
-    Sprite sprite;
     private long timeCreated;
 
 
@@ -69,7 +68,7 @@ public class Book extends Entity {
         setInMotion();
 
         //Load sprite
-        sprite = new Sprite(new Texture("core/assets/bookSprite.png"));
+        Sprite sprite = new Sprite(new Texture("core/assets/bookSprite.png"));
         sprite.setSize(width, height);
         super.setSprite(sprite);
         super.scaleSprite(1f / Constants.TILE_SIZE);
@@ -97,20 +96,7 @@ public class Book extends Entity {
     public int getSpeed() {
         return 0;
     }
-    /**
-     * Updates velocity, direction and rotation of body
-     */
-    private void updateMovement(){
-        setBodyVelocity(force);
-    }
 
-
-    private void updateLocation(float deltaTime){
-//TODO beh�vs?
-
-
-
-    }
     @Override
     protected void setBodyVelocity(Vector2 velocity){
         super.setBodyVelocity(velocity);
@@ -224,6 +210,9 @@ public class Book extends Entity {
         return this.remove;
     }
 
+    /**
+     * @return System time created
+     */
     public long getTimeCreated() {
         return timeCreated;
     }
