@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.ContactListener;
+import edu.chalmers.zombie.utils.Constants;
+
+import java.awt.*;
 
 /**
  * The general model for storing a specific level. The level contains a tiled map, which is the graphical representation of the level, and a box2d World which handles the physics.
@@ -15,6 +18,7 @@ import edu.chalmers.zombie.controller.ContactListener;
 public class Level {
     private World world;
     private TiledMap tiledMap;
+    private float tileSize;
 
     /**
      * Creates a new level based on a tiled map and a Box2D world
@@ -29,6 +33,7 @@ public class Level {
             throw new NullPointerException("Level: incorrect path name");
         world = new World(new Vector2(0,0), true);
         world.setContactListener(new ContactListener());
+        tileSize = (float) Constants.TILE_SIZE;
     }
 
     /**
@@ -59,5 +64,17 @@ public class Level {
      */
     public void destroyBody(Body b){
         getWorld().destroyBody(b);
+    }
+
+    public Point coordinatesToTile(Point coordinates){
+        int x = Math.round(coordinates.x / tileSize);   //Vill ha som int istället för float.
+        int y = Math.round(coordinates.y / tileSize); //Måste flippa, 0,0 är längst ner till vänster i libGDX men högst upp till vänster i Tiled
+        return new Point(x,y);
+    }
+
+    public Point tileToCoordinates(Point tile){
+        int x = Math.round(tile.x * tileSize);
+        int y = Math.round(tile.y * tileSize);
+        return new Point(x,y);
     }
 }

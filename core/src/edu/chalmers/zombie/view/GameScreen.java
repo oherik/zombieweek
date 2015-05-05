@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -16,8 +20,11 @@ import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.PathAlgorithm;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Tobias on 15-04-02.
@@ -34,6 +41,13 @@ public class GameScreen implements Screen{
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
 
+    //För testa av path finding //TODO debug
+    private PathAlgorithm pathFinding;
+    private Iterator<Point> path;
+    private Pixmap pixmap;
+    private Texture pathTexture;
+    private Sprite pathSprite;
+    private int steps;
 
     public GameScreen(World world, float tileSize){
         this.currentWorld = world;
@@ -51,6 +65,9 @@ public class GameScreen implements Screen{
         //HUD
         batchHUD = new SpriteBatch();
         bitmapFont = new BitmapFont();
+
+        /*---TEST--*/
+        steps = 0;
     }
 
     public void resize(int width, int height){
@@ -84,7 +101,7 @@ public class GameScreen implements Screen{
 //Rita kartan
         mapRenderer.setView(camera);
         mapRenderer.render();
-
+        steps++;
         //	batch.begin();
         //	batch.draw(img, 0, 0);
         //	batch        .end();
@@ -106,6 +123,52 @@ public class GameScreen implements Screen{
 
         gameModel.getPlayer().draw(mapRenderer.getBatch());
         gameModel.getZombie().draw(mapRenderer.getBatch());
+
+
+
+        /*--------------------------TESTA PATH FINDING------------------------------------*/
+
+        //Skapa path finding        //TODO debug
+
+
+
+
+
+        if(steps>=60) {
+            TiledMapTileLayer meta = (TiledMapTileLayer) gameModel.getLevel().getMap().getLayers().get("meta");
+            pathFinding = new PathAlgorithm(meta, "collision");
+            Point start = new Point(Math.round(gameModel.getZombie().getX()), Math.round(gameModel.getZombie().getY()));
+            Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
+
+            Point startTile = start;
+            Point endTile = end;
+            System.out.println(startTile + " " + endTile);
+            path = pathFinding.getPath(startTile, endTile);
+            int layerHeight = meta.getHeight();
+            int layerWidth = meta.getWidth();
+            //Rita ut pathen
+            pixmap = new Pixmap(Math.round(layerWidth * tileSize), Math.round(layerHeight * tileSize), Pixmap.Format.RGBA8888);
+            pixmap.setColor(com.badlogic.gdx.graphics.Color.RED);
+            Point oldP = start;
+            Point p = oldP;
+            if (path == null)
+                System.out.println("Ingen path hittad");
+            else {
+                System.out.println("Path:");
+                while (path.hasNext()) {
+                    Point tile = path.next();
+                    System.out.print(tile.x + " " + tile.y);
+                    p = tile;
+                    System.out.print("    = " + p.x + " " + p.y + "\n");
+                    oldP = p;
+                }
+
+            }
+            steps=0;
+        }
+        /*-----------------SLUTTESTAT---------------------*/
+
+
         mapRenderer.getBatch().end();
 
         //rita box2d debug
@@ -120,6 +183,8 @@ public class GameScreen implements Screen{
         bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
         bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
         batchHUD.end();
+
+
     }
     public void show(){
 
