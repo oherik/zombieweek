@@ -54,6 +54,7 @@ public class GameModel {
      */
     private void addTestZombie(){
         zombie = new ZombieTest(levels.get(0).getWorld(),2,2);
+        getLevel().addZombie(zombie);
     }
 
     /**
@@ -141,4 +142,8 @@ public class GameModel {
     public void clearEntitiesToRemove(){this.entitiesToRemove.clear();}
 
     public Set<Entity> getEntitiesToRemove() {return this.entitiesToRemove; }
+
+    public ArrayList<Zombie> getZombies(){
+        return getLevel().getZombies();
+    }
 }

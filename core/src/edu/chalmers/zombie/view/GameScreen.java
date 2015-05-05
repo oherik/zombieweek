@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Entity;
+import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.adapter.Book;
@@ -69,6 +70,9 @@ public class GameScreen implements Screen{
 
         /*---TEST--*/
         steps = 0;
+        TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMap().getLayers().get("meta");
+        pathFinding = new PathAlgorithm(meta, "collision");
+        /*---SLUTTEST---*/
     }
 
     public void resize(int width, int height){
@@ -125,6 +129,7 @@ public class GameScreen implements Screen{
 
         gameModel.getPlayer().draw(mapRenderer.getBatch());
         gameModel.getZombie().draw(mapRenderer.getBatch());
+        mapRenderer.getBatch().end();
 
 
 
@@ -132,46 +137,10 @@ public class GameScreen implements Screen{
 
         //Skapa path finding        //TODO debug
 
-
-
-
-
-        if(steps>=60) {
-            TiledMapTileLayer meta = (TiledMapTileLayer) gameModel.getLevel().getMap().getLayers().get("meta");
-            pathFinding = new PathAlgorithm(meta, "collision");
-            Point start = new Point(Math.round(gameModel.getZombie().getX()), Math.round(gameModel.getZombie().getY()));
-            Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
-
-            Point startTile = start;
-            Point endTile = end;
-            System.out.println(startTile + " " + endTile);
-            path = pathFinding.getPath(startTile, endTile);
-            int layerHeight = meta.getHeight();
-            int layerWidth = meta.getWidth();
-            //Rita ut pathen
-            pixmap = new Pixmap(Math.round(layerWidth * tileSize), Math.round(layerHeight * tileSize), Pixmap.Format.RGBA8888);
-            pixmap.setColor(com.badlogic.gdx.graphics.Color.RED);
-            Point oldP = start;
-            Point p = oldP;
-            if (path == null)
-                System.out.println("Ingen path hittad");
-            else {
-                System.out.println("Path:");
-                while (path.hasNext()) {
-                    Point tile = path.next();
-                    System.out.print(tile.x + " " + tile.y);
-                    p = tile;
-                    System.out.print("    = " + p.x + " " + p.y + "\n");
-                    oldP = p;
-                }
-
-            }
-            steps=0;
+        if(steps%60==0) {   //uppdaterar varje sekund
+           updateZombiePaths();
         }
         /*-----------------SLUTTESTAT---------------------*/
-
-
-        mapRenderer.getBatch().end();
 
         //rita box2d debug
         boxDebug.render(mapController.getWorld(), camera.combined);
@@ -193,6 +162,27 @@ public class GameScreen implements Screen{
     }
     public void hide(){
 
+    }
+
+    private void updateZombiePaths(){
+        GameModel gameModel = GameModel.getInstance();
+        for(Zombie z : gameModel.getZombies()) {
+            Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
+            Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
+            path = pathFinding.getPath(start, end);                 //TODO gör nåt vettigt här istälelt för att abra printa.
+            if (path == null)
+                System.out.println("Ingen path hittad");
+            else {
+                System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
+                int i = 0;
+                while (path.hasNext()) {
+                    Point tile = path.next();
+                    System.out.println(tile.x + " " + tile.y);
+                    i++;
+                }
+                System.out.println("Antal steg: " + i);
+            }
+        }
     }
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
