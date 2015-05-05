@@ -216,14 +216,16 @@ public class Player extends Entity implements CreatureInterface {
     private void updatePosition(){
         //setY((float)y);
         //setX((float) x);
+        //TODO: delete?
     }
 
     /**
      * Updates location of player
      */
     private void updateLocation(float deltaTime){
-        setX(getX() + deltaTime * force.x);
-        setY(getY() + deltaTime * force.y);
+        //setX(getX() + deltaTime * force.x);
+        //setY(getY() + deltaTime * force.y);
+        //TODO: delete?
     }
 
     public void attack(Zombie zombie) {
