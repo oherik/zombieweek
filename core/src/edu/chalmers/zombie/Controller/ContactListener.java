@@ -1,8 +1,9 @@
-package edu.chalmers.zombie.utils;
+package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.Book;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,7 +12,7 @@ import java.util.Set;
 /** A custom contact listener
  * Created by Erik on 2015-04-18.
  */
-public class ZWContactListener  implements ContactListener{
+public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener {
 
 
     private GameModel gameModel;
