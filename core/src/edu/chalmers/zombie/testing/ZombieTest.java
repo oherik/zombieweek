@@ -42,13 +42,5 @@ public class ZombieTest extends Zombie {
         return null;
     }
 
-    @Override
-    public void setX(float x) {
-
-    }
-
-    @Override
-    public void setY(float y) {
-
-    }
+    
 }
