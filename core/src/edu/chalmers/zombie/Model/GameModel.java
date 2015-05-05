@@ -149,4 +149,7 @@ public class GameModel {
     public ArrayList<Zombie> getZombies(){
         return getLevel().getZombies();
     }
+
+
+
 }

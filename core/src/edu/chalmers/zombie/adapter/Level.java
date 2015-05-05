@@ -61,11 +61,10 @@ public class Level {
      * @param z A zombie to remove
      */
     public void removeZombie(Zombie z){
-        world.destroyBody(z.getBody());
         z.dispose();
         zombies.remove(z);
-        z = null;
     }
+
 
     /**
      * @return the level's map

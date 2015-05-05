@@ -1,7 +1,10 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.Book;
+import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -17,12 +20,22 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
     public void beginContact (Contact contact){     //Anropas när två saker börjar kollidera
         GameModel gameModel = GameModel.getInstance();
         gameModel.clearEntitiesToRemove();
-        if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PROJECTILE) {
+        if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PROJECTILE) {      //Är en bok
             if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_PLAYER) {
                 Book b = (Book) contact.getFixtureB().getBody().getUserData(); //TODO detta måste göras snyggare. Kanske en projectile-huvudklass?
                 gameModel.addEntityToRemove(b);
                 b.markForRemoval();
                 gameModel.getPlayer().increaseAmmunition();
+            }
+            if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_ZOMBIE) {
+                Book b = (Book) contact.getFixtureB().getBody().getUserData(); //TODO detta måste göras snyggare. Kanske en projectile-huvudklass?
+                gameModel.addEntityToRemove(b);
+                b.markForRemoval();
+                Zombie z = (Zombie) contact.getFixtureA().getBody().getUserData();
+                z.KnockOut();
+                gameModel.addEntityToRemove(z);
+                z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp
+                z.scaleSprite(1f/Constants.TILE_SIZE);
             }
         }
     }

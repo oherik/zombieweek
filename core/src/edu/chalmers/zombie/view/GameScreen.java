@@ -127,8 +127,10 @@ public class GameScreen implements Screen{
 
         removeEntities();
 
+
+        for(Zombie z : gameModel.getZombies())
+            z.draw(mapRenderer.getBatch());
         gameModel.getPlayer().draw(mapRenderer.getBatch());
-        gameModel.getZombie().draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 
 
@@ -169,7 +171,8 @@ public class GameScreen implements Screen{
      */
     private void updateZombiePaths(){   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?
         GameModel gameModel = GameModel.getInstance();
-        for(Zombie z : gameModel.getZombies()) {
+        for(Zombie z : gameModel.getZombies())
+           if(!z.isKnockedOut())     {
             Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
             Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
             path = pathFinding.getPath(start, end);                 //TODO gör nåt vettigt här istälelt för att abra printa.
