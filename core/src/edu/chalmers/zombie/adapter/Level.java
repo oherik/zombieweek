@@ -27,10 +27,11 @@ public class Level {
     private float tileSize;
     private ArrayList zombies;
     private Body ground;
-    private Sprite mapPainting;
+    private Sprite mapPainting, mapPaintingTopLayer;
     /**
      * Creates a new level based on a tiled map and a Box2D world
-     * @param mapPath   The file path to the map
+     * @param mapPath  The file path to the map containing the meta data
+     * @param mapPaintingPath  The file path to the map painting
      * @throws NullPointerException if the path name is incorrect or not found
      */
     public Level(String mapPath, String mapPaintingPath){
@@ -46,6 +47,19 @@ public class Level {
         BodyDef bd =new BodyDef();
         ground = world.createBody(bd);  //Behövs för friktion
         mapPainting = new Sprite(new Texture(mapPaintingPath));
+    }
+
+    /**
+     * If a top layer is included
+     * @param mapPath  The file path to the map containing the meta data
+     * @param mapPaintingPath  The file path to the map painting
+     * @param mapPaintingTopLayerPath  The file path to the map painting's top layer
+     */
+    public Level(String mapPath, String mapPaintingPath, String mapPaintingTopLayerPath){
+        this(mapPath,mapPaintingPath);
+        if(mapPaintingTopLayerPath == null)
+            throw new NullPointerException("Level: no top layer path name recieved");
+        mapPaintingTopLayer = new Sprite(new Texture(mapPaintingTopLayerPath));
     }
 
     public Body getGround(){
@@ -113,5 +127,11 @@ public class Level {
      */
     public Sprite getMapPainting(){
         return mapPainting;
+    }
+    /**
+     * @return The map painting to be rendered on top of the player and other entities
+     */
+    public Sprite getMapPaintingTopLayer(){
+        return mapPaintingTopLayer;
     }
 }

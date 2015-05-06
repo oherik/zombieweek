@@ -41,7 +41,7 @@ public class GameScreen implements Screen{
     //HUD variables
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
-    private Sprite tiledMapPainting;
+    private Sprite tiledMapPainting, tiledMapPaintingTopLayer;
 
     //För testa av path finding //TODO debug
     private PathAlgorithm pathFinding;
@@ -62,8 +62,10 @@ public class GameScreen implements Screen{
         tiledMap = mapController.getMap(0);
         /*--- test ---*/
         tiledMapPainting = mapController.getMapPainting(0); //TODO test
+        tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(0); //TODO test
         float scale= 1f/tileSize;
         tiledMapPainting.setSize(tiledMapPainting.getWidth() * scale, tiledMapPainting.getHeight() * scale);
+        tiledMapPaintingTopLayer.setSize(tiledMapPaintingTopLayer.getWidth() * scale, tiledMapPaintingTopLayer.getHeight() * scale);
         /*--- end test ---*/
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
@@ -145,6 +147,13 @@ public class GameScreen implements Screen{
         for(Zombie z : gameModel.getZombies())
             z.draw(mapRenderer.getBatch());
         gameModel.getPlayer().draw(mapRenderer.getBatch());
+
+        /* --- TEST rita ut det som ska vara ovanför --- */
+        if( tiledMapPaintingTopLayer!=null) {
+            tiledMapPaintingTopLayer.draw(mapRenderer.getBatch());
+
+        }
+        /* --- END TEST --- */
         mapRenderer.getBatch().end();
 
 

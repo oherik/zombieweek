@@ -42,7 +42,7 @@ public class GameModel {
      * Only for debug
      */
     private void addTestLevel(){
-        levels.add(new Level("core/assets/Map/Test_v2.tmx","core/assets/Map/testmap.png"));
+        levels.add(new Level("core/assets/Map/Test_v2.tmx","core/assets/Map/testmap.png","core/assets/Map/testmap_top.png"));
     }
 
     /**
