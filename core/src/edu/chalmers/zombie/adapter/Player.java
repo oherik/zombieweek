@@ -76,7 +76,7 @@ public class Player extends Entity implements CreatureInterface {
         killCount = killCount + 1;
     }
 
-    @Override
+    //@Override
     public void move(Direction direction) {
         this.speed = 7;
         switch (direction){
@@ -236,7 +236,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     @Override
-    public void KnockOut() {
+    public void knockOut() {
 
         // TODO: game over
     }

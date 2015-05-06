@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -8,12 +9,16 @@ import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.PathAlgorithm;
 
 /**
  * Created by neda on 2015-03-31.
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
+
     private boolean isKnockedOut;
+    private Vector2 force;
+
     /**
      * Creates a new zombie
      * @param sprite    Which sprite to use
@@ -22,6 +27,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * @param y     The zombie's y coordinate
      */
     public Zombie(Sprite sprite, World world, float x, float y){
+
         super(sprite,world,x,y);
         int width = Constants.TILE_SIZE;
         int height = Constants.TILE_SIZE;
@@ -68,8 +74,9 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //TODO: remove zombie
     }
 
-    @Override
-    public void move(Direction direction) {
+    //@Override
+    public void moveToPlayer(float x, float y, PathAlgorithm path) {
+
 
     }
 
@@ -77,9 +84,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * Changes the sprite to a sleeping one
      */
     @Override
-    public void KnockOut() {
+    public void knockOut() {
         isKnockedOut = true;
-        // TODO: remove zombie
     }
 
     public boolean isKnockedOut(){

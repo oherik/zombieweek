@@ -32,7 +32,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 gameModel.addEntityToRemove(b);
                 b.markForRemoval();
                 Zombie z = (Zombie) contact.getFixtureA().getBody().getUserData();
-                z.KnockOut();
+                z.knockOut();
                 gameModel.addEntityToRemove(z);
                 z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp
                 z.scaleSprite(1f/Constants.TILE_SIZE);

@@ -13,7 +13,7 @@ public interface CreatureInterface {
      * A method which controls creature movement.
      * @param keyID id number of key pressed        //TODO keyID?
      */
-    void move(Direction direction);
+    //void move(Direction direction);
 
     /**
      * A method to control a creatures attack
@@ -21,7 +21,7 @@ public interface CreatureInterface {
      * (registers attacks).
      */
 
-    void KnockOut();
+    void knockOut();
 
     /**
      * A method to check whether a creature has been attacked.
