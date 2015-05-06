@@ -148,4 +148,20 @@ public class PathAlgorithm {
                 (x == parentX + 1 && y == parentY - 1) ||
                 (x == parentX + 1 && y == parentY + 1);
     }
+
+    /**
+     * A method that returns startPos.
+     */
+    public Point getStartPos() {
+
+        return startPos;
+    }
+
+    /**
+     * A method that returns endPos.
+     */
+    public Point getEndPos() {
+
+        return endPos;
+    }
 }
