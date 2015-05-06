@@ -27,7 +27,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 b.markForRemoval();
                 gameModel.getPlayer().increaseAmmunition();
             }
-            if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_ZOMBIE) {
+            else if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_ZOMBIE) {
                 Book b = (Book) contact.getFixtureB().getBody().getUserData(); //TODO detta måste göras snyggare. Kanske en projectile-huvudklass?
                 gameModel.addEntityToRemove(b);
                 b.markForRemoval();
@@ -36,6 +36,10 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 gameModel.addEntityToRemove(z);
                 z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp
                 z.scaleSprite(1f/Constants.TILE_SIZE);
+            }
+            else if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_OBSTACLE) {  //Boken har kolliderat med vägg eller liknande
+                Book b = (Book) contact.getFixtureB().getBody().getUserData(); //TODO detta måste göras snyggare. Kanske en projectile-huvudklass?
+                b.hitGround();
             }
         }
     }
