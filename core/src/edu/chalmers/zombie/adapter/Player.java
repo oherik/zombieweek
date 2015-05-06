@@ -173,13 +173,13 @@ public class Player extends Entity implements CreatureInterface {
      * Method that checks if keys are released simultaneously
      */
     private void checkSimultaneousRelease(){
-
+        updateMovement();
         final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
 
         if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
 
                 //Keys were released at the same time (thread is sleeping/waiting)
-                updateMovement();
+
 
         } else {
 
@@ -188,7 +188,6 @@ public class Player extends Entity implements CreatureInterface {
                     try {
                         keyThread.sleep(timeSensitiveness); //waiting for new key release
                         //if(getWorld().isLocked())     //TODO hack för att inte krascha
-                            updateMovement(); //no more key released
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);
                     }
@@ -199,6 +198,7 @@ public class Player extends Entity implements CreatureInterface {
 
             keyThread.start();
         }
+
     }
 
 
