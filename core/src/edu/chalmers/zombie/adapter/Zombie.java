@@ -67,7 +67,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     public abstract int getType();
 
-    public abstract Vector2 getSpeed();
+    public abstract Vector2 getVelocity();
 
     public abstract void attack(Player player);
 

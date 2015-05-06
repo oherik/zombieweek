@@ -303,7 +303,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
 
-    public Vector2 getSpeed(){
+    public Vector2 getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 

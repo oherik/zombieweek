@@ -153,7 +153,7 @@ public abstract class Entity {
     public float getWidth(){
         return sprite.getWidth();
     }
-    public abstract Vector2 getSpeed(); //TODO empty
+    public abstract Vector2 getVelocity(); //TODO empty
 
 
     public void setBody(Body body) {

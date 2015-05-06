@@ -82,7 +82,7 @@ public class Book extends Entity {
 
 
     @Override
-    public Vector2 getSpeed() {
+    public Vector2 getVelocity() {
         return getBody().getLinearVelocity();
     }
 
