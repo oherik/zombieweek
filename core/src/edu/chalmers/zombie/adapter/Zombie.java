@@ -38,6 +38,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x+0.5f,y+0.5f);
+        bodyDef.linearDamping = 20f;
+        bodyDef.angularDamping = 20f;
 
         //Load shape
         PolygonShape shape = new PolygonShape();
@@ -68,7 +70,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     public abstract int getType();
 
-    public abstract int getSpeed();
+    public abstract Vector2 getVelocity();
 
     public abstract void attack(Player player);
 

@@ -80,18 +80,26 @@ public class InputController implements InputProcessor{
                 break;
             case Input.Keys.SPACE:
                 //throw book
-                Player player = gameModel.getPlayer();
-                player.decreaseAmmunition();
-                if(player.getAmmunition()>0) {
-                    Book book = new Book(player.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getSpeed());
-                    gameModel.addBook(book);
-                    
-                }
+                tryThrowingBook();
                 break;
             default:
                 return false;
         }
         return true;
+    }
+
+    private void tryThrowingBook(){
+        Player player = gameModel.getPlayer();
+        if(player.getAmmunition()>0) {
+            player.decreaseAmmunition();
+            throwBook();
+        }
+    }
+
+    private void throwBook(){
+        Player player = gameModel.getPlayer();
+        Book book = new Book(player.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
+        gameModel.addBook(book);
     }
 
     /**

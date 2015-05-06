@@ -2,6 +2,7 @@ package edu.chalmers.zombie.testing;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Player;
@@ -23,8 +24,8 @@ public class ZombieTest extends Zombie {
     }
 
     @Override
-    public int getSpeed() {
-        return 0;
+    public Vector2 getVelocity() {
+        return null;
     }
 
     @Override
