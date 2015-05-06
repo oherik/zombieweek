@@ -303,8 +303,8 @@ public class Player extends Entity implements CreatureInterface {
     }
 
 
-    public int getSpeed(){
-        return Math.max(Math.abs(Math.round(getBody().getLinearVelocity().x)), Math.abs(Math.round(getBody().getLinearVelocity().y))); //TODO måste fixas, borde skicka en vector2
+    public Vector2 getSpeed(){
+        return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
 }

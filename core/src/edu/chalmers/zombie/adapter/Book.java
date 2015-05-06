@@ -15,7 +15,8 @@ public class Book extends Entity {
     private Vector2 force;
     private Direction direction;
     private boolean remove = false;
-    int speed, velocity, omega;
+    int velocity, omega;
+    Vector2 speed;
     float width, height;
     private long timeCreated;
 
@@ -28,7 +29,7 @@ public class Book extends Entity {
      * @param world In which world to create the physical representation of the book
      * @param initialSpeed  The speed which to add to the throwing speed
      */
-    public Book(Direction d, float x, float y, World world, int initialSpeed) {
+    public Book(Direction d, float x, float y, World world, Vector2 initialSpeed) {
         super(world);
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
@@ -81,8 +82,8 @@ public class Book extends Entity {
 
 
     @Override
-    public int getSpeed() {
-        return 0;
+    public Vector2 getSpeed() {
+        return getBody().getLinearVelocity();
     }
 
     @Override
@@ -146,36 +147,37 @@ public class Book extends Entity {
     public void setInMotion(){
         switch(direction){
             case NORTH:
-                force.y = speed + velocity;
+                force.y = + velocity;
                 break;
             case SOUTH:
-                force.y = -speed - velocity;
+                force.y = - velocity;
                 break;
             case WEST:
-                force.x = -speed - velocity;
+                force.x = - velocity;
                 break;
             case EAST:
-                force.x = speed + velocity;
+                force.x = velocity;
                 break;
-            case NORTH_EAST:
-                force.x = Constants.SQRT_2*(speed+velocity);
-                force.y = Constants.SQRT_2*(speed+velocity);
+            case NORTH_EAST:    //TODO fixa diagonalt
+                force.x = velocity;
+                force.y = velocity;
                 break;
             case NORTH_WEST:
-                force.x = Constants.SQRT_2*(-speed-velocity);
-                force.y =  Constants.SQRT_2*(speed+velocity);
+                force.x = -velocity;
+                force.y =  +velocity;
                 break;
             case SOUTH_EAST:
-                force.x = Constants.SQRT_2*(speed+velocity);
-                force.y =Constants.SQRT_2*(-speed-velocity);
+                force.x = +velocity;
+                force.y =-velocity;
                 break;
             case SOUTH_WEST:
-                force.x = Constants.SQRT_2*(-speed-velocity);
-                force.y =  Constants.SQRT_2*(-speed-velocity);
+                force.x = -velocity;
+                force.y =  -velocity;
                 break;
             default:
                 break;
         }
+        force.add(speed); // Add the player speed
         setBodyVelocity(force);
         setAngularVelocity(omega);
     }
