@@ -1,10 +1,13 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import edu.chalmers.zombie.adapter.Level;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -88,5 +91,17 @@ public class MapController {
     public void createObstacles (int index, String metaLayerName, String collisionProperty){
 
        //TODO lägg till när tillhörande model-kod implementerats
+    }
+
+    public Level getLevel(int levelIndex){
+       return gameModel.getLevel(levelIndex);
+    }
+
+    public Sprite getMapPainting(int levelIndex){
+        return gameModel.getLevel(levelIndex).getMapPainting();
+    }
+
+    public Sprite getMapPaintingTopLayer(int levelIndex){
+        return gameModel.getLevel(levelIndex).getMapPaintingTopLayer();
     }
 }

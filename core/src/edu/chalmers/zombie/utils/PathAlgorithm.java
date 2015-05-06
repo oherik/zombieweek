@@ -72,8 +72,10 @@ public class PathAlgorithm {
         while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            if (currentNode.equals(this.endPos))
+            if (currentNode.equals(this.endPos)) {
+                currentElement.getPath().add(currentNode);
                 return currentElement.getPath().iterator();
+            }
             else {
                 int x = currentNode.x;
                 int y = currentNode.y;
@@ -145,5 +147,21 @@ public class PathAlgorithm {
                 (x == parentX - 1 && y == parentY + 1) ||
                 (x == parentX + 1 && y == parentY - 1) ||
                 (x == parentX + 1 && y == parentY + 1);
+    }
+
+    /**
+     * A method that returns startPos.
+     */
+    public Point getStartPos() {
+
+        return startPos;
+    }
+
+    /**
+     * A method that returns endPos.
+     */
+    public Point getEndPos() {
+
+        return endPos;
     }
 }

@@ -15,8 +15,8 @@ public abstract class Entity {
     private Sprite sprite;
     private Body body;
     private World world;
-    private int width;
-    private int height;
+    private int width; //TODO: delete?
+    private int height; //TODO: delete?
 
     /**
      * Creates an entity without a sprite
@@ -91,9 +91,12 @@ public abstract class Entity {
      * @param batch The sprite batch in which to draw it
      */
     public void draw(Batch batch){
-        updateRotation();
+        if(body!=null) {
+            updateRotation();
+            updatePosition();
+        }
         sprite.draw(batch);
-        updatePosition();
+
     }
 
     /**
@@ -114,11 +117,6 @@ public abstract class Entity {
         sprite.setX(body.getPosition().x - sprite.getHeight() / 2f);
     }
 
-    /**
-     * Set the body's x position
-     * @param x The new x coordinate
-     */
-    public abstract void setX(float x);
 
     /**
      * @return The body's x position
@@ -127,11 +125,6 @@ public abstract class Entity {
         return body.getPosition().x;
     }
 
-    /**
-     * Set the body's x position
-     * @param y The new y coordinate
-     */
-    public abstract void setY(float y);
 
     /**
      * @return The body's y position
@@ -160,7 +153,7 @@ public abstract class Entity {
     public float getWidth(){
         return sprite.getWidth();
     }
-    public abstract int getSpeed(); //TODO empty
+    public abstract Vector2 getVelocity(); //TODO empty
 
 
     public void setBody(Body body) {

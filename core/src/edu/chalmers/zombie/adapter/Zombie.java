@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -8,11 +9,18 @@ import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.PathAlgorithm;
+import edu.chalmers.zombie.utils.ZombieType;
 
 /**
  * Created by neda on 2015-03-31.
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
+
+    private int speed;
+    private ZombieType type;
+    private boolean isKnockedOut;
+    private Vector2 force;
 
     /**
      * Creates a new zombie
@@ -22,6 +30,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * @param y     The zombie's y coordinate
      */
     public Zombie(Sprite sprite, World world, float x, float y){
+
         super(sprite,world,x,y);
         int width = Constants.TILE_SIZE;
         int height = Constants.TILE_SIZE;
@@ -29,6 +38,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x+0.5f,y+0.5f);
+        bodyDef.linearDamping = 20f;
+        bodyDef.angularDamping = 20f;
 
         //Load shape
         PolygonShape shape = new PolygonShape();
@@ -40,13 +51,16 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = .8f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
+        fixDef.filter.categoryBits = Constants.COLLISION_ZOMBIE;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
 
         //Set body
         super.setBody(bodyDef, fixDef);
+        super.getBody().setUserData(this);
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
+
+        isKnockedOut = false;
 
     }
 
@@ -56,7 +70,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     public abstract int getType();
 
-    public abstract int getSpeed();
+    public abstract Vector2 getVelocity();
 
     public abstract void attack(Player player);
 
@@ -65,17 +79,23 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //TODO: remove zombie
     }
 
-    @Override
-    public void move(Direction direction) {
+    //@Override
+    public void moveToPlayer(float x, float y, PathAlgorithm path) {
+
 
     }
 
+    /**
+     * Changes the sprite to a sleeping one
+     */
     @Override
-    public void KnockOut() {
-
-        // TODO: remove zombie
+    public void knockOut() {
+        isKnockedOut = true;
     }
 
+    public boolean isKnockedOut(){
+        return isKnockedOut;
+    }
     @Override
     public boolean hasBeenAttacked() {
 

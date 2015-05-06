@@ -2,6 +2,9 @@ package edu.chalmers.zombie.model;
 
 import com.badlogic.gdx.graphics.Texture;       //TODO debug
 import com.badlogic.gdx.graphics.g2d.Sprite;    //TODO debug
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.joints.FrictionJoint;
+import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
@@ -39,7 +42,7 @@ public class GameModel {
      * Only for debug
      */
     private void addTestLevel(){
-        levels.add(new Level("core/assets/Map/Test_v2.tmx"));
+        levels.add(new Level("core/assets/Map/Test_v2.tmx","core/assets/Map/testmap.png","core/assets/Map/testmap_top.png"));
     }
 
     /**
@@ -54,6 +57,7 @@ public class GameModel {
      */
     private void addTestZombie(){
         zombie = new ZombieTest(levels.get(0).getWorld(),2,2);
+        getLevel().addZombie(zombie);
     }
 
     /**
@@ -141,4 +145,14 @@ public class GameModel {
     public void clearEntitiesToRemove(){this.entitiesToRemove.clear();}
 
     public Set<Entity> getEntitiesToRemove() {return this.entitiesToRemove; }
+
+    /**
+     * @return The current level's zombies
+     */
+    public ArrayList<Zombie> getZombies(){
+        return getLevel().getZombies();
+    }
+
+
+
 }

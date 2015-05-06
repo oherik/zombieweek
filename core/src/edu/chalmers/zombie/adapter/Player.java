@@ -22,19 +22,22 @@ public class Player extends Entity implements CreatureInterface {
     private Body playerBody;
     private int width;
     private int height;
-    private float x;
-    private float y;
     private Vector2 force;
     //Sets the player's starting direction to east so that a thrown book will have a direction.
-    private Direction direction = Direction.EAST;
+    private Direction direction = Direction.NORTH;
     //Holds the players speed.
     private int speed = 7;
+    private float dampening;
+    private int legPower;
 
     private Thread keyThread; //Keeps track of key releases
 
 
     public Player(Sprite sprite, World world, float x, float y) {
         super(sprite, world, x, y);
+        legPower =  150; //Styr maxhastigheten
+        dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
+
         width = Constants.TILE_SIZE;
         height = Constants.TILE_SIZE;
 
@@ -42,6 +45,8 @@ public class Player extends Entity implements CreatureInterface {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x+0.5f,y+0.5f);
+        bodyDef.linearDamping = dampening;
+        bodyDef.angularDamping = dampening;
 
         //Load shape
         PolygonShape shape = new PolygonShape();
@@ -64,6 +69,8 @@ public class Player extends Entity implements CreatureInterface {
         lives = 100;
         force = new Vector2(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
+
+
     }
 
     private int getKillCount() {
@@ -76,9 +83,14 @@ public class Player extends Entity implements CreatureInterface {
         killCount = killCount + 1;
     }
 
-    @Override
+
+    public void moveIfNeeded(){
+        getBody().applyForce(force, getBody().getLocalCenter(), true);
+    }
+
+    //@Override
     public void move(Direction direction) {
-        this.speed = 7;
+       speed = legPower;
         switch (direction){
             case NORTH:
                 force.y = speed;
@@ -120,8 +132,8 @@ public class Player extends Entity implements CreatureInterface {
      * Updates velocity, direction and rotation of body
      */
     private void updateMovement(){
-
-        setBodyVelocity(force);
+        moveIfNeeded();
+       // setBodyVelocity(force);
         updateDirecton();
         updateRotation();
     }
@@ -217,16 +229,18 @@ public class Player extends Entity implements CreatureInterface {
      * Updates position of player
      */
     private void updatePosition(){
-        setY((float)y);
-        setX((float) x);
+        //setY((float)y);
+        //setX((float) x);
+        //TODO: delete?
     }
 
     /**
      * Updates location of player
      */
     private void updateLocation(float deltaTime){
-        setX(getX() + deltaTime * force.x);
-        setY(getY() + deltaTime * force.y);
+        //setX(getX() + deltaTime * force.x);
+        //setY(getY() + deltaTime * force.y);
+        //TODO: delete?
     }
 
     public void attack(Zombie zombie) {
@@ -235,7 +249,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     @Override
-    public void KnockOut() {
+    public void knockOut() {
 
         // TODO: game over
     }
@@ -290,17 +304,8 @@ public class Player extends Entity implements CreatureInterface {
     }
 
 
-
-    public void setX(float x){
-        this.x = x;
-    }
-
-     public void setY(float y){
-         this.y = y;
-     }
-
-    public int getSpeed(){
-        return this.speed;
+    public Vector2 getVelocity(){
+        return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
 }
