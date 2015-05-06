@@ -82,12 +82,6 @@ public class GameScreen implements Screen{
         pathFinding = new PathAlgorithm(meta, "collision");
         /*---SLUTTEST---*/
 
-        //Friktionstest //TODO
-        mapController.setPlayerFriction(GameModel.getInstance().getPlayer().getBody(), GameModel.getInstance().getCurrentLevelIndex());
-        for(Zombie z : GameModel.getInstance().getZombies())
-        if(z.getBody()!=null)
-            mapController.setZombieFriction(z.getBody(), GameModel.getInstance().getCurrentLevelIndex());
-
     }
 
     public void resize(int width, int height){
@@ -130,7 +124,10 @@ public class GameScreen implements Screen{
         ArrayList<Book> books = gameModel.getBooks();
         for (int i = 0; i<books.size(); i++) {
             Book b = books.get(i);
+            long airTime = 500;
             long lifeTime = 5000; //life time for book in millisec
+            if(System.currentTimeMillis() - b.getTimeCreated() > airTime)
+                b.hitGround();
             if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime){
                 gameModel.addEntityToRemove(b);
                 b.markForRemoval();

@@ -62,7 +62,7 @@ public class Book extends Entity {
         //Set body
         super.setBody(bodyDef, fixDef);
         velocity = 7;
-        omega= 10;
+        omega= 20;
 
         setInMotion();
 
@@ -203,6 +203,9 @@ public class Book extends Entity {
         return timeCreated;
     }
 
-
+    public void hitGround(){
+        super.getBody().setLinearDamping(4f);
+        super.getBody().setAngularDamping(3f);
+    }
 
 }

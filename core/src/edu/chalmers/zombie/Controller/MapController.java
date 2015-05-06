@@ -104,26 +104,4 @@ public class MapController {
     public Sprite getMapPaintingTopLayer(int levelIndex){
         return gameModel.getLevel(levelIndex).getMapPaintingTopLayer();
     }
-
-    public void setPlayerFriction(Body b, int levelIndex ){
-        FrictionJointDef jointDef = new FrictionJointDef();
-        jointDef.initialize(b, getLevel(levelIndex).getGround(),new Vector2(0,0));
-        jointDef.maxForce = 0.9f;
-        jointDef.maxTorque = 5;
-        getLevel(levelIndex).getWorld().createJoint(jointDef);
-    }
-    public void setZombieFriction(Body b, int levelIndex ){
-        FrictionJointDef jointDef = new FrictionJointDef();
-        jointDef.initialize(b, getLevel(levelIndex).getGround(),new Vector2(0,0));
-        jointDef.maxForce = 0.9f;
-        jointDef.maxTorque = 5;
-        getLevel(levelIndex).getWorld().createJoint(jointDef);
-    }
-    public void setBookFriction(Body b, int levelIndex ){
-        FrictionJointDef jointDef = new FrictionJointDef();
-        jointDef.initialize(b, getLevel(levelIndex).getGround(),new Vector2(0,0));
-        jointDef.maxForce = 0.9f;
-        jointDef.maxTorque = 5;
-        getLevel(levelIndex).getWorld().createJoint(jointDef);
-    }
 }
