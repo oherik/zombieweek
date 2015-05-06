@@ -143,6 +143,7 @@ public class GameScreen implements Screen{
 
         for(Zombie z : gameModel.getZombies())
             z.draw(mapRenderer.getBatch());
+        gameModel.getPlayer().moveIfNeeded();
         gameModel.getPlayer().draw(mapRenderer.getBatch());
 
         /* --- TEST rita ut det som ska vara ovanför --- */

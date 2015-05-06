@@ -27,12 +27,17 @@ public class Player extends Entity implements CreatureInterface {
     private Direction direction = Direction.NORTH;
     //Holds the players speed.
     private int speed = 7;
+    private float dampening;
+    private int legPower;
 
     private Thread keyThread; //Keeps track of key releases
 
 
     public Player(Sprite sprite, World world, float x, float y) {
         super(sprite, world, x, y);
+        legPower =  150; //Styr maxhastigheten
+        dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
+
         width = Constants.TILE_SIZE;
         height = Constants.TILE_SIZE;
 
@@ -40,6 +45,8 @@ public class Player extends Entity implements CreatureInterface {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x+0.5f,y+0.5f);
+        bodyDef.linearDamping = dampening;
+        bodyDef.angularDamping = dampening;
 
         //Load shape
         PolygonShape shape = new PolygonShape();
@@ -76,9 +83,13 @@ public class Player extends Entity implements CreatureInterface {
         killCount = killCount + 1;
     }
 
+    public void moveIfNeeded(){
+        getBody().applyForce(force, getBody().getLocalCenter(), true);
+    }
+
     @Override
     public void move(Direction direction) {
-        this.speed = 7;
+       speed = legPower;
         switch (direction){
             case NORTH:
                 force.y = speed;
@@ -120,8 +131,8 @@ public class Player extends Entity implements CreatureInterface {
      * Updates velocity, direction and rotation of body
      */
     private void updateMovement(){
-
-        setBodyVelocity(force);
+        moveIfNeeded();
+       // setBodyVelocity(force);
         updateDirecton();
         updateRotation();
     }
@@ -292,7 +303,7 @@ public class Player extends Entity implements CreatureInterface {
 
 
     public int getSpeed(){
-        return this.speed;
+        return Math.max(Math.abs(Math.round(getBody().getLinearVelocity().x)), Math.abs(Math.round(getBody().getLinearVelocity().y))); //TODO måste fixas, borde skicka en vector2
     }
 
 }
