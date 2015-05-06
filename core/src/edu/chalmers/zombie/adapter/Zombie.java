@@ -10,12 +10,15 @@ import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PathAlgorithm;
+import edu.chalmers.zombie.utils.ZombieType;
 
 /**
  * Created by neda on 2015-03-31.
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 
+    private int speed;
+    private ZombieType type;
     private boolean isKnockedOut;
     private Vector2 force;
 
