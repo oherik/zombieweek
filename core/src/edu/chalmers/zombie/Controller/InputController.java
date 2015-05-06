@@ -4,8 +4,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.adapter.Player;
@@ -80,18 +82,26 @@ public class InputController implements InputProcessor{
                 break;
             case Input.Keys.SPACE:
                 //throw book
-                Player player = gameModel.getPlayer();
-                player.decreaseAmmunition();
-                if(player.getAmmunition()>0) {
-                    Book book = new Book(player.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getSpeed());
-                    gameModel.addBook(book);
-                    
-                }
+                tryThrowingBook();
                 break;
             default:
                 return false;
         }
         return true;
+    }
+
+    private void tryThrowingBook(){
+        Player player = gameModel.getPlayer();
+        if(player.getAmmunition()>0) {
+            player.decreaseAmmunition();
+            throwBook();
+        }
+    }
+
+    private void throwBook(){
+        Player player = gameModel.getPlayer();
+        Book book = new Book(player.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getSpeed());
+        gameModel.addBook(book);
     }
 
     /**
