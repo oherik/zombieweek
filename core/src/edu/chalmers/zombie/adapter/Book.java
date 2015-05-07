@@ -206,8 +206,10 @@ public class Book extends Entity {
     }
 
     public void hitGround(){
-        super.getBody().setLinearDamping(4f);
-        super.getBody().setAngularDamping(3f);
+        if (super.getBody() != null) {
+            super.getBody().setLinearDamping(4f);
+            super.getBody().setAngularDamping(3f);
+        }
     }
 
 }
