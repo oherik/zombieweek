@@ -15,8 +15,8 @@ public class Book extends Entity {
     private Vector2 force;
     private Direction direction;
     private boolean remove = false;
-    int velocity, omega;
-    Vector2 speed;
+    int speed, omega;
+    Vector2 initialVelocity;
     float width, height;
     private long timeCreated;
 
@@ -27,17 +27,17 @@ public class Book extends Entity {
      * @param x The player's x position
      * @param y The player's y position
      * @param world In which world to create the physical representation of the book
-     * @param initialSpeed  The speed which to add to the throwing speed
+     * @param initialVelocity  The speed which to add to the throwing speed
      */
-    public Book(Direction d, float x, float y, World world, Vector2 initialSpeed) {
+    public Book(Direction d, float x, float y, World world, Vector2 initialVelocity) {
         super(world);
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
 
         //Set variables
         this.direction=d;
-        this.speed = initialSpeed;
-        force = new Vector2(0,0);
+        this.initialVelocity = initialVelocity;
+        force = new Vector2(1,1); //if 0,0 setLength wont work
 
         //Update position to be in front of player
         Vector2 position = getUpdatedPosition(x,y);
@@ -62,7 +62,7 @@ public class Book extends Entity {
 
         //Set body
         super.setBody(bodyDef, fixDef);
-        velocity = 7;
+        speed = 7;
         omega= 20;
 
         setInMotion();
@@ -145,39 +145,9 @@ public class Book extends Entity {
      *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
      */
     public void setInMotion(){
-        switch(direction){
-            case NORTH:
-                force.y = + velocity;
-                break;
-            case SOUTH:
-                force.y = - velocity;
-                break;
-            case WEST:
-                force.x = - velocity;
-                break;
-            case EAST:
-                force.x = velocity;
-                break;
-            case NORTH_EAST:    //TODO fixa diagonalt
-                force.x = velocity;
-                force.y = velocity;
-                break;
-            case NORTH_WEST:
-                force.x = -velocity;
-                force.y =  +velocity;
-                break;
-            case SOUTH_EAST:
-                force.x = +velocity;
-                force.y =-velocity;
-                break;
-            case SOUTH_WEST:
-                force.x = -velocity;
-                force.y =  -velocity;
-                break;
-            default:
-                break;
-        }
-        force.add(speed); // Add the player speed
+        force.setLength(speed);
+        force.setAngleRad(direction.getRotation()+Constants.PI/2);
+        force.add(initialVelocity); // Add the player velocity
         setBodyVelocity(force);
         setAngularVelocity(omega);
     }
