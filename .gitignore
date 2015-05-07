@@ -63,4 +63,7 @@ gradle-app.setting
 !gradle-wrapper.jar
 
 # Gitinspector 
-./gitinspector-0.3.2
+*gitinspector*
+
+# Groovy testing
+*.groovy
