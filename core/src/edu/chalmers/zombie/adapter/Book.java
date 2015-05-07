@@ -205,7 +205,11 @@ public class Book extends Entity {
         return timeCreated;
     }
 
-    public void hitGround(){
+    /**
+     * Applies friction to the book, for example if it hits the ground
+     */
+
+    public void applyFriction(){
         if (super.getBody() != null) {
             super.getBody().setLinearDamping(4f);
             super.getBody().setAngularDamping(3f);

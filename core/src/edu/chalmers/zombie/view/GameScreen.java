@@ -127,7 +127,7 @@ public class GameScreen implements Screen{
             long airTime = 500;
             long lifeTime = 5000; //life time for book in millisec
             if(System.currentTimeMillis() - b.getTimeCreated() > airTime)
-                b.hitGround();
+                b.applyFriction();
             if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime){
                 gameModel.addEntityToRemove(b);
                 b.markForRemoval();
