@@ -67,3 +67,4 @@ gradle-app.setting
 
 # Groovy testing
 *.groovy
+.core/tests
