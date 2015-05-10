@@ -17,6 +17,7 @@ import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.testing.PlayerTest;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.view.GameScreen;
+import edu.chalmers.zombie.view.MainMenuScreen;
 
 public class ZombieWeek extends Game {
     private World currentWorld;
@@ -27,7 +28,8 @@ public class ZombieWeek extends Game {
 	public void create () {
         mapController = new MapController();
         currentWorld = mapController.getWorld();
-        setScreen(new GameScreen(this.currentWorld, Constants.TILE_SIZE));
+        //setScreen(new MainMenuScreen()); //Main menu screen
+        setScreen(new GameScreen(this.currentWorld, Constants.TILE_SIZE)); //Game screen
 	}
 
 	@Override
