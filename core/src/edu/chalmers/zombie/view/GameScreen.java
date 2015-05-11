@@ -71,7 +71,8 @@ public class GameScreen implements Screen{
         boxDebug = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputController());
         //Lägg till kollisionsobjekt
-        mapController.createObstacles("meta", "collision");
+        mapController.initializeCollisionObjects();
+        mapController.createObstacles("meta", GameModel.getInstance().getCollisionObjects());
         //HUD
         batchHUD = new SpriteBatch();
         bitmapFont = new BitmapFont();

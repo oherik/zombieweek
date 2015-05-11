@@ -14,6 +14,9 @@ public class Constants {
     public static final short COLLISION_PROJECTILE = 8;
     public static final short COLLISION_ENTITY = 14;
     public static final short COLLISION_OBSTACLE  = 16;
+    public static final short COLLISION_WATER  = 32;
+    public static final short COLLISION_DOOR_NEXT  = 64;
+    public static final short COLLISION_DOOOR_PREVIOUS  = 128;
 
 
     //Fysikhantering

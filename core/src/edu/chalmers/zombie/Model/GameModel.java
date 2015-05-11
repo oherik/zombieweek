@@ -25,6 +25,7 @@ public class GameModel {
     private int currentLevel;
     private ArrayList<Book> books = new ArrayList<Book>();
     private Set entitiesToRemove;
+    private ArrayList<CollisionObject> collisionObjects;
 
     /**
      * Initializes the game model
@@ -42,7 +43,7 @@ public class GameModel {
      * Only for debug
      */
     private void addTestLevel(){
-        levels.add(new Level("core/assets/Map/Test_v2.tmx","core/assets/Map/testmap.png","core/assets/Map/testmap_top.png"));
+        levels.add(new Level("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
     }
 
     /**
@@ -153,6 +154,16 @@ public class GameModel {
         return getLevel().getZombies();
     }
 
+    public ArrayList<CollisionObject> getCollisionObjects(){
+        return this.collisionObjects;
+    }
 
+    public void setCollisionObjects(ArrayList<CollisionObject> collisionObjects){
+        this.collisionObjects=collisionObjects;
+    }
+
+    public void addCollisionObjects(CollisionObject obj){
+        this.collisionObjects.add(obj);
+    }
 
 }
