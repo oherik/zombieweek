@@ -6,7 +6,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.ZombieType;
@@ -103,9 +105,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void moveToPlayer(PathAlgorithm path) {
 
 
-        while(path.getPath(position, path.getEndPos()).hasNext()) {
+        Point playerPos = MapController.getPlayerPosition();
 
-            Point p = path.getPath(position, path.getEndPos()).next();
+        while(path.getPath(position, playerPos).hasNext()){
+
+            Point p = path.getPath(position, playerPos).next();
             point = new Vector2(point.x, point.y);
             getBody().applyForce(force, point, !isKnockedOut);
 
