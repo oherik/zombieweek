@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.ZombieType;
 
@@ -21,6 +20,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private ZombieType type;
     private boolean isKnockedOut;
     private Vector2 force;
+    private Vector2 point;
 
     /**
      * Creates a new zombie
@@ -54,6 +54,10 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         fixDef.filter.categoryBits = Constants.COLLISION_ZOMBIE;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
 
+        //Set vectors
+        force = new Vector2(0,0);
+        point = new Vector2(0,0);
+        
         //Set body
         super.setBody(bodyDef, fixDef);
         super.getBody().setUserData(this);
@@ -80,8 +84,10 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     }
 
     //@Override
-    public void moveToPlayer(float x, float y, PathAlgorithm path) {
+    public void moveToPlayer(PathAlgorithm path) {
 
+
+        getBody().applyForce(force, point, !isKnockedOut);
 
     }
 

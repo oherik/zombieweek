@@ -90,7 +90,8 @@ public class Player extends Entity implements CreatureInterface {
 
     //@Override
     public void move(Direction direction) {
-       speed = legPower;
+
+        speed = legPower;
         switch (direction){
             case NORTH:
                 force.y = speed;
