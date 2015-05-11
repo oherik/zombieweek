@@ -88,7 +88,11 @@ public class Player extends Entity implements CreatureInterface {
         getBody().applyForce(force, getBody().getLocalCenter(), true);
     }
 
-    //@Override
+
+    /**
+     * Moves player
+     * @param direction Direction to move in
+     */
     public void move(Direction direction) {
        speed = legPower;
         switch (direction){
@@ -107,7 +111,9 @@ public class Player extends Entity implements CreatureInterface {
             default:
                 break;
         }
+
         updateMovement();
+
     }
 
     /**
@@ -132,16 +138,25 @@ public class Player extends Entity implements CreatureInterface {
      * Updates velocity, direction and rotation of body
      */
     private void updateMovement(){
-        moveIfNeeded();
+
        // setBodyVelocity(force);
+        updateSpeed();
         updateDirecton();
         updateRotation();
+
+        moveIfNeeded();
     }
+
+    /**
+     * Updates player speed
+     */
+    private void updateSpeed(){force.setLength(speed);}
 
     /**
      * Sets Direction from variable force
      */
     private void updateDirecton(){
+
         if(force.y > 0){
             if (force.x > 0){
                 direction = Direction.NORTH_EAST;
@@ -165,6 +180,7 @@ public class Player extends Entity implements CreatureInterface {
                 direction = Direction.WEST;
             }
         }
+
     }
 
 
@@ -173,9 +189,8 @@ public class Player extends Entity implements CreatureInterface {
      * Method that checks if keys are released simultaneously
      */
     private void checkSimultaneousRelease(){
-        updateMovement();
         final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
-
+        updateMovement();
         if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
 
                 //Keys were released at the same time (thread is sleeping/waiting)
@@ -192,12 +207,12 @@ public class Player extends Entity implements CreatureInterface {
                         System.out.println("------ Key thread interrupted -------\n" + e);
                     }
                     //keyThread.interrupt();
-
                 }
             };
 
             keyThread.start();
         }
+
 
     }
 
