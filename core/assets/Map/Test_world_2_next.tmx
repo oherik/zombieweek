@@ -30,7 +30,7 @@
   </tile>
   <tile id="6">
    <properties>
-    <property name="door_previous" value=""/>
+    <property name="door_previous" value="true"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
   </tile>

@@ -9,6 +9,8 @@ import edu.chalmers.zombie.utils.Constants;
 
 import edu.chalmers.zombie.utils.Direction;
 
+import java.awt.*;
+
 /**
  * Created by neda on 2015-03-31.
  * Modified by Tobias
@@ -359,6 +361,11 @@ public class Player extends Entity implements CreatureInterface {
     public boolean isHidden() {
 
         return isHidden;
+    }
+
+    public void setPosition(Point point){
+        getBody().setTransform(point.x + 0.5f, point.y + 0.5f, getBody().getAngle()); //+0.5f because we want it in the middle
+        updateRotation();
     }
 
 }
