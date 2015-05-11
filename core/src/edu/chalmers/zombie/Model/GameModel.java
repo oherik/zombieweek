@@ -9,6 +9,7 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,16 +27,20 @@ public class GameModel {
     private ArrayList<Book> books = new ArrayList<Book>();
     private Set entitiesToRemove;
     private ArrayList<CollisionObject> collisionObjects;
+    private String metaLayerName;
+    private  boolean worldNeedsUpdate; //If a map change has been called
 
     /**
      * Initializes the game model
      */
     private GameModel(){
-        currentLevel = 0;
+        metaLayerName = "meta";
+        currentLevel = 1;   //TODO test
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
+        worldNeedsUpdate = true;
         //addTestLevel();                                 //TODO debug
-        addTestLevel_2();                                 //TODO debug
+        //addTestLevel_2();                                 //TODO debug
         //addTestPlayer();                                //TODO debug
        // addTestZombie();                                //TODO debug
     }
@@ -69,6 +74,8 @@ public class GameModel {
         getLevel().addZombie(zombie);
     }
 
+
+
     /**
      * @return  The current instance of the game model
      */
@@ -94,6 +101,21 @@ public class GameModel {
     public Zombie getZombie(){
         return zombie;
     }
+    /**
+     * Adds a level
+     */
+    public void addLevel(Level level){
+        levels.add(level);
+    }
+
+    /**
+     * Sets all levels
+     */
+    private void setLevels(ArrayList<Level> levels){
+        this.levels = levels;
+    }
+
+
 
     /**
      * @return  The current level
@@ -126,7 +148,7 @@ public class GameModel {
      * @return  The previous level in order
      * @throws  IndexOutOfBoundsException if the current map is the first
      */
-    public Level getPreviousMap(){
+    public Level getPreviousLevel(){
         if(this.currentLevel == 0)
             throw new IndexOutOfBoundsException("GameModel: already at first indexed level");
         currentLevel-=1;
@@ -180,6 +202,22 @@ public class GameModel {
 
     public void addCollisionObjects(CollisionObject obj){
         this.collisionObjects.add(obj);
+    }
+
+    public String getMetaLayerName(){
+        return this.metaLayerName;
+    }
+
+    public ArrayList<Level> getLevels(){
+        return levels;
+    }
+
+    public void setWorldNeedsUpdate(boolean bool){
+        this.worldNeedsUpdate = bool;
+    }
+
+    public boolean worldNeedsUpdate(){
+        return this.worldNeedsUpdate;
     }
 
 }

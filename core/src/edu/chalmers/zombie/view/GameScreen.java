@@ -59,20 +59,21 @@ public class GameScreen implements Screen{
         float height = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(width, height);
         mapController = new MapController();
-        tiledMap = mapController.getMap(0);
-        /*--- test ---*/
-        tiledMapPainting = mapController.getMapPainting(0); //TODO test
-        tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(0); //TODO test
+
+        //Scale the level images
         float scale= 1f/tileSize;
-        tiledMapPainting.setSize(tiledMapPainting.getWidth() * scale, tiledMapPainting.getHeight() * scale);
-        tiledMapPaintingTopLayer.setSize(tiledMapPaintingTopLayer.getWidth() * scale, tiledMapPaintingTopLayer.getHeight() * scale);
-        /*--- end test ---*/
+        mapController.scaleImages(scale);
+
+        //Lägg till kollisionsobjekt
+        mapController.initializeCollisionObjects();
+        updateLevelIfNeeded();
+
+        //Starta rendrerare
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputController());
-        //Lägg till kollisionsobjekt
-        mapController.initializeCollisionObjects();
-        mapController.createBodies("meta", GameModel.getInstance().getCollisionObjects());
+
+
         //HUD
         batchHUD = new SpriteBatch();
         bitmapFont = new BitmapFont();
@@ -83,6 +84,23 @@ public class GameScreen implements Screen{
         pathFinding = new PathAlgorithm(meta, "collision");
         /*---SLUTTEST---*/
 
+
+    }
+
+    /**
+     * If the level has changed the map and renderer need to change as well
+     */
+    public void updateLevelIfNeeded() {
+        if (mapController.worldNeedsUpdate()) {
+            this.currentWorld = mapController.getWorld();
+            tiledMap = mapController.getMap();
+        /*--- test ---*/
+            this.tiledMapPainting = mapController.getMapPainting(); //TODO test
+            this.tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(); //TODO test
+            mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
+            mapController.createBodies();
+            mapController.setWorldNeedsUpdate(false);
+        }
     }
 
     public void resize(int width, int height){
@@ -100,6 +118,7 @@ public class GameScreen implements Screen{
 
     }
     public void render(float f){
+        updateLevelIfNeeded();
         GameModel gameModel = GameModel.getInstance();
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
