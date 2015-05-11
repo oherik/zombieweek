@@ -21,6 +21,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private boolean isKnockedOut;
     private Vector2 force;
     private Vector2 point;
+    private Sprite sprite;
 
     /**
      * Creates a new zombie
@@ -32,6 +33,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public Zombie(Sprite sprite, World world, float x, float y){
 
         super(sprite,world,x,y);
+        this.sprite = sprite;
         int width = Constants.TILE_SIZE;
         int height = Constants.TILE_SIZE;
         //Load body def
@@ -67,7 +69,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         isKnockedOut = false;
 
     }
-
 
 
     private boolean isAttacked;
@@ -107,4 +108,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         return isAttacked;
     }
+
+    public abstract Zombie spawn(World world, ZombieType type, int x, int y);
+
 }
