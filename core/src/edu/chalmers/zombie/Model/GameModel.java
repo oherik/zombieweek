@@ -34,9 +34,10 @@ public class GameModel {
         currentLevel = 0;
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
-        addTestLevel();                                 //TODO debug
-        addTestPlayer();                                //TODO debug
-        addTestZombie();                                //TODO debug
+        //addTestLevel();                                 //TODO debug
+        addTestLevel_2();                                 //TODO debug
+        //addTestPlayer();                                //TODO debug
+       // addTestZombie();                                //TODO debug
     }
 
     /**
@@ -44,6 +45,13 @@ public class GameModel {
      */
     private void addTestLevel(){
         levels.add(new Level("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
+    }
+
+    /**
+     * Only for debug
+     */
+    private void addTestLevel_2(){
+        levels.add(new Level("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
     }
 
     /**
@@ -73,6 +81,14 @@ public class GameModel {
      */
     public Player getPlayer(){
         return player;
+    }
+
+    /**
+     * Sets the player
+     * @param player The player
+     */
+    public void setPlayer(Player player){
+        this.player = player;
     }
 
     public Zombie getZombie(){

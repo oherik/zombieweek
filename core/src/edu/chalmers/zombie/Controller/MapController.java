@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.adapter.CollisionObject;
 import edu.chalmers.zombie.adapter.Level;
+import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
@@ -82,14 +84,14 @@ public class MapController {
         //Door, next
         fixDef = new FixtureDef();
         fixDef.shape = shape;
-        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_NEXT |Constants.COLLISION_OBSTACLE;
+        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_NEXT;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_next", bodyDef, fixDef));
 
         //Door, previous
         fixDef = new FixtureDef();
         fixDef.shape = shape;
-        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_PREVIOUS | Constants.COLLISION_OBSTACLE;
+        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_PREVIOUS;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_previous", bodyDef, fixDef));
 
@@ -121,12 +123,13 @@ public class MapController {
      * @param metaLayerName The name of the meta layer of the map
      */
 
-    public void createObstacles(String metaLayerName, ArrayList<CollisionObject> collisionObjects) {
+    public void createBodies(String metaLayerName, ArrayList<CollisionObject> collisionObjects) {
         World world = getWorld();
         TiledMap tiledMap = getMap();
         TiledMapTileLayer metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName);
 
         String zombieSpawn = "zombie_spawn"; //TODO test tills vi får flera sorters zombies
+        String playerSpawn = "player_spawn"; //TODO test tills ovan är fixat
 
         if (metaLayer != null) {
             metaLayer.setVisible(false);
@@ -141,11 +144,13 @@ public class MapController {
                                 obj.getBodyDef().position.set((col + 0.5f) * tileSize / ppM, (row + 0.5f) * tileSize / ppM);
                                 world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
                             }
-                            if(currentCell.getTile().getProperties().get(zombieSpawn) != null) {
-                                Zombie zombie = new ZombieTest(getWorld(), row, col);
-                                getLevel().addZombie(zombie);
-                            }
-
+                        }
+                        if(currentCell.getTile().getProperties().get(zombieSpawn) != null) {
+                          Zombie zombie = new ZombieTest(getWorld(), col, row);           //TODO test
+                           getLevel().addZombie(zombie);
+                        }
+                        if(currentCell.getTile().getProperties().get(playerSpawn) != null) {
+                            gameModel.setPlayer(new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),getWorld(),col,row)); //TODO test
                         }
                     }
                 }
@@ -156,7 +161,7 @@ public class MapController {
 
 
     /*  -----------------------OLD----------------------------------------
-    public void createObstacles(String metaLayerName, String collisionProperty){
+    public void createBodies(String metaLayerName, String collisionProperty){
         World world = getWorld();
         TiledMap tiledMap = getMap();
         BodyDef bodyDef = new BodyDef();
@@ -192,7 +197,7 @@ public class MapController {
     }
      -----------------------------END--------------------------------------------*/
 
-    public void createObstacles (int index, String metaLayerName, String collisionProperty){
+    public void createBodies(int index, String metaLayerName, String collisionProperty){
 
        //TODO lägg till när tillhörande model-kod implementerats
     }
