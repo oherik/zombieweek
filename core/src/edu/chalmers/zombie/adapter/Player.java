@@ -19,6 +19,7 @@ public class Player extends Entity implements CreatureInterface {
     private int lives;
     private int ammunition;
     private boolean isAttacked;
+    private boolean isHidden;
     private Body playerBody;
     private int width;
     private int height;
@@ -77,17 +78,27 @@ public class Player extends Entity implements CreatureInterface {
 
     }
 
+    /**
+     * A method to get current players kill count.
+     * @return int killCount.
+     */
     private int getKillCount() {
 
         return killCount;
     }
 
+    /**
+     * A method that increases current player's kill count.
+     */
     private void incKillCount() {
 
         killCount = killCount + 1;
     }
 
 
+    /**
+     * Moves player if needed. 
+     */
     public void moveIfNeeded(){
         getBody().applyForce(force, getBody().getLocalCenter(), true);
     }
@@ -263,6 +274,10 @@ public class Player extends Entity implements CreatureInterface {
         //TODO: delete?
     }
 
+    /**
+     * A method used when player is attacking zombie.
+     * @param zombie the zombie that is attacked.
+     */
     public void attack(Zombie zombie) {
 
         // TODO: fill in with attack of zombie instance
@@ -291,6 +306,10 @@ public class Player extends Entity implements CreatureInterface {
 
         return super.getBody();
     }
+
+    /**
+     * A method that increases ammuntion.
+     */
     public void addBook(){
         ++ammunition;
     }
@@ -331,6 +350,15 @@ public class Player extends Entity implements CreatureInterface {
     public Player spawn(World world, int x, int y) {
 
         return new Player(sprite, world, x, y);
+    }
+
+    /**
+     * A method that checks whether Player is hidden or not.
+     * @return true if hidden, false if not.
+     */
+    public boolean isHidden() {
+
+        return isHidden;
     }
 
 }
