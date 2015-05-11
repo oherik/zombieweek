@@ -49,7 +49,13 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
             }
         }
         else if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PLAYER) {      //Är spelaren
-            if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_DOOR_NEXT) {
+            if(contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_DOOR_PREVIOUS) {
+                System.out.println("lol");
+                mapController.loadNextLevel();
+
+            }
+            else   if(contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_DOOR_PREVIOUS) {
+                System.out.println("lolno");
                 mapController.loadNextLevel();
 
             }
