@@ -10,6 +10,8 @@ import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.utils.ZombieType;
 import sun.awt.motif.X11CNS11643;
 
+import java.awt.*;
+
 /**
  * Created by Tobias on 15-04-21.
  */
@@ -19,6 +21,7 @@ public class ZombieTest extends Zombie {
 
     public ZombieTest(World world, float x, float y){
         super(new Sprite(new Texture("core/assets/zombie_test.png")),world,x,y);
+        setZombiePosition(new Point((int)x, (int)y));
     }
 
 
