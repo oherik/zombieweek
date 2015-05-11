@@ -11,6 +11,8 @@ import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.ZombieType;
 
+import java.awt.*;
+
 /**
  * Created by neda on 2015-03-31.
  */
@@ -22,6 +24,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private Vector2 force;
     private Vector2 point;
     private Sprite sprite;
+    private Point position;
 
     /**
      * Creates a new zombie
@@ -80,6 +83,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public abstract Vector2 getVelocity();
 
     public abstract void attack(Player player);
+    
+    public Point getZombiePosition() {
+
+        return position;
+    }
 
     public void remove(Zombie zombie) {
 
@@ -90,8 +98,10 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void moveToPlayer(PathAlgorithm path) {
 
 
-        while(path.getPath(path.getStartPos(), path.getEndPos()).hasNext()) {
+        while(path.getPath(position, path.getEndPos()).hasNext()) {
 
+            Point p = path.getPath(position, path.getEndPos()).next();
+            point = new Vector2(point.x, point.y);
             getBody().applyForce(force, point, !isKnockedOut);
 
         }
