@@ -59,13 +59,15 @@ public class GameScreen implements Screen{
         float height = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(width, height);
         mapController = new MapController();
-        tiledMap = mapController.getMap(0);
+        tiledMap = mapController.getMap();
         /*--- test ---*/
-        tiledMapPainting = mapController.getMapPainting(0); //TODO test
-        tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(0); //TODO test
+        tiledMapPainting = mapController.getMapPainting(); //TODO test
+        tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(); //TODO test
         float scale= 1f/tileSize;
+
         tiledMapPainting.setSize(tiledMapPainting.getWidth() * scale, tiledMapPainting.getHeight() * scale);
-        tiledMapPaintingTopLayer.setSize(tiledMapPaintingTopLayer.getWidth() * scale, tiledMapPaintingTopLayer.getHeight() * scale);
+        if(tiledMapPaintingTopLayer!=null)
+                tiledMapPaintingTopLayer.setSize(tiledMapPaintingTopLayer.getWidth() * scale, tiledMapPaintingTopLayer.getHeight() * scale);
         /*--- end test ---*/
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();

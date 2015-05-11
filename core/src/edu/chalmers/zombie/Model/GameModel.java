@@ -9,6 +9,7 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,11 +32,11 @@ public class GameModel {
      * Initializes the game model
      */
     private GameModel(){
-        currentLevel = 0;
+        currentLevel = 1;   //TODO test
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
         //addTestLevel();                                 //TODO debug
-        addTestLevel_2();                                 //TODO debug
+        //addTestLevel_2();                                 //TODO debug
         //addTestPlayer();                                //TODO debug
        // addTestZombie();                                //TODO debug
     }
@@ -69,6 +70,8 @@ public class GameModel {
         getLevel().addZombie(zombie);
     }
 
+
+
     /**
      * @return  The current instance of the game model
      */
@@ -94,6 +97,21 @@ public class GameModel {
     public Zombie getZombie(){
         return zombie;
     }
+    /**
+     * Adds a level
+     */
+    public void addLevel(Level level){
+        levels.add(level);
+    }
+
+    /**
+     * Sets all levels
+     */
+    private void setLevels(ArrayList<Level> levels){
+        this.levels = levels;
+    }
+
+
 
     /**
      * @return  The current level

@@ -50,6 +50,21 @@ public class MapController {
      */
     public Level getLevel(){return gameModel.getLevel();}
 
+    /**
+     * Creates the different levels and stores them in the model
+     */
+
+    public void initializeLevels(){
+
+        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_previous.tmx", "core/assets/Map/Test_world_2_previous.png"));
+        gameModel.addLevel(new Level("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
+        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_next.tmx", "core/assets/Map/Test_world_2_next.png"));
+
+    }
+
+    /**
+     * Creates the different collision objects that represent the physical world and stores them in the model
+     */
     public void initializeCollisionObjects(){
         float tileSize = Constants.TILE_SIZE;
         float ppM = Constants.PIXELS_PER_METER;
@@ -212,5 +227,13 @@ public class MapController {
 
     public Sprite getMapPaintingTopLayer(int levelIndex){
         return gameModel.getLevel(levelIndex).getMapPaintingTopLayer();
+    }
+
+    public Sprite getMapPainting(){
+        return gameModel.getLevel().getMapPainting();
+    }
+
+    public Sprite getMapPaintingTopLayer(){
+        return gameModel.getLevel().getMapPaintingTopLayer();
     }
 }
