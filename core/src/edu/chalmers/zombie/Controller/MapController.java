@@ -279,4 +279,11 @@ public class MapController {
     public void loadPreviousLevel(){
 
     }
+
+    public boolean worldNeedsUpdate(){
+        return gameModel.worldNeedsUpdate();
+    }
+
+    public void setWorldNeedsUpdate(boolean bool){ gameModel.setWorldNeedsUpdate(bool);
+    }
 }

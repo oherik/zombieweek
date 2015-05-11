@@ -28,6 +28,7 @@ public class GameModel {
     private Set entitiesToRemove;
     private ArrayList<CollisionObject> collisionObjects;
     private String metaLayerName;
+    private  boolean worldNeedsUpdate; //If a map change has been called
 
     /**
      * Initializes the game model
@@ -37,6 +38,7 @@ public class GameModel {
         currentLevel = 1;   //TODO test
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
+        worldNeedsUpdate = true;
         //addTestLevel();                                 //TODO debug
         //addTestLevel_2();                                 //TODO debug
         //addTestPlayer();                                //TODO debug
@@ -208,6 +210,14 @@ public class GameModel {
 
     public ArrayList<Level> getLevels(){
         return levels;
+    }
+
+    public void setWorldNeedsUpdate(boolean bool){
+        this.worldNeedsUpdate = bool;
+    }
+
+    public boolean worldNeedsUpdate(){
+        return this.worldNeedsUpdate;
     }
 
 }
