@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.utils.ZombieType;
 
 /**
  * Created by Tobias on 15-04-21.
@@ -31,6 +32,12 @@ public class ZombieTest extends Zombie {
     @Override
     public void attack(Player player) {
 
+    }
+
+    @Override
+    public Zombie spawn(World world, ZombieType type, int x, int y) {
+
+        return new ZombieTest(world, x, y);
     }
 
     @Override

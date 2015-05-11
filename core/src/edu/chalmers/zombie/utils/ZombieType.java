@@ -12,6 +12,7 @@ public enum ZombieType {
     IT,
     ECON,
     ZETA,
-    BOSS;
+    BOSS,
+    BASIC;
 
 }
