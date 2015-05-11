@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="mesh" tilewidth="32" tileheight="32">
+  <tile id="0">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="water" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_blue.png"/>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="door_next" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_green.png"/>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="sneak" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_orange.png"/>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="zombie_spawn" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_purple.png"/>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="collision_all" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_red.png"/>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="door_previous" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="player_spawn" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_teal.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="8" name="map" tilewidth="1600" tileheight="800">
+  <tile id="0">
+   <image width="1600" height="800" source="Test_world_2_bottom.png"/>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20KP6AAAAAAgLcBE4gAAQ==
+  </data>
+ </layer>
+ <layer name="Map" width="50" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Cd+FeMiSVwtAqaAAAAAMBfcx0oWRnIAAk=
+  </data>
+ </layer>
+ <layer name="meta" width="50" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztltEKgCAMRWdl/f8f96IQMkvXna7YhQM9yLZDk4pEFB3HcTopExJaeTPbXU0umi4L9XlsDTVneEjfx1p5zjW5hAJkRngg75vG3S2Tdw7lwWWEx7WXdQ/JDKM9tILchadzezp3GPKQ1tKK1IP7Vn3RA1kLsbMWerVEe3ZEL/ewxR89av/ss2d0bHICJ3ARcA==
+  </data>
+ </layer>
+</map>
