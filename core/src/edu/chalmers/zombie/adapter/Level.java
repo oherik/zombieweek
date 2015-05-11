@@ -11,10 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.ContactListener;
 import edu.chalmers.zombie.utils.Constants;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * The general model for storing a specific level. The level contains a tiled map, which is the graphical representation of the level, and a box2d World which handles the physics.
@@ -28,6 +25,7 @@ public class Level {
     private ArrayList zombies;
     private Body ground;
     private Sprite mapPainting, mapPaintingTopLayer;
+    private boolean initializedBodies;
     /**
      * Creates a new level based on a tiled map and a Box2D world
      * @param mapPath  The file path to the map containing the meta data
@@ -47,6 +45,7 @@ public class Level {
         BodyDef bd =new BodyDef();
         ground = world.createBody(bd);  //Behövs för friktion
         mapPainting = new Sprite(new Texture(mapPaintingPath));
+        initializedBodies = false;
     }
 
     /**
@@ -134,4 +133,13 @@ public class Level {
     public Sprite getMapPaintingTopLayer(){
         return mapPaintingTopLayer;
     }
+
+    public void setInitializedBodies(boolean bool){
+        this.initializedBodies = bool;
+    }
+
+    public boolean hasInitializedBodies(){
+        return this.initializedBodies;
+    }
+
 }

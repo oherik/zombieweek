@@ -14,6 +14,7 @@ import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.PlayerTest;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.view.GameScreen;
@@ -27,8 +28,10 @@ public class ZombieWeek extends Game {
 
 	public void create () {
         mapController = new MapController();
+        mapController.initializeLevels();
         currentWorld = mapController.getWorld();
         //setScreen(new MainMenuScreen()); //Main menu screen
+        System.out.println(GameModel.getInstance().getCurrentLevelIndex());
         setScreen(new GameScreen(this.currentWorld, Constants.TILE_SIZE)); //Game screen
 	}
 
