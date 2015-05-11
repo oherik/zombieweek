@@ -40,8 +40,8 @@ public class Player extends Entity implements CreatureInterface {
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
-        width = Constants.TILE_SIZE;
-        height = Constants.TILE_SIZE;
+        width = Constants.PLAYER_SIZE;
+        height = Constants.PLAYER_SIZE;
 
         this.sprite = sprite;
 

@@ -7,6 +7,7 @@ public class Constants {
 
     public static final int TILE_SIZE = 32;
     public static final float PIXELS_PER_METER = 32;
+    public static final int PLAYER_SIZE = 28;
 
     //Kollisionshantering
     public static final short COLLISION_PLAYER= 2;
@@ -14,7 +15,10 @@ public class Constants {
     public static final short COLLISION_PROJECTILE = 8;
     public static final short COLLISION_ENTITY = 14;
     public static final short COLLISION_OBSTACLE  = 16;
-
+    public static final short COLLISION_WATER  = 32;
+    public static final short COLLISION_DOOR_NEXT  = 64;
+    public static final short COLLISION_DOOR_PREVIOUS  = 128;
+    public static final short COLLISION_SNEAK = 256;
 
     //Fysikhantering
     public static final float TIMESTEP = 1/60f;

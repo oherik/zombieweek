@@ -25,6 +25,7 @@ public class GameModel {
     private int currentLevel;
     private ArrayList<Book> books = new ArrayList<Book>();
     private Set entitiesToRemove;
+    private ArrayList<CollisionObject> collisionObjects;
 
     /**
      * Initializes the game model
@@ -33,16 +34,24 @@ public class GameModel {
         currentLevel = 0;
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
-        addTestLevel();                                 //TODO debug
-        addTestPlayer();                                //TODO debug
-        addTestZombie();                                //TODO debug
+        //addTestLevel();                                 //TODO debug
+        addTestLevel_2();                                 //TODO debug
+        //addTestPlayer();                                //TODO debug
+       // addTestZombie();                                //TODO debug
     }
 
     /**
      * Only for debug
      */
     private void addTestLevel(){
-        levels.add(new Level("core/assets/Map/Test_v2.tmx","core/assets/Map/testmap.png","core/assets/Map/testmap_top.png"));
+        levels.add(new Level("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
+    }
+
+    /**
+     * Only for debug
+     */
+    private void addTestLevel_2(){
+        levels.add(new Level("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
     }
 
     /**
@@ -72,6 +81,14 @@ public class GameModel {
      */
     public Player getPlayer(){
         return player;
+    }
+
+    /**
+     * Sets the player
+     * @param player The player
+     */
+    public void setPlayer(Player player){
+        this.player = player;
     }
 
     public Zombie getZombie(){
@@ -153,6 +170,16 @@ public class GameModel {
         return getLevel().getZombies();
     }
 
+    public ArrayList<CollisionObject> getCollisionObjects(){
+        return this.collisionObjects;
+    }
 
+    public void setCollisionObjects(ArrayList<CollisionObject> collisionObjects){
+        this.collisionObjects=collisionObjects;
+    }
+
+    public void addCollisionObjects(CollisionObject obj){
+        this.collisionObjects.add(obj);
+    }
 
 }
