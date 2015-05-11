@@ -27,11 +27,13 @@ public class GameModel {
     private ArrayList<Book> books = new ArrayList<Book>();
     private Set entitiesToRemove;
     private ArrayList<CollisionObject> collisionObjects;
+    private String metaLayerName;
 
     /**
      * Initializes the game model
      */
     private GameModel(){
+        metaLayerName = "meta";
         currentLevel = 1;   //TODO test
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
@@ -144,7 +146,7 @@ public class GameModel {
      * @return  The previous level in order
      * @throws  IndexOutOfBoundsException if the current map is the first
      */
-    public Level getPreviousMap(){
+    public Level getPreviousLevel(){
         if(this.currentLevel == 0)
             throw new IndexOutOfBoundsException("GameModel: already at first indexed level");
         currentLevel-=1;
@@ -198,6 +200,14 @@ public class GameModel {
 
     public void addCollisionObjects(CollisionObject obj){
         this.collisionObjects.add(obj);
+    }
+
+    public String getMetaLayerName(){
+        return this.metaLayerName;
+    }
+
+    public ArrayList<Level> getLevels(){
+        return levels;
     }
 
 }

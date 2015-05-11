@@ -65,16 +65,15 @@ public class GameScreen implements Screen{
         tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(); //TODO test
         float scale= 1f/tileSize;
 
-        tiledMapPainting.setSize(tiledMapPainting.getWidth() * scale, tiledMapPainting.getHeight() * scale);
-        if(tiledMapPaintingTopLayer!=null)
-                tiledMapPaintingTopLayer.setSize(tiledMapPaintingTopLayer.getWidth() * scale, tiledMapPaintingTopLayer.getHeight() * scale);
+        mapController.scaleImages(scale);
+
         /*--- end test ---*/
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputController());
         //Lägg till kollisionsobjekt
         mapController.initializeCollisionObjects();
-        mapController.createBodies("meta", GameModel.getInstance().getCollisionObjects());
+        mapController.createBodies();
         //HUD
         batchHUD = new SpriteBatch();
         bitmapFont = new BitmapFont();
@@ -84,7 +83,23 @@ public class GameScreen implements Screen{
         TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMap().getLayers().get("meta");
         pathFinding = new PathAlgorithm(meta, "collision");
         /*---SLUTTEST---*/
+        updateLevel();
 
+    }
+
+    public void updateLevel(){
+        this.currentWorld = mapController.getWorld();
+        tiledMap = mapController.getMap();
+        /*--- test ---*/
+        this.tiledMapPainting = mapController.getMapPainting(); //TODO test
+        this.tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(); //TODO test
+
+
+
+        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
+
+
+        mapController.createBodies();
     }
 
     public void resize(int width, int height){
