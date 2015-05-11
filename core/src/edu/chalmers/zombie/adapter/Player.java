@@ -63,7 +63,7 @@ public class Player extends Entity implements CreatureInterface {
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR_PREVIOUS | Constants.COLLISION_DOOR_NEXT;
 
         //Set body
         super.setBody(bodyDef, fixDef);
