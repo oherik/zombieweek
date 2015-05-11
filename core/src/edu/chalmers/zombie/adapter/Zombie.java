@@ -75,7 +75,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     public abstract ZombieType getType();
 
-    public abstract void setType();
+    public abstract void setType(ZombieType type);
 
     public abstract Vector2 getVelocity();
 
@@ -90,8 +90,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void moveToPlayer(PathAlgorithm path) {
 
 
-        getBody().applyForce(force, point, !isKnockedOut);
+        while(path.getPath(path.getStartPos(), path.getEndPos()).hasNext()) {
 
+            getBody().applyForce(force, point, !isKnockedOut);
+
+        }
     }
 
     /**

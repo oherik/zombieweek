@@ -8,11 +8,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.utils.ZombieType;
+import sun.awt.motif.X11CNS11643;
 
 /**
  * Created by Tobias on 15-04-21.
  */
 public class ZombieTest extends Zombie {
+
+    private ZombieType type;
 
     public ZombieTest(World world, float x, float y){
         super(new Sprite(new Texture("core/assets/zombie_test.png")),world,x,y);
@@ -20,8 +23,13 @@ public class ZombieTest extends Zombie {
 
 
     @Override
-    public int getType() {
-        return 0;
+    public ZombieType getType() {
+        return type;
+    }
+
+    @Override
+    public void setType(ZombieType type) {
+        this.type = type;
     }
 
     @Override
