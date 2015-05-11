@@ -83,7 +83,12 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public abstract Vector2 getVelocity();
 
     public abstract void attack(Player player);
-    
+
+    public void setZombiePosition(Point pos) {
+
+        position = pos;
+    }
+
     public Point getZombiePosition() {
 
         return position;
