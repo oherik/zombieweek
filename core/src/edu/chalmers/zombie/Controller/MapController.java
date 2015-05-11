@@ -200,7 +200,7 @@ public class MapController {
                             }
                             if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
                                 level.setPlayerSpawn(new Point(col, row));
-                                gameModel.setPlayer(new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")), getWorld(), col, row)); //TODO test
+                                gameModel.setPlayer(new Player(new Sprite(gameModel.res.getTexture("player")), getWorld(), col, row)); //TODO test
                             }
                             if (currentCell.getTile().getProperties().get(playerReturn) != null) {
                                 level.setPlayerReturn(new Point(col, row));
