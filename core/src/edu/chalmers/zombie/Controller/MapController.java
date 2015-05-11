@@ -13,6 +13,7 @@ import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -285,5 +286,12 @@ public class MapController {
     }
 
     public void setWorldNeedsUpdate(boolean bool){ gameModel.setWorldNeedsUpdate(bool);
+    }
+
+    /**
+     * @return The player's current (rounded) position as a point
+     */
+    public Point getPlayerPosition(){
+        return new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
     }
 }
