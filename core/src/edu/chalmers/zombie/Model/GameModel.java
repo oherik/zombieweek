@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -31,7 +32,9 @@ public class GameModel {
     private ArrayList<CollisionObject> collisionObjects;
     private String metaLayerName;
     private  boolean worldNeedsUpdate; //If a map change has been called
-private Point playerBufferPosition; //Can't alter the player position directly in the world step
+    private Point playerBufferPosition; //Can't alter the player position directly in the world step
+    public static ResourceManager res;
+
 
     /**
      * Initializes the game model
@@ -39,6 +42,8 @@ private Point playerBufferPosition; //Can't alter the player position directly i
     private GameModel(){
         metaLayerName = "meta";
         currentLevel = 0;   //TODO test
+        res = new ResourceManager();
+        res.loadTexture("player","core/assets/player_professional_final_version.png");
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
         worldNeedsUpdate = true;
@@ -66,7 +71,8 @@ private Point playerBufferPosition; //Can't alter the player position directly i
      * Only for debug
      */
     private void addTestPlayer(){
-        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),levels.get(0).getWorld(),0,0);
+        player = new Player(new Sprite(res.getTexture("player")),levels.get(0).getWorld(),0,0);
+
     }
 
     /**
