@@ -7,6 +7,7 @@ public class Constants {
 
     public static final int TILE_SIZE = 32;
     public static final float PIXELS_PER_METER = 32;
+    public static final int PLAYER_SIZE = 28;
 
     //Kollisionshantering
     public static final short COLLISION_PLAYER= 2;
