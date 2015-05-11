@@ -29,17 +29,21 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
+    private Sprite sprite;
 
     private Thread keyThread; //Keeps track of key releases
 
 
     public Player(Sprite sprite, World world, float x, float y) {
+
         super(sprite, world, x, y);
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         width = Constants.TILE_SIZE;
         height = Constants.TILE_SIZE;
+
+        this.sprite = sprite;
 
         //Load body def
         BodyDef bodyDef = new BodyDef();
@@ -322,6 +326,11 @@ public class Player extends Entity implements CreatureInterface {
 
     public Vector2 getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
+    }
+
+    public Player spawn(World world, int x, int y) {
+
+        return new Player(sprite, world, x, y);
     }
 
 }
