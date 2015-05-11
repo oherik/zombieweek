@@ -2,8 +2,6 @@ package edu.chalmers.zombie.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import edu.chalmers.zombie.testing.CollisionTest;
-import edu.chalmers.zombie.testing.PathTest;
 import edu.chalmers.zombie.ZombieWeek;
 
 import java.io.BufferedReader;
