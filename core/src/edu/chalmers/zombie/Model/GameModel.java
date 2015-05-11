@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,11 +26,14 @@ public class GameModel {
     private int currentLevel;
     private ArrayList<Book> books = new ArrayList<Book>();
     private Set entitiesToRemove;
+    public static ResourceManager res;
 
     /**
      * Initializes the game model
      */
     private GameModel(){
+        res = new ResourceManager();
+        res.loadTexture("player","core/assets/player_professional_final_version.png");
         currentLevel = 0;
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
@@ -49,7 +53,8 @@ public class GameModel {
      * Only for debug
      */
     private void addTestPlayer(){
-        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),levels.get(0).getWorld(),0,0);
+        player = new Player(new Sprite(res.getTexture("player")),levels.get(0).getWorld(),0,0);
+
     }
 
     /**
