@@ -105,12 +105,13 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void moveToPlayer(PathAlgorithm path) {
 
 
-        Point playerPos = MapController.getPlayerPosition();
+        MapController mapController = new MapController();
+        Point playerPos = mapController.getPlayerPosition();
 
         while(path.getPath(position, playerPos).hasNext()){
 
             Point p = path.getPath(position, playerPos).next();
-            point = new Vector2(point.x, point.y);
+            point = new Vector2(p.x, p.y);
             getBody().applyForce(force, point, !isKnockedOut);
 
         }
