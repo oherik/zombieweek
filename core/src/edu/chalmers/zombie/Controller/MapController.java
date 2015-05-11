@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.adapter.CollisionObject;
 import edu.chalmers.zombie.adapter.Level;
+import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
@@ -40,6 +42,11 @@ public class MapController {
      * @return the current world from the model
      */
     public World getWorld(){return gameModel.getLevel().getWorld();}
+
+    /**
+     * @return the current level from the model
+     */
+    public Level getLevel(){return gameModel.getLevel();}
 
     public void initializeCollisionObjects(){
         float tileSize = Constants.TILE_SIZE;
@@ -75,16 +82,25 @@ public class MapController {
         //Door, next
         fixDef = new FixtureDef();
         fixDef.shape = shape;
-        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
+        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_NEXT |Constants.COLLISION_OBSTACLE;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_next", bodyDef, fixDef));
 
         //Door, previous
         fixDef = new FixtureDef();
         fixDef.shape = shape;
-        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
+        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_PREVIOUS | Constants.COLLISION_OBSTACLE;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_previous", bodyDef, fixDef));
+
+        //Sneak
+        fixDef = new FixtureDef();
+        fixDef.friction = 0.2f;
+        fixDef.restitution = .1f;
+        fixDef.shape = shape;
+        fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
+        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
+        collisionObjects.add(new CollisionObject("sneak", bodyDef, fixDef));
 
         //Add to game model
         gameModel.setCollisionObjects(collisionObjects);
@@ -109,6 +125,9 @@ public class MapController {
         World world = getWorld();
         TiledMap tiledMap = getMap();
         TiledMapTileLayer metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName);
+
+        String zombieSpawn = "zombie_spawn"; //TODO test tills vi får flera sorters zombies
+
         if (metaLayer != null) {
             metaLayer.setVisible(false);
             float tileSize = Constants.TILE_SIZE;
@@ -122,7 +141,10 @@ public class MapController {
                                 obj.getBodyDef().position.set((col + 0.5f) * tileSize / ppM, (row + 0.5f) * tileSize / ppM);
                                 world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
                             }
-
+                            if(currentCell.getTile().getProperties().get(zombieSpawn) != null) {
+                                Zombie zombie = new ZombieTest(getWorld(), row, col);
+                                getLevel().addZombie(zombie);
+                            }
 
                         }
                     }
