@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.utils.ZombieType;
-import sun.awt.motif.X11CNS11643;
+//import sun.awt.motif.X11CNS11643;
 
 /**
  * Created by Tobias on 15-04-21.

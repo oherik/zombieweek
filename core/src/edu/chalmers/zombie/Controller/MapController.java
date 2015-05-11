@@ -128,14 +128,14 @@ public class MapController {
         fixDef = new FixtureDef();
         fixDef.shape = shape;
         fixDef.filter.categoryBits = Constants.COLLISION_DOOR_NEXT;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE | Constants.COLLISION_PROJECTILE;
+        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_next", bodyDef, fixDef));
 
         //Door, previous
         fixDef = new FixtureDef();
         fixDef.shape = shape;
         fixDef.filter.categoryBits = Constants.COLLISION_DOOR_PREVIOUS;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE | Constants.COLLISION_PROJECTILE;
+        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_previous", bodyDef, fixDef));
 
         //Sneak
