@@ -96,6 +96,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return position;
     }
 
+    public void setForce(int force) {
+     //TODO: STUFF HERE PLZ
+        
+    }
+
     public void remove(Zombie zombie) {
 
         //TODO: remove zombie
