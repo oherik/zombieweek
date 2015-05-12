@@ -180,12 +180,4 @@ public class Level {
     public void setPlayerReturn(Point playerReturn) {
         this.playerReturn = playerReturn;
     }
-
-    /**
-     * TEST
-     * TEST
-     * TEST
-     * TEST
-     * TEST
-     */
 }
