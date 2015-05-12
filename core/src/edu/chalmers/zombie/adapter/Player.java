@@ -351,9 +351,17 @@ public class Player extends Entity implements CreatureInterface {
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
-    public Player spawn(World world, int x, int y) {
+    /**
+     * Spawns the current player at chosen point.
+     * @param x coordinate.
+     * @param y coordinate.
+     * @return this player. 
+     */
+    public Player spawn( int x, int y) {
 
-        return new Player(sprite, world, x, y);
+        Point p = new Point(x,y);
+        this.setPosition(p);
+        return this;
     }
 
     /**
