@@ -1,8 +1,8 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.CollisionObject;
@@ -54,9 +54,9 @@ public class MapController {
 
     public void initializeLevels(){
 
-        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_previous.tmx", "core/assets/Map/Test_world_2_previous.png"));
-        gameModel.addLevel(new Level("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
-        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_next.tmx", "core/assets/Map/Test_world_2_next.png"));
+        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_previous.tmx"));
+        gameModel.addLevel(new Level("core/assets/Map/Test_world_3.tmx"));
+        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_next.tmx"));
 
     }
 
@@ -124,21 +124,14 @@ public class MapController {
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        collisionObjects.add(new CollisionObject("collision_all", bodyDef, fixDef));
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_ALL, bodyDef, fixDef));
 
-        //Door, next
+        //Door
         fixDef = new FixtureDef();;
         fixDef.shape = doorShape;
         fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        collisionObjects.add(new CollisionObject("door_next", bodyDef, fixDef));
-
-        //Door, previous
-        fixDef = new FixtureDef();
-        fixDef.shape = doorShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        collisionObjects.add(new CollisionObject("door_previous", bodyDef, fixDef));
+        collisionObjects.add(new CollisionObject(Constants.DOOR_PROPERTY, bodyDef, fixDef));
 
         //Sneak
         fixDef = new FixtureDef();
@@ -188,10 +181,13 @@ public class MapController {
                         TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);       //hämta cell
                         if (currentCell != null && currentCell.getTile() != null) {             //ej tom
                             for (CollisionObject obj : collisionObjects) {
-                                if (currentCell.getTile().getProperties().get(obj.getProperty()) != null) {
+                                if (currentCell.getTile().getProperties().get(obj.getName()) != null) {
                                     obj.getBodyDef().position.set((col + 0.5f) * tileSize / ppM, (row + 0.5f) * tileSize / ppM);
                                     Fixture fixture = world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
-                                    fixture.getBody().setUserData(obj.getProperty());
+                                    if(obj.getName().equals(Constants.DOOR_PROPERTY)){
+                                        obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.DOOR_PROPERTY));       //Dvs leveln den leder till
+                                    }
+                                    fixture.getBody().setUserData(obj.getName());
                                 }
                             }
                             if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {
@@ -264,22 +260,25 @@ public class MapController {
        return gameModel.getLevel(levelIndex);
     }
 
-    public Sprite getMapPainting(int levelIndex){
+    public Sprite getMapBottomLayer(int levelIndex){
         return gameModel.getLevel(levelIndex).getMapPainting();
     }
 
-    public Sprite getMapPaintingTopLayer(int levelIndex){
+    public Sprite getMapTopLayer(int levelIndex){
         return gameModel.getLevel(levelIndex).getMapPaintingTopLayer();
     }
 
-    public Sprite getMapPainting(){
-        return gameModel.getLevel().getMapPainting();
+    public TiledMapImageLayer getMapBottomLayer(){
+        return gameModel.getLevel().getBottomLayer();
     }
 
-    public Sprite getMapPaintingTopLayer(){
-        return gameModel.getLevel().getMapPaintingTopLayer();
+    public TiledMapImageLayer getMapTopLayer(){
+        return gameModel.getLevel().getTopLayer();
     }
 
+    public TiledMapTileLayer getMapMetaLayer(){
+        return gameModel.getLevel().getMetaLayer();
+    }
     /**
      * Loads the next level in the game model, creates bodies if needed and sets that the renderer needs to update the world
      * @throws  IndexOutOfBoundsException if the current level is the last

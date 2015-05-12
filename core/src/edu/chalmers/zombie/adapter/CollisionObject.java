@@ -7,14 +7,23 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  * Created by Erik on 2015-05-11.
  */
 public class CollisionObject {
-    private String property;
+    private String name, property;
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
 
-    public CollisionObject(String property, BodyDef bodyDef, FixtureDef fixtureDef){
-        this.property = property;
+    public CollisionObject(String name, BodyDef bodyDef, FixtureDef fixtureDef){
+        this.name = name;
         this.bodyDef = bodyDef;
         this.fixtureDef = fixtureDef;
+    }
+
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void setProperty(String property){
+        this.property = property;
     }
 
     public String getProperty(){

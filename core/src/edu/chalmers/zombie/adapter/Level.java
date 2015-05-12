@@ -3,6 +3,8 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -27,45 +29,46 @@ public class Level {
     private Body ground;
     private Sprite mapPainting, mapPaintingTopLayer;
     private boolean initializedBodies;
-    Point playerSpawn;
-    Point playerReturn;
+    Point playerSpawn, playerReturn;
+    TiledMapTileLayer metaLayer;
+    TiledMapImageLayer topLayer, bottomLayer;
     /**
      * Creates a new level based on a tiled map and a Box2D world
      * @param mapPath  The file path to the map containing the meta data
-     * @param mapPaintingPath  The file path to the map painting
      * @throws NullPointerException if the path name is incorrect or not found
      */
-    public Level(String mapPath, String mapPaintingPath){
-        if(mapPath == null || mapPaintingPath == null)
+    public Level(String mapPath){
+        if(mapPath == null)
             throw new NullPointerException("Level: no path name recieved");
         tiledMap = new TmxMapLoader().load(mapPath);
         if(tiledMap == null)
             throw new NullPointerException("Level: incorrect path name");
+
+        //Initialize the layers
+        metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(Constants.META_LAYER);
+        topLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.TOP_LAYER);
+        bottomLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.BOTTOM_LAYER);
+        tileSize = (float) Constants.TILE_SIZE;
+
+        //Create the world
         world = new World(new Vector2(0,0), true);
         world.setContactListener(new ContactListener());
-        tileSize = (float) Constants.TILE_SIZE;
-        zombies = new ArrayList<Zombie>();
-        BodyDef bd =new BodyDef();
-        ground = world.createBody(bd);  //Behövs för friktion
-        mapPainting = new Sprite(new Texture(mapPaintingPath));
         initializedBodies = false;
+
+
+        zombies = new ArrayList<Zombie>();
     }
 
-    /**
-     * If a top layer is included
-     * @param mapPath  The file path to the map containing the meta data
-     * @param mapPaintingPath  The file path to the map painting
-     * @param mapPaintingTopLayerPath  The file path to the map painting's top layer
-     */
-    public Level(String mapPath, String mapPaintingPath, String mapPaintingTopLayerPath){
-        this(mapPath,mapPaintingPath);
-        if(mapPaintingTopLayerPath == null)
-            throw new NullPointerException("Level: no top layer path name recieved");
-        mapPaintingTopLayer = new Sprite(new Texture(mapPaintingTopLayerPath));
+    public TiledMapTileLayer getMetaLayer(){
+        return this.metaLayer;
     }
 
-    public Body getGround(){
-        return  ground;
+    public TiledMapImageLayer getTopLayer(){
+        return this.topLayer;
+    }
+
+    public TiledMapImageLayer getBottomLayer(){
+        return this.bottomLayer;
     }
 
     /**

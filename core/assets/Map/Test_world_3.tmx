@@ -30,6 +30,7 @@
   <tile id="4">
    <properties>
     <property name="collision_all" value="true"/>
+    <property name="collision_zombie" value="true"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_red.png"/>
   </tile>
