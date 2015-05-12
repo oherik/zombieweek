@@ -68,3 +68,6 @@ gradle-app.setting
 # Groovy testing
 *.groovy
 .core/tests
+
+# ZombieWeek files
+savedGame.properties
