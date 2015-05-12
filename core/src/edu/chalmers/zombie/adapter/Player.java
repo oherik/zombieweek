@@ -28,7 +28,7 @@ public class Player extends Entity implements CreatureInterface {
     private int width;
     private int height;
     private Vector2 force;
-    //Sets the player's starting direction to east so that a thrown book will have a direction.
+    //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
     //Holds the players speed.
     private int speed = 7;
@@ -144,11 +144,11 @@ public class Player extends Entity implements CreatureInterface {
      */
     private void updateRotation(){
         GameModel gameModel = GameModel.getInstance();
+        Body body = getBody();
+        float rotation =  direction.getRotation();
         //Checks if world.step() is running. If it is running it tries again and again until step isn't running.
         //This is the reason why sometimes the game lags and a StackOverflowError happens.
         if (!gameModel.isStepping()) {
-            Body body = getBody();
-            float rotation =  direction.getRotation();
             body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
         } else{
             updateRotation();
