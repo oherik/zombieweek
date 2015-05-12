@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 /**
  * Created by Erik on 2015-05-11.
  */
-public class CollisionObject {
+public class CollisionObject implements Cloneable {
     private String name, property;
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
@@ -36,5 +36,11 @@ public class CollisionObject {
 
     public FixtureDef getFixtureDef(){
         return this.fixtureDef;
+    }
+
+    public CollisionObject clone() {
+        CollisionObject obj = new CollisionObject(this.name, this.bodyDef, this.fixtureDef);
+        obj.setProperty(property);
+        return obj;
     }
 }

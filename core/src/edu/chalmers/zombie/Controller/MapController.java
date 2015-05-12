@@ -129,7 +129,7 @@ public class MapController {
         //Door
         fixDef = new FixtureDef();;
         fixDef.shape = doorShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
+        fixDef.filter.categoryBits = Constants.COLLISION_DOOR;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject(Constants.DOOR_PROPERTY, bodyDef, fixDef));
 
@@ -180,15 +180,28 @@ public class MapController {
                     for (int col = 0; col < metaLayer.getWidth(); col++) {
                         TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);       //hämta cell
                         if (currentCell != null && currentCell.getTile() != null) {             //ej tom
+                            CollisionObject toAdd = null;
+                            CollisionObject toRemove = null;
                             for (CollisionObject obj : collisionObjects) {
                                 if (currentCell.getTile().getProperties().get(obj.getName()) != null) {
                                     obj.getBodyDef().position.set((col + 0.5f) * tileSize / ppM, (row + 0.5f) * tileSize / ppM);
-                                    Fixture fixture = world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
-                                    if(obj.getName().equals(Constants.DOOR_PROPERTY)){
+                                    if(obj.getName().equals(Constants.DOOR_PROPERTY) && obj.getProperty()==null){     //tom dörr
+                                                                                /* Need to create another door */
+                                        toAdd = obj.clone();
                                         obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.DOOR_PROPERTY));       //Dvs leveln den leder till
+                                        toRemove = obj;
                                     }
-                                    fixture.getBody().setUserData(obj.getName());
+                                    Fixture fixture = world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
+                                    fixture.setUserData(obj);
                                 }
+                            }
+                            if(toRemove != null) {
+                                collisionObjects.remove(toRemove);
+                                toRemove = null;
+                            }
+                            if(toAdd != null) {
+                                collisionObjects.add(toAdd);
+                                toAdd = null;
                             }
                             if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {
                                 Zombie zombie = new ZombieTest(getWorld(), col, row);           //TODO test
