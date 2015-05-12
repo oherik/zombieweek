@@ -8,6 +8,7 @@ import edu.chalmers.zombie.utils.Constants;
 
 
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.Potions;
 
 import java.awt.*;
 
@@ -35,6 +36,7 @@ public class Player extends Entity implements CreatureInterface {
     private Sprite sprite;
     private FixtureDef fixDef;
     private BodyDef bodyDef;
+    private Potions potion;
 
     private Thread keyThread; //Keeps track of key releases
 
