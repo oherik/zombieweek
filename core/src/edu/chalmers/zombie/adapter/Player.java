@@ -33,8 +33,8 @@ public class Player extends Entity implements CreatureInterface {
     private float dampening;
     private int legPower;
     private Sprite sprite;
-    private FixtureDef fixdef;
-    private BodyDef bodyDef; 
+    private FixtureDef fixDef;
+    private BodyDef bodyDef;
 
     private Thread keyThread; //Keeps track of key releases
 
@@ -51,7 +51,7 @@ public class Player extends Entity implements CreatureInterface {
         this.sprite = sprite;
 
         //Load body def
-        BodyDef bodyDef = new BodyDef();
+        this.bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x+0.5f,y+0.5f);
         bodyDef.linearDamping = dampening;
@@ -61,7 +61,7 @@ public class Player extends Entity implements CreatureInterface {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
         //Load fixture def
-        FixtureDef fixDef = new FixtureDef();
+        this.fixDef = new FixtureDef();
         fixDef.shape = shape;
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
