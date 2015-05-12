@@ -45,12 +45,19 @@
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_teal.png"/>
   </tile>
+  <tile id="7">
+   <properties>
+    <property name="player_return" value=""/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_pink.png"/>
+  </tile>
  </tileset>
- <tileset firstgid="8" name="map" tilewidth="1600" tileheight="800">
+ <tileset firstgid="9" name="map" tilewidth="1600" tileheight="800">
   <tile id="0">
    <image width="1600" height="800" source="Test_world_2_bottom.png"/>
   </tile>
  </tileset>
+ <tileset firstgid="10" name="sd" tilewidth="1" tileheight="1"/>
  <layer name="Tile Layer 1" width="50" height="25">
   <data encoding="base64" compression="zlib">
    eJztwTEBAAAAwqD1T20KP6AAAAAAgLcBE4gAAQ==
@@ -58,12 +65,12 @@
  </layer>
  <layer name="Map" width="50" height="25">
   <data encoding="base64" compression="zlib">
-   eJztzjENAAAIA7Cd+FeMiSVwtAqaAAAAAMBfcx0oWRnIAAk=
+   eJztzjENAAAIA7C9+DeMiSVwtAqaAAAAAMBfcx0oWRqQAAo=
   </data>
  </layer>
  <layer name="meta" width="50" height="25">
   <data encoding="base64" compression="zlib">
-   eJztltEKgCAMRWdl/f8f96IQMkvXna7YhQM9yLZDk4pEFB3HcTopExJaeTPbXU0umi4L9XlsDTVneEjfx1p5zjW5hAJkRngg75vG3S2Tdw7lwWWEx7WXdQ/JDKM9tILchadzezp3GPKQ1tKK1IP7Vn3RA1kLsbMWerVEe3ZEL/ewxR89av/ss2d0bHICJ3ARcA==
+   eJztlm0LgCAMhGev/v9f3BcFES2dO1uxgyMhue3BSe1EtJvNZnOnc7lglEZ6u8ssCcHiw3OhPo6tIXsmR1qTcx5rZR0zS3KZJTWDQ/K+Ie5urjhzUhwlxXceyJHWQnOMngenh9kcKEnO9NO+I+w7FXFws1DicpS+VV/kkMySmFkNtVqE7l2ilnHo8h85av/sb/do1ukLuVwRew==
   </data>
  </layer>
 </map>

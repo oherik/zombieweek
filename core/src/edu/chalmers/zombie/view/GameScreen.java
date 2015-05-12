@@ -68,6 +68,9 @@ public class GameScreen implements Screen{
         mapController.initializeCollisionObjects();
         updateLevelIfNeeded();
 
+        //Spelaren med
+        mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
+
         //Starta rendrerare
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
@@ -98,7 +101,9 @@ public class GameScreen implements Screen{
             this.tiledMapPainting = mapController.getMapPainting(); //TODO test
             this.tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(); //TODO test
             mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
-            mapController.createBodies();
+            mapController.createBodiesIfNeeded();
+            TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMap().getLayers().get("meta");
+            pathFinding = new PathAlgorithm(meta, "collision");
             mapController.setWorldNeedsUpdate(false);
         }
     }
@@ -159,6 +164,7 @@ public class GameScreen implements Screen{
         }
 
         removeEntities();
+        movePlayerIfNeeded();
 
 
         for(Zombie z : gameModel.getZombies())
@@ -246,5 +252,13 @@ public class GameScreen implements Screen{
         }
         gameModel.clearEntitiesToRemove();
 
+    }
+
+    private void movePlayerIfNeeded() {
+        if (mapController.getPlayerBufferPosition() != null) {
+
+        mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
+        mapController.setPlayerBufferPosition(null);
+    }
     }
 }

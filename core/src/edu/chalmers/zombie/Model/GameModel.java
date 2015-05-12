@@ -8,7 +8,10 @@ import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.ResourceManager;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,13 +32,18 @@ public class GameModel {
     private ArrayList<CollisionObject> collisionObjects;
     private String metaLayerName;
     private  boolean worldNeedsUpdate; //If a map change has been called
+    private Point playerBufferPosition; //Can't alter the player position directly in the world step
+    public static ResourceManager res;
+
 
     /**
      * Initializes the game model
      */
     private GameModel(){
         metaLayerName = "meta";
-        currentLevel = 1;   //TODO test
+        currentLevel = 0;   //TODO test
+        res = new ResourceManager();
+        res.loadTexture("player","core/assets/player_professional_final_version.png");
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
         worldNeedsUpdate = true;
@@ -63,7 +71,8 @@ public class GameModel {
      * Only for debug
      */
     private void addTestPlayer(){
-        player = new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")),levels.get(0).getWorld(),0,0);
+        player = new Player(new Sprite(res.getTexture("player")),levels.get(0).getWorld(),0,0);
+
     }
 
     /**
@@ -134,32 +143,20 @@ public class GameModel {
     }
 
     /**
-     * @return  The next levél in order
-     * @throws  IndexOutOfBoundsException if the current level is the last
-     */
-    public Level getNextLevel(){
-        if(this.currentLevel ==this.levels.size()-1)
-            throw new IndexOutOfBoundsException("GameModel: already at last indexed level");
-        currentLevel+=1;
-        return this.levels.get(currentLevel);
-    }
-
-    /**
-     * @return  The previous level in order
-     * @throws  IndexOutOfBoundsException if the current map is the first
-     */
-    public Level getPreviousLevel(){
-        if(this.currentLevel == 0)
-            throw new IndexOutOfBoundsException("GameModel: already at first indexed level");
-        currentLevel-=1;
-        return this.levels.get(currentLevel);
-    }
-
-    /**
      * @return  The index for the current level
      */
     public int getCurrentLevelIndex(){
         return this.currentLevel;
+    }
+
+    /**
+     * @return  Sets the current level
+     * @throws  IndexOutOfBoundsException if the index is < 0
+     */
+    public void setCurrentLevelIndex(int i){
+        if(i < 0)
+            throw new IndexOutOfBoundsException("GameModel: current level must be >= 0");
+        this.currentLevel = i;
     }
 
     /**
@@ -220,4 +217,11 @@ public class GameModel {
         return this.worldNeedsUpdate;
     }
 
+    public void setPlayerBufferPosition(Point point){
+        this.playerBufferPosition = point;
+    }
+
+    public Point getPlayerBufferPosition(){
+        return this.playerBufferPosition;
+    }
 }

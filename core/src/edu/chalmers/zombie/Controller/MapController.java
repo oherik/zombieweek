@@ -102,15 +102,17 @@ public class MapController {
 
         FixtureDef fixDef = new FixtureDef();
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
+        PolygonShape standardBoxShape = new PolygonShape();
+        standardBoxShape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
+        PolygonShape doorShape = new PolygonShape();
+        doorShape.setAsBox(tileSize / 4 / ppM, tileSize / 2 / ppM);
 
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
 
         //Water
         fixDef.friction = 0;
         fixDef.restitution = .1f;
-        fixDef.shape = shape;
+        fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_WATER;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
         collisionObjects.add(new CollisionObject("water", bodyDef, fixDef));
@@ -119,22 +121,22 @@ public class MapController {
         fixDef = new FixtureDef();
         fixDef.friction = 0.2f;
         fixDef.restitution = .1f;
-        fixDef.shape = shape;
+        fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("collision_all", bodyDef, fixDef));
 
         //Door, next
-        fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_NEXT;
+        fixDef = new FixtureDef();;
+        fixDef.shape = doorShape;
+        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_next", bodyDef, fixDef));
 
         //Door, previous
         fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.filter.categoryBits = Constants.COLLISION_DOOR_PREVIOUS;
+        fixDef.shape = doorShape;
+        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject("door_previous", bodyDef, fixDef));
 
@@ -142,7 +144,7 @@ public class MapController {
         fixDef = new FixtureDef();
         fixDef.friction = 0.2f;
         fixDef.restitution = .1f;
-        fixDef.shape = shape;
+        fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
         collisionObjects.add(new CollisionObject("sneak", bodyDef, fixDef));
@@ -166,7 +168,7 @@ public class MapController {
      * @param metaLayerName The name of the meta layer of the map
      */
 
-    public void createBodies(String metaLayerName, ArrayList<CollisionObject> collisionObjects) {
+    public void createBodiesIfNeeded(String metaLayerName, ArrayList<CollisionObject> collisionObjects) {
         Level level = getLevel();
         if(!level.hasInitializedBodies()) {
             World world = getWorld();
@@ -175,6 +177,7 @@ public class MapController {
 
             String zombieSpawn = "zombie_spawn"; //TODO test tills vi får flera sorters zombies
             String playerSpawn = "player_spawn"; //TODO test tills ovan är fixat
+            String playerReturn = "player_return"; //TODO test tills ovan är fixat
 
             if (metaLayer != null) {
                 metaLayer.setVisible(false);
@@ -187,7 +190,8 @@ public class MapController {
                             for (CollisionObject obj : collisionObjects) {
                                 if (currentCell.getTile().getProperties().get(obj.getProperty()) != null) {
                                     obj.getBodyDef().position.set((col + 0.5f) * tileSize / ppM, (row + 0.5f) * tileSize / ppM);
-                                    world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
+                                    Fixture fixture = world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
+                                    fixture.getBody().setUserData(obj.getProperty());
                                 }
                             }
                             if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {
@@ -195,7 +199,11 @@ public class MapController {
                                 getLevel().addZombie(zombie);
                             }
                             if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
-                                gameModel.setPlayer(new Player(new Sprite(new Texture("core/assets/player_professional_final_version.png")), getWorld(), col, row)); //TODO test
+                                level.setPlayerSpawn(new Point(col, row));
+                                gameModel.setPlayer(new Player(new Sprite(gameModel.res.getTexture("player")), getWorld(), col, row)); //TODO test
+                            }
+                            if (currentCell.getTile().getProperties().get(playerReturn) != null) {
+                                level.setPlayerReturn(new Point(col, row));
                             }
                         }
                     }
@@ -205,13 +213,13 @@ public class MapController {
         }
     }
 
-    public void createBodies() {
-       createBodies(gameModel.getMetaLayerName(), gameModel.getCollisionObjects());
+    public void createBodiesIfNeeded() {
+       createBodiesIfNeeded(gameModel.getMetaLayerName(), gameModel.getCollisionObjects());
     }
 
 
     /*  -----------------------OLD----------------------------------------
-    public void createBodies(String metaLayerName, String collisionProperty){
+    public void createBodiesIfNeeded(String metaLayerName, String collisionProperty){
         World world = getWorld();
         TiledMap tiledMap = getMap();
         BodyDef bodyDef = new BodyDef();
@@ -247,7 +255,7 @@ public class MapController {
     }
      -----------------------------END--------------------------------------------*/
 
-    public void createBodies(int index, String metaLayerName, String collisionProperty){
+    public void createBodiesIfNeeded(int index, String metaLayerName, String collisionProperty){
 
        //TODO lägg till när tillhörande model-kod implementerats
     }
@@ -272,13 +280,37 @@ public class MapController {
         return gameModel.getLevel().getMapPaintingTopLayer();
     }
 
+    /**
+     * Loads the next level in the game model, creates bodies if needed and sets that the renderer needs to update the world
+     * @throws  IndexOutOfBoundsException if the current level is the last
+     */
     public void loadNextLevel(){
-        Level level = gameModel.getNextLevel();
-        createBodies();
+        int currentLevel = gameModel.getCurrentLevelIndex();
+        if(currentLevel ==gameModel.getLevels().size()-1)
+            throw new IndexOutOfBoundsException("GameModel: already at last indexed level");
+        currentLevel+=1;
+        gameModel.setCurrentLevelIndex(currentLevel);
+        createBodiesIfNeeded();
+        setPlayerBufferPosition(getLevel().getPlayerSpawn());
+        gameModel.setWorldNeedsUpdate(true);
     }
 
+    /**
+     * Loads the previous level in the game model, creates bodies if needed and sets that the renderer needs to update the world
+     * @throws  IndexOutOfBoundsException if the current level is the first
+     */
     public void loadPreviousLevel(){
-
+        int currentLevel = gameModel.getCurrentLevelIndex();
+        if(currentLevel == 0)
+            throw new IndexOutOfBoundsException("GameModel: already at first indexed level");
+        currentLevel-=1;
+        gameModel.setCurrentLevelIndex(currentLevel);
+        createBodiesIfNeeded();
+        if(getLevel().getPlayerReturn() == null)        //Spawn och return är samma
+            setPlayerBufferPosition(getLevel().getPlayerSpawn());
+        else
+            setPlayerBufferPosition(getLevel().getPlayerReturn());
+        gameModel.setWorldNeedsUpdate(true);
     }
 
     public boolean worldNeedsUpdate(){
@@ -293,5 +325,18 @@ public class MapController {
      */
     public Point getPlayerPosition(){
         return new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
+    }
+
+    public void updatePlayerPosition(Point point){
+        gameModel.getPlayer().setPosition(point);
+    }
+
+    public void setPlayerBufferPosition(Point point){
+        gameModel.setPlayerBufferPosition(point);
+    }
+
+
+    public Point getPlayerBufferPosition(){
+        return gameModel.getPlayerBufferPosition();
     }
 }

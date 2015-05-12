@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.ContactListener;
 import edu.chalmers.zombie.utils.Constants;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +27,8 @@ public class Level {
     private Body ground;
     private Sprite mapPainting, mapPaintingTopLayer;
     private boolean initializedBodies;
+    Point playerSpawn;
+    Point playerReturn;
     /**
      * Creates a new level based on a tiled map and a Box2D world
      * @param mapPath  The file path to the map containing the meta data
@@ -140,6 +143,22 @@ public class Level {
 
     public boolean hasInitializedBodies(){
         return this.initializedBodies;
+    }
+
+    public Point getPlayerSpawn(){
+        return this.playerSpawn;
+    }
+
+    public Point getPlayerReturn(){
+        return this.playerReturn;
+    }
+
+    public void setPlayerSpawn(Point playerSpawn){
+        this.playerSpawn = playerSpawn;
+    }
+
+    public void setPlayerReturn(Point playerReturn){
+        this.playerReturn = playerReturn;
     }
 
 }
