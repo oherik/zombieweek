@@ -9,6 +9,14 @@ public class Constants {
     public static final float PIXELS_PER_METER = 32;
     public static final int PLAYER_SIZE = 28;
 
+    //Level
+    public static final String META_LAYER = "meta";
+    public static final String TOP_LAYER = "top";
+    public static final String BOTTOM_LAYER = "bottom";
+    public static final String DOOR_PROPERTY = "door"; //TODO för resten med?
+    public static final String COLLISION_PROPERTY_ALL = "collision_all"; //TODO för resten med?
+    public static final String COLLISION_PROPERTY_ZOMBIE = "collision_zombie"; //TODO för resten med?
+
     //Kollisionshantering
     public static final short COLLISION_PLAYER= 2;
     public static final short COLLISION_ZOMBIE = 4;
@@ -16,8 +24,7 @@ public class Constants {
     public static final short COLLISION_ENTITY = 14;
     public static final short COLLISION_OBSTACLE  = 16;
     public static final short COLLISION_WATER  = 32;
-    public static final short COLLISION_DOOR_NEXT  = 64;
-    public static final short COLLISION_DOOR_PREVIOUS  = 128;
+    public static final short COLLISION_DOOR  = 64;
     public static final short COLLISION_SNEAK = 256;
 
     //Fysikhantering
