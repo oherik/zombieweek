@@ -355,7 +355,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     /**
-     * A method which increases the player's number of lives. 
+     * A method which increases the player's number of lives.
      */
     public void incLives() {
 
@@ -375,8 +375,10 @@ public class Player extends Entity implements CreatureInterface {
      */
     public Player spawn( int x, int y) {
 
+        this.removeBody();
         Point p = new Point(x,y);
         this.setPosition(p);
+        this.setBody(bodyDef, fixDef);
         return this;
     }
 
