@@ -14,6 +14,7 @@ public class PathAlgorithm {
     private TiledMapTileLayer metaLayer;
     private Point startPos, endPos;
     private String collision;
+    private int maxSteps;
 
     /**
      * Constructor
@@ -32,7 +33,7 @@ public class PathAlgorithm {
         this.collision = collision;
     }
 
-    /** The start function for calculating the shortest path between two points on the map.
+    /** The start function for calculating the shortest path between two points on the map, with a default maxStep value of 50.
      * 
      * @param startPos The starting position (normally the zombie's position)
      * @param endPos   The end position (normally the player position)
@@ -50,6 +51,22 @@ public class PathAlgorithm {
             throw new IndexOutOfBoundsException("PathAlgorithm: the end position must be positive");
         this.startPos = startPos;
         this.endPos = endPos;
+        maxSteps = 50;
+        return calculatePath();
+    }
+
+    /** The start function for calculating the shortest path between two points on the map, a maximum number of steps included
+     *
+     * @param startPos The starting position (normally the zombie's position)
+     * @param endPos   The end position (normally the player position)
+     * @param maxSteps  The maximum number of steps
+     * @return  the shortest path as an iterator over points
+     * @throws IndexOutOfBoundsException if the start or end position is negative
+     * @throws  NullPointerException    if either of the points is null
+     */
+    public Iterator<Point> getPath(Point startPos, Point endPos, int maxSteps) {
+        getPath(startPos,endPos);
+        this.maxSteps = maxSteps;
         return calculatePath();
     }
 
@@ -65,11 +82,12 @@ public class PathAlgorithm {
         QueueElement currentElement;
         int width = metaLayer.getWidth();
         int height = metaLayer.getHeight();
+        int steps = 0;
         boolean[][] closedNodes = new boolean[width][height];
         int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
         queue.add(new QueueElement(this.startPos, 0, 0, new ArrayList<Point>()));
 
-        while (!queue.isEmpty()) {
+        while (!queue.isEmpty() && steps < this.maxSteps) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
             if (currentNode.equals(this.endPos)) {
@@ -100,6 +118,7 @@ public class PathAlgorithm {
                     }
                 }
             }
+            steps++;
 
         }
         return null;    //No path found

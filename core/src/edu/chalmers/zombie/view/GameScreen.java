@@ -224,7 +224,7 @@ public class GameScreen implements Screen{
            if(!z.isKnockedOut())     {
             Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
             Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
-            path = pathFinding.getPath(start, end);                 //TODO gör nåt vettigt här istälelt för att abra printa.
+            path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
             if (path == null)
                 System.out.println("Ingen path hittad");
             else {
