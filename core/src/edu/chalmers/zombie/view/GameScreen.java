@@ -19,6 +19,7 @@ import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.adapter.Book;
+import edu.chalmers.zombie.controller.SaveLoadController;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
@@ -105,6 +106,10 @@ public class GameScreen implements Screen{
             TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMap().getLayers().get("meta");
             pathFinding = new PathAlgorithm(meta, "collision");
             mapController.setWorldNeedsUpdate(false);
+
+            //Save game
+            SaveLoadController saveLoadController = new SaveLoadController();
+            saveLoadController.saveGame();
         }
     }
 
@@ -226,14 +231,14 @@ public class GameScreen implements Screen{
             if (path == null)
                 System.out.println("Ingen path hittad");
             else {
-                System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
+                //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
                 int i = 0;
                 while (path.hasNext()) {
                     Point tile = path.next();
-                    System.out.println(tile.x + " " + tile.y);
+                    //System.out.println(tile.x + " " + tile.y);
                     i++;
                 }
-                System.out.println("Antal steg: " + i);
+                //System.out.println("Antal steg: " + i);
             }
         }
     }
