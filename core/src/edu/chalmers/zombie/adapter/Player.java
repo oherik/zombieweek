@@ -33,6 +33,8 @@ public class Player extends Entity implements CreatureInterface {
     private float dampening;
     private int legPower;
     private Sprite sprite;
+    private FixtureDef fixdef;
+    private BodyDef bodyDef; 
 
     private Thread keyThread; //Keeps track of key releases
 
