@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="mesh" tilewidth="32" tileheight="32">
+  <tile id="0">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="water" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_blue.png"/>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="door" value="2"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_green.png"/>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="sneak" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_orange.png"/>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="zombie_spawn" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_purple.png"/>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="collision_all" value="true"/>
+    <property name="collision_zombie" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_red.png"/>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="door" value="0"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="player_spawn" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_teal.png"/>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="player_return" value=""/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_pink.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="9" name="map" tilewidth="1600" tileheight="800">
+  <tile id="0">
+   <image width="1600" height="800" source="Test_world_2_bottom.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="10" name="sd" tilewidth="1" tileheight="1"/>
+ <imagelayer name="bottom">
+  <image source="Test_world_2_bottom.png"/>
+ </imagelayer>
+ <imagelayer name="top">
+  <image source="Test_world_2_top.png"/>
+ </imagelayer>
+ <layer name="meta" width="50" height="25">
+  <properties>
+   <property name="level" value="2"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztlm0LgCAMhGev/v9f3BcFES2dO1uxgyMhue3BSe1EtJvNZnOnc7lglEZ6u8ssCcHiw3OhPo6tIXsmR1qTcx5rZR0zS3KZJTWDQ/K+Ie5urjhzUhwlxXceyJHWQnOMngenh9kcKEnO9NO+I+w7FXFws1DicpS+VV/kkMySmFkNtVqE7l2ilnHo8h85av/sb/do1ukLuVwRew==
+  </data>
+ </layer>
+</map>
