@@ -72,21 +72,24 @@ public class InputController implements InputProcessor{
                 //move west
                 gameModel.movePlayer(Direction.WEST);
                 break;
-            case Input.Keys.UP:
-                //aim left
-                break;
-            case Input.Keys.DOWN:
-                //aim right
-                break;
             case Input.Keys.SPACE:
                 //throw book
                 tryThrowingBook();
+                break;
+            case Input.Keys.UP:
+                //aim left
+                getPlayer().getHand().startAimingLeft();
+                break;
+            case Input.Keys.DOWN:
+                //aim right
+                getPlayer().getHand().startAimingRight();
                 break;
             default:
                 return false;
         }
         return true;
     }
+
 
     private void tryThrowingBook(){
         Player player = gameModel.getPlayer();
@@ -98,8 +101,7 @@ public class InputController implements InputProcessor{
 
     private void throwBook(){
         Player player = gameModel.getPlayer();
-        Book book = new Book(player.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
-        gameModel.addBook(book);
+        player.getHand().throwBook();
     }
 
     /**
@@ -120,6 +122,7 @@ public class InputController implements InputProcessor{
 
         if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
             //set aiming force to zero
+            getPlayer().getHand().stopAiming();
         } else {return false;}
         return true;
     }

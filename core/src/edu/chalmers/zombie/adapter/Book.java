@@ -13,7 +13,7 @@ import edu.chalmers.zombie.utils.Direction;
  */
 public class Book extends Entity {
     private Vector2 force;
-    private Direction direction;
+    private float direction;
     private boolean remove = false;
     int speed, omega;
     Vector2 initialVelocity;
@@ -29,7 +29,7 @@ public class Book extends Entity {
      * @param world In which world to create the physical representation of the book
      * @param initialVelocity  The speed which to add to the throwing speed
      */
-    public Book(Direction d, float x, float y, World world, Vector2 initialVelocity) {
+    public Book(float d, float x, float y, World world, Vector2 initialVelocity) {
         super(world);
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
@@ -103,38 +103,8 @@ public class Book extends Entity {
     public Vector2 getUpdatedPosition(float x, float y){
         float distance = 1.5f;
         Vector2 position = new Vector2(x,y);
-        switch (direction) {
-            case NORTH:
-                position.y = position.y + distance;
-                break;
-            case SOUTH:
-                position.y = position.y - distance;
-                break;
-            case WEST:
-                position.x = position.x - distance;
-                break;
-            case EAST:
-                position.x = position.x + distance;
-                break;
-            case NORTH_EAST:
-                position.x = position.x + distance;
-                position.y = position.y + distance;
-                break;
-            case NORTH_WEST:
-                position.y = position.y + distance;
-                position.x = position.x - distance;
-                break;
-            case SOUTH_EAST:
-                position.x = position.x + distance;
-                position.y = position.y - distance;
-                break;
-            case SOUTH_WEST:
-                position.y = position.y - distance;
-                position.x = position.x - distance;
-                break;
-            default:
-                break;
-        }
+        position.y = (float)(y + distance*Math.sin(direction + Constants.PI/2));
+        position.x = (float)(x + distance*Math.cos(direction + Constants.PI/2));
 
         return position;
 
@@ -146,7 +116,7 @@ public class Book extends Entity {
      */
     public void setInMotion(){
         force.setLength(speed);
-        force.setAngleRad(direction.getRotation()+Constants.PI/2);
+        force.setAngleRad(direction + Constants.PI*1/2); //TODO Rätt vinkel?
         force.add(initialVelocity); // Add the player velocity
         setBodyVelocity(force);
         setAngularVelocity(omega);

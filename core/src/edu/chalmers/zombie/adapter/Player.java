@@ -40,6 +40,8 @@ public class Player extends Entity implements CreatureInterface {
     private Potions potion;
 
     private Thread keyThread; //Keeps track of key releases
+    //The hand is throwing the book and aiming.
+    private Hand hand = new Hand();
 
 
     public Player(Sprite sprite, World world, float x, float y) {
@@ -405,5 +407,7 @@ public class Player extends Entity implements CreatureInterface {
         getBody().setTransform(point.x + 0.5f, point.y + 0.5f, getBody().getAngle()); //+0.5f because we want it in the middle
         updateRotation();
     }
-
+    public Hand getHand(){
+        return this.hand;
+    }
 }
