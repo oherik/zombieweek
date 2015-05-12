@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -42,7 +43,7 @@ public class GameScreen implements Screen{
     //HUD variables
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
-    private Sprite tiledMapPainting, tiledMapPaintingTopLayer;
+    private TiledMapImageLayer tiledMapBottomLayer, tiledMapTopLayer;
 
     //För testa av path finding //TODO debug
     private PathAlgorithm pathFinding;
@@ -63,7 +64,7 @@ public class GameScreen implements Screen{
 
         //Scale the level images
         float scale= 1f/tileSize;
-        mapController.scaleImages(scale);
+//        mapController.scaleImages(scale);
 
         //Lägg till kollisionsobjekt
         mapController.initializeCollisionObjects();
@@ -84,8 +85,8 @@ public class GameScreen implements Screen{
 
         /*---TEST--*/
         steps = 0;
-        TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMap().getLayers().get("meta");
-        pathFinding = new PathAlgorithm(meta, "collision");
+        TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMetaLayer();
+        pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
         /*---SLUTTEST---*/
 
 
@@ -99,12 +100,12 @@ public class GameScreen implements Screen{
             this.currentWorld = mapController.getWorld();
             tiledMap = mapController.getMap();
         /*--- test ---*/
-            this.tiledMapPainting = mapController.getMapPainting(); //TODO test
-            this.tiledMapPaintingTopLayer = mapController.getMapPaintingTopLayer(); //TODO test
+            this.tiledMapBottomLayer = mapController.getMapBottomLayer(); //TODO test
+            this.tiledMapTopLayer = mapController.getMapTopLayer(); //TODO test
             mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
             mapController.createBodiesIfNeeded();
-            TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMap().getLayers().get("meta");
-            pathFinding = new PathAlgorithm(meta, "collision");
+            TiledMapTileLayer meta = mapController.getMapMetaLayer();
+            pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
             mapController.setWorldNeedsUpdate(false);
 
             //Save game
@@ -138,11 +139,12 @@ public class GameScreen implements Screen{
 
 
 
-        camera.position.set(gameModel.getPlayer().getX(),gameModel.getPlayer().getY(),0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
+        camera.position.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
         camera.update();
 
 
 //Rita kartan
+        mapRenderer.render();
         mapRenderer.setView(camera);
         //mapRenderer.render();
         steps++;
@@ -150,7 +152,7 @@ public class GameScreen implements Screen{
 
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         //playerTest.draw(mapRenderer.getBatch());
-        tiledMapPainting.draw(mapRenderer.getBatch());
+        //tiledMapBottomLayer.draw(mapRenderer.getBatch());
         ArrayList<Book> books = gameModel.getBooks();
         for (int i = 0; i<books.size(); i++) {
             Book b = books.get(i);
@@ -178,8 +180,8 @@ public class GameScreen implements Screen{
         gameModel.getPlayer().draw(mapRenderer.getBatch());
 
         /* --- TEST rita ut det som ska vara ovanför --- */
-        if( tiledMapPaintingTopLayer!=null) {
-            tiledMapPaintingTopLayer.draw(mapRenderer.getBatch());
+        if( tiledMapTopLayer !=null) {
+           // tiledMapTopLayer.draw(mapRenderer.getBatch());
 
         }
         /* --- END TEST --- */
@@ -227,7 +229,7 @@ public class GameScreen implements Screen{
            if(!z.isKnockedOut())     {
             Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
             Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
-            path = pathFinding.getPath(start, end);                 //TODO gör nåt vettigt här istälelt för att abra printa.
+            path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
             if (path == null)
                 System.out.println("Ingen path hittad");
             else {

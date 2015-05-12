@@ -6,7 +6,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.ZombieType;
@@ -94,6 +96,16 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return position;
     }
 
+    /**
+     * A method which sets force affording to chosen speed.
+     * @param speed int. 
+     */
+    public void setForceY(int speed) {
+
+        force.y = speed;
+        
+    }
+
     public void remove(Zombie zombie) {
 
         //TODO: remove zombie
@@ -103,10 +115,13 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void moveToPlayer(PathAlgorithm path) {
 
 
-        while(path.getPath(position, path.getEndPos()).hasNext()) {
+        MapController mapController = new MapController();
+        Point playerPos = mapController.getPlayerPosition();
 
-            Point p = path.getPath(position, path.getEndPos()).next();
-            point = new Vector2(point.x, point.y);
+        while(path.getPath(position, playerPos).hasNext()){
+
+            Point p = path.getPath(position, playerPos).next();
+            point = new Vector2(p.x, p.y);
             getBody().applyForce(force, point, !isKnockedOut);
 
         }

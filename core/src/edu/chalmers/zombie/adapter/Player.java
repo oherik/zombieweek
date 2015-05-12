@@ -33,6 +33,8 @@ public class Player extends Entity implements CreatureInterface {
     private float dampening;
     private int legPower;
     private Sprite sprite;
+    private FixtureDef fixDef;
+    private BodyDef bodyDef;
 
     private Thread keyThread; //Keeps track of key releases
 
@@ -49,7 +51,7 @@ public class Player extends Entity implements CreatureInterface {
         this.sprite = sprite;
 
         //Load body def
-        BodyDef bodyDef = new BodyDef();
+        this.bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x+0.5f,y+0.5f);
         bodyDef.linearDamping = dampening;
@@ -59,13 +61,13 @@ public class Player extends Entity implements CreatureInterface {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
         //Load fixture def
-        FixtureDef fixDef = new FixtureDef();
+        this.fixDef = new FixtureDef();
         fixDef.shape = shape;
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR_PREVIOUS | Constants.COLLISION_DOOR_NEXT;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR;
 
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -344,14 +346,38 @@ public class Player extends Entity implements CreatureInterface {
         return lives;
     }
 
+    /**
+     * A method which decreases the player's number of lives.
+     */
+    public void decLives() {
+
+        lives = lives--;
+    }
+
+    /**
+     * A method which increases the player's number of lives. 
+     */
+    public void incLives() {
+
+        lives = lives++;
+    }
+
 
     public Vector2 getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
-    public Player spawn(World world, int x, int y) {
+    /**
+     * Spawns the current player at chosen point.
+     * @param x coordinate.
+     * @param y coordinate.
+     * @return this player.
+     */
+    public Player spawn( int x, int y) {
 
-        return new Player(sprite, world, x, y);
+        Point p = new Point(x,y);
+        this.setPosition(p);
+        return this;
     }
 
     /**

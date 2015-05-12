@@ -49,21 +49,20 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
         }
 
         else if (contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_PLAYER) {      //Är spelaren
-                if (contact.getFixtureA().getBody().getUserData().equals("door_previous")) {
-                    mapController.loadPreviousLevel();
-                } else if (contact.getFixtureA().getBody().getUserData().equals("door_next")) {
-                    mapController.loadNextLevel();
+                if (contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_DOOR) {
+                    CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
+                    int levelToLoad = Integer.parseInt(door.getProperty());
+                    mapController.loadLevel(levelToLoad);
                 }
+
             }
 
-        else if (contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_OBSTACLE) {      //Är ett statiskt objekt, det ovan fungerar inte alltid //TODO går att fixa?
+        else if (contact.getFixtureB().getFilterData().categoryBits == Constants.COLLISION_DOOR) {      //Är en dörr, det ovan fungerar inte alltid //TODO går att fixa?
             if (contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_PLAYER){
-                if (contact.getFixtureB().getBody().getUserData().equals("door_previous")) {
-                    mapController.loadPreviousLevel();
-                } else if (contact.getFixtureB().getBody().getUserData().equals("door_next")) {
-                    mapController.loadNextLevel();
+                    CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
+                    int levelToLoad = Integer.parseInt(door.getProperty());
+                 mapController.loadLevel(levelToLoad);
 
-                 }
             }
          }
         }

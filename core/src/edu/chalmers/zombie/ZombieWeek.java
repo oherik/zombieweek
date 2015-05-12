@@ -31,7 +31,6 @@ public class ZombieWeek extends Game {
         mapController.initializeLevels();
         currentWorld = mapController.getWorld();
         //setScreen(new MainMenuScreen()); //Main menu screen
-        System.out.println(GameModel.getInstance().getCurrentLevelIndex());
         setScreen(new GameScreen(this.currentWorld, Constants.TILE_SIZE)); //Game screen
 	}
 

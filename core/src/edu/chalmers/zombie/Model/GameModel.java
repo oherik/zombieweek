@@ -41,7 +41,7 @@ public class GameModel {
      */
     private GameModel(){
         metaLayerName = "meta";
-        currentLevel = 0;   //TODO test
+        currentLevel = 1;   //TODO test
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
         levels = new ArrayList<Level>();
@@ -55,18 +55,19 @@ public class GameModel {
 
     /**
      * Only for debug
-     */
+     *//*
     private void addTestLevel(){
         levels.add(new Level("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
     }
-
+*/
     /**
      * Only for debug
      */
+    /*
     private void addTestLevel_2(){
         levels.add(new Level("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
     }
-
+    */
     /**
      * Only for debug
      */
