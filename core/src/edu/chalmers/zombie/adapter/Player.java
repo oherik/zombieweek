@@ -41,7 +41,7 @@ public class Player extends Entity implements CreatureInterface {
 
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
-    private Hand hand = new Hand();
+    private Hand hand = new Hand(this);
 
 
     public Player(Sprite sprite, World world, float x, float y) {
@@ -409,5 +409,8 @@ public class Player extends Entity implements CreatureInterface {
     }
     public Hand getHand(){
         return this.hand;
+    }
+    public void throwBook(){
+        hand.throwBook();
     }
 }

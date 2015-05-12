@@ -180,7 +180,7 @@ public class GameScreen implements Screen{
             z.draw(mapRenderer.getBatch());
         gameModel.getPlayer().moveIfNeeded();
         gameModel.getPlayer().draw(mapRenderer.getBatch());
-
+        gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
         /* --- TEST rita ut det som ska vara ovanför --- */
         if( tiledMapTopLayer !=null) {
            // tiledMapTopLayer.draw(mapRenderer.getBatch());

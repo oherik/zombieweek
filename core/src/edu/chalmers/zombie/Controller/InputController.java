@@ -101,9 +101,8 @@ public class InputController implements InputProcessor{
 
     private void throwBook(){
         Player player = gameModel.getPlayer();
-        player.getHand().throwBook();
+        player.throwBook();
     }
-
     /**
      * Decides what to do when the player releases a key
      * @param keycode   The key released
