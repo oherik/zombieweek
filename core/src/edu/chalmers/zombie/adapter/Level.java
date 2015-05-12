@@ -29,14 +29,15 @@ public class Level {
 
     /**
      * Creates a new level based on a tiled map and a Box2D world
-     * @param mapPath  The file path to the map
+     *
+     * @param mapPath The file path to the map
      * @throws NullPointerException if the path name is incorrect or not found
      */
-    public Level(String mapPath){
-        if(mapPath == null)
+    public Level(String mapPath) {
+        if (mapPath == null)
             throw new NullPointerException("Level: no path name recieved");
         tiledMap = new TmxMapLoader().load(mapPath);
-        if(tiledMap == null)
+        if (tiledMap == null)
             throw new NullPointerException("Level: incorrect path name");
 
         //Initialize the layers
@@ -45,7 +46,7 @@ public class Level {
         bottomLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.BOTTOM_LAYER);
 
         //Create the world
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0, 0), true);
         world.setContactListener(new ContactListener());
         initializedBodies = false;
 
@@ -55,44 +56,46 @@ public class Level {
     /**
      * @return The map's meta data layer
      */
-    public TiledMapTileLayer getMetaLayer(){
+    public TiledMapTileLayer getMetaLayer() {
         return this.metaLayer;
     }
 
     /**
      * @return The map's top graphical layer
      */
-    public TiledMapImageLayer getTopLayer(){
+    public TiledMapImageLayer getTopLayer() {
         return this.topLayer;
     }
 
     /**
      * @return The map's bottom graphical layer
      */
-    public TiledMapImageLayer getBottomLayer(){
+    public TiledMapImageLayer getBottomLayer() {
         return this.bottomLayer;
     }
 
     /**
      * @return The level's zombies
      */
-    public ArrayList<Zombie> getZombies(){
+    public ArrayList<Zombie> getZombies() {
         return zombies;
     }
 
     /**
      * Adds a zombie
+     *
      * @param z A zombie
      */
-    public void addZombie(Zombie z){
+    public void addZombie(Zombie z) {
         zombies.add(z);
     }
 
     /**
      * Removes a zombie
+     *
      * @param z A zombie to remove
      */
-    public void removeZombie(Zombie z){
+    public void removeZombie(Zombie z) {
         z.dispose();
         zombies.remove(z);
     }
@@ -100,94 +103,81 @@ public class Level {
     /**
      * @return the level's map
      */
-    public TiledMap getMap(){
+    public TiledMap getMap() {
         return this.tiledMap;
     }
 
     /**
      * @return the level's Box2D World
      */
-    public World getWorld(){
+    public World getWorld() {
         return this.world;
     }
 
     /**
      * Destroys an entity body
+     *
      * @param e The entity which body will be destroyed
      */
-    public void destroyBody(Entity e){
+    public void destroyBody(Entity e) {
         e.removeBody();
     }
 
     /**
      * Destroys a body
+     *
      * @param b The body which will be destroyed
      */
-    public void destroyBody(Body b){
+    public void destroyBody(Body b) {
         getWorld().destroyBody(b);
-        b=null; //To avoid null pointer exceptions
+        b = null; //To avoid null pointer exceptions
     }
 
     /**
      * Sets a variable which is true if the bodies (collision objects) have been initialized
-     * @param bool  true if the collision objects have been initialized, false if not
+     *
+     * @param bool true if the collision objects have been initialized, false if not
      */
-    public void setInitializedBodies(boolean bool){
+    public void setInitializedBodies(boolean bool) {
         this.initializedBodies = bool;
     }
 
     /**
      * @return true if the collision objects have been initialized, false if not
      */
-    public boolean hasInitializedBodies(){
+    public boolean hasInitializedBodies() {
         return this.initializedBodies;
     }
 
     /**
      * @return The spawn point for the player
      */
-    public Point getPlayerSpawn(){
+    public Point getPlayerSpawn() {
         return this.playerSpawn;
     }
 
     /**
      * @return The point where the player shall be placed if she returns to this level
      */
-    public Point getPlayerReturn(){
+    public Point getPlayerReturn() {
         return this.playerReturn;
     }
 
     /**
      * Sets where the player will spawn
-     * @param playerSpawn   A point on the map where the player will spawn
+     *
+     * @param playerSpawn A point on the map where the player will spawn
      */
-    public void setPlayerSpawn(Point playerSpawn){
+    public void setPlayerSpawn(Point playerSpawn) {
         this.playerSpawn = playerSpawn;
     }
 
     /**
      * Sets where the player will be placed if she returns to this level
-     * @param playerReturn   A point on the map where the player will be placed if she returns to this level
+     *
+     * @param playerReturn A point on the map where the player will be placed if she returns to this level
      */
-    public void setPlayerReturn(Point playerReturn){
+    public void setPlayerReturn(Point playerReturn) {
         this.playerReturn = playerReturn;
     }
-    /**
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * TESTING GIT INSPECTOR; PLEASE IGNORE
-     * 
-     */
 }
