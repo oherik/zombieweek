@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
 
@@ -142,9 +143,16 @@ public class Player extends Entity implements CreatureInterface {
      * Updates Body rotation
      */
     private void updateRotation(){
-        Body body = getBody();
-        float rotation =  direction.getRotation();
-        body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
+        GameModel gameModel = GameModel.getInstance();
+        //Checks if world.step() is running. If it is running it tries again and again until step isn't running.
+        //This is the reason why sometimes the game lags and a StackOverflowError happens.
+        if (!gameModel.isStepping()) {
+            Body body = getBody();
+            float rotation =  direction.getRotation();
+            body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
+        } else{
+            updateRotation();
+        }
     }
 
     /**
@@ -212,11 +220,10 @@ public class Player extends Entity implements CreatureInterface {
      */
     private void checkSimultaneousRelease(){
         final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
-        updateMovement();
         if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
 
                 //Keys were released at the same time (thread is sleeping/waiting)
-
+            updateMovement();
 
         } else {
 
@@ -224,6 +231,7 @@ public class Player extends Entity implements CreatureInterface {
                 public void run() {
                     try {
                         keyThread.sleep(timeSensitiveness); //waiting for new key release
+                        updateMovement();
                         //if(getWorld().isLocked())     //TODO hack för att inte krascha
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);

@@ -34,6 +34,7 @@ public class GameModel {
     private  boolean worldNeedsUpdate; //If a map change has been called
     private Point playerBufferPosition; //Can't alter the player position directly in the world step
     public static ResourceManager res;
+    private boolean stepping = false;
 
 
     /**
@@ -224,5 +225,12 @@ public class GameModel {
 
     public Point getPlayerBufferPosition(){
         return this.playerBufferPosition;
+    }
+    //These two methods are keeping track of world.step().
+    public boolean isStepping(){
+        return stepping;
+    }
+    public void setStepping(boolean s){
+        this.stepping = s;
     }
 }

@@ -135,8 +135,10 @@ public class GameScreen implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Uppdatera fysik
+        //Tells GameModel when step is happening
+        gameModel.setStepping(true);
         currentWorld.step(Constants.TIMESTEP, 6, 2);
-
+        gameModel.setStepping(false);
 
 
         camera.position.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
