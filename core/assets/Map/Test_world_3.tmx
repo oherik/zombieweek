@@ -10,7 +10,7 @@
   </tile>
   <tile id="1">
    <properties>
-    <property name="door" value="3"/>
+    <property name="door" value="2"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_green.png"/>
   </tile>
@@ -36,7 +36,7 @@
   </tile>
   <tile id="5">
    <properties>
-    <property name="door" value="1"/>
+    <property name="door" value="0"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
   </tile>

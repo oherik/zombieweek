@@ -292,36 +292,29 @@ public class MapController {
     public TiledMapTileLayer getMapMetaLayer(){
         return gameModel.getLevel().getMetaLayer();
     }
-    /**
-     * Loads the next level in the game model, creates bodies if needed and sets that the renderer needs to update the world
-     * @throws  IndexOutOfBoundsException if the current level is the last
-     */
-    public void loadNextLevel(){
-        int currentLevel = gameModel.getCurrentLevelIndex();
-        if(currentLevel ==gameModel.getLevels().size()-1)
-            throw new IndexOutOfBoundsException("GameModel: already at last indexed level");
-        currentLevel+=1;
-        gameModel.setCurrentLevelIndex(currentLevel);
-        createBodiesIfNeeded();
-        setPlayerBufferPosition(getLevel().getPlayerSpawn());
-        gameModel.setWorldNeedsUpdate(true);
-    }
 
     /**
-     * Loads the previous level in the game model, creates bodies if needed and sets that the renderer needs to update the world
+     * Loads the new level in the game model, creates bodies if needed and sets that the renderer needs to update the world
+     * @param levelIndex the level to load
      * @throws  IndexOutOfBoundsException if the current level is the first
      */
-    public void loadPreviousLevel(){
-        int currentLevel = gameModel.getCurrentLevelIndex();
-        if(currentLevel == 0)
-            throw new IndexOutOfBoundsException("GameModel: already at first indexed level");
-        currentLevel-=1;
-        gameModel.setCurrentLevelIndex(currentLevel);
-        createBodiesIfNeeded();
-        if(getLevel().getPlayerReturn() == null)        //Spawn och return är samma
-            setPlayerBufferPosition(getLevel().getPlayerSpawn());
+
+
+    public void loadLevel(int levelIndex){
+        int maxSize = gameModel.getLevels().size() -1;
+        if(levelIndex<0 ||levelIndex > maxSize)
+            throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+        int currentLevelIndex = gameModel.getCurrentLevelIndex();
+        gameModel.setCurrentLevelIndex(levelIndex);
+        if(currentLevelIndex>levelIndex){
+            if(getLevel().getPlayerReturn() == null)        //Spawn och return är samma
+                setPlayerBufferPosition(getLevel().getPlayerSpawn());
+            else
+                setPlayerBufferPosition(getLevel().getPlayerReturn());
+        }
         else
-            setPlayerBufferPosition(getLevel().getPlayerReturn());
+            setPlayerBufferPosition(getLevel().getPlayerSpawn());
+        createBodiesIfNeeded();
         gameModel.setWorldNeedsUpdate(true);
     }
 

@@ -52,7 +52,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 if (contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_DOOR) {
                     CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
                     int levelToLoad = Integer.parseInt(door.getProperty());
-                    System.out.println("                                       " +door.getProperty());
+                    mapController.loadLevel(levelToLoad);
                 }
 
             }
@@ -61,7 +61,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
             if (contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_PLAYER){
                     CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
                     int levelToLoad = Integer.parseInt(door.getProperty());
-                System.out.println("                                       " +door.getProperty());
+                 mapController.loadLevel(levelToLoad);
 
             }
          }
