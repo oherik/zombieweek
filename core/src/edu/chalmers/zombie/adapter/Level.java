@@ -26,7 +26,7 @@ public class Level {
     Point playerSpawn, playerReturn;
     TiledMapTileLayer metaLayer;
     TiledMapImageLayer topLayer, bottomLayer;
-    
+
     /**
      * Creates a new level based on a tiled map and a Box2D world
      * @param mapPath  The file path to the map
@@ -172,5 +172,7 @@ public class Level {
     public void setPlayerReturn(Point playerReturn){
         this.playerReturn = playerReturn;
     }
-
+    /**
+     * TESTING GIT INSPECTOR; PLEASE IGNORE
+     */
 }
