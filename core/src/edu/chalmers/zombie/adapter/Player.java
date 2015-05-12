@@ -346,6 +346,22 @@ public class Player extends Entity implements CreatureInterface {
         return lives;
     }
 
+    /**
+     * A method which decreases the player's number of lives.
+     */
+    public void decLives() {
+
+        lives = lives--;
+    }
+
+    /**
+     * A method which increases the player's number of lives. 
+     */
+    public void incLives() {
+
+        lives = lives++;
+    }
+
 
     public Vector2 getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
@@ -355,7 +371,7 @@ public class Player extends Entity implements CreatureInterface {
      * Spawns the current player at chosen point.
      * @param x coordinate.
      * @param y coordinate.
-     * @return this player. 
+     * @return this player.
      */
     public Player spawn( int x, int y) {
 
