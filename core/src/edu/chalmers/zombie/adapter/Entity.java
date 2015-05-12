@@ -8,23 +8,19 @@ import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
- * Created by Tobias on 15-04-21.
+ * A class which holds a reference to a body and a sprite, as well as the world in which the body resides.
  */
 public abstract class Entity {
 
     private Sprite sprite;
     private Body body;
     private World world;
-    private int width; //TODO: delete?
-    private int height; //TODO: delete?
 
     /**
      * Creates an entity without a sprite
      * @param world The world in which to create it
      */
     public Entity(World world){
-        this.width = Constants.TILE_SIZE;
-        this.height = Constants.TILE_SIZE;
         this.world = world;
     }
 
@@ -36,8 +32,6 @@ public abstract class Entity {
      * @param y         The sprite's y coordinate
      */
     public Entity(Sprite sprite, World world, float x, float y){
-        this.width = Constants.TILE_SIZE;
-        this.height = Constants.TILE_SIZE;
         this.sprite = sprite;
         sprite.setX(x);
         sprite.setY(y);
@@ -117,14 +111,12 @@ public abstract class Entity {
         sprite.setX(body.getPosition().x - sprite.getHeight() / 2f);
     }
 
-
     /**
      * @return The body's x position
      */
     public float getX(){
         return body.getPosition().x;
     }
-
 
     /**
      * @return The body's y position
@@ -153,21 +145,36 @@ public abstract class Entity {
     public float getWidth(){
         return sprite.getWidth();
     }
+
     public abstract Vector2 getVelocity(); //TODO empty
 
-
+    /**
+     * Sets the entity's body
+     * @param body  The new body
+     */
     public void setBody(Body body) {
         this.body=body;
     }
 
+    /**
+     * @return The world in which the entity's body resides
+     */
     public World getWorld(){
         return this.world;
     }
 
+    /**
+     * Sets the entity's sprite
+     * @param sprite The new sprite
+     */
     public void setSprite(Sprite sprite){
         this.sprite = sprite;
     }
 
+    /**
+     * Removes the body from the world in which it resides. It also sets the body to null, since it otherwise can cause
+     * null pointer exceptions.
+     */
     public void removeBody(){
         this.world.destroyBody(body);
         this.body = null;}
