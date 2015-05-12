@@ -96,8 +96,13 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return position;
     }
 
-    public void setForce(int force) {
-     //TODO: STUFF HERE PLZ
+    /**
+     * A method which sets force affording to chosen speed.
+     * @param speed int. 
+     */
+    public void setForceY(int speed) {
+
+        force.y = speed;
         
     }
 
