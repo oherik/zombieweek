@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
 
@@ -27,7 +28,7 @@ public class Player extends Entity implements CreatureInterface {
     private int width;
     private int height;
     private Vector2 force;
-    //Sets the player's starting direction to east so that a thrown book will have a direction.
+    //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
     //Holds the players speed.
     private int speed = 7;
@@ -39,6 +40,8 @@ public class Player extends Entity implements CreatureInterface {
     private Potions potion;
 
     private Thread keyThread; //Keeps track of key releases
+    //The hand is throwing the book and aiming.
+    private Hand hand = new Hand(this);
 
     public Player(Sprite sprite, World world, float x, float y) {
 
@@ -146,9 +149,16 @@ public class Player extends Entity implements CreatureInterface {
      * Updates Body rotation
      */
     private void updateRotation(){
+        GameModel gameModel = GameModel.getInstance();
         Body body = getBody();
         float rotation =  direction.getRotation();
-        body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
+        //Checks if world.step() is running. If it is running it tries again and again until step isn't running.
+        //This is the reason why sometimes the game lags and a StackOverflowError happens.
+        if (!gameModel.isStepping()) {
+            body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
+        } else{
+            updateRotation();
+        }
     }
 
     /**
@@ -216,11 +226,10 @@ public class Player extends Entity implements CreatureInterface {
      */
     private void checkSimultaneousRelease(){
         final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
-        updateMovement();
         if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
 
                 //Keys were released at the same time (thread is sleeping/waiting)
-
+            updateMovement();
 
         } else {
 
@@ -228,6 +237,7 @@ public class Player extends Entity implements CreatureInterface {
                 public void run() {
                     try {
                         keyThread.sleep(timeSensitiveness); //waiting for new key release
+                        updateMovement();
                         //if(getWorld().isLocked())     //TODO hack för att inte krascha
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);
@@ -406,5 +416,10 @@ public class Player extends Entity implements CreatureInterface {
         getBody().setTransform(point.x + 0.5f, point.y + 0.5f, getBody().getAngle()); //+0.5f because we want it in the middle
         updateRotation();
     }
-
+    public Hand getHand(){
+        return this.hand;
+    }
+    public void throwBook(){
+        hand.throwBook();
+    }
 }

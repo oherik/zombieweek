@@ -17,23 +17,19 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * controller to handle the operations on the different maps and worlds
- * Created by Erik on 2015-04-17.
+ * This controller class makes all the different calculations regarding the maps, levels, worlds and objects in them.
  */
 public class MapController {
     GameModel gameModel;
 
+    /**
+     * Constructor
+     */
     public MapController(){
         this.gameModel = GameModel.getInstance();
     }
 
-    /**
-     * @param levelIndex    The index in which the level is stored in the model
-     * @return the world which is found at the given index
-     */
-    public TiledMap getMap(int levelIndex){return gameModel.getLevel(levelIndex).getMap();}
-
-    /**
+     /**
      * @return the current map from the model
      */
     public TiledMap getMap(){return gameModel.getLevel().getMap();}
@@ -52,7 +48,7 @@ public class MapController {
      * Creates the different levels and stores them in the model
      */
 
-    public void initializeLevels(){
+    public void initializeLevels(){ //TODO varifrån ska vi hämta dessa?
 
         gameModel.addLevel(new Level("core/assets/Map/Test_world_2_previous.tmx"));
         gameModel.addLevel(new Level("core/assets/Map/Test_world_3.tmx"));
@@ -61,55 +57,25 @@ public class MapController {
     }
 
     /**
-     * Scales the map images
-     * @param scale The new scale
-     * @throws IndexOutOfBoundsException if the scale <=0
-     * @throws NullPointerException if level is null
-     */
-    public void scaleImage(Level level, float scale){
-        if(scale<=0)
-            throw new IndexOutOfBoundsException("Scale must be > 0");
-        if(level == null)
-            throw new NullPointerException("Level mustn't be null");
-        Sprite mapPainting = level.getMapPainting();
-        Sprite mapPaintingTopLayer = level.getMapPaintingTopLayer();
-        mapPainting.setSize(mapPainting.getWidth() * scale, mapPainting.getHeight() * scale);
-        if (mapPaintingTopLayer != null)
-            mapPaintingTopLayer.setSize(mapPaintingTopLayer.getWidth() * scale, mapPaintingTopLayer.getHeight() * scale);
-    }
-
-    /**
-     * Scales all the map images
-     * @param scale The new scale
-     * @throws IndexOutOfBoundsException if the scale <=0
-     */
-    public void scaleImages(float scale){
-        if(scale<=0)
-            throw new IndexOutOfBoundsException("Scale must be > 0");
-        for(Level level : gameModel.getLevels())
-            scaleImage(level, scale);
-    }
-
-    /**
-     * Creates the different collision objects that represent the physical world and stores them in the model
+     * Creates the different collision objects (see CollisionObject.java) that represent the physical world and stores
+     * them in the model.
      */
     public void initializeCollisionObjects(){
-        float tileSize = Constants.TILE_SIZE;
-        float ppM = Constants.PIXELS_PER_METER;
-
+        //Create and define body
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody; //The collision objects shouldn't move
 
-        FixtureDef fixDef = new FixtureDef();
-
+        //Define shapes
         PolygonShape standardBoxShape = new PolygonShape();
-        standardBoxShape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
-        PolygonShape doorShape = new PolygonShape();
-        doorShape.setAsBox(tileSize / 4 / ppM, tileSize / 2 / ppM);
+        standardBoxShape.setAsBox(0.5f, 0.5f);   //The size is set as 2 * the values inside the parantheses
+        PolygonShape doorShape = new PolygonShape();    //The door is thinner, so the player doesn't accidentally bump into them
+        doorShape.setAsBox(0.25f, 0.5f); //The size is set as 2 * the values inside the parantheses
 
+        //Create a new ArrayList to store the objects
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
 
         //Water
+        FixtureDef fixDef = new FixtureDef();
         fixDef.friction = 0;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
@@ -118,7 +84,7 @@ public class MapController {
         collisionObjects.add(new CollisionObject("water", bodyDef, fixDef));
 
         //Collision for all
-        fixDef = new FixtureDef();
+        fixDef = new FixtureDef();  //Reset the fixture definition, this has to be done for each new object
         fixDef.friction = 0.2f;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
@@ -148,25 +114,30 @@ public class MapController {
     }
 
     /**
-     * This function creates all the box2d obstacles. The obstacles are (at the moment, this might change in the future)
-     * made up of squares one tile large each. An obstacle might be a wall, a river or anything else that the player shouldn't
-     * be allowed to walk on. The maps all have a layer of meta data if they contain obstacles. A tile in the meta data layer
-     * can for example have the property "collision", which states that the tile in question shouldn't be traversable. For
-     * abstractation reasons the function recieves both the name of the meta layer and the collision property instead of
-     * simply searching for "meta" and "collision".
+     * This function creates all the Box2d obstacle bodies. The obstacles are the CollisionObjects defined in
+     * initializeCollisionObjects() and stored in GameModel.  An obstacle might be a wall, a river or anything else that
+     * the player, zombie or projectile should be able to collide with one way or another. The boxes are created by the
+     * definitions stored in the collision object array list.
      *
-     * It goes through all the tiles in the map looking for tiles containing the collision property. If one is found a box2d
-     * square is placed there, which allows for collision detection.
      *
-     * @param metaLayerName The name of the meta layer of the map
+     * It goes through all the tiles in the map looking for tiles containing any of the collision names in the
+     * collision object array list. If one is found a box2d fixture is placed there, which allows for collision detection.
+     * The fixture then has its user data set to a refernce to the object in question, so it can be called upon
+     * during the collision detection.
+     *
+     * If a tile is found where a door should be placed the door property is stored as a property in the door collision
+     * object. The door property is the level which should be loaded if the player touches the door. A new door collision
+     * object is then added to the collision object array list, in case any more door is found (the same can't be re-used
+     * since the property of the doors in most cases are unique). The door is then removed from the array list.
+     *
+     * @param collisionObjects the list of all the collision objects that can be placed in the world
      */
 
-    public void createBodiesIfNeeded(String metaLayerName, ArrayList<CollisionObject> collisionObjects) {
+    private void createBodiesIfNeeded(ArrayList<CollisionObject> collisionObjects) {
         Level level = getLevel();
-        if(!level.hasInitializedBodies()) {
+        if(!level.hasInitializedBodies()) { //if the level already has these initialized there's no point in continuing
             World world = getWorld();
-            TiledMap tiledMap = getMap();
-            TiledMapTileLayer metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName);
+            TiledMapTileLayer metaLayer = getMapMetaLayer();
 
             String zombieSpawn = "zombie_spawn"; //TODO test tills vi får flera sorters zombies
             String playerSpawn = "player_spawn"; //TODO test tills ovan är fixat
@@ -174,22 +145,19 @@ public class MapController {
 
             if (metaLayer != null) {
                 metaLayer.setVisible(false);
-                float tileSize = Constants.TILE_SIZE;
-                float ppM = Constants.PIXELS_PER_METER;
                 for (int row = 0; row < metaLayer.getHeight(); row++) {       //TODO onödigt att gå igenom allt?
                     for (int col = 0; col < metaLayer.getWidth(); col++) {
-                        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);       //hämta cell
-                        if (currentCell != null && currentCell.getTile() != null) {             //ej tom
+                        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
+                        if (currentCell != null && currentCell.getTile() != null) {        //There's a meta data tile on that position
                             CollisionObject toAdd = null;
                             CollisionObject toRemove = null;
                             for (CollisionObject obj : collisionObjects) {
                                 if (currentCell.getTile().getProperties().get(obj.getName()) != null) {
-                                    obj.getBodyDef().position.set((col + 0.5f) * tileSize / ppM, (row + 0.5f) * tileSize / ppM);
-                                    if(obj.getName().equals(Constants.DOOR_PROPERTY) && obj.getProperty()==null){     //tom dörr
-                                                                                /* Need to create another door */
+                                    obj.getBodyDef().position.set((col + 0.5f), (row + 0.5f));
+                                    if(obj.getName().equals(Constants.DOOR_PROPERTY)){
                                         toAdd = obj.clone();
-                                        obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.DOOR_PROPERTY));       //Dvs leveln den leder till
                                         toRemove = obj;
+                                        obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.DOOR_PROPERTY));
                                     }
                                     Fixture fixture = world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
                                     fixture.setUserData(obj);
@@ -197,13 +165,11 @@ public class MapController {
                             }
                             if(toRemove != null) {
                                 collisionObjects.remove(toRemove);
-                                toRemove = null;
                             }
                             if(toAdd != null) {
                                 collisionObjects.add(toAdd);
-                                toAdd = null;
                             }
-                            if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {
+                            if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {           //TODO skapa en spawnEntities-metod istället. Och en huvudmetod som går igenom båda metoderna
                                 Zombie zombie = new ZombieTest(getWorld(), col, row);           //TODO test
                                 getLevel().addZombie(zombie);
                             }
@@ -222,92 +188,89 @@ public class MapController {
         }
     }
 
+    /**
+     * Runs createBodiesIfNeeded using the default values stored in the game model.
+     */
     public void createBodiesIfNeeded() {
-       createBodiesIfNeeded(gameModel.getMetaLayerName(), gameModel.getCollisionObjects());
-    }
-
-
-    /*  -----------------------OLD----------------------------------------
-    public void createBodiesIfNeeded(String metaLayerName, String collisionProperty){
-        World world = getWorld();
-        TiledMap tiledMap = getMap();
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.restitution = .1f;
-        fixDef.friction = 0;
-        TiledMapTileLayer metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName);
-        if(metaLayer != null) {
-            metaLayer.setVisible(false);
-            float tileSize = Constants.TILE_SIZE;
-            float ppM = Constants.PIXELS_PER_METER;
-
-            for (int row = 0; row < metaLayer.getHeight(); row++) {       //TODO onödigt att gå igenom allt?
-                for (int col = 0; col < metaLayer.getWidth(); col++) {
-                    TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);       //hämta cell
-                    if (currentCell != null &&
-                            currentCell.getTile() != null &&
-                            currentCell.getTile().getProperties().get(collisionProperty) != null) {     //om allt detta stämmer är det en kollisionstile
-                        bodyDef.position.set((col + 0.5f) * tileSize / ppM, (row + 0.5f) * tileSize / ppM);
-
-                        PolygonShape shape = new PolygonShape();
-                        shape.setAsBox(tileSize / 2 / ppM, tileSize / 2 / ppM);
-                        fixDef.shape = shape;
-                        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
-                        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-                        world.createBody(bodyDef).createFixture(fixDef);
-                    }
-
-                }
-            }
-        }
-    }
-     -----------------------------END--------------------------------------------*/
-
-    public void createBodiesIfNeeded(int index, String metaLayerName, String collisionProperty){
-
-       //TODO lägg till när tillhörande model-kod implementerats
-    }
-
-    public Level getLevel(int levelIndex){
-       return gameModel.getLevel(levelIndex);
-    }
-
-    public Sprite getMapBottomLayer(int levelIndex){
-        return gameModel.getLevel(levelIndex).getMapPainting();
-    }
-
-    public Sprite getMapTopLayer(int levelIndex){
-        return gameModel.getLevel(levelIndex).getMapPaintingTopLayer();
-    }
-
-    public TiledMapImageLayer getMapBottomLayer(){
-        return gameModel.getLevel().getBottomLayer();
-    }
-
-    public TiledMapImageLayer getMapTopLayer(){
-        return gameModel.getLevel().getTopLayer();
-    }
-
-    public TiledMapTileLayer getMapMetaLayer(){
-        return gameModel.getLevel().getMetaLayer();
+       createBodiesIfNeeded(gameModel.getCollisionObjects());
     }
 
     /**
-     * Loads the new level in the game model, creates bodies if needed and sets that the renderer needs to update the world
-     * @param levelIndex the level to load
-     * @throws  IndexOutOfBoundsException if the current level is the first
+     * @param levelIndex the level index that will be accessed
+     * @return The level specified by the index
+     * @throws  IndexOutOfBoundsException if the user tries to access a level not in range
      */
+    public Level getLevel(int levelIndex){
+        int maxSize = gameModel.getLevels().size() -1;
+        if(levelIndex<0 ||levelIndex > maxSize)
+            throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+        return gameModel.getLevel(levelIndex);
+    }
 
+    /**
+     * @param levelIndex the level index which bottom layer will be accessed
+     * @return The bottom layer specified by the index
+     */
+    public TiledMapImageLayer  getMapBottomLayer(int levelIndex){
+        return getLevel(levelIndex).getBottomLayer();
+    }
 
+    /**
+     * @param levelIndex the level index which top layer will be accessed
+     * @return The top layer specified by the index
+     */
+    public TiledMapImageLayer  getMapTopLayer(int levelIndex){
+        return getLevel(levelIndex).getTopLayer();
+    }
+
+    /**
+     * @param levelIndex the level index which meta layer will be accessed
+     * @return The meta layer specified by the index
+     */
+    public TiledMapTileLayer getMapMetaLayer(int levelIndex){
+        return getLevel(levelIndex).getMetaLayer();
+    }
+
+    /**
+     * @return The current bottom layer
+     */
+    public TiledMapImageLayer getMapBottomLayer(){
+        return getMapBottomLayer(gameModel.getCurrentLevelIndex());
+    }
+
+    /**
+     * @return The current top layer
+     */
+    public TiledMapImageLayer getMapTopLayer(){
+        return getMapTopLayer(gameModel.getCurrentLevelIndex());
+    }
+
+    /**
+     * @return The current meta layer
+     */
+    public TiledMapTileLayer getMapMetaLayer(){
+        return getMapMetaLayer(gameModel.getCurrentLevelIndex());
+    }
+
+    /**
+     * Loads the new level in the game model, creates bodies if needed and sets that the renderer needs to update the
+     * world. It also updates where the player will be placed after the world step function (it's not possible to do it
+     * at the same time, thus a temporary point is stored in the model). This is decided based on if the level that's
+     * being loaded is before or after the one just shown to the user. It then creates the collision bodies for the new
+     * level, if needed and sets a variable in the game model that the renderer needs to update the world in the next
+     * world step.
+     *
+     * @param levelIndex the level to load
+     * @throws  IndexOutOfBoundsException if the user tries to access a level not in range
+     */
     public void loadLevel(int levelIndex){
         int maxSize = gameModel.getLevels().size() -1;
         if(levelIndex<0 ||levelIndex > maxSize)
             throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
-        int currentLevelIndex = gameModel.getCurrentLevelIndex();
+        int oldLevelIndex = gameModel.getCurrentLevelIndex();
         gameModel.setCurrentLevelIndex(levelIndex);
-        if(currentLevelIndex>levelIndex){
-            if(getLevel().getPlayerReturn() == null)        //Spawn och return är samma
+        if(oldLevelIndex>levelIndex){
+            if(getLevel().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getLevel().getPlayerSpawn());
             else
                 setPlayerBufferPosition(getLevel().getPlayerReturn());
@@ -318,11 +281,19 @@ public class MapController {
         gameModel.setWorldNeedsUpdate(true);
     }
 
+    /**
+     * @return true if the world needs to be updated, false if not
+     */
     public boolean worldNeedsUpdate(){
         return gameModel.worldNeedsUpdate();
     }
 
-    public void setWorldNeedsUpdate(boolean bool){ gameModel.setWorldNeedsUpdate(bool);
+    /**
+     * If the world needs to update the next step, this variable is set in the model
+     * @param bool true if the world needs to be updated, false if not
+     */
+    public void setWorldNeedsUpdate(boolean bool){
+        gameModel.setWorldNeedsUpdate(bool);
     }
 
     /**
@@ -332,15 +303,25 @@ public class MapController {
         return new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
     }
 
+    /**
+     * Updates the player's position
+     * @param point Where the player will be placed
+     */
     public void updatePlayerPosition(Point point){
         gameModel.getPlayer().setPosition(point);
     }
 
+    /**
+     * Sets where the player should be when the world step is done
+     * @param point Where the player will be placed after the step
+     */
     public void setPlayerBufferPosition(Point point){
         gameModel.setPlayerBufferPosition(point);
     }
 
-
+    /**
+     * @return where the player will be placed after the step
+     */
     public Point getPlayerBufferPosition(){
         return gameModel.getPlayerBufferPosition();
     }
