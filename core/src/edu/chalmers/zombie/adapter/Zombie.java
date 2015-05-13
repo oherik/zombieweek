@@ -27,6 +27,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private Vector2 point;
     private Sprite sprite;
     private Point position;
+    private int hp;
 
     /**
      * Creates a new zombie
@@ -78,6 +79,23 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     private boolean isAttacked;
 
+    /**
+     * A method which sets the zombie's speed to a new speed.
+     * @param newSpeed
+     */
+    public void setSpeed(int newSpeed) {
+
+        speed = newSpeed;
+    }
+
+    /**
+     * A method which decreases the zombie's hp (life measured in points).
+     */
+    public  void decHp() {
+
+        hp = hp--;
+    }
+
     public abstract ZombieType getType();
 
     public abstract void setType(ZombieType type);
@@ -98,7 +116,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     /**
      * A method which sets force affording to chosen speed.
-     * @param speed int. 
+     * @param speed int.
      */
     public void setForceY(int speed) {
 
@@ -123,7 +141,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
             Point p = path.getPath(position, playerPos).next();
             point = new Vector2(p.x, p.y);
             getBody().applyForce(force, point, !isKnockedOut);
-
         }
     }
 

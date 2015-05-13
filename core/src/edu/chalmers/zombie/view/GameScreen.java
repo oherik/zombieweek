@@ -174,9 +174,14 @@ public class GameScreen implements Screen{
         movePlayerIfNeeded();
 
 
-        for(Zombie z : gameModel.getZombies())
+        for(Zombie z : gameModel.getZombies()) {
+
             z.draw(mapRenderer.getBatch());
+        //    z.moveToPlayer(pathFinding);
+        }
+
         gameModel.getPlayer().moveIfNeeded();
+
         gameModel.getPlayer().draw(mapRenderer.getBatch());
 
         /* --- TEST rita ut det som ska vara ovanför --- */
@@ -243,6 +248,7 @@ public class GameScreen implements Screen{
                 //System.out.println("Antal steg: " + i);
             }
         }
+
     }
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
