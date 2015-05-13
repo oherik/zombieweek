@@ -40,7 +40,6 @@ public class Player extends Entity implements CreatureInterface {
 
     private Thread keyThread; //Keeps track of key releases
 
-
     public Player(Sprite sprite, World world, float x, float y) {
 
         super(sprite, world, x, y);
@@ -82,6 +81,11 @@ public class Player extends Entity implements CreatureInterface {
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
 
 
+    }
+
+    public Player(Player p) {
+
+        this(p.getSprite(), p.getWorld(), p.getX(), p.getY());
     }
 
     /**
@@ -299,6 +303,11 @@ public class Player extends Entity implements CreatureInterface {
     public boolean hasBeenAttacked() {
 
         return isAttacked;
+    }
+
+    public Sprite getSprite() {
+
+        return sprite;
     }
 
     @Override
