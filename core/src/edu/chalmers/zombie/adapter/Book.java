@@ -58,7 +58,7 @@ public class Book extends Entity {
         fixDef.restitution = 0;
         fixDef.friction = 8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
 
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -100,8 +100,9 @@ public class Book extends Entity {
      * Get updated position to be in front of the coordinates given.
      * @return The new position for the book
      */
+    //TODO move to EntityController
     public Vector2 getUpdatedPosition(float x, float y){
-        float distance = 1.5f;
+        float distance = 0f;
         Vector2 position = new Vector2(x,y);
         position.y = (float)(y + distance*Math.sin(direction + Constants.PI/2));
         position.x = (float)(x + distance*Math.cos(direction + Constants.PI/2));
@@ -114,6 +115,7 @@ public class Book extends Entity {
     /**
      *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
      */
+    //TODO move to EntityController
     public void setInMotion(){
         force.setLength(speed);
         force.setAngleRad(direction + Constants.PI*1/2); //TODO Rätt vinkel?
@@ -144,16 +146,4 @@ public class Book extends Entity {
     public long getTimeCreated() {
         return timeCreated;
     }
-
-    /**
-     * Applies friction to the book, for example if it hits the ground
-     */
-
-    public void applyFriction(){
-        if (super.getBody() != null) {
-            super.getBody().setLinearDamping(4f);
-            super.getBody().setAngularDamping(3f);
-        }
-    }
-
 }

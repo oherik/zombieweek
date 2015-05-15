@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.controller.EntityController;
 import edu.chalmers.zombie.controller.InputController;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.adapter.Book;
@@ -161,7 +162,7 @@ public class GameScreen implements Screen{
             long airTime = 500;
             long lifeTime = 5000; //life time for book in millisec
             if(System.currentTimeMillis() - b.getTimeCreated() > airTime)
-                b.applyFriction();
+                EntityController.hitGround(b);
             if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime){
                 gameModel.addEntityToRemove(b);
                 b.markForRemoval();
@@ -237,8 +238,9 @@ public class GameScreen implements Screen{
             Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
             Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
             path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
-            if (path == null)
-                System.out.println("Ingen path hittad");
+            if (path == null) {
+                // System.out.println("Ingen path hittad");
+            }
             else {
                 //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
                 int i = 0;

@@ -4,12 +4,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
@@ -24,12 +26,14 @@ import java.util.Iterator;
 public class InputController implements InputProcessor{
 
     GameModel gameModel;
+    MapController mapController;
 
     /**
      * Constructor. Initializes the game model
      */
     public InputController(){
         gameModel = GameModel.getInstance();
+        mapController = new MapController();
     }
 
     /**
@@ -90,15 +94,26 @@ public class InputController implements InputProcessor{
         return true;
     }
 
-
+    /**
+     * Throws a book if all conditions are sactisfactory
+     */
     private void tryThrowingBook(){
         Player player = gameModel.getPlayer();
-        if(player.getAmmunition()>0) {
+        float distance = 1f;
+        float angle = player.getHand().getDirection()+Constants.PI*0.5f;
+
+
+        if(player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getMapMetaLayer(),distance,angle) ) {
             player.decreaseAmmunition();
             throwBook();
         }
     }
 
+
+
+    /**
+     * Throws a book
+     */
     private void throwBook(){
         Player player = gameModel.getPlayer();
         player.throwBook();
