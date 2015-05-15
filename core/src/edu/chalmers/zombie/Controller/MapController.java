@@ -328,51 +328,54 @@ public class MapController {
     }
 
     /**
-     * Checks if the path is obstructed by a wall using a modified version of Bresenham's line algorithm
+     * Checks if the path is obstructed by a wall using a modified version of Bresenham's line algorithm while taking into account how the maps are constructed.
      * @param position  The original position
      * @param metaLayer The map's meta layer
      * @param distance  The distance in which to check
-     * @param angle in radians, the angle to check
+     * @param angle the angle to check, in radians (0 is east, pi is west)
      * @return  true if the path is obstructed, false otherwise
      */
     public static boolean pathObstructed(Vector2 position, TiledMapTileLayer metaLayer, float distance, float angle){
-
-        Vector2 wallCheck = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
-        if(position.x>wallCheck.x){
-            Vector2 temp = wallCheck;
-            wallCheck = position;
+    /* Input checks */
+        if(position == null ||metaLayer == null)
+            throw new NullPointerException("The input mustn't be null");
+        if(position.x < 0 || position.y < 0)
+            throw new IndexOutOfBoundsException("The position must be positive");   //TODO kanske inte behövs i och med att det checkas i relevant metod
+        if(position.x > metaLayer.getWidth() || position.y > metaLayer.getHeight())
+            throw new IndexOutOfBoundsException("The position must be within meta layer bounds");//TODO kanske inte behövs i och med att det checkas i relevant metod
+        if(distance < 0)
+            throw new IndexOutOfBoundsException("The distance must be positive");
+        Vector2 endPosition = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
+        /* Set the west-most point as origin. This is necessary for the rest of the algorithm to work */ //TODO kanske kan gå runt det?
+        if(position.x>endPosition.x){
+            Vector2 temp = endPosition;
+            endPosition = position;
             position=temp;
         }
+        /* Extract and convert the positions to map coordinates */
         int x_origin = Math.round(position.x - position.x % 1 - 0.5f);
         int y_origin = Math.round(position.y - position.y % 1 - 0.5f);
-        if(x_origin < 0 || y_origin < 0)
-            throw new IndexOutOfBoundsException("The position must be positive");
-        int x_end = Math.round(wallCheck.x - wallCheck.x % 1 - 0.5f);
-        int y_end = Math.round(wallCheck.y - wallCheck.y % 1 - 0.5f);
+        int x_end = Math.round(endPosition.x - endPosition.x % 1 - 0.5f);
+        int y_end = Math.round(endPosition.y - endPosition.y % 1 - 0.5f);
 
         int dx = x_end - x_origin;
         int dy = y_end - y_origin;
         double error = 0;
-        double deltaerr = (double)dy/(double)dx;
-        int ysign = 1;
-        if((y_end-y_origin)<0)
-            ysign=-1;
-        if(deltaerr < 0)
-            deltaerr = -deltaerr;
+        double deltaError = ((double)dy/(double)dx < 0) ? -(double)dy/(double)dx : (double)dy/(double)dx;
+        int ySign = (y_end-y_origin)<0 ? -1 : 1;
         int y = y_origin;
-        for(int x = x_origin; x<= x_end && x>=0 && y>=0&& x<metaLayer.getWidth() && y<metaLayer.getHeight(); x++){
+        for(int x = x_origin; x <= x_end && x>=0 && x<metaLayer.getWidth(); x++){
             if(wallAt(x,y,metaLayer)) {
                 return true;
             }
-            error = error + deltaerr;
-            while(error>=0.5){
+            error = error + deltaError;
+            while(error>=0.5 && y>= 0 && y < metaLayer.getHeight()){
                 if(wallAt(x,y,metaLayer)) {
                     return true;
                 }
-                y = y + ysign;
+                y = y + ySign;
                 error = error -1;
             }
-
         }
         return false;
     }
@@ -386,20 +389,26 @@ public class MapController {
      */
     public static boolean wallAt(Point position, TiledMapTileLayer metaLayer){
         if(position == null  ||metaLayer == null)
-            throw new NullPointerException("wallAt: Null recieved");
-        float x = position.x;
-        float y = position.y;
-        x = x - x%1;
-        y = y - y%1;
+            throw new NullPointerException("The input mustn't be null");
 
+        int x = Math.round(position.x - position.x%1);
+        int y = Math.round(position.y - position.y%1);
 
-        int mapX = Math.round(x);
-        int mapY = Math.round(y);
-
-        return wallAt(mapX,mapY,metaLayer);
+        return wallAt(x,y,metaLayer);
     }
 
+    /**
+     * Checks if there is a collision_all tile at a given position
+     * @param x The x coordinate
+     * @param y The  coordinate
+     * @param metaLayer The map's meta layer
+     * @return  true if there's a collision tile at that position, false otherwise
+     */
     public static boolean wallAt(int x, int y, TiledMapTileLayer metaLayer){
+        if(metaLayer == null)
+            throw new NullPointerException("The meta layer mustn't be null");
+        if(x<0 ||y < 0 || x > metaLayer.getWidth()-1 ||y > metaLayer.getHeight()-1 )
+            throw new IndexOutOfBoundsException("The input coordinates must be withing the meta layer bounds");
         return (metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) != null);
     }
 }
