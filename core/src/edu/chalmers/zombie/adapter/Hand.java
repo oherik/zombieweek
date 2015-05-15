@@ -76,4 +76,8 @@ public class Hand {
     public Sprite getAimer(){
         return aimer;
     }
+
+    public float getDirection(){
+        return direction;
+    }
 }

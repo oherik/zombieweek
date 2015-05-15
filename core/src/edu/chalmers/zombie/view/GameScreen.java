@@ -233,8 +233,9 @@ public class GameScreen implements Screen{
             Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
             Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
             path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
-            if (path == null)
-                System.out.println("Ingen path hittad");
+            if (path == null) {
+                // System.out.println("Ingen path hittad");
+            }
             else {
                 //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
                 int i = 0;

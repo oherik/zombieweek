@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.CollisionObject;
 import edu.chalmers.zombie.adapter.Level;
@@ -324,5 +325,81 @@ public class MapController {
      */
     public Point getPlayerBufferPosition(){
         return gameModel.getPlayerBufferPosition();
+    }
+
+    /**
+     * Checks if the path is obstructed by a wall using a modified version of Bresenham's line algorithm
+     * @param position  The original position
+     * @param metaLayer The map's meta layer
+     * @param distance  The distance in which to check
+     * @param angle in radians, the angle to check
+     * @return  true if the path is obstructed, false otherwise
+     */
+    public static boolean pathObstructed(Vector2 position, TiledMapTileLayer metaLayer, float distance, float angle){
+
+        Vector2 wallCheck = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
+        if(position.x>wallCheck.x){
+            Vector2 temp = wallCheck;
+            wallCheck = position;
+            position=temp;
+        }
+        int x_origin = Math.round(position.x - position.x % 1 - 0.5f);
+        int y_origin = Math.round(position.y - position.y % 1 - 0.5f);
+        if(x_origin < 0 || y_origin < 0)
+            throw new IndexOutOfBoundsException("The position must be positive");
+        int x_end = Math.round(wallCheck.x - wallCheck.x % 1 - 0.5f);
+        int y_end = Math.round(wallCheck.y - wallCheck.y % 1 - 0.5f);
+
+        int dx = x_end - x_origin;
+        int dy = y_end - y_origin;
+        double error = 0;
+        double deltaerr = (double)dy/(double)dx;
+        int ysign = 1;
+        if((y_end-y_origin)<0)
+            ysign=-1;
+        if(deltaerr < 0)
+            deltaerr = -deltaerr;
+        int y = y_origin;
+        for(int x = x_origin; x<= x_end && x>=0 && y>=0&& x<metaLayer.getWidth() && y<metaLayer.getHeight(); x++){
+            if(wallAt(x,y,metaLayer)) {
+                return true;
+            }
+            error = error + deltaerr;
+            while(error>=0.5){
+                if(wallAt(x,y,metaLayer)) {
+                    return true;
+                }
+                y = y + ysign;
+                error = error -1;
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * Checks if there's a wall tile at the given position
+     * @param position  the position to check at
+     * @param metaLayer the map's meta layer
+     * @return true if there's a wall there, false otherwise
+     * @throws NullPointerException if the position or meta layer are empty
+     */
+    public static boolean wallAt(Point position, TiledMapTileLayer metaLayer){
+        if(position == null  ||metaLayer == null)
+            throw new NullPointerException("wallAt: Null recieved");
+        float x = position.x;
+        float y = position.y;
+        x = x - x%1;
+        y = y - y%1;
+
+
+        int mapX = Math.round(x);
+        int mapY = Math.round(y);
+
+        return wallAt(mapX,mapY,metaLayer);
+    }
+
+    public static boolean wallAt(int x, int y, TiledMapTileLayer metaLayer){
+        return (metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) != null);
     }
 }

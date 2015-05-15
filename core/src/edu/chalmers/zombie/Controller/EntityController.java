@@ -93,7 +93,7 @@ public class EntityController {
             GameModel.getInstance().addEntityToRemove(b); //TODO behövs båda dessa?
             b.markForRemoval();             //TODO behövs båda dessa?
             p.increaseAmmunition();
-        
+
     }
 
 
