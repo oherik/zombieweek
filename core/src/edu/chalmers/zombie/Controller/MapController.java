@@ -49,11 +49,13 @@ public class MapController {
      */
 
     public void initializeLevels(){ //TODO varifrån ska vi hämta dessa?
+        gameModel.res.loadTiledMap("level0","core/assets/Map/Test_world_2_previous.tmx");
+        gameModel.res.loadTiledMap("level1","core/assets/Map/Test_world_3.tmx");
+        gameModel.res.loadTiledMap("level2","core/assets/Map/Test_world_2_next.tmx");
 
-        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_previous.tmx"));
-        gameModel.addLevel(new Level("core/assets/Map/Test_world_3.tmx"));
-        gameModel.addLevel(new Level("core/assets/Map/Test_world_2_next.tmx"));
-
+        gameModel.addLevel(new Level(gameModel.res.getTiledMap("level0"))); //0
+        gameModel.addLevel(new Level(gameModel.res.getTiledMap("level1"))); //1
+        gameModel.addLevel(new Level(gameModel.res.getTiledMap("level2"))); //2
     }
 
     /**
