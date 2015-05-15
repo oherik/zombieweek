@@ -59,14 +59,14 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 switch(contact.getFixtureA().getFilterData().categoryBits){
                     case Constants.COLLISION_PLAYER:
                         Player p = gameModel.getPlayer();
-                        pickUp(p,b);
+                        EntityController.pickUp(p, b);
                         break;
                     case Constants.COLLISION_ZOMBIE:
                         Zombie z = (Zombie) contact.getFixtureA().getBody().getUserData();
-                        applyHit(z, b);
+                        EntityController.applyHit(z, b);
                         break;
                     case Constants.COLLISION_OBSTACLE:
-                        hitGround(b);
+                        EntityController.hitGround(b);
                         break;
                 }
                 break;
@@ -113,64 +113,10 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 
     }
 
-    /**
-     * A book hits the ground
-     * @param b The book
-     */
-    public void hitGround(Book b){
-        b.applyFriction();
-    }
 
-    /**
-     * A zombie gets hit by a book
-     * @param z The zombie
-     * @param b The book
-     */
-    public void applyHit(Zombie z, Book b){
-        double damage = getDamage(b);
-        //TODO först kolla om zombien ska knockas ut
-        knockOut(z);
-        gameModel.addEntityToRemove(b);
-        b.markForRemoval();
-    }
 
-    public void applyHit(Entity e1, Entity e2){
-        
-    }
 
-    /**
-     * A zombie gets knocked out
-     * @param z The zombie
-     */
-    public void knockOut(Zombie z){
-        z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp, borde vara z.getDeadSprite() eller nåt
-        z.scaleSprite(1f / Constants.TILE_SIZE);
-        gameModel.addEntityToRemove(z);
-        z.knockOut();                                                                   //TODO Zombie bör få en hit() eller nåt istället
-    }
 
-    /**
-     * Calculates the damage caused by the book
-     * @param b The book in question
-     * @return  The damage caused by the book
-     */
-    public double getDamage(Book b){
-        Vector2 vel = b.getVelocity();
-        float mass = b.getBody().getMass();
-        return Math.sqrt(vel.x*vel.x + vel.y*vel.y);    //TODO ta med massan här och nån konstant
-
-    }
-
-    /**
-     * A player picks up a book
-     * @param p The player
-     * @param b The book
-     */
-    public void pickUp(Player p, Book b){
-        gameModel.addEntityToRemove(b); //TODO behövs båda dessa?
-        b.markForRemoval();             //TODO behövs båda dessa?
-        p.increaseAmmunition();
-    }
 
 
 }
