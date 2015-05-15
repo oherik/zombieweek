@@ -30,15 +30,11 @@ public class Level {
     /**
      * Creates a new level based on a tiled map and a Box2D world
      *
-     * @param mapPath The file path to the map
+     * @param tiledMap The map of the level
      * @throws NullPointerException if the path name is incorrect or not found
      */
-    public Level(String mapPath) {
-        if (mapPath == null)
-            throw new NullPointerException("Level: no path name recieved");
-        tiledMap = new TmxMapLoader().load(mapPath);
-        if (tiledMap == null)
-            throw new NullPointerException("Level: incorrect path name");
+    public Level(TiledMap tiledMap) {
+        this.tiledMap = tiledMap;
 
         //Initialize the layers
         metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(Constants.META_LAYER);
