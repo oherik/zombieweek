@@ -14,7 +14,7 @@ import edu.chalmers.zombie.utils.Direction;
 public class Book extends Entity {
     private Vector2 force;
     private float direction;
-    private boolean remove = false;
+    private boolean remove = false, isOnGround = false;
     int speed, omega;
     Vector2 initialVelocity;
     float width, height;
@@ -145,6 +145,21 @@ public class Book extends Entity {
      */
     public long getTimeCreated() {
         return timeCreated;
+    }
+
+    /**
+     * @return True if the book is on the ground and thereby safe to pick up, false otherwise
+     */
+    public boolean isOnGround(){
+        return this.isOnGround;
+    }
+
+    /**
+     * Sets if the book is on the ground
+     * @param bool  If the book is on the ground
+     */
+    public void setIsOnGround(boolean bool){
+        this.isOnGround = bool;
     }
 
 

@@ -47,6 +47,7 @@ public class EntityController {
     public static void hitGround(Book book){
         //TODO göra boken mindre, lägga till ljud etc
         applyGroundFriction(book, 4f, 3f);
+        book.setIsOnGround(true);
     }
 
     /**
@@ -93,8 +94,10 @@ public class EntityController {
      * @param b The book
      */
     public static void pickUp(Player p, Book b){
-        GameModel.getInstance().addEntityToRemove(b); //TODO behövs båda dessa?
-        b.markForRemoval();             //TODO behövs båda dessa?
-        p.increaseAmmunition();
+        if(b.isOnGround()) {
+            GameModel.getInstance().addEntityToRemove(b); //TODO behövs båda dessa?
+            b.markForRemoval();             //TODO behövs båda dessa?
+            p.increaseAmmunition();
+        }
     }
 }
