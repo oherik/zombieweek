@@ -21,18 +21,14 @@ public class SaveLoadController {
         fileName = "savedGame.properties";
         gameModel = GameModel.getInstance();
         properties = new Properties();
+        loadGame(); //loads current game data from file
     }
 
     /**
-     * Saves current level, player health and player ammo to file. Will be used at checkpoints.
+     * Saves current level, highest reached level, player health and player ammo to file. Will be used at checkpoints.
      */
     public void saveGame(){
-        int level = gameModel.getCurrentLevelIndex();
-        int health = gameModel.getPlayer().getLives();
-        int ammo = gameModel.getPlayer().getAmmunition();
-        properties.setProperty("level", Integer.toString(level));
-        properties.setProperty("health", Integer.toString(health));
-        properties.setProperty("ammo", Integer.toString(ammo));
+        updateProperties();
 
         try {
             output = new FileOutputStream(fileName);
@@ -50,22 +46,18 @@ public class SaveLoadController {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 
     /**
-     * Loads game if a game has been saved.
+     * Loads game if a game has been saved to file.
      */
-    public void loadGame(){
+    private void loadGame(){
 
         try {
             input = new FileInputStream(fileName);
             properties.load(input);
-            System.out.println("--- LOADING GAME ---");
-            System.out.println("Current level: " + properties.getProperty("level"));
-            System.out.println("Player health: " + properties.getProperty("health"));
-            System.out.println("Player ammo: " + properties.getProperty("ammo"));
+            System.out.println("--- LOADING GAMEFILE PROPERTIES ---");
 
             //TODO: Save properties to gameModel
 
@@ -83,6 +75,43 @@ public class SaveLoadController {
             }
         }
 
+    }
+
+    /**
+     * Updates properties from current game data
+     */
+    private void updateProperties(){
+        int level = gameModel.getCurrentLevelIndex();
+        int health = gameModel.getPlayer().getLives();
+        int ammo = gameModel.getPlayer().getAmmunition();
+        int highestReachedLevel;
+
+
+        String highest = properties.getProperty("highestReachedLevel");
+        if (highest!=null){ //if property not saved
+            highestReachedLevel = Integer.parseInt(highest);
+        } else {
+            highestReachedLevel = level;
+        }
+
+        //checks if player has reached a higher level than before
+        if (level>=highestReachedLevel){
+            properties.setProperty("highestReachedLevel", Integer.toString(level));
+        } else {
+            properties.setProperty("highestReachedLevel", Integer.toString(highestReachedLevel));
+        }
+
+        properties.setProperty("level", Integer.toString(level));
+        properties.setProperty("health", Integer.toString(health));
+        properties.setProperty("ammo", Integer.toString(ammo));
+    }
+
+
+    /**
+     * @return A copy of the properties stored in file
+     */
+    public Properties getProperties(){
+        return (Properties)properties.clone();
     }
 
 
