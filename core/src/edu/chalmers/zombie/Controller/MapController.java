@@ -6,10 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import edu.chalmers.zombie.adapter.CollisionObject;
-import edu.chalmers.zombie.adapter.Level;
-import edu.chalmers.zombie.adapter.Player;
-import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
@@ -278,6 +275,9 @@ public class MapController {
         }
         else
             setPlayerBufferPosition(getLevel().getPlayerSpawn());
+        for(Book book : gameModel.getBooks()){
+            book.markForRemoval();
+        }
         createBodiesIfNeeded();
         gameModel.setWorldNeedsUpdate(true);
     }
