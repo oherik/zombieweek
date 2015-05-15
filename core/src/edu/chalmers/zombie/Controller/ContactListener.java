@@ -8,12 +8,13 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
-/** A custom contact listener
+/** A custom contact listener. It registers the different contacts and forward the commands to the other controllers.
  * Created by Erik on 2015-04-18.
  */
 public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener {
     private GameModel gameModel;
     private MapController mapController;
+    private EntityController entityController;
 
     /**
      * Instantiates the contact listener.
@@ -21,6 +22,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
     public ContactListener (){
         this.gameModel = GameModel.getInstance();
         this.mapController = new MapController();
+        this.entityController = new EntityController();
     }
 
     /**

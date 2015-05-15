@@ -100,6 +100,7 @@ public class Book extends Entity {
      * Get updated position to be in front of the coordinates given.
      * @return The new position for the book
      */
+    //TODO move to EntityController
     public Vector2 getUpdatedPosition(float x, float y){
         float distance = 1.5f;
         Vector2 position = new Vector2(x,y);
@@ -114,6 +115,7 @@ public class Book extends Entity {
     /**
      *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
      */
+    //TODO move to EntityController
     public void setInMotion(){
         force.setLength(speed);
         force.setAngleRad(direction + Constants.PI*1/2); //TODO Rätt vinkel?
@@ -145,15 +147,5 @@ public class Book extends Entity {
         return timeCreated;
     }
 
-    /**
-     * Applies friction to the book, for example if it hits the ground
-     */
-
-    public void applyFriction(){
-        if (super.getBody() != null) {
-            super.getBody().setLinearDamping(4f);
-            super.getBody().setAngularDamping(3f);
-        }
-    }
 
 }
