@@ -8,6 +8,7 @@ import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 
 /**
+ * //TODO borde kanske vara en nästlad klass inne i Player? /Erik
  * Created by daniel on 5/12/2015.
  */
 public class Hand {

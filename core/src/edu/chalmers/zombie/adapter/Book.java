@@ -14,7 +14,7 @@ import edu.chalmers.zombie.utils.Direction;
 public class Book extends Entity {
     private Vector2 force;
     private float direction;
-    private boolean remove = false, isOnGround = false;
+    private boolean remove = false;
     int speed, omega;
     Vector2 initialVelocity;
     float width, height;
@@ -58,7 +58,7 @@ public class Book extends Entity {
         fixDef.restitution = 0;
         fixDef.friction = 8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
 
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -102,7 +102,7 @@ public class Book extends Entity {
      */
     //TODO move to EntityController
     public Vector2 getUpdatedPosition(float x, float y){
-        float distance = 1.5f;
+        float distance = 0f;
         Vector2 position = new Vector2(x,y);
         position.y = (float)(y + distance*Math.sin(direction + Constants.PI/2));
         position.x = (float)(x + distance*Math.cos(direction + Constants.PI/2));
@@ -146,21 +146,4 @@ public class Book extends Entity {
     public long getTimeCreated() {
         return timeCreated;
     }
-
-    /**
-     * @return True if the book is on the ground and thereby safe to pick up, false otherwise
-     */
-    public boolean isOnGround(){
-        return this.isOnGround;
-    }
-
-    /**
-     * Sets if the book is on the ground
-     * @param bool  If the book is on the ground
-     */
-    public void setIsOnGround(boolean bool){
-        this.isOnGround = bool;
-    }
-
-
 }
