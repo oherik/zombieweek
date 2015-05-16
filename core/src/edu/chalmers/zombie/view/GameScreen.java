@@ -24,6 +24,7 @@ import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.controller.SaveLoadController;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
@@ -53,6 +54,9 @@ public class GameScreen implements Screen{
     private Texture pathTexture;
     private Sprite pathSprite;
     private int steps;
+
+
+
 
     public GameScreen(World world, float tileSize){
 
@@ -89,6 +93,8 @@ public class GameScreen implements Screen{
         TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMetaLayer();
         pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
         /*---SLUTTEST---*/
+
+        GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
 
 
     }
@@ -130,8 +136,26 @@ public class GameScreen implements Screen{
 
     }
     public void render(float f){
+        GameState gameState = GameModel.getInstance().getGameState();
+        switch (gameState){
+            case GAME_RUNNING:
+                updateRunning(f);
+                break;
+            case GAME_PAUSED:
+                updatePaused(f);
+                break;
+        }
+    }
+
+    /**
+     * Render game when game is running
+     * @param f
+     */
+    private void updateRunning(float f){
         updateLevelIfNeeded();
+
         GameModel gameModel = GameModel.getInstance();
+
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -154,6 +178,8 @@ public class GameScreen implements Screen{
         mapRenderer.getBatch().begin();
 
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+
+
         //playerTest.draw(mapRenderer.getBatch());
         //tiledMapBottomLayer.draw(mapRenderer.getBatch());
         ArrayList<Book> books = gameModel.getBooks();
@@ -180,7 +206,7 @@ public class GameScreen implements Screen{
         for(Zombie z : gameModel.getZombies()) {
 
             z.draw(mapRenderer.getBatch());
-        //    z.moveToPlayer(pathFinding);
+            //    z.moveToPlayer(pathFinding);
         }
 
         gameModel.getPlayer().moveIfNeeded();
@@ -189,7 +215,7 @@ public class GameScreen implements Screen{
         gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
         /* --- TEST rita ut det som ska vara ovanför --- */
         if( tiledMapTopLayer !=null) {
-           // tiledMapTopLayer.draw(mapRenderer.getBatch());
+            // tiledMapTopLayer.draw(mapRenderer.getBatch());
 
         }
         /* --- END TEST --- */
@@ -202,7 +228,7 @@ public class GameScreen implements Screen{
         //Skapa path finding        //TODO debug
 
         if(steps%60==0) {   //uppdaterar varje sekund
-           updateZombiePaths();
+            updateZombiePaths();
         }
         /*-----------------SLUTTESTAT---------------------*/
 
@@ -219,8 +245,18 @@ public class GameScreen implements Screen{
         bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
         batchHUD.end();
 
+    }
+
+    /**
+     * Render game when game is paused
+     * @param f
+     */
+    private void updatePaused(float f){
+
+
 
     }
+
     public void show(){
 
     }
