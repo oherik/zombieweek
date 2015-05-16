@@ -348,12 +348,6 @@ public class MapController {
         if(distance < 0)
             throw new IndexOutOfBoundsException("The distance must be positive");
         Vector2 endPosition = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
-        /* Set the west-most point as origin. This is necessary for the rest of the algorithm to work */ //TODO kanske kan gå runt det?
-        if(position.x>endPosition.x){
-            Vector2 temp = endPosition;
-            endPosition = position;
-            position=temp;
-        }
         /* Extract and convert the positions to map coordinates */
         int x_origin = Math.round(position.x - position.x % 1 - 0.5f);
         int y_origin = Math.round(position.y - position.y % 1 - 0.5f);
@@ -362,11 +356,12 @@ public class MapController {
 
         int dx = x_end - x_origin;
         int dy = y_end - y_origin;
+        int dxSign = (dx<0) ? -1 : 1;
         double error = 0;
         double deltaError = ((double)dy/(double)dx < 0) ? -(double)dy/(double)dx : (double)dy/(double)dx;
         int ySign = (y_end-y_origin)<0 ? -1 : 1;
         int y = y_origin;
-        for(int x = x_origin; x <= x_end && x>=0 && x<metaLayer.getWidth(); x++){
+        for(int x = x_origin; x != x_end + dxSign && x>=0 && x<metaLayer.getWidth(); x = x + dxSign){
             if(wallAt(x,y,metaLayer)) {
                 return true;
             }
