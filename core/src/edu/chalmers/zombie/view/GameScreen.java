@@ -171,17 +171,16 @@ public class GameScreen implements Screen{
 
 
 //Rita kartan
-        mapRenderer.render();
+        int[] backgroundLayers = { 0 };
+        int[] foregroundLayers = { 1 };
+        mapRenderer.render(backgroundLayers);
         mapRenderer.setView(camera);
         //mapRenderer.render();
         steps++;
         mapRenderer.getBatch().begin();
 
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-
-
-        //playerTest.draw(mapRenderer.getBatch());
-        //tiledMapBottomLayer.draw(mapRenderer.getBatch());
+        
         ArrayList<Book> books = gameModel.getBooks();
         for (int i = 0; i<books.size(); i++) {
             Book b = books.get(i);
@@ -213,13 +212,13 @@ public class GameScreen implements Screen{
 
         gameModel.getPlayer().draw(mapRenderer.getBatch());
         gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
-        /* --- TEST rita ut det som ska vara ovanför --- */
+
+        mapRenderer.getBatch().end();
         if( tiledMapTopLayer !=null) {
-            // tiledMapTopLayer.draw(mapRenderer.getBatch());
+           mapRenderer.render(foregroundLayers);
 
         }
-        /* --- END TEST --- */
-        mapRenderer.getBatch().end();
+
 
 
 
