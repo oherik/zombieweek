@@ -13,6 +13,7 @@ import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
@@ -87,6 +88,19 @@ public class InputController implements InputProcessor{
             case Input.Keys.DOWN:
                 //aim right
                 getPlayer().getHand().startAimingRight();
+                break;
+            case Input.Keys.ESCAPE:
+
+                switch (gameModel.getGameState()){
+                    case GAME_RUNNING:
+                        System.out.println("GAME PAUSED");
+                        gameModel.setGameState(GameState.GAME_PAUSED);
+                        break;
+                    case GAME_PAUSED:
+                        System.out.println("GAME STARTED");
+                        gameModel.setGameState(GameState.GAME_RUNNING);
+                        break;
+                }
                 break;
             default:
                 return false;
