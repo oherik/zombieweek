@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.awt.*;
@@ -35,6 +36,7 @@ public class GameModel {
     private Point playerBufferPosition; //Can't alter the player position directly in the world step
     public static ResourceManager res;
     private boolean stepping = false;
+    private GameState gameState; //the state of the game
 
 
     /**
@@ -233,4 +235,8 @@ public class GameModel {
     public void setStepping(boolean s){
         this.stepping = s;
     }
+
+    public GameState getGameState(){return gameState;}
+
+    public void setGameState(GameState gameState){this.gameState = gameState;}
 }
