@@ -59,6 +59,9 @@ public class SaveLoadController {
             properties.load(input);
             System.out.println("--- LOADING GAMEFILE PROPERTIES ---");
 
+            int highestReachedLevel = getHighestLevelFromProperties();
+            gameModel.setHighestCompletedLevel(highestReachedLevel);
+
             //TODO: Save properties to gameModel
 
         } catch (IOException e) {
@@ -84,26 +87,36 @@ public class SaveLoadController {
         int level = gameModel.getCurrentLevelIndex();
         int health = gameModel.getPlayer().getLives();
         int ammo = gameModel.getPlayer().getAmmunition();
+        int highestReachedLevel = getHighestLevelFromProperties();
+
+        //checks if player has reached a higher level than before
+        if (level>=highestReachedLevel){
+            properties.setProperty("highestReachedLevel", Integer.toString(level));
+            gameModel.setHighestCompletedLevel(level); //gives model the new highest completed level
+        } else {
+            properties.setProperty("highestReachedLevel", Integer.toString(highestReachedLevel));
+            gameModel.setHighestCompletedLevel(highestReachedLevel);
+        }
+
+        properties.setProperty("level", Integer.toString(level));
+        properties.setProperty("health", Integer.toString(health));
+        properties.setProperty("ammo", Integer.toString(ammo));
+    }
+
+    /**
+     * Get the highest level from the already saved properties file. If no level is completed, current will be highest.
+     * @return The highest level completed
+     */
+    private int getHighestLevelFromProperties(){
         int highestReachedLevel;
-
-
+        int level = gameModel.getCurrentLevelIndex();
         String highest = properties.getProperty("highestReachedLevel");
         if (highest!=null){ //if property not saved
             highestReachedLevel = Integer.parseInt(highest);
         } else {
             highestReachedLevel = level;
         }
-
-        //checks if player has reached a higher level than before
-        if (level>=highestReachedLevel){
-            properties.setProperty("highestReachedLevel", Integer.toString(level));
-        } else {
-            properties.setProperty("highestReachedLevel", Integer.toString(highestReachedLevel));
-        }
-
-        properties.setProperty("level", Integer.toString(level));
-        properties.setProperty("health", Integer.toString(health));
-        properties.setProperty("ammo", Integer.toString(ammo));
+        return highestReachedLevel;
     }
 
 
