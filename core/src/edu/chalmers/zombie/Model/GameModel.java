@@ -37,6 +37,7 @@ public class GameModel {
     public static ResourceManager res;
     private boolean stepping = false;
     private GameState gameState; //the state of the game
+    private int highestCompletedLevel;
 
 
     /**
@@ -239,4 +240,8 @@ public class GameModel {
     public GameState getGameState(){return gameState;}
 
     public void setGameState(GameState gameState){this.gameState = gameState;}
+
+    public void setHighestCompletedLevel(int level){this.highestCompletedLevel = level;}
+
+    public int getHighestCompletedLevel(){return highestCompletedLevel;}
 }
