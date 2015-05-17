@@ -27,6 +27,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private Vector2 point;
     private Sprite sprite;
     private Point position;
+    private MapController mapController;
     private int hp;
 
     /**
@@ -71,6 +72,10 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         super.getBody().setUserData(this);
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
+
+        mapController = new MapController();
+        mapController.initializeCollisionObjects();
+        mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
 
         isKnockedOut = false;
 
@@ -132,15 +137,14 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     //@Override
     public void moveToPlayer(PathAlgorithm path) {
 
-
-        MapController mapController = new MapController();
         Point playerPos = mapController.getPlayerPosition();
 
         while(path.getPath(position, playerPos).hasNext()){
 
             Point p = path.getPath(position, playerPos).next();
             point = new Vector2(p.x, p.y);
-            getBody().applyForce(force, point, !isKnockedOut);
+            setForceY(7);
+            this.getBody().applyForce(force, point, !isKnockedOut);
         }
     }
 
