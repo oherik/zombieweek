@@ -8,13 +8,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SaveLoadController;
 import edu.chalmers.zombie.model.GameModel;
@@ -102,10 +105,11 @@ public class MainMenuScreen implements Screen {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
         textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("background", Color.GRAY);
         textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
+
 
         return skin;
     }
@@ -119,7 +123,7 @@ public class MainMenuScreen implements Screen {
         Table table = new Table();
 
         TextButton newGameButton = new TextButton("New game", skin);
-        TextButton levelButton = new TextButton("Choose level", skin);
+        final TextButton levelButton = new TextButton("Choose level", skin);
         TextButton exitGameButton = new TextButton("Exit game", skin);
 
         table.add(newGameButton).size(250,50).padBottom(15).row();
@@ -144,6 +148,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 menuState = MenuState.LEVEL_MENU;
                 Gdx.input.setInputProcessor(levelStage); //level menu is input processor
+                levelButton.toggle();
             }
         });
 
@@ -164,9 +169,7 @@ public class MainMenuScreen implements Screen {
         table.setFillParent(true);
         levelStage.addActor(table);
 
-
         int levelsCompleted = GameModel.getInstance().getHighestCompletedLevel();
-
 
         for (int i = 0;i <= levelsCompleted;i++){
             String buttonName = "Level " + (i+1);
@@ -183,6 +186,28 @@ public class MainMenuScreen implements Screen {
                 }
             });
         }
+
+
+        /*--- Back button ---*/
+        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
+
+        imageButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("core/assets/arrowLeft_grey.png")));
+        imageButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(new Texture("core/assets/arrowLeft.png")));
+        imageButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(new Texture("core/assets/arrowLeft_lightgrey.png")));
+
+        ImageButton backIconButton = new ImageButton(imageButtonStyle);
+        backIconButton.setSize(30,30);
+        backIconButton.setPosition(10, Gdx.graphics.getHeight()-40);
+
+        levelStage.addActor(backIconButton);
+
+        backIconButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                menuState = MenuState.MAIN_MENU;
+                Gdx.input.setInputProcessor(mainStage);
+            }
+        });
 
     }
 
