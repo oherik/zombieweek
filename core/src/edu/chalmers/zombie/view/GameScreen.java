@@ -268,24 +268,26 @@ public class GameScreen implements Screen{
      */
     private void updateZombiePaths(){   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?
         GameModel gameModel = GameModel.getInstance();
-        for(Zombie z : gameModel.getZombies())
-           if(!z.isKnockedOut())     {
-            Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
-            Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
-            path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
-            if (path == null) {
-                // System.out.println("Ingen path hittad");
-            }
-            else {
-                //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
-                int i = 0;
-                while (path.hasNext()) {
-                    Point tile = path.next();
-                    //System.out.println(tile.x + " " + tile.y);
-                    i++;
-                }
-                //System.out.println("Antal steg: " + i);
-            }
+        for(Zombie z : gameModel.getZombies()) {
+           if(!z.isKnockedOut()) {
+               z.moveToPlayer(pathFinding);
+               Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
+               Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
+               path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
+               if (path == null) {
+                   // System.out.println("Ingen path hittad");
+               } else {
+                   //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
+                   int i = 0;
+                   while (path.hasNext()) {
+                       Point tile = path.next();
+                       //System.out.println(tile.x + " " + tile.y);
+                       i++;
+                   }
+                   //System.out.println("Antal steg: " + i);
+               }
+
+           }
         }
 
     }
@@ -311,6 +313,7 @@ public class GameScreen implements Screen{
 
         mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
         mapController.setPlayerBufferPosition(null);
+            updateZombiePaths();
     }
     }
 }

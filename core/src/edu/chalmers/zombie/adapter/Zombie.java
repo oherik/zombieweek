@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -66,6 +67,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //Set vectors
         force = new Vector2(0,0);
         point = new Vector2(0,0);
+
+        position = new Point((int)x,(int)y);
         
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -76,6 +79,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         mapController = new MapController();
         mapController.initializeCollisionObjects();
         mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
+
+        super.getBody().setAngularDamping(100);
 
         isKnockedOut = false;
 
@@ -126,7 +131,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void setForceY(int speed) {
 
         force.y = speed;
-        
     }
 
     public void remove(Zombie zombie) {
@@ -139,13 +143,48 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         Point playerPos = mapController.getPlayerPosition();
 
-        while(path.getPath(position, playerPos).hasNext()){
+        //System.out.println(playerPos.x + " " + playerPos.y); <-- for debugging
 
-            Point p = path.getPath(position, playerPos).next();
-            point = new Vector2(p.x, p.y);
-            setForceY(7);
-            this.getBody().applyForce(force, point, !isKnockedOut);
+        Point p = playerPos;
+        point = new Vector2(p.x, p.y);
+
+        // Boop
+        Point ps = getZombiePosition();
+        Vector2 start = new Vector2(ps.x, ps.y);
+
+        setSpeed(200);
+
+        float time = 0.01f;
+
+        float distance = start.dst2(point);
+
+        Vector2 direction = new Vector2(p.x - ps.x, p.y - ps.y);
+        direction = direction.nor();
+
+        setForceY(500);
+
+        force.x = 0;
+
+        //super.getBody().applyForce(force, point, !isKnockedOut);
+        //super.getBody().setLinearVelocity(-speed, speed);
+        //super.getBody().applyForceToCenter(force.nor(), !isKnockedOut);
+
+        /*while(path.getPath(position, playerPos).hasNext()){
+
+            Point po = path.getPath(position, playerPos).next();
+            point = new Vector2(po.x, po.y);
+            setForceY(500);
+            force.x = 0;
+            super.getBody().applyForce(force, point, !isKnockedOut);
+        }*/
+
+        Circle zcircle = new Circle(ps.x, ps.y, 10);
+        Circle pcircle = new Circle(p.x, p.y, 10);
+
+        if (zcircle.overlaps(pcircle)) {
+            super.getBody().applyForce(force, point, !isKnockedOut);
         }
+
     }
 
     /**

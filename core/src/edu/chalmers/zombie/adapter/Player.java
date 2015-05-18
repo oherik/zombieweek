@@ -158,6 +158,7 @@ public class Player extends Entity implements CreatureInterface {
             body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
         } else{
             updateRotation();
+            // Commenting the section above causes no issues and fizes the StackOverflowError.
         }
     }
 
