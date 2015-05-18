@@ -131,6 +131,8 @@ public class InputController implements InputProcessor{
     private void throwBook(){
         Player player = gameModel.getPlayer();
         player.throwBook();
+
+        gameModel.res.getSound("throw").play();
     }
     /**
      * Decides what to do when the player releases a key
