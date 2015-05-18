@@ -68,6 +68,10 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                     case Constants.COLLISION_OBSTACLE:
                         EntityController.hitGround(b);
                         break;
+                    case Constants.COLLISION_WATER:
+                        //TODO plums
+                        EntityController.remove(b);
+                        break;
                 }
                 break;
             case (Constants.COLLISION_PLAYER):
@@ -77,6 +81,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         int levelToLoad = Integer.parseInt(door.getProperty());
                         mapController.loadLevel(levelToLoad);
                         break;
+
                 }
                 break;
             case (Constants.COLLISION_DOOR):
@@ -88,14 +93,37 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         break;
                 }
             break;
+            case (Constants.COLLISION_WATER):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_PLAYER:
+                        //TODO Ner i vatten
+                        gameModel.getPlayer().setWaterTilesTouching(gameModel.getPlayer().getWaterTilesTouching()+1);
+                        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_WATER, Constants.PLAYER_FRICTION_WATER);
+                        break;
+                }
+
         }
     }
 
     /**
-     * Called when two objects stop colliding. Not used in the current version
+     * Called when two objects stop colliding.
      * @param contact The contact object between two objects
      */
     public void endContact (Contact contact){
+        gameModel.clearEntitiesToRemove();
+        switch(contact.getFixtureB().getFilterData().categoryBits) {
+            case (Constants.COLLISION_WATER):
+                switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
+                    case Constants.COLLISION_PLAYER:
+                        Player player = gameModel.getPlayer();
+                        player.setWaterTilesTouching(player.getWaterTilesTouching() - 1);
+                        if(player.getWaterTilesTouching()<1) {
+                            //TODO upp ur vattnet
+                            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+                        }
+                        break;
+                }
+        }
      }
 
     /**

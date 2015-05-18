@@ -80,8 +80,9 @@ public class MapController {
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_WATER;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject("water", bodyDef, fixDef));
+        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        fixDef.isSensor = true;
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
 
         //Collision for all
         fixDef = new FixtureDef();  //Reset the fixture definition, this has to be done for each new object
@@ -106,7 +107,7 @@ public class MapController {
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject("sneak", bodyDef, fixDef));
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
 
         //Add to game model
         gameModel.setCollisionObjects(collisionObjects);

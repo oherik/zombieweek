@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -38,6 +39,8 @@ public class Player extends Entity implements CreatureInterface {
     private FixtureDef fixDef;
     private BodyDef bodyDef;
     private Potions potion;
+    private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
+    private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
 
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
@@ -71,7 +74,7 @@ public class Player extends Entity implements CreatureInterface {
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER;
 
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -421,5 +424,21 @@ public class Player extends Entity implements CreatureInterface {
     }
     public void throwBook(){
         hand.throwBook();
+    }
+
+    public int getWaterTilesTouching(){
+        return waterTilesTouching;
+    }
+
+    public void setWaterTilesTouching(int i){
+        waterTilesTouching = i;
+    }
+
+    public int getSneakTilesTouching(){
+        return sneakTilesTouching;
+    }
+
+    public void setSneakTilesTouching(int i){
+        sneakTilesTouching = i;
     }
 }

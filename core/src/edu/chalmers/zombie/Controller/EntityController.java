@@ -41,23 +41,12 @@ public class EntityController {
      */
     public static void hitGround(Book book){
         //TODO göra boken mindre, lägga till ljud etc
-        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER;
         setMaskBits(book, maskBits);
-        applyGroundFriction(book, 4f, 3f);
+        setFriction(book, 4f, 3f);
     }
 
-    /**
-     * Applies friction to the book, for example if it hits the wall and falls to the ground. If the book's body is set to null no friction is applied since the body handles the physics.
-     * @param book  The book to apply friction on
-     * @param linearDampening   How high the linear friction should be
-     * @param angularDampening  How high the angular, or rotational, friciton should be
-     */
-    public static void applyGroundFriction(Book book, float linearDampening, float angularDampening) {
-        if (book.getBody() != null) {
-            book.getBody().setLinearDamping(linearDampening);
-            book.getBody().setAngularDamping(angularDampening);
-        }
-    }
+
 
     /**
      * A zombie gets hit by a book
@@ -98,6 +87,11 @@ public class EntityController {
 
 
     /* ------------------------ ENTITY ----------------------------*/
+    public static void remove(Entity entity){
+        GameModel.getInstance().addEntityToRemove(entity);
+        entity.markForRemoval();
+    }
+
     /** The player attacks the zombie or vice versa
     * @param e1    The first entity
     * @param e2    The second entity
@@ -105,6 +99,20 @@ public class EntityController {
     public static void attack(Entity e1, Entity e2){
         //TODO skriv denna
     }
+
+    /**
+     * Applies friction to the book, for example if it hits the wall and falls to the ground. If the book's body is set to null no friction is applied since the body handles the physics.
+     * @param entity  The book to apply friction on
+     * @param linearDampening   How high the linear friction should be
+     * @param angularDampening  How high the angular, or rotational, friciton should be
+     */
+    public static void setFriction(Entity entity, float linearDampening, float angularDampening) {
+        if (entity.getBody() != null) {
+            entity.getBody().setLinearDamping(linearDampening);
+            entity.getBody().setAngularDamping(angularDampening);
+        }
+    }
+
     /**
      * Sets the entity's category bits, used for collision detection
      * @param entity    The entity
