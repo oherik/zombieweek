@@ -15,6 +15,7 @@ public abstract class Entity {
     private Sprite sprite;
     private Body body;
     private World world;
+    private boolean remove = false;
 
     /**
      * Creates an entity without a sprite
@@ -178,4 +179,19 @@ public abstract class Entity {
     public void removeBody(){
         this.world.destroyBody(body);
         this.body = null;}
+
+    /**
+     * Sets this entity to be removed in the next world update
+     */
+    public void markForRemoval(){
+        this.remove = true;
+    }
+
+    /**
+     * @return True if the entity shall be removed, false if not
+     */
+    public boolean toRemove(){
+        return this.remove;
+    }
+
 }
