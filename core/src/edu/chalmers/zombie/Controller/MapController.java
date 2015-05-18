@@ -268,8 +268,16 @@ public class MapController {
         int maxSize = gameModel.getLevels().size() -1;
         if(levelIndex<0 ||levelIndex > maxSize)
             throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+        gameModel.setWorldNeedsUpdate(true);
         int oldLevelIndex = gameModel.getCurrentLevelIndex();
         gameModel.setCurrentLevelIndex(levelIndex);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getPlayer());
+        for(Book book : gameModel.getBooks()){
+            book.markForRemoval();
+            gameModel.addEntityToRemove(book);
+        }
+        gameModel.clearBookList();
+        createBodiesIfNeeded();
         if(oldLevelIndex>levelIndex){
             if(getLevel().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getLevel().getPlayerSpawn());
@@ -278,11 +286,7 @@ public class MapController {
         }
         else
             setPlayerBufferPosition(getLevel().getPlayerSpawn());
-        for(Book book : gameModel.getBooks()){
-            book.markForRemoval();
-        }
-        createBodiesIfNeeded();
-        gameModel.setWorldNeedsUpdate(true);
+
     }
 
     /**
@@ -312,7 +316,7 @@ public class MapController {
      * @param point Where the player will be placed
      */
     public void updatePlayerPosition(Point point){
-        gameModel.getPlayer().setPosition(point);
+               gameModel.getPlayer().setPosition(point);
     }
 
     /**

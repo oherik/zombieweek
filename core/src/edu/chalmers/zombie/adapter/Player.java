@@ -392,6 +392,22 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     /**
+     * Creates a new default body at the given position
+     * @param point The point where to create the new body
+     * @return A new default body
+     */
+    public Body createDefaultBody(World world, Point point){
+        if(this.getBody()!=null) {
+            this.removeBody();
+        }
+        this.setWorld(world);
+        this.setBody(bodyDef, fixDef);
+        this.setPosition(point);
+        getBody().setFixedRotation(true);   //Så att spelaren inte roterar
+        return this.getBody();
+    }
+
+    /**
      * Spawns the current player at chosen point.
      * @param x coordinate.
      * @param y coordinate.

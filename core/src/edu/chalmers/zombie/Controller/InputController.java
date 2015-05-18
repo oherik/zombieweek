@@ -117,7 +117,7 @@ public class InputController implements InputProcessor{
         float angle = player.getHand().getDirection()+Constants.PI*0.5f;
 
 
-        if(player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getMapMetaLayer(),distance,angle) ) {
+        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getMapMetaLayer(),distance,angle) ) {
             player.decreaseAmmunition();
             throwBook();
         }

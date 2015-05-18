@@ -244,4 +244,8 @@ public class GameModel {
     public void setHighestCompletedLevel(int level){this.highestCompletedLevel = level;}
 
     public int getHighestCompletedLevel(){return highestCompletedLevel;}
+
+    public void clearBookList(){
+        this.books.clear();
+    }
 }

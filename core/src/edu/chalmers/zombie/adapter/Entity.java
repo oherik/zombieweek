@@ -180,6 +180,10 @@ public abstract class Entity {
         this.world.destroyBody(body);
         this.body = null;}
 
+    public void nullifyBody(){
+        this.body = null;
+    }
+
     /**
      * Sets this entity to be removed in the next world update
      */
@@ -192,6 +196,14 @@ public abstract class Entity {
      */
     public boolean toRemove(){
         return this.remove;
+    }
+
+    /**
+     * Sets the current player world
+     * @param world The current world
+     */
+    public void setWorld(World world){
+        this.world=world;
     }
 
 }

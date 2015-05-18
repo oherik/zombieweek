@@ -73,26 +73,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.remove(b);
                         break;
                 }
-                break;
-            case (Constants.COLLISION_PLAYER):
-                switch (contact.getFixtureA().getFilterData().categoryBits){        //Not made as an if-statement if more collision alternatives are to be added
-                    case Constants.COLLISION_DOOR:
-                        CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
-                        int levelToLoad = Integer.parseInt(door.getProperty());
-                        mapController.loadLevel(levelToLoad);
-                        break;
-
-                }
-                break;
-            case (Constants.COLLISION_DOOR):
-                switch(contact.getFixtureA().getFilterData().categoryBits){
-                    case Constants.COLLISION_PLAYER:
-                        CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
-                        int levelToLoad = Integer.parseInt(door.getProperty());
-                        mapController.loadLevel(levelToLoad);
-                        break;
-                }
-            break;
+              break;
             case (Constants.COLLISION_WATER):
                 switch(contact.getFixtureA().getFilterData().categoryBits){
                     case Constants.COLLISION_PLAYER:
@@ -110,7 +91,6 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
      * @param contact The contact object between two objects
      */
     public void endContact (Contact contact){
-        gameModel.clearEntitiesToRemove();
         switch(contact.getFixtureB().getFilterData().categoryBits) {
             case (Constants.COLLISION_WATER):
                 switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
@@ -131,7 +111,27 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
      * @param contact The contact object between two objects
      */
     public  void preSolve(Contact contact, Manifold manifold){
+        switch(contact.getFixtureB().getFilterData().categoryBits) {
+            case (Constants.COLLISION_PLAYER):
+                switch (contact.getFixtureA().getFilterData().categoryBits){        //Not made as an if-statement if more collision alternatives are to be added
+                    case Constants.COLLISION_DOOR:
+                             CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
+                            int levelToLoad = Integer.parseInt(door.getProperty());
+                          mapController.loadLevel(levelToLoad);
+                        break;
 
+                }
+                break;
+            case (Constants.COLLISION_DOOR):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_PLAYER:
+                            CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
+                          int levelToLoad = Integer.parseInt(door.getProperty());
+                         mapController.loadLevel(levelToLoad);
+                        break;
+                }
+                break;
+        }
     }
     /**
      * Not used in the current version

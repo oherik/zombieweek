@@ -111,8 +111,14 @@ public class GameScreen implements Screen{
             this.tiledMapTopLayer = mapController.getMapTopLayer(); //TODO test
             mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
             mapController.createBodiesIfNeeded();
+            if(GameModel.getInstance().getPlayer().getBody() == null){
+                GameModel.getInstance().getPlayer().createDefaultBody(currentWorld, mapController.getPlayerBufferPosition());
+            }
+         //   mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
+            mapController.setPlayerBufferPosition(null);
             TiledMapTileLayer meta = mapController.getMapMetaLayer();
             pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
+
             mapController.setWorldNeedsUpdate(false);
 
             //Save game
@@ -152,6 +158,7 @@ public class GameScreen implements Screen{
      * @param f
      */
     private void updateRunning(float f){
+
         updateLevelIfNeeded();
 
         GameModel gameModel = GameModel.getInstance();
@@ -165,84 +172,82 @@ public class GameScreen implements Screen{
         currentWorld.step(Constants.TIMESTEP, 6, 2);
         gameModel.setStepping(false);
 
+        removeEntities();
+        if(!gameModel.worldNeedsUpdate()) {
 
-        camera.position.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
-        camera.update();
+            camera.position.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
+            camera.update();
 
 
 //Rita kartan
-        int[] backgroundLayers = { 0 };
-        int[] foregroundLayers = { 1 };
-        mapRenderer.render(backgroundLayers);
-        mapRenderer.setView(camera);
-        //mapRenderer.render();
-        steps++;
-        mapRenderer.getBatch().begin();
+            int[] backgroundLayers = {0};
+            int[] foregroundLayers = {1};
+            mapRenderer.render(backgroundLayers);
+            mapRenderer.setView(camera);
+            //mapRenderer.render();
+            steps++;
+            mapRenderer.getBatch().begin();
 
-        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        
-        ArrayList<Book> books = gameModel.getBooks();
-        for (int i = 0; i<books.size(); i++) {
-            Book b = books.get(i);
-            long airTime = 500;
-            long lifeTime = 5000; //life time for book in millisec
-            if(System.currentTimeMillis() - b.getTimeCreated() > airTime)
-                EntityController.hitGround(b);
-            if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime){
-                gameModel.addEntityToRemove(b);
-                b.markForRemoval();
+            mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+
+            ArrayList<Book> books = gameModel.getBooks();
+            for (int i = 0; i < books.size(); i++) {
+                Book b = books.get(i);
+                long airTime = 500;
+                long lifeTime = 5000; //life time for book in millisec
+                if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
+                    EntityController.hitGround(b);
+                if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
+                    gameModel.addEntityToRemove(b);
+                    b.markForRemoval();
+                }
+                if (b.toRemove())
+                    books.remove(i); //Förenklad forsats skulle göra detta svårt
+                else
+                    b.draw(mapRenderer.getBatch());
             }
-            if(b.toRemove())
-                books.remove(i); //Förenklad forsats skulle göra detta svårt
-            else
-                b.draw(mapRenderer.getBatch());
-        }
-
-        removeEntities();
-        movePlayerIfNeeded();
 
 
-        for(Zombie z : gameModel.getZombies()) {
+            for (Zombie z : gameModel.getZombies()) {
 
-            z.draw(mapRenderer.getBatch());
-            //    z.moveToPlayer(pathFinding);
-        }
+                z.draw(mapRenderer.getBatch());
+                //    z.moveToPlayer(pathFinding);
+            }
 
-        gameModel.getPlayer().moveIfNeeded();
+            gameModel.getPlayer().moveIfNeeded();
+            gameModel.getPlayer().draw(mapRenderer.getBatch());
+            gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
 
-        gameModel.getPlayer().draw(mapRenderer.getBatch());
-        gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
+            mapRenderer.getBatch().end();
+            if (tiledMapTopLayer != null) {
+                mapRenderer.render(foregroundLayers);
 
-        mapRenderer.getBatch().end();
-        if( tiledMapTopLayer !=null) {
-           mapRenderer.render(foregroundLayers);
-
-        }
-
+            }
 
 
+            //rita box2d debug
+            boxDebug.render(mapController.getWorld(), camera.combined);
+            //render HUD
+            String playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
+            String playerHealth = "Health: " + gameModel.getPlayer().getLives();
+            String playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
+            batchHUD.begin();
+            bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+            bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight() - 10);
+            bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight() - 25);
+            bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight() - 40);
+            batchHUD.end();
 
-        /*--------------------------TESTA PATH FINDING------------------------------------*/
 
-        //Skapa path finding        //TODO debug
+         /*--------------------------TESTA PATH FINDING------------------------------------*/
 
-        if(steps%60==0) {   //uppdaterar varje sekund
-            updateZombiePaths();
-        }
+            //Skapa path finding        //TODO debug
+
+            if (steps % 60 == 0) {   //uppdaterar varje sekund
+                updateZombiePaths();
+            }
         /*-----------------SLUTTESTAT---------------------*/
-
-        //rita box2d debug
-        boxDebug.render(mapController.getWorld(), camera.combined);
-        //render HUD
-        String playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
-        String playerHealth = "Health: " + gameModel.getPlayer().getLives();
-        String playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
-        batchHUD.begin();
-        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
-        bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
-        bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
-        batchHUD.end();
+        }
 
     }
 
@@ -306,11 +311,10 @@ public class GameScreen implements Screen{
 
     }
 
-    private void movePlayerIfNeeded() {
+    private void movePlayerToBufferIfNeeded() {
         if (mapController.getPlayerBufferPosition() != null) {
 
-        mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
-        mapController.setPlayerBufferPosition(null);
+
     }
     }
 }
