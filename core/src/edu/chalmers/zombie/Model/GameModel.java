@@ -48,6 +48,12 @@ public class GameModel {
         currentLevel = 1;   //TODO test
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
+        res.loadSound("throw","core/assets/Audio/Sound_effects/throw_book.mp3");
+        res.loadSound("menu_hover","core/assets/Audio/Sound_effects/menu_hover.mp3");
+        res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");
+        res.loadSound("pick_up_book","core/assets/Audio/Sound_effects/pick_up_book.mp3");
+        res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
+
         levels = new ArrayList<Level>();
         entitiesToRemove = new HashSet<Entity>();
         worldNeedsUpdate = true;
