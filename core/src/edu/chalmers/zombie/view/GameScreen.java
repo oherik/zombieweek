@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.view;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -15,16 +14,20 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Zombie;
-import edu.chalmers.zombie.controller.EntityController;
-import edu.chalmers.zombie.controller.InputController;
-import edu.chalmers.zombie.controller.MapController;
+import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.adapter.Book;
-import edu.chalmers.zombie.controller.SaveLoadController;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
+import edu.chalmers.zombie.utils.MenuBuilder;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
@@ -55,6 +58,8 @@ public class GameScreen implements Screen{
     private Sprite pathSprite;
     private int steps;
 
+    private Stage pauseStage;
+
 
 
 
@@ -81,7 +86,7 @@ public class GameScreen implements Screen{
         //Starta rendrerare
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
         boxDebug = new Box2DDebugRenderer();
-        Gdx.input.setInputProcessor(new InputController());
+
 
 
         //HUD
@@ -96,6 +101,17 @@ public class GameScreen implements Screen{
 
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
 
+        //Pause menu
+        pauseStage = new Stage();
+        setUpPauseMenu();
+
+        //Set input
+        InputProcessor inputProcessorOne = new InputController();
+        InputProcessor inputProcessorTwo = pauseStage;
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(inputProcessorOne);
+        inputMultiplexer.addProcessor(inputProcessorTwo);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
     }
 
@@ -142,7 +158,7 @@ public class GameScreen implements Screen{
                 updateRunning(f);
                 break;
             case GAME_PAUSED:
-                updatePaused(f);
+                updatePaused();
                 break;
         }
     }
@@ -248,11 +264,43 @@ public class GameScreen implements Screen{
 
     /**
      * Render game when game is paused
-     * @param f
      */
-    private void updatePaused(float f){
+    private void updatePaused(){
 
+        pauseStage.act();
+        pauseStage.draw();
 
+    }
+
+    private void setUpPauseMenu(){
+
+        MenuBuilder menuBuilder = new MenuBuilder();
+        Skin skin = menuBuilder.createMenuSkin();
+
+        Table table = new Table();
+
+        TextButton mainMenuButton = new TextButton("Main Menu", skin);
+        TextButton quitGameButton = new TextButton("Quit game", skin);
+
+        table.add(mainMenuButton).size(250,50).padBottom(15).row();
+        table.add(quitGameButton).size(250,50).padBottom(15).row();
+
+        table.setFillParent(true);
+        pauseStage.addActor(table);
+
+        mainMenuButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+            }
+        });
+
+        quitGameButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
 
     }
 
