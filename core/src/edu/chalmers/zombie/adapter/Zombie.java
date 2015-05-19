@@ -152,7 +152,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         Point zombiePosition = getZombiePosition();
 
-        setSpeed(200);
+        setSpeed(80);
 
         Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
 
@@ -162,36 +162,36 @@ public abstract class Zombie extends Entity implements CreatureInterface {
             // TODO: attack
         } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
 
-            setForceY(50);
+            setForceY(speed);
             setForceX(0);
         } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
             setForceY(0);
-            setForceX(50);
+            setForceX(speed);
         } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
             setForceY(0);
-            setForceX(-50);
+            setForceX(-speed);
         } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
 
-            setForceY(-50);
+            setForceY(-speed);
             setForceX(0);
         } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
-            setForceY(50);
-            setForceX(50);
+            setForceY(speed);
+            setForceX(speed);
         } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
-            setForceY(-50);
-            setForceX(50);
+            setForceY(-speed);
+            setForceX(speed);
         } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
-            setForceY(50);
-            setForceX(-50);
+            setForceY(speed);
+            setForceX(-speed);
         } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
-            setForceY(-50);
-            setForceX(-50);
+            setForceY(-speed);
+            setForceX(-speed);
         } else {
             // TODO: some exception management
         }
@@ -216,7 +216,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
             force.x = 0;
             super.getBody().applyForce(force, point, !isKnockedOut);
         }*/
-
     }
 
     /**
