@@ -166,7 +166,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         Vector2 direction = new Vector2(p.x - ps.x, p.y - ps.y);
         direction = direction.nor();
 
-        if (p.y > ps.y) {
+        /*if (p.y > ps.y) {
 
             setForceY(50);
             setForceX(50);
@@ -174,7 +174,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
             setForceY(-50);
             setForceX(50);
-        }
+        } */
 
         if (p.x == ps.x && p.y == ps.y) {
 
@@ -183,6 +183,14 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
             setForceY(50);
             setForceX(0);
+        } else if (p.x > ps.x && p.y == ps.y) {
+
+            setForceY(0);
+            setForceX(50);
+        } else if (p.x < ps.x && p.y == ps.y) {
+
+            setForceY(0);
+            setForceX(-50);
         } else if (ps.y < p.y && p.x == ps.x) {
 
             setForceY(-50);
@@ -210,10 +218,14 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         Circle zcircle = new Circle(ps.x, ps.y, 10);
         Circle pcircle = new Circle(p.x, p.y, 5);
 
-        if (zcircle.overlaps(pcircle)) {
+        if (super.getBody() != null) {
 
-            super.getBody().applyForce(force, point, !isKnockedOut);
+            if (zcircle.overlaps(pcircle)) {
+
+                super.getBody().applyForce(force, point, !isKnockedOut);
+            }
         }
+        
 
         //super.getBody().applyForce(force, point, !isKnockedOut);
         //super.getBody().setLinearVelocity(-speed, speed);
