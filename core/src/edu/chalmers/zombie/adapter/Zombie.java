@@ -25,6 +25,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private float radius;
     private ZombieType type;
     private boolean isKnockedOut;
+    private boolean isAttacked;
     private Vector2 force;
     private Vector2 point;
     private Sprite sprite;
@@ -88,8 +89,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     }
 
 
-    private boolean isAttacked;
-
     /**
      * A method which sets the zombie's speed to a new speed.
      * @param newSpeed
@@ -105,6 +104,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public  void decHp() {
 
         hp = hp--;
+    }
+
+    public void setStartingHp(int hp) {
+
+        this.hp = hp;
     }
 
     public ZombieType getType() {
