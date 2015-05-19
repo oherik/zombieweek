@@ -102,11 +102,12 @@ public class MapController {
 
         //Sneak
         fixDef = new FixtureDef();
-        fixDef.friction = 0.2f;
+        fixDef.friction = 0f;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
+        fixDef.filter.maskBits = Constants.COLLISION_ENTITY;
+        fixDef.isSensor = true;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
 
         //Add to game model
