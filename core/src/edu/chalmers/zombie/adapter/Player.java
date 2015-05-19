@@ -3,14 +3,13 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
 
 import edu.chalmers.zombie.utils.Direction;
-import edu.chalmers.zombie.utils.Potions;
+import edu.chalmers.zombie.utils.PotionType;
 
 import java.awt.*;
 
@@ -38,7 +37,7 @@ public class Player extends Entity implements CreatureInterface {
     private Sprite sprite;
     private FixtureDef fixDef;
     private BodyDef bodyDef;
-    private Potions potion;
+    private PotionType potion;
     private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
     private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
 
