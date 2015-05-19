@@ -16,6 +16,8 @@ public class Constants {
     public static final String DOOR_PROPERTY = "door"; //TODO för resten med?
     public static final String COLLISION_PROPERTY_ALL = "collision_all"; //TODO för resten med?
     public static final String COLLISION_PROPERTY_ZOMBIE = "collision_zombie"; //TODO för resten med?
+    public static final String COLLISION_PROPERTY_WATER = "water";
+    public static final String COLLISION_PROPERTY_SNEAK = "sneak";
 
     //Kollisionshantering
     public static final short COLLISION_PLAYER= 2;
@@ -29,6 +31,11 @@ public class Constants {
 
     //Fysikhantering
     public static final float TIMESTEP = 1/60f;
+
+    //Rörelse
+    public static final float PLAYER_FRICTION_DEFAULT = 30f;
+    public static final float PLAYER_FRICTION_WATER = 80f;
+
 
     //Matematik
     public static final float PI = 3.14159265358979323846f; //Oklart om vi behöver så mycket

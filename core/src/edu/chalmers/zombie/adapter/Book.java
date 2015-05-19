@@ -14,7 +14,6 @@ import edu.chalmers.zombie.utils.Direction;
 public class Book extends Entity {
     private Vector2 force;
     private float direction;
-    private boolean remove = false;
     int speed, omega;
     Vector2 initialVelocity;
     float width, height;
@@ -46,6 +45,7 @@ public class Book extends Entity {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position.x+0.5f,position.y+0.5f);
+        bodyDef.bullet = true;
 
         //Load shape
         PolygonShape shape = new PolygonShape();
@@ -126,19 +126,6 @@ public class Book extends Entity {
 
 
 
-    /**
-     * Sets this book to be removed in the next world update
-     */
-    public void markForRemoval(){
-        this.remove = true;
-    }
-
-    /**
-     * @return True if the books shall be removed, false if not
-     */
-    public boolean toRemove(){
-        return this.remove;
-    }
 
     /**
      * @return System time created

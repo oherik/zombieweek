@@ -68,34 +68,42 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                     case Constants.COLLISION_OBSTACLE:
                         EntityController.hitGround(b);
                         break;
-                }
-                break;
-            case (Constants.COLLISION_PLAYER):
-                switch (contact.getFixtureA().getFilterData().categoryBits){        //Not made as an if-statement if more collision alternatives are to be added
-                    case Constants.COLLISION_DOOR:
-                        CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
-                        int levelToLoad = Integer.parseInt(door.getProperty());
-                        mapController.loadLevel(levelToLoad);
+                    case Constants.COLLISION_WATER:
+                        //TODO plums
+                        EntityController.remove(b);
                         break;
                 }
-                break;
-            case (Constants.COLLISION_DOOR):
+              break;
+            case (Constants.COLLISION_WATER):
                 switch(contact.getFixtureA().getFilterData().categoryBits){
                     case Constants.COLLISION_PLAYER:
-                        CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
-                        int levelToLoad = Integer.parseInt(door.getProperty());
-                        mapController.loadLevel(levelToLoad);
+                        //TODO Ner i vatten
+                        gameModel.getPlayer().setWaterTilesTouching(gameModel.getPlayer().getWaterTilesTouching()+1);
+                        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_WATER, Constants.PLAYER_FRICTION_WATER);
                         break;
                 }
-            break;
+
         }
     }
 
     /**
-     * Called when two objects stop colliding. Not used in the current version
+     * Called when two objects stop colliding.
      * @param contact The contact object between two objects
      */
     public void endContact (Contact contact){
+        switch(contact.getFixtureB().getFilterData().categoryBits) {
+            case (Constants.COLLISION_WATER):
+                switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
+                    case Constants.COLLISION_PLAYER:
+                        Player player = gameModel.getPlayer();
+                        player.setWaterTilesTouching(player.getWaterTilesTouching() - 1);
+                        if(player.getWaterTilesTouching()<1) {
+                            //TODO upp ur vattnet
+                            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+                        }
+                        break;
+                }
+        }
      }
 
     /**
@@ -103,7 +111,27 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
      * @param contact The contact object between two objects
      */
     public  void preSolve(Contact contact, Manifold manifold){
+        switch(contact.getFixtureB().getFilterData().categoryBits) {
+            case (Constants.COLLISION_PLAYER):
+                switch (contact.getFixtureA().getFilterData().categoryBits){        //Not made as an if-statement if more collision alternatives are to be added
+                    case Constants.COLLISION_DOOR:
+                             CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
+                            int levelToLoad = Integer.parseInt(door.getProperty());
+                          mapController.loadLevel(levelToLoad);
+                        break;
 
+                }
+                break;
+            case (Constants.COLLISION_DOOR):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_PLAYER:
+                            CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
+                          int levelToLoad = Integer.parseInt(door.getProperty());
+                         mapController.loadLevel(levelToLoad);
+                        break;
+                }
+                break;
+        }
     }
     /**
      * Not used in the current version
