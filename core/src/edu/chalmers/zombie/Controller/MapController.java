@@ -264,11 +264,14 @@ public class MapController {
      * @param levelIndex the level to load
      * @throws  IndexOutOfBoundsException if the user tries to access a level not in range
      */
-    public void loadLevel(int levelIndex){
-        int maxSize = gameModel.getLevels().size() -1;
-        if(levelIndex<0 ||levelIndex > maxSize)
-            throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+    public void loadLevel(int levelIndex) {
+        int maxSize = gameModel.getLevels().size() - 1;
+        if (levelIndex < 0 || levelIndex > maxSize){
+        throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+        }
         gameModel.setWorldNeedsUpdate(true);
+        gameModel.getPlayer().setSneakTilesTouching(0);
+        gameModel.getPlayer().setWaterTilesTouching(0);
         int oldLevelIndex = gameModel.getCurrentLevelIndex();
         gameModel.setCurrentLevelIndex(levelIndex);
         GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getPlayer());
