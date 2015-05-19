@@ -22,6 +22,7 @@ import java.awt.*;
 public abstract class Zombie extends Entity implements CreatureInterface {
 
     private int speed;
+    private float radius;
     private ZombieType type;
     private boolean isKnockedOut;
     private Vector2 force;
@@ -143,6 +144,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //TODO: remove zombie
     }
 
+    public void setDetectionRadius(float radius) {
+
+        this.radius = radius;
+    }
+
     //@Override
     public void moveToPlayer(PathAlgorithm path) {
 
@@ -153,6 +159,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         Point zombiePosition = getZombiePosition();
 
         setSpeed(80);
+        setDetectionRadius(5);
 
         Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
 
@@ -196,8 +203,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
             // TODO: some exception management
         }
 
-        Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, 5);
-        Circle pcircle = new Circle(playerPosition.x, playerPosition.y, 5);
+        Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
+        Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
 
         if (super.getBody() != null) {
 
