@@ -10,23 +10,24 @@ import java.awt.*;
 /**
  * Created by neda on 2015-05-19.
  */
-public class BasicZombie extends Zombie {
+public class EconZombie extends Zombie {
 
     private Sprite sprite;
     //private int hp;
     private World world;
     private Point position;
 
-    public BasicZombie(Sprite sprite, World world, int x, int y) {
+    public EconZombie(Sprite sprite, World world, int x, int y) {
 
         super(sprite, world, x, y);
-        setType(ZombieType.BASIC);
+        setType(ZombieType.ECON);
         this.world = world;
         this.sprite = sprite;
         position = new Point(x, y);
         setDetectionRadius(10);
         setStartingHp(50);
-        setSpeed(50);
+        setSpeed(200);
+        super.setAngularVelocity(10);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class BasicZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new BasicZombie(sprite, world, x, y);
+        return new EconZombie(sprite, world, x, y);
     }
 
     @Override

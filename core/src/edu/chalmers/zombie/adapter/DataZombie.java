@@ -13,7 +13,7 @@ import java.awt.*;
 public class DataZombie extends Zombie {
 
     private Sprite sprite;
-    private int hp;
+    //private int hp;
     private World world;
     private Point position;
 
@@ -25,7 +25,8 @@ public class DataZombie extends Zombie {
         this.sprite = sprite;
         position = new Point(x, y);
         setDetectionRadius(1);
-        hp = 90000;
+        setStartingHp(90000);
+        setSpeed(800);
     }
 
     @Override
