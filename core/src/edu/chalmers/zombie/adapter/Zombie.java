@@ -146,68 +146,49 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     //@Override
     public void moveToPlayer(PathAlgorithm path) {
 
-        Point playerPos = mapController.getPlayerPosition();
+        Point playerPosition = mapController.getPlayerPosition();
 
-        //System.out.println(playerPos.x + " " + playerPos.y); <-- for debugging
+        point = new Vector2(playerPosition.x, playerPosition.y);
 
-        Point p = playerPos;
-        point = new Vector2(p.x, p.y);
-
-        // Boop
-        Point ps = getZombiePosition();
-        Vector2 start = new Vector2(ps.x, ps.y);
+        Point zombiePosition = getZombiePosition();
 
         setSpeed(200);
 
-        float time = 0.01f;
+        Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
 
-        float distance = start.dst2(point);
 
-        Vector2 direction = new Vector2(p.x - ps.x, p.y - ps.y);
-        direction = direction.nor();
-
-        /*if (p.y > ps.y) {
-
-            setForceY(50);
-            setForceX(50);
-        } else {
-
-            setForceY(-50);
-            setForceX(50);
-        } */
-
-        if (p.x == ps.x && p.y == ps.y) {
+        if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
             // TODO: attack
-        } else if (p.y > ps.y && p.x == ps.x) {
+        } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
 
             setForceY(50);
             setForceX(0);
-        } else if (p.x > ps.x && p.y == ps.y) {
+        } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
             setForceY(0);
             setForceX(50);
-        } else if (p.x < ps.x && p.y == ps.y) {
+        } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
             setForceY(0);
             setForceX(-50);
-        } else if (ps.y < p.y && p.x == ps.x) {
+        } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
 
             setForceY(-50);
             setForceX(0);
-        } else if (p.y > ps.y && p.x > ps.x) {
+        } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
             setForceY(50);
             setForceX(50);
-        } else if (p.y < ps.y && p.x > ps.x) {
+        } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
             setForceY(-50);
-            setForceX(-50);
-        } else if (p.y > ps.y && p.x < ps.x) {
+            setForceX(50);
+        } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
             setForceY(50);
             setForceX(-50);
-        } else if (p.y < ps.y && p.x < ps.x) {
+        } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
             setForceY(-50);
             setForceX(-50);
@@ -215,8 +196,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
             // TODO: some exception management
         }
 
-        Circle zcircle = new Circle(ps.x, ps.y, 10);
-        Circle pcircle = new Circle(p.x, p.y, 5);
+        Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, 5);
+        Circle pcircle = new Circle(playerPosition.x, playerPosition.y, 5);
 
         if (super.getBody() != null) {
 
@@ -225,11 +206,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
                 super.getBody().applyForce(force, point, !isKnockedOut);
             }
         }
-        
 
-        //super.getBody().applyForce(force, point, !isKnockedOut);
-        //super.getBody().setLinearVelocity(-speed, speed);
-        //super.getBody().applyForceToCenter(force.nor(), !isKnockedOut);
 
         /*while(path.getPath(position, playerPos).hasNext()){
 
