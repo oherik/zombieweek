@@ -36,7 +36,8 @@ public class MachineZombie extends Zombie {
 
     @Override
     public Zombie spawn(World world, int x, int y) {
-        return null;
+
+        return new MachineZombie(sprite, world, x, y);
     }
 
     @Override
