@@ -102,11 +102,12 @@ public class MapController {
 
         //Sneak
         fixDef = new FixtureDef();
-        fixDef.friction = 0.2f;
+        fixDef.friction = 0f;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
+        fixDef.filter.maskBits = Constants.COLLISION_ENTITY;
+        fixDef.isSensor = true;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
 
         //Add to game model
@@ -264,11 +265,16 @@ public class MapController {
      * @param levelIndex the level to load
      * @throws  IndexOutOfBoundsException if the user tries to access a level not in range
      */
-    public void loadLevel(int levelIndex){
-        int maxSize = gameModel.getLevels().size() -1;
-        if(levelIndex<0 ||levelIndex > maxSize)
-            throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+    public void loadLevel(int levelIndex) {
+        int maxSize = gameModel.getLevels().size() - 1;
+        if (levelIndex < 0 || levelIndex > maxSize){
+        throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+        }
         gameModel.setWorldNeedsUpdate(true);
+        gameModel.getPlayer().setSneakTilesTouching(0);
+        gameModel.getPlayer().setWaterTilesTouching(0);
+        //TODO sluta simma, sluta sneaka
+        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
         int oldLevelIndex = gameModel.getCurrentLevelIndex();
         gameModel.setCurrentLevelIndex(levelIndex);
         GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getPlayer());
