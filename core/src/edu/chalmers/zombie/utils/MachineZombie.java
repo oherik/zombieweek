@@ -20,7 +20,7 @@ public class MachineZombie extends Zombie {
     public MachineZombie(Sprite sprite, World world, int x, int y) {
 
         super(sprite, world, x, y);
-        setType(ZombieType.ZETA);
+        setType(ZombieType.MACHINE);
         this.world = world;
         this.sprite = sprite;
         position = new Point(x, y);
