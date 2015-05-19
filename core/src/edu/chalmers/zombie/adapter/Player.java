@@ -458,4 +458,8 @@ public class Player extends Entity implements CreatureInterface {
     public void setSneakTilesTouching(int i){
         sneakTilesTouching = i;
     }
+
+    public void setHidden(boolean isHidden) {
+        this.isHidden = isHidden;
+    }
 }
