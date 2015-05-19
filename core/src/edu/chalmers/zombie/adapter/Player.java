@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -38,6 +39,8 @@ public class Player extends Entity implements CreatureInterface {
     private FixtureDef fixDef;
     private BodyDef bodyDef;
     private Potions potion;
+    private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
+    private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
 
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
@@ -71,7 +74,7 @@ public class Player extends Entity implements CreatureInterface {
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER;
 
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -110,7 +113,7 @@ public class Player extends Entity implements CreatureInterface {
 
 
     /**
-     * Moves player if needed. 
+     * Moves player if needed.
      */
     public void moveIfNeeded(){
         getBody().applyForce(force, getBody().getLocalCenter(), true);
@@ -158,6 +161,7 @@ public class Player extends Entity implements CreatureInterface {
             body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
         } else{
             updateRotation();
+            // Commenting the section above causes no issues and fizes the StackOverflowError.
         }
     }
 
@@ -389,6 +393,22 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     /**
+     * Creates a new default body at the given position
+     * @param point The point where to create the new body
+     * @return A new default body
+     */
+    public Body createDefaultBody(World world, Point point){
+        if(this.getBody()!=null) {
+            this.removeBody();
+        }
+        this.setWorld(world);
+        this.setBody(bodyDef, fixDef);
+        this.setPosition(point);
+        getBody().setFixedRotation(true);   //Så att spelaren inte roterar
+        return this.getBody();
+    }
+
+    /**
      * Spawns the current player at chosen point.
      * @param x coordinate.
      * @param y coordinate.
@@ -421,5 +441,21 @@ public class Player extends Entity implements CreatureInterface {
     }
     public void throwBook(){
         hand.throwBook();
+    }
+
+    public int getWaterTilesTouching(){
+        return waterTilesTouching;
+    }
+
+    public void setWaterTilesTouching(int i){
+        waterTilesTouching = i;
+    }
+
+    public int getSneakTilesTouching(){
+        return sneakTilesTouching;
+    }
+
+    public void setSneakTilesTouching(int i){
+        sneakTilesTouching = i;
     }
 }

@@ -122,7 +122,7 @@ public class InputController implements InputProcessor{
         float angle = player.getHand().getDirection()+Constants.PI*0.5f;
 
 
-        if(player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getMapMetaLayer(),distance,angle) ) {
+        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getMapMetaLayer(),distance,angle) ) {
             player.decreaseAmmunition();
             throwBook();
         }
@@ -136,6 +136,8 @@ public class InputController implements InputProcessor{
     private void throwBook(){
         Player player = gameModel.getPlayer();
         player.throwBook();
+
+        gameModel.res.getSound("throw").play();
     }
     /**
      * Decides what to do when the player releases a key

@@ -80,8 +80,9 @@ public class MapController {
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_WATER;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject("water", bodyDef, fixDef));
+        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        fixDef.isSensor = true;
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
 
         //Collision for all
         fixDef = new FixtureDef();  //Reset the fixture definition, this has to be done for each new object
@@ -106,7 +107,7 @@ public class MapController {
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject("sneak", bodyDef, fixDef));
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
 
         //Add to game model
         gameModel.setCollisionObjects(collisionObjects);
@@ -267,8 +268,16 @@ public class MapController {
         int maxSize = gameModel.getLevels().size() -1;
         if(levelIndex<0 ||levelIndex > maxSize)
             throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
+        gameModel.setWorldNeedsUpdate(true);
         int oldLevelIndex = gameModel.getCurrentLevelIndex();
         gameModel.setCurrentLevelIndex(levelIndex);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getPlayer());
+        for(Book book : gameModel.getBooks()){
+            book.markForRemoval();
+            gameModel.addEntityToRemove(book);
+        }
+        gameModel.clearBookList();
+        createBodiesIfNeeded();
         if(oldLevelIndex>levelIndex){
             if(getLevel().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getLevel().getPlayerSpawn());
@@ -277,11 +286,7 @@ public class MapController {
         }
         else
             setPlayerBufferPosition(getLevel().getPlayerSpawn());
-        for(Book book : gameModel.getBooks()){
-            book.markForRemoval();
-        }
-        createBodiesIfNeeded();
-        gameModel.setWorldNeedsUpdate(true);
+
     }
 
     /**
@@ -311,7 +316,7 @@ public class MapController {
      * @param point Where the player will be placed
      */
     public void updatePlayerPosition(Point point){
-        gameModel.getPlayer().setPosition(point);
+               gameModel.getPlayer().setPosition(point);
     }
 
     /**

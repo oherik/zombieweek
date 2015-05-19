@@ -24,10 +24,11 @@ public class EntityController {
      * @param z The zombie
      */
     public static void knockOut(Zombie z){
-        z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp, borde vara z.getDeadSprite() eller nåt
+        z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp, borde vara z.getDeadSprite() eller nï¿½t
         z.scaleSprite(1f / Constants.TILE_SIZE);
         GameModel.getInstance().addEntityToRemove(z);
-        z.knockOut();                                                                   //TODO Zombie bör få en hit() eller nåt istället
+        z.knockOut();                                                                   //TODO Zombie bï¿½r fï¿½ en hit() eller nï¿½t istï¿½llet
+        GameModel.getInstance().res.getSound("zombie_sleeping").play();
     }
 
     /* ---------------- PLAYER --------------------*/
@@ -40,24 +41,13 @@ public class EntityController {
      * @param book  The book
      */
     public static void hitGround(Book book){
-        //TODO göra boken mindre, lägga till ljud etc
-        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        //TODO gï¿½ra boken mindre, lï¿½gga till ljud etc
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER;
         setMaskBits(book, maskBits);
-        applyGroundFriction(book, 4f, 3f);
+        setFriction(book, 4f, 3f);
     }
 
-    /**
-     * Applies friction to the book, for example if it hits the wall and falls to the ground. If the book's body is set to null no friction is applied since the body handles the physics.
-     * @param book  The book to apply friction on
-     * @param linearDampening   How high the linear friction should be
-     * @param angularDampening  How high the angular, or rotational, friciton should be
-     */
-    public static void applyGroundFriction(Book book, float linearDampening, float angularDampening) {
-        if (book.getBody() != null) {
-            book.getBody().setLinearDamping(linearDampening);
-            book.getBody().setAngularDamping(angularDampening);
-        }
-    }
+
 
     /**
      * A zombie gets hit by a book
@@ -66,10 +56,11 @@ public class EntityController {
      */
     public static void applyHit(Zombie z, Book b){
         double damage = getDamage(b);
-        //TODO först kolla om zombien ska knockas ut
+        //TODO fï¿½rst kolla om zombien ska knockas ut
         knockOut(z);
         GameModel.getInstance().addEntityToRemove(b);
         b.markForRemoval();
+        GameModel.getInstance().res.getSound("zombie_hit").play();
     }
 
     /**
@@ -80,7 +71,7 @@ public class EntityController {
     public static double getDamage(Book b){
         Vector2 vel = b.getVelocity();
         float mass = b.getBody().getMass();
-        return Math.sqrt(vel.x*vel.x + vel.y*vel.y);    //TODO ta med massan här och nån konstant
+        return Math.sqrt(vel.x*vel.x + vel.y*vel.y);    //TODO ta med massan hï¿½r och nï¿½n konstant
 
     }
 
@@ -90,14 +81,19 @@ public class EntityController {
      * @param b The book
      */
     public static void pickUp(Player p, Book b){
-            GameModel.getInstance().addEntityToRemove(b); //TODO behövs båda dessa?
-            b.markForRemoval();             //TODO behövs båda dessa?
+            GameModel.getInstance().addEntityToRemove(b); //TODO behï¿½vs bï¿½da dessa?
+            b.markForRemoval();             //TODO behï¿½vs bï¿½da dessa?
             p.increaseAmmunition();
-
+            GameModel.getInstance().res.getSound("pick_up_book").play();
     }
 
 
     /* ------------------------ ENTITY ----------------------------*/
+    public static void remove(Entity entity){
+        GameModel.getInstance().addEntityToRemove(entity);
+        entity.markForRemoval();
+    }
+
     /** The player attacks the zombie or vice versa
     * @param e1    The first entity
     * @param e2    The second entity
@@ -105,6 +101,20 @@ public class EntityController {
     public static void attack(Entity e1, Entity e2){
         //TODO skriv denna
     }
+
+    /**
+     * Applies friction to the book, for example if it hits the wall and falls to the ground. If the book's body is set to null no friction is applied since the body handles the physics.
+     * @param entity  The book to apply friction on
+     * @param linearDampening   How high the linear friction should be
+     * @param angularDampening  How high the angular, or rotational, friciton should be
+     */
+    public static void setFriction(Entity entity, float linearDampening, float angularDampening) {
+        if (entity.getBody() != null) {
+            entity.getBody().setLinearDamping(linearDampening);
+            entity.getBody().setAngularDamping(angularDampening);
+        }
+    }
+
     /**
      * Sets the entity's category bits, used for collision detection
      * @param entity    The entity

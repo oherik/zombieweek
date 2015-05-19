@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -21,12 +22,14 @@ import java.awt.*;
 public abstract class Zombie extends Entity implements CreatureInterface {
 
     private int speed;
+    private float radius;
     private ZombieType type;
     private boolean isKnockedOut;
     private Vector2 force;
     private Vector2 point;
     private Sprite sprite;
     private Point position;
+    private MapController mapController;
     private int hp;
 
     /**
@@ -65,12 +68,20 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //Set vectors
         force = new Vector2(0,0);
         point = new Vector2(0,0);
+
+        position = new Point((int)x,(int)y);
         
         //Set body
         super.setBody(bodyDef, fixDef);
         super.getBody().setUserData(this);
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
+
+        mapController = new MapController();
+        mapController.initializeCollisionObjects();
+        mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
+
+        super.getBody().setAngularDamping(10000);
 
         isKnockedOut = false;
 
@@ -96,13 +107,19 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         hp = hp--;
     }
 
-    public abstract ZombieType getType();
+    public ZombieType getType() {
 
-    public abstract void setType(ZombieType type);
+        return type;
+    }
 
-    public abstract Vector2 getVelocity();
+    public void setType(ZombieType type) {
 
-    public abstract void attack(Player player);
+        this.type = type;
+    }
+
+    //public abstract Vector2 getVelocity();
+
+    public abstract void attack();
 
     public void setZombiePosition(Point pos) {
 
@@ -121,7 +138,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void setForceY(int speed) {
 
         force.y = speed;
-        
+    }
+
+    public void setForceX(int speed) {
+
+        force.x = speed;
     }
 
     public void remove(Zombie zombie) {
@@ -129,19 +150,85 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //TODO: remove zombie
     }
 
+    public void setDetectionRadius(float radius) {
+
+        this.radius = radius;
+    }
+
     //@Override
     public void moveToPlayer(PathAlgorithm path) {
 
+        Point playerPosition = mapController.getPlayerPosition();
 
-        MapController mapController = new MapController();
-        Point playerPos = mapController.getPlayerPosition();
+        point = new Vector2(playerPosition.x, playerPosition.y);
 
-        while(path.getPath(position, playerPos).hasNext()){
+        Point zombiePosition = getZombiePosition();
 
-            Point p = path.getPath(position, playerPos).next();
-            point = new Vector2(p.x, p.y);
-            getBody().applyForce(force, point, !isKnockedOut);
+        setSpeed(80);
+        setDetectionRadius(5);
+
+        Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
+
+
+        if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
+
+            // TODO: attack
+        } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
+
+            setForceY(speed);
+            setForceX(0);
+        } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
+
+            setForceY(0);
+            setForceX(speed);
+        } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
+
+            setForceY(0);
+            setForceX(-speed);
+        } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
+
+            setForceY(-speed);
+            setForceX(0);
+        } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
+
+            setForceY(speed);
+            setForceX(speed);
+        } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
+
+            setForceY(-speed);
+            setForceX(speed);
+        } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
+
+            setForceY(speed);
+            setForceX(-speed);
+        } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
+
+            setForceY(-speed);
+            setForceX(-speed);
+        } else {
+            // TODO: some exception management
         }
+
+        Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
+        Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
+
+        if (super.getBody() != null) {
+
+            if (zcircle.overlaps(pcircle)) {
+
+                super.getBody().applyForce(force, point, !isKnockedOut);
+            }
+        }
+
+
+        /*while(path.getPath(position, playerPos).hasNext()){
+
+            Point po = path.getPath(position, playerPos).next();
+            point = new Vector2(po.x, po.y);
+            setForceY(500);
+            force.x = 0;
+            super.getBody().applyForce(force, point, !isKnockedOut);
+        }*/
     }
 
     /**
@@ -161,6 +248,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return isAttacked;
     }
 
-    public abstract Zombie spawn(World world, ZombieType type, int x, int y);
+    public abstract Zombie spawn(World world, int x, int y);
 
 }
