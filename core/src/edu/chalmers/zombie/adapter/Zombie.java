@@ -80,7 +80,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         mapController.initializeCollisionObjects();
         mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
 
-        super.getBody().setAngularDamping(100);
+        super.getBody().setAngularDamping(10000);
 
         isKnockedOut = false;
 
@@ -133,6 +133,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         force.y = speed;
     }
 
+    public void setForceX(int speed) {
+
+        force.x = speed;
+    }
+
     public void remove(Zombie zombie) {
 
         //TODO: remove zombie
@@ -161,9 +166,54 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         Vector2 direction = new Vector2(p.x - ps.x, p.y - ps.y);
         direction = direction.nor();
 
-        setForceY(500);
+        if (p.y > ps.y) {
 
-        force.x = 0;
+            setForceY(50);
+            setForceX(50);
+        } else {
+
+            setForceY(-50);
+            setForceX(50);
+        }
+
+        if (p.x == ps.x && p.y == ps.y) {
+
+            // TODO: attack
+        } else if (p.y > ps.y && p.x == ps.x) {
+
+            setForceY(50);
+            setForceX(0);
+        } else if (ps.y < p.y && p.x == ps.x) {
+
+            setForceY(-50);
+            setForceX(0);
+        } else if (p.y > ps.y && p.x > ps.x) {
+
+            setForceY(50);
+            setForceX(50);
+        } else if (p.y < ps.y && p.x > ps.x) {
+
+            setForceY(-50);
+            setForceX(-50);
+        } else if (p.y > ps.y && p.x < ps.x) {
+
+            setForceY(50);
+            setForceX(-50);
+        } else if (p.y < ps.y && p.x < ps.x) {
+
+            setForceY(-50);
+            setForceX(-50);
+        } else {
+            // TODO: some exception management
+        }
+
+        Circle zcircle = new Circle(ps.x, ps.y, 10);
+        Circle pcircle = new Circle(p.x, p.y, 5);
+
+        if (zcircle.overlaps(pcircle)) {
+
+            super.getBody().applyForce(force, point, !isKnockedOut);
+        }
 
         //super.getBody().applyForce(force, point, !isKnockedOut);
         //super.getBody().setLinearVelocity(-speed, speed);
@@ -177,13 +227,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
             force.x = 0;
             super.getBody().applyForce(force, point, !isKnockedOut);
         }*/
-
-        Circle zcircle = new Circle(ps.x, ps.y, 10);
-        Circle pcircle = new Circle(p.x, p.y, 10);
-
-        if (zcircle.overlaps(pcircle)) {
-            super.getBody().applyForce(force, point, !isKnockedOut);
-        }
 
     }
 

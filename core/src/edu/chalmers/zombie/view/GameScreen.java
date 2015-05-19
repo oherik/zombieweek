@@ -167,6 +167,12 @@ public class GameScreen implements Screen{
                 updatePaused();
                 break;
         }
+
+        GameModel gameModel = GameModel.getInstance();
+        for (Zombie z : gameModel.getZombies()) {
+
+            z.moveToPlayer(pathFinding);
+        }
     }
 
     /**
@@ -323,7 +329,6 @@ public class GameScreen implements Screen{
         GameModel gameModel = GameModel.getInstance();
         for(Zombie z : gameModel.getZombies()) {
            if(!z.isKnockedOut()) {
-               z.moveToPlayer(pathFinding);
                Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
                Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
                path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
