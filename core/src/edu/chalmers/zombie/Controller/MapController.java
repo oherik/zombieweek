@@ -273,6 +273,8 @@ public class MapController {
         gameModel.setWorldNeedsUpdate(true);
         gameModel.getPlayer().setSneakTilesTouching(0);
         gameModel.getPlayer().setWaterTilesTouching(0);
+        //TODO sluta simma, sluta sneaka
+        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
         int oldLevelIndex = gameModel.getCurrentLevelIndex();
         gameModel.setCurrentLevelIndex(levelIndex);
         GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getPlayer());

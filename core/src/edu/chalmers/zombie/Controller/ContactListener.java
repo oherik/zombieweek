@@ -82,6 +82,15 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_WATER, Constants.PLAYER_FRICTION_WATER);
                         break;
                 }
+            case (Constants.COLLISION_SNEAK):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_PLAYER:
+                        //TODO Sneaka
+                        //TODO set hidden
+                        gameModel.getPlayer().setSneakTilesTouching(gameModel.getPlayer().getSneakTilesTouching() + 1);
+                        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);
+                        break;
+                }
 
         }
     }
@@ -103,6 +112,20 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         }
                         break;
                 }
+            case (Constants.COLLISION_SNEAK):
+                switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
+                    case Constants.COLLISION_PLAYER:
+                        Player player = gameModel.getPlayer();
+                        player.setSneakTilesTouching(player.getSneakTilesTouching() - 1);
+                        if(player.getSneakTilesTouching()<1) {
+                            //TODO Sluta sneaka
+                            //TODO  player.setHidden(false)
+                            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+                        }
+                        break;
+                }
+
+
         }
      }
 
