@@ -26,6 +26,7 @@ public class BasicZombie extends Zombie {
         position = new Point(x, y);
         setDetectionRadius(10);
         setStartingHp(50);
+        setSpeed(50);
     }
 
     @Override

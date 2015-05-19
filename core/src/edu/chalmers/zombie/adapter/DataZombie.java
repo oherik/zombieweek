@@ -26,6 +26,7 @@ public class DataZombie extends Zombie {
         position = new Point(x, y);
         setDetectionRadius(1);
         setStartingHp(90000);
+        setSpeed(800);
     }
 
     @Override
