@@ -30,8 +30,8 @@ public class ZombieWeek extends Game {
         mapController = new MapController();
         mapController.initializeLevels();
         currentWorld = mapController.getWorld();
-        //setScreen(new MainMenuScreen()); //Main menu screen
-        setScreen(new GameScreen(this.currentWorld, Constants.TILE_SIZE)); //Game screen
+        setScreen(new MainMenuScreen()); //Main menu screen
+        //setScreen(new GameScreen(this.currentWorld, Constants.TILE_SIZE)); //Game screen
 	}
 
 	@Override

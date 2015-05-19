@@ -1,14 +1,15 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.Direction;
 
 /**
- * //TODO borde kanske vara en nästlad klass inne i Player? /Erik
+ * //TODO borde kanske vara en nï¿½stlad klass inne i Player? /Erik
  * Created by daniel on 5/12/2015.
  */
 public class Hand {
@@ -17,6 +18,7 @@ public class Hand {
     private Thread aimLeft = new Thread();
     private Sprite aimer = new Sprite(new Texture("core/assets/aimer.png"));
     private Player player;
+    private boolean mouseAiming = false;
 
     public Hand(Player player){
         aimer.setSize(0.5f,0.5f);
@@ -29,38 +31,43 @@ public class Hand {
         gameModel.addBook(book);
     }
     public void startAimingRight() {
-        aimLeft.stop();
-        aimRight = new Thread(){
-            public void run()  {
-                while (true){
-                    direction = (float)(direction - 0.1);
-                    try{
-                        this.sleep(50);
-                    } catch (InterruptedException e){
+        if (!mouseAiming) {
+            aimLeft.stop();
+            aimRight = new Thread() {
+                public void run() {
+                    while (true) {
+                        direction = (float) (direction - 0.1);
+                        try {
+                            this.sleep(50);
+                        } catch (InterruptedException e) {
+
+                        }
 
                     }
-
                 }
-            }
-        };
-        aimRight.start();
+            };
+            aimRight.start();
+
+        }
     }
     public void startAimingLeft(){
-        aimRight.stop();
-        aimLeft = new Thread(){
-            public void run()  {
-                while (true){
-                    direction = (float)(direction + 0.1);
-                    try{
-                        this.sleep(50);
-                    } catch (InterruptedException e){
+        if (!mouseAiming) {
+            aimRight.stop();
+            aimLeft = new Thread() {
+                public void run() {
+                    while (true) {
+                        direction = (float) (direction + 0.1);
+                        try {
+                            this.sleep(50);
+                        } catch (InterruptedException e) {
+
+                        }
 
                     }
-
                 }
-            }
-        };
-        aimLeft.start();
+            };
+            aimLeft.start();
+        }
     }
     public void stopAiming(){
         aimRight.stop();
@@ -80,4 +87,19 @@ public class Hand {
     public float getDirection(){
         return direction;
     }
+
+    public void toggleMouseAiming(){
+        stopAiming();
+        mouseAiming = !mouseAiming;
+    }
+
+    public void setMouseDirection(int x, int y){
+        if (mouseAiming) {
+            float deltaX = Gdx.graphics.getWidth() / 2 - x;
+            float deltaY = y - Gdx.graphics.getHeight() / 2;
+            Vector2 directionVector = new Vector2(deltaX, deltaY);
+            direction = (float) (directionVector.angle() / 57.2957795) + Constants.PI / 2;
+        }
+    }
+
 }

@@ -15,6 +15,7 @@ import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;
+import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
 import java.util.Iterator;
@@ -88,6 +89,10 @@ public class InputController implements InputProcessor{
             case Input.Keys.DOWN:
                 //aim right
                 getPlayer().getHand().startAimingRight();
+                break;
+            case Input.Keys.C:
+                //change aiming type
+                getPlayer().getHand().toggleMouseAiming();
                 break;
             case Input.Keys.ESCAPE:
 
@@ -177,6 +182,7 @@ public class InputController implements InputProcessor{
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        getPlayer().getHand().setMouseDirection(screenX, screenY);
         return false;
     }
 
@@ -199,5 +205,4 @@ public class InputController implements InputProcessor{
         PathAlgorithm pA = new PathAlgorithm((TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName), collisionProperty);
         Iterator<Point> it = pA.getPath(start, end);
     }
-
 }

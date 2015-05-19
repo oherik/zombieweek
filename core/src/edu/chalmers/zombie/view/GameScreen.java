@@ -235,6 +235,7 @@ public class GameScreen implements Screen{
         boxDebug.render(mapController.getWorld(), camera.combined);
         //render HUD
         String playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
+
         String playerHealth = "Health: " + gameModel.getPlayer().getLives();
         String playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
         batchHUD.begin();
