@@ -107,13 +107,19 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         hp = hp--;
     }
 
-    public abstract ZombieType getType();
+    public ZombieType getType() {
 
-    public abstract void setType(ZombieType type);
+        return type;
+    }
 
-    public abstract Vector2 getVelocity();
+    public void setType(ZombieType type) {
 
-    public abstract void attack(Player player);
+        this.type = type;
+    }
+
+    //public abstract Vector2 getVelocity();
+
+    public abstract void attack();
 
     public void setZombiePosition(Point pos) {
 
@@ -242,6 +248,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return isAttacked;
     }
 
-    public abstract Zombie spawn(World world, ZombieType type, int x, int y);
+    public abstract Zombie spawn(World world, int x, int y);
 
 }
