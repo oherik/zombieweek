@@ -74,13 +74,23 @@ public class MapController {
         //Create a new ArrayList to store the objects
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
 
-        //Water
+        //Water, sensor
         FixtureDef fixDef = new FixtureDef();
         fixDef.friction = 0;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_WATER;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        fixDef.isSensor = true;
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
+
+        //Water, collision
+        fixDef = new FixtureDef();
+        fixDef.friction = 0;
+        fixDef.restitution = .1f;
+        fixDef.shape = standardBoxShape;
+        fixDef.filter.categoryBits = Constants.COLLISION_WATER;
+        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
         fixDef.isSensor = true;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
 
@@ -100,15 +110,25 @@ public class MapController {
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject(Constants.DOOR_PROPERTY, bodyDef, fixDef));
 
-        //Sneak
+        //Sneak, sensor
         fixDef = new FixtureDef();
         fixDef.friction = 0f;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY;
+        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
         fixDef.isSensor = true;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+
+        //Sneak, collision
+        fixDef = new FixtureDef();
+        fixDef.friction = 0f;
+        fixDef.restitution = .1f;
+        fixDef.shape = standardBoxShape;
+        fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
+        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+
 
         //Add to game model
         gameModel.setCollisionObjects(collisionObjects);
