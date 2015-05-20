@@ -14,6 +14,7 @@ public class Potion extends Entity {
 
     private Sprite sprite;
     private Point position;
+    private boolean hasBeenRemoved;
     private Vector2 velocity;
 
     public Potion(PotionType potionType, Sprite sprite, World world, int x, int y) {
@@ -39,6 +40,8 @@ public class Potion extends Entity {
                 break;
         }
 
+        hasBeenRemoved = false;
+
     }
 
     @Override
@@ -50,5 +53,10 @@ public class Potion extends Entity {
     public Potion spawn(PotionType type, World world, int x, int y) {
 
         return new Potion(type, sprite, world, x, y);
+    }
+
+    public void setHasBeenRemoved(boolean hasBeenRemoved) {
+
+        this.hasBeenRemoved = hasBeenRemoved;
     }
 }
