@@ -183,6 +183,10 @@ public class MapController {
                                 level.setPlayerReturn(new Point(col, row));
                             }
                         }
+                        /* ----- Create zombie path finding ----*/
+                        if (currentCell == null || currentCell.getTile() == null || currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null){
+                            level.setZombieNavigationalTile(col,row, true);
+                        }
                     }
                 }
             }
