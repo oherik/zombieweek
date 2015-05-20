@@ -20,7 +20,7 @@ public class ITZombie extends Zombie {
     public ITZombie(Sprite sprite, World world, int x, int y) {
 
         super(sprite, world, x, y);
-        setType(ZombieType.MACHINE);
+        setType(ZombieType.IT);
         this.world = world;
         this.sprite = sprite;
         position = new Point(x, y);
