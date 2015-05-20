@@ -423,4 +423,25 @@ public class MapController {
             throw new IndexOutOfBoundsException("The input coordinates must be withing the meta layer bounds");
         return (metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) != null);
     }
+
+    /**
+     * @return The current level's zombie navigation mesh
+     */
+    public boolean[][] getZombieNavigationMesh(){
+        /*  //TODO printar navmeshen, debug
+        System.out.println("i: " + getLevel().getZombieNavigationMesh().length    + " j: " +getLevel().getZombieNavigationMesh()[0].length);
+            for(int y = getLevel().getZombieNavigationMesh()[0].length-1; y >= 0; y--){
+                for(int x = 0; x < getLevel().getZombieNavigationMesh().length; x++){
+               // if(getMapMetaLayer().getCell(x,y) == null || getMapMetaLayer().getCell(x, y) == null || getMapMetaLayer().getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null)        //TODO debug
+                if(getLevel().getZombieNavigationMesh()[x][y] == true)
+                        System.out.print("   ");
+                else
+                        System.out.print(" x ");
+            }
+            System.out.println("");
+        }
+        */
+        return getLevel().getZombieNavigationMesh();
+
+    }
 }
