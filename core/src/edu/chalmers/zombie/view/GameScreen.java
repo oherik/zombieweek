@@ -96,7 +96,8 @@ public class GameScreen implements Screen{
         /*---TEST--*/
         steps = 0;
         TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMetaLayer();
-        pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
+        boolean[][] zombieNavMesh = mapController.getZombieNavigationMesh();
+        pathFinding = new PathAlgorithm(zombieNavMesh);
         /*---SLUTTEST---*/
 
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
@@ -133,7 +134,7 @@ public class GameScreen implements Screen{
          //   mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
             mapController.setPlayerBufferPosition(null);
             TiledMapTileLayer meta = mapController.getMapMetaLayer();
-            pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
+            pathFinding = new PathAlgorithm(mapController.getZombieNavigationMesh());
 
             mapController.setWorldNeedsUpdate(false);
 

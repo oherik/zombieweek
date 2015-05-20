@@ -15,6 +15,7 @@ public class PathAlgorithm {
     private Point startPos, endPos;
     private String collision;
     private int maxSteps;
+    private boolean[][] navigationalMesh;
 
     /**
      * Constructor
@@ -31,6 +32,20 @@ public class PathAlgorithm {
             throw new NullPointerException("PathAlgorithm: the collision alias given cannot be null");
         this.metaLayer = metaLayer;
         this.collision = collision;
+    }
+
+
+    /**
+     * Constructor
+     *
+     * @param navigationalMesh A grdi where the zombie can walk, where a "true" flag indicates that the zombie can walk there
+     *  @throws NullPointerException if either of metaLayer or collision is null
+     */
+
+    public PathAlgorithm(boolean[][] navigationalMesh) {
+        if (navigationalMesh == null)
+            throw new NullPointerException("PathAlgorithm: the navigational mesh cannot be null");
+        this.navigationalMesh = navigationalMesh;
     }
 
     /** The start function for calculating the shortest path between two points on the map, with a default maxStep value of 50.
@@ -80,8 +95,15 @@ public class PathAlgorithm {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
         ArrayList<Point> path;
         QueueElement currentElement;
-        int width = metaLayer.getWidth();
-        int height = metaLayer.getHeight();
+        int width, height;
+        if(metaLayer!= null) {
+            width = metaLayer.getWidth();
+            height = metaLayer.getHeight();
+        }
+        else{
+            width = navigationalMesh.length;
+            height = navigationalMesh[0].length;
+        }
         int steps = 0;
         boolean[][] closedNodes = new boolean[width][height];
         int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
@@ -131,7 +153,10 @@ public class PathAlgorithm {
      * @return  true if it's walkable, false if it isn't
      */
     private boolean walkableTile(boolean[][] closedNodes, int x, int y){
-        return !closedNodes[x][y] == true && (metaLayer.getCell(x, y) == null || (metaLayer.getCell(x,  y).getTile().getProperties().get(this.collision) == null));
+        if(metaLayer != null)
+         return !closedNodes[x][y] == true && (metaLayer.getCell(x, y) == null || (metaLayer.getCell(x,  y).getTile().getProperties().get(this.collision) == null));
+        else
+            return !closedNodes[x][y] == true && this.navigationalMesh[x][y]==true;
     }
 
 

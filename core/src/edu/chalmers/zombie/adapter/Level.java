@@ -3,7 +3,6 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -26,6 +25,7 @@ public class Level {
     Point playerSpawn, playerReturn;
     TiledMapTileLayer metaLayer;
     TiledMapImageLayer topLayer, bottomLayer;
+    boolean[][] zombieNavigationMesh;
 
     /**
      * Creates a new level based on a tiled map and a Box2D world
@@ -47,6 +47,25 @@ public class Level {
         initializedBodies = false;
 
         zombies = new ArrayList<Zombie>();
+
+        zombieNavigationMesh = new boolean[metaLayer.getWidth()][metaLayer.getHeight()];
+    }
+
+    /**
+     * Mark a tile as traversable for the zombies
+     * @param x The x coordinate
+     * @param y The y coordinate
+     * @param traversable   true if traversable, false if not
+     */
+    public void setZombieNavigationalTile(int x, int y, boolean traversable){
+        zombieNavigationMesh[x][y] = traversable;
+    }
+
+    /**
+     * @return  The traverasble tiles for the zombies
+     */
+    public boolean[][] getZombieNavigationMesh(){
+        return zombieNavigationMesh;
     }
 
     /**

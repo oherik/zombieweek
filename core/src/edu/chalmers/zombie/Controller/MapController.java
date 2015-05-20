@@ -132,6 +132,8 @@ public class MapController {
      * object is then added to the collision object array list, in case any more door is found (the same can't be re-used
      * since the property of the doors in most cases are unique). The door is then removed from the array list.
      *
+     * If a collision_all or collision_zombie property isn't found the specific tile is added to the level's zombie navigational mesh
+     *
      * @param collisionObjects the list of all the collision objects that can be placed in the world
      */
 
@@ -182,6 +184,11 @@ public class MapController {
                             if (currentCell.getTile().getProperties().get(playerReturn) != null) {
                                 level.setPlayerReturn(new Point(col, row));
                             }
+                        }
+                        /* ----- Create zombie path finding ----*/
+                        if (currentCell == null || currentCell.getTile() == null ||
+                                (currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null && currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) == null)){
+                            level.setZombieNavigationalTile(col,row, true);
                         }
                     }
                 }
@@ -418,5 +425,26 @@ public class MapController {
         if(x<0 ||y < 0 || x > metaLayer.getWidth()-1 ||y > metaLayer.getHeight()-1 )
             throw new IndexOutOfBoundsException("The input coordinates must be withing the meta layer bounds");
         return (metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) != null);
+    }
+
+    /**
+     * @return The current level's zombie navigation mesh
+     */
+    public boolean[][] getZombieNavigationMesh(){
+          //TODO printar navmeshen, debug
+        System.out.println("i: " + getLevel().getZombieNavigationMesh().length    + " j: " +getLevel().getZombieNavigationMesh()[0].length);
+            for(int y = getLevel().getZombieNavigationMesh()[0].length-1; y >= 0; y--){
+                for(int x = 0; x < getLevel().getZombieNavigationMesh().length; x++){
+               // if(getMapMetaLayer().getCell(x,y) == null || getMapMetaLayer().getCell(x, y) == null || getMapMetaLayer().getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null)        //TODO debug
+                if(getLevel().getZombieNavigationMesh()[x][y] == true)
+                        System.out.print("   ");
+                else
+                        System.out.print(" x ");
+            }
+            System.out.println("");
+        }
+
+        return getLevel().getZombieNavigationMesh();
+
     }
 }

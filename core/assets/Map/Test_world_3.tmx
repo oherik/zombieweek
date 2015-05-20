@@ -10,6 +10,7 @@
   </tile>
   <tile id="1">
    <properties>
+    <property name="collision_zombie" value="true"/>
     <property name="door" value="2"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_green.png"/>
@@ -36,6 +37,7 @@
   </tile>
   <tile id="5">
    <properties>
+    <property name="collision_zombie" value="true"/>
     <property name="door" value="0"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
@@ -70,7 +72,7 @@
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztlt0KgCAMRmdl+f5PnBcNQmaobXPFPjgQBNuOP1QEgOg4jtNJmXAhlTezPdWkIuWSMgv0eWwNdbU9sOfIfqyVZ6xJJRRwRsOD875J3N0yeOa4PKjguyToce8l7aG1tzM9pKK5hnvmMOYxWksqox7Ut+qLHpy1OM6shV4tkZ6do5d72OKPHrV/9tkzOjY5AYdsEXY=
+   eJztllkKwCAMRLX7/U9cP1oQccsyLqUDgUKiyWs0rTG/fo2rvbONXl9PjlD2MZQoHNI9USyXs6UizufYKuNjQvaE24818Zzb0wamqRYcmndY456X9J45LY5cLci55ueK5aasL3HkfBq9jeVpzYESlyP3DlPrDmcno0ZKXRrxM/Yj9q2akYPrQ8x07rzj3g9JbhQH1SeN1z6XX+NA91YSS9kPxZH6Z0fPO4kk82skzchxAzKVBuw=
   </data>
  </layer>
 </map>
