@@ -59,4 +59,11 @@ public class Potion extends Entity {
 
         this.hasBeenRemoved = hasBeenRemoved;
     }
+
+    public void removeIfNecessary() {
+
+        if (hasBeenRemoved) {
+            this.removeBody();
+        }
+    }
 }
