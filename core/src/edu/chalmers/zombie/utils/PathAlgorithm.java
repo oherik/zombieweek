@@ -57,7 +57,7 @@ public class PathAlgorithm {
      * @throws  NullPointerException    if either of the points is null
      */
 
-    public Iterator<Point> getPath(Point startPos, Point endPos) {
+    public ArrayList<Point> getPath(Point startPos, Point endPos) {
         if(startPos == null || endPos == null)
             throw new NullPointerException("PathAlgorithm: the points given cannot be null");
         if(startPos.y<0 || startPos.x <0)
@@ -79,7 +79,7 @@ public class PathAlgorithm {
      * @throws IndexOutOfBoundsException if the start or end position is negative
      * @throws  NullPointerException    if either of the points is null
      */
-    public Iterator<Point> getPath(Point startPos, Point endPos, int maxSteps) {
+    public ArrayList<Point> getPath(Point startPos, Point endPos, int maxSteps) {
         getPath(startPos,endPos);
         this.maxSteps = maxSteps;
         return calculatePath();
@@ -91,7 +91,7 @@ public class PathAlgorithm {
      * @return the shortest path or, if none found, null
      */
 
-    private Iterator<Point> calculatePath() {
+    private ArrayList<Point> calculatePath() {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
         ArrayList<Point> path;
         QueueElement currentElement;
@@ -114,7 +114,7 @@ public class PathAlgorithm {
             Point currentNode = currentElement.getNode();
             if (currentNode.equals(this.endPos)) {
                 currentElement.getPath().add(currentNode);
-                return currentElement.getPath().iterator();
+                return currentElement.getPath();
             }
             else {
                 int x = currentNode.x;

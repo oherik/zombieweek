@@ -18,6 +18,8 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -206,6 +208,6 @@ public class InputController implements InputProcessor{
         TiledMap tiledMap =  gameModel.getLevel().getMap();
         BodyDef bodyDef = new BodyDef();
         PathAlgorithm pA = new PathAlgorithm((TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName), collisionProperty);
-        Iterator<Point> it = pA.getPath(start, end);
+        ArrayList<Point> it = pA.getPath(start, end);
     }
 }

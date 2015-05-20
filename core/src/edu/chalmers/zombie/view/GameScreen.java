@@ -52,7 +52,7 @@ public class GameScreen implements Screen{
 
     //För testa av path finding //TODO debug
     private PathAlgorithm pathFinding;
-    private Iterator<Point> path;
+    private ArrayList<Point> path;
     private Pixmap pixmap;
     private Texture pathTexture;
     private Sprite pathSprite;
@@ -351,11 +351,11 @@ public class GameScreen implements Screen{
                } else {
                    //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
                    int i = 0;
-                   while (path.hasNext()) {
+                   /*while (path.hasNext()) {
                        Point tile = path.next();
                        //System.out.println(tile.x + " " + tile.y);
                        i++;
-                   }
+                   }*/
                    //System.out.println("Antal steg: " + i);
                }
 
@@ -383,13 +383,9 @@ public class GameScreen implements Screen{
     private void movePlayerToBufferIfNeeded() {
         if (mapController.getPlayerBufferPosition() != null) {
 
-//<<<<<<< HEAD
         mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
         mapController.setPlayerBufferPosition(null);
             updateZombiePaths();
-//=======
-
-//>>>>>>> 1ffaac9a2ec5c13ece91b3a017e86c6c456154c3
     }
     }
 }
