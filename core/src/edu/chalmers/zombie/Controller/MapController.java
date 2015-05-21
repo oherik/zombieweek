@@ -91,7 +91,6 @@ public class MapController {
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_WATER;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        fixDef.isSensor = true;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
 
         //Collision for all
