@@ -269,10 +269,11 @@ public class GameScreen implements Screen{
             float direction = gameModel.getPlayer().getHand().getDirection();
             Vector2 v = new Vector2(1,1);
             v.setLength(100);
-            v.setAngle((direction)*180/Constants.PI);
+            v.setAngleRad(direction + Constants.PI/2);
+
             shapeRenderer.setAutoShapeType(true);
             shapeRenderer.begin();
-            shapeRenderer.line(playerPosition, v);
+            shapeRenderer.line(playerPosition, new Vector2(v.x + playerPosition.x, v.y + playerPosition.y));
             shapeRenderer.end();
 
          /*--------------------------TESTA PATH FINDING------------------------------------*/
