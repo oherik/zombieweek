@@ -169,11 +169,7 @@ public class GameScreen implements Screen{
                 break;
         }
 
-        GameModel gameModel = GameModel.getInstance();
-        for (Zombie z : gameModel.getZombies()) {
 
-            z.moveToPlayer(pathFinding);
-        }
     }
 
     /**
@@ -212,6 +208,10 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().begin();
 
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+
+            for (Zombie z : gameModel.getZombies()) {
+                z.moveToPlayer(pathFinding);
+            }
 
             ArrayList<Book> books = gameModel.getBooks();
             for (int i = 0; i < books.size(); i++) {
