@@ -4,36 +4,16 @@ package edu.chalmers.zombie.utils;
 import java.awt.*;
 import java.util.*;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 /**
  * Created by Erik on 2015-04-01.
  * This is the class which handles the path finding for the zombies. It uses A*, which is a modified version of Dijkstra's algorithm.
  */
 public class PathAlgorithm {
-    private TiledMapTileLayer metaLayer;
     private Point startPos, endPos;
     private String collision;
     private int maxSteps;
     private boolean[][] navigationalMesh;
-
-    /**
-     * Constructor
-     *
-     * @param metaLayer The current map in which the player and the zombie are
-     * @param collision The property for collision in the meta layer
-     *  @throws NullPointerException if either of metaLayer or collision is null
-     */
-
-    public PathAlgorithm(TiledMapTileLayer metaLayer, String collision) {
-        if (metaLayer == null)
-            throw new NullPointerException("PathAlgorithm: the layer given cannot be null");
-        if (collision == null)
-            throw new NullPointerException("PathAlgorithm: the collision alias given cannot be null");
-        this.metaLayer = metaLayer;
-        this.collision = collision;
-    }
-
 
     /**
      * Constructor
@@ -99,17 +79,9 @@ public class PathAlgorithm {
 
     private ArrayList<Point> calculatePath() {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
-        ArrayList<Point> path;
         QueueElement currentElement;
-        int width, height;
-        if(metaLayer!= null) {
-            width = metaLayer.getWidth();
-            height = metaLayer.getHeight();
-        }
-        else{
-            width = navigationalMesh.length;
-            height = navigationalMesh[0].length;
-        }
+        int width = navigationalMesh.length;
+        int height = navigationalMesh[0].length;
         int steps = 0;
         boolean[][] closedNodes = new boolean[width][height];
         int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
@@ -159,9 +131,6 @@ public class PathAlgorithm {
      * @return  true if it's walkable, false if it isn't
      */
     private boolean walkableTile(boolean[][] closedNodes, int x, int y){
-        if(metaLayer != null)
-         return !closedNodes[x][y] == true && (metaLayer.getCell(x, y) == null || (metaLayer.getCell(x,  y).getTile().getProperties().get(this.collision) == null));
-        else
             return !closedNodes[x][y] == true && this.navigationalMesh[x][y]==true;
     }
 
