@@ -280,7 +280,6 @@ public class GameScreen implements Screen{
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
 
-            collisionPoints.clear();
 
             float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
             //Vector2 v = new Vector2(1,1);
@@ -359,6 +358,9 @@ public class GameScreen implements Screen{
 
             shapeRenderer.setProjectionMatrix(camera.combined);
             EarClippingTriangulator ecp = new EarClippingTriangulator();
+            for(float floaten: collisionPointsArray)
+              System.out.println(floaten);
+            System.out.println("");
             float[] region1 = new float[]{
                     collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[8],
                     collisionPointsArray[9], collisionPointsArray[10], collisionPointsArray[11],
