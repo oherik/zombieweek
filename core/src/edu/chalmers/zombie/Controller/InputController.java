@@ -4,10 +4,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
@@ -15,7 +13,6 @@ import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;
-import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
 import java.util.ArrayDeque;
@@ -204,8 +201,8 @@ public class InputController implements InputProcessor{
      * @param collisionProperty
      */
    private void drawPath(Point start, Point end ,String metaLayerName, String collisionProperty){       //TODO ej klar
-        World world = gameModel.getLevel().getWorld();
-        TiledMap tiledMap =  gameModel.getLevel().getMap();
+        World world = gameModel.getRoom().getWorld();
+        TiledMap tiledMap =  gameModel.getRoom().getMap();
         BodyDef bodyDef = new BodyDef();
         PathAlgorithm pA = new PathAlgorithm((TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName), collisionProperty);
         ArrayList<Point> it = pA.getPath(start, end);

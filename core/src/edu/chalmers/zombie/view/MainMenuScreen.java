@@ -136,10 +136,10 @@ public class MainMenuScreen implements Screen {
         table.setFillParent(true);
         levelStage.addActor(table);
 
-        int levelsCompleted = GameModel.getInstance().getHighestCompletedLevel();
+        int levelsCompleted = GameModel.getInstance().getHighestCompletedRoom();
 
         for (int i = 0;i <= levelsCompleted;i++){
-            String buttonName = "Level " + (i+1);
+            String buttonName = "Room " + (i+1);
             final int level = i;
             TextButton levelButton = new TextButton(buttonName, skin);
             table.add(levelButton).size(250,50).padBottom(15).row();
@@ -148,7 +148,7 @@ public class MainMenuScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     MapController mapController = new MapController();
-                    World world = mapController.getLevel(level).getWorld();
+                    World world = mapController.getRoom(level).getWorld();
                     ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen(world, Constants.TILE_SIZE));
                 }
             });
