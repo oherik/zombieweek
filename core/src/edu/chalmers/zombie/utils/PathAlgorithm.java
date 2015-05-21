@@ -10,22 +10,6 @@ import java.util.*;
  * This is the class which handles the path finding for the zombies. It uses A*, which is a modified version of Dijkstra's algorithm.
  */
 public class PathAlgorithm {
-    private Point startPos, endPos;
-    private int maxSteps;
-    private boolean[][] navigationalMesh;
-
-    /**
-     * Constructor
-     *
-     * @param navigationalMesh A grdi where the zombie can walk, where a "true" flag indicates that the zombie can walk there
-     *  @throws NullPointerException if either of metaLayer or collision is null
-     */
-
-    public PathAlgorithm(boolean[][] navigationalMesh) {
-        if (navigationalMesh == null)
-            throw new NullPointerException("PathAlgorithm: the navigational mesh cannot be null");
-        this.navigationalMesh = navigationalMesh;
-    }
 
     /** The start function for calculating the shortest path between two points on the map, with a default maxStep value of 50.
      * 
@@ -36,23 +20,9 @@ public class PathAlgorithm {
      * @throws  NullPointerException    if either of the points is null
      */
 
-    public ArrayList<Point> getPath(Point startPos, Point endPos) {
-        if(startPos == null || endPos == null)
-            throw new NullPointerException("PathAlgorithm: the points given cannot be null");
-        if(startPos.y<0 || startPos.x <0)
-            throw new IndexOutOfBoundsException("PathAlgorithm: the start position must be positive");
-        if(endPos.x<0 || endPos.y<0)
-            throw new IndexOutOfBoundsException("PathAlgorithm: the end position must be positive");
-        if(startPos.equals(endPos)){
-            ArrayList<Point> singlePointArray = new ArrayList<Point>();
-            singlePointArray.add(endPos);
-            return singlePointArray;
-        }
-
-        this.startPos = startPos;
-        this.endPos = endPos;
-        maxSteps = 50;
-        return calculatePath();
+    public static ArrayList<Point> getPath(Point startPos, Point endPos, boolean[][] navigationalMesh) throws NullPointerException, IndexOutOfBoundsException {
+        int maxSteps = 50;
+        return getPath(startPos,endPos,navigationalMesh,maxSteps);
     }
 
     /** The start function for calculating the shortest path between two points on the map, a maximum number of steps included
@@ -64,10 +34,23 @@ public class PathAlgorithm {
      * @throws IndexOutOfBoundsException if the start or end position is negative
      * @throws  NullPointerException    if either of the points is null
      */
-    public ArrayList<Point> getPath(Point startPos, Point endPos, int maxSteps) {
-        getPath(startPos,endPos);
-        this.maxSteps = maxSteps;
-        return calculatePath();
+    public static ArrayList<Point> getPath(Point startPos, Point endPos, boolean[][] navigationalMesh, int maxSteps) throws NullPointerException, IndexOutOfBoundsException {
+        if (navigationalMesh == null)
+            throw new NullPointerException("PathAlgorithm: the navigational mesh cannot be null");
+        if(startPos == null || endPos == null)
+            throw new NullPointerException("PathAlgorithm: the points given cannot be null");
+        if(startPos.y<0 || startPos.x <0)
+            throw new IndexOutOfBoundsException("PathAlgorithm: the start position must be positive");
+        if(endPos.x<0 || endPos.y<0)
+            throw new IndexOutOfBoundsException("PathAlgorithm: the end position must be positive");
+        if(maxSteps<1)
+            throw new IndexOutOfBoundsException("The number of steps must be >0");
+        if(startPos.equals(endPos)){
+            ArrayList<Point> singlePointArray = new ArrayList<Point>();
+            singlePointArray.add(endPos);
+            return singlePointArray;
+        }
+        return calculatePath(startPos,endPos,navigationalMesh,maxSteps);
     }
 
     /**
@@ -76,7 +59,7 @@ public class PathAlgorithm {
      * @return the shortest path or, if none found, null
      */
 
-    private ArrayList<Point> calculatePath() {
+    private static ArrayList<Point> calculatePath(Point startPos, Point endPos, boolean[][] navigationalMesh, int maxSteps) {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
         QueueElement currentElement;
         int width = navigationalMesh.length;
@@ -84,12 +67,12 @@ public class PathAlgorithm {
         int steps = 0;
         boolean[][] closedNodes = new boolean[width][height];
         int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
-        queue.add(new QueueElement(this.startPos, 0, 0, new ArrayList<Point>()));
+        queue.add(new QueueElement(startPos, 0, 0, new ArrayList<Point>()));
 
-        while (!queue.isEmpty() && steps < this.maxSteps) {
+        while (!queue.isEmpty() && steps < maxSteps) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            if (currentNode.equals(this.endPos)) {
+            if (currentNode.equals(endPos)) {
                 currentElement.getPath().add(currentNode);
                 return currentElement.getPath();
             }
@@ -99,8 +82,8 @@ public class PathAlgorithm {
                 closedNodes[x][y] = true;
                 for (int i = Math.max(0, x - 1); i <= Math.min(width-1, x + 1); i++) {
                     for (int j = Math.max(0, y - 1); j <= Math.min(height-1, y + 1); j++) {
-                        if (walkableTile(closedNodes, i, j)
-                                && noCornersCut(closedNodes, currentNode, i, j)) {
+                        if (walkableTile(closedNodes, i, j, navigationalMesh)
+                                && noCornersCut(closedNodes, currentNode, i, j, navigationalMesh)) {
                             int g;
                             int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
                             if(isDiagonal(currentNode, i, j))
@@ -129,8 +112,8 @@ public class PathAlgorithm {
      * @param y     The node's y variable
      * @return  true if it's walkable, false if it isn't
      */
-    private boolean walkableTile(boolean[][] closedNodes, int x, int y){
-            return !closedNodes[x][y] == true && this.navigationalMesh[x][y]==true;
+    private static boolean walkableTile(boolean[][] closedNodes, int x, int y, boolean[][] navigationalMesh){
+            return !closedNodes[x][y] == true && navigationalMesh[x][y]==true;
     }
 
 
@@ -141,11 +124,11 @@ public class PathAlgorithm {
      * @param y     The node's y variable
      * @return true if it's walkable, false if it cuts corners
      */
-    private boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y){
+    private static boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y, boolean[][] navigationalMesh){
         int parentX = parent.x;
         int parentY = parent.y;
         if(isDiagonal(parent, x, y))
-            return walkableTile(closedNodes, parentX, y) && walkableTile(closedNodes, x, parentY);
+            return walkableTile(closedNodes, parentX, y, navigationalMesh) && walkableTile(closedNodes, x, parentY, navigationalMesh);
         else
             return true;
     }
@@ -158,7 +141,7 @@ public class PathAlgorithm {
      * @param y     The node's y variable
      * @return true if it is diagonal, false if it isn't
      */
-    private boolean isDiagonal(Point parentNode, int x, int y){
+    private static boolean isDiagonal(Point parentNode, int x, int y){
         int parentX = parentNode.x;
         int parentY = parentNode.y;
         return(x == parentX - 1 && y == parentY - 1) ||
@@ -167,19 +150,4 @@ public class PathAlgorithm {
                 (x == parentX + 1 && y == parentY + 1);
     }
 
-    /**
-     * A method that returns startPos.
-     */
-    public Point getStartPos() {
-
-        return startPos;
-    }
-
-    /**
-     * A method that returns endPos.
-     */
-    public Point getEndPos() {
-
-        return endPos;
-    }
 }

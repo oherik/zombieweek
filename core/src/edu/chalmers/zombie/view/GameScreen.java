@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import edu.chalmers.zombie.adapter.Entity;
+import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.adapter.Book;
@@ -80,7 +81,6 @@ public class GameScreen implements Screen{
 
         //Lägg till kollisionsobjekt
         mapController.initializeCollisionObjects();
-        MapController.createPathAlgorithm(mapController.getRoom());
         updateRoomIfNeeded();
 
         //Spelaren med
@@ -100,7 +100,6 @@ public class GameScreen implements Screen{
         steps = 0;
         TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getRoom().getMetaLayer();
         boolean[][] zombieNavMesh = mapController.getZombieNavigationMesh();
-        pathFinding = new PathAlgorithm(zombieNavMesh);
         /*---SLUTTEST---*/
 
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
@@ -133,7 +132,6 @@ public class GameScreen implements Screen{
             this.tiledMapTopLayer = mapController.getMapTopLayer(); //TODO test
             mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
             mapController.createBodiesIfNeeded();
-            MapController.createPathAlgorithm(mapController.getRoom());
              //path test
             /*ArrayList<Point> bana = MapController.getPath(new Point(3, 11), new Point(19, 18));
             for(Point p : bana) {
@@ -149,7 +147,6 @@ public class GameScreen implements Screen{
          //   mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
             mapController.setPlayerBufferPosition(null);
             TiledMapTileLayer meta = mapController.getMapMetaLayer();
-            pathFinding = new PathAlgorithm(mapController.getZombieNavigationMesh());
 
             mapController.setWorldNeedsUpdate(false);
 
@@ -358,20 +355,23 @@ public class GameScreen implements Screen{
         GameModel gameModel = GameModel.getInstance();
         for(Zombie z : gameModel.getZombies()) {
            if(!z.isKnockedOut()) {
-               Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
-               Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
-               path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
+               Player player = gameModel.getPlayer();
+               Point end = new Point(Math.round(player.getX()-0.5f), Math.round(player.getY()-0.5f));
+               Point start = new Point(Math.round(z.getX()-0.5f), Math.round(z.getY()-0.5f));
+               path = pathFinding.getPath(start, end, mapController.getRoom().getZombieNavigationMesh(), 20);                 //TODO gör nåt vettigt här istälelt för att abra printa.
+               System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
                if (path == null) {
-                   // System.out.println("Ingen path hittad");
+                    System.out.println("Ingen path hittad");
                } else {
-                   //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
+
                    int i = 0;
-                   /*while (path.hasNext()) {
-                       Point tile = path.next();
-                       //System.out.println(tile.x + " " + tile.y);
+                   Iterator<Point> test = path.iterator();
+                   while (test.hasNext()) {
+                       Point tile = test.next();
+                       System.out.println(tile.x + " " + tile.y);
                        i++;
-                   }*/
-                   //System.out.println("Antal steg: " + i);
+                   }
+                   System.out.println("Antal steg: " + i);
                }
 
            }
