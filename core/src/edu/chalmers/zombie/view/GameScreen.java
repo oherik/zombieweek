@@ -63,6 +63,8 @@ public class GameScreen implements Screen{
 
 
 
+
+
     public GameScreen(World world, float tileSize){
 
         this.currentWorld = world;
@@ -107,12 +109,14 @@ public class GameScreen implements Screen{
         setUpPauseMenu();
 
         //Set input
-        InputProcessor inputProcessorOne = new InputController();
         InputProcessor inputProcessorTwo = pauseStage;
+        InputProcessor inputProcessorOne = new InputController();
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(inputProcessorOne);
         inputMultiplexer.addProcessor(inputProcessorTwo);
+        inputMultiplexer.addProcessor(inputProcessorOne);
         Gdx.input.setInputProcessor(inputMultiplexer);
+
+
 
     }
 
