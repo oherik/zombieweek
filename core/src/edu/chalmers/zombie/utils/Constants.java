@@ -9,7 +9,7 @@ public class Constants {
     public static final float PIXELS_PER_METER = 32;
     public static final int PLAYER_SIZE = 28;
 
-    //Level
+    //Room
     public static final String META_LAYER = "meta";
     public static final String TOP_LAYER = "top";
     public static final String BOTTOM_LAYER = "bottom";

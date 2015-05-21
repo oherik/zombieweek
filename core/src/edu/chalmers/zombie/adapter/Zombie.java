@@ -80,7 +80,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         mapController = new MapController();
         mapController.initializeCollisionObjects();
-        mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
+        mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
 
         super.getBody().setAngularDamping(10000);
 

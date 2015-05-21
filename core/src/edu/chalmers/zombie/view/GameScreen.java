@@ -72,16 +72,16 @@ public class GameScreen implements Screen{
         camera = new OrthographicCamera(width, height);
         mapController = new MapController();
 
-        //Scale the level images
+        //Scale the room images
         float scale= 1f/tileSize;
 //        mapController.scaleImages(scale);
 
         //Lägg till kollisionsobjekt
         mapController.initializeCollisionObjects();
-        updateLevelIfNeeded();
+        updateRoomIfNeeded();
 
         //Spelaren med
-        mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
+        mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
 
         //Starta rendrerare
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
@@ -95,7 +95,7 @@ public class GameScreen implements Screen{
 
         /*---TEST--*/
         steps = 0;
-        TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMetaLayer();
+        TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getRoom().getMetaLayer();
         boolean[][] zombieNavMesh = mapController.getZombieNavigationMesh();
         pathFinding = new PathAlgorithm(zombieNavMesh);
         /*---SLUTTEST---*/
@@ -117,9 +117,9 @@ public class GameScreen implements Screen{
     }
 
     /**
-     * If the level has changed the map and renderer need to change as well
+     * If the room has changed the map and renderer need to change as well
      */
-    public void updateLevelIfNeeded() {
+    public void updateRoomIfNeeded() {
         if (mapController.worldNeedsUpdate()) {
             this.currentWorld = mapController.getWorld();
             tiledMap = mapController.getMap();
@@ -182,7 +182,7 @@ public class GameScreen implements Screen{
      */
     private void updateRunning(float f){
 
-        updateLevelIfNeeded();
+        updateRoomIfNeeded();
 
         GameModel gameModel = GameModel.getInstance();
 
@@ -374,7 +374,7 @@ public class GameScreen implements Screen{
     private void removeEntities(){
         GameModel gameModel = GameModel.getInstance();
         for(Entity e: gameModel.getEntitiesToRemove()){
-            gameModel.getLevel().destroyBody(e);
+            gameModel.getRoom().destroyBody(e);
         }
         gameModel.clearEntitiesToRemove();
 

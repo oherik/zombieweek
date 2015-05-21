@@ -1,8 +1,5 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
@@ -140,7 +137,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                     case Constants.COLLISION_DOOR:
                              CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
                             int levelToLoad = Integer.parseInt(door.getProperty());
-                          mapController.loadLevel(levelToLoad);
+                          mapController.loadRoom(levelToLoad);
                         break;
 
                 }
@@ -150,7 +147,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                     case Constants.COLLISION_PLAYER:
                             CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
                           int levelToLoad = Integer.parseInt(door.getProperty());
-                         mapController.loadLevel(levelToLoad);
+                         mapController.loadRoom(levelToLoad);
                         break;
                 }
                 break;
