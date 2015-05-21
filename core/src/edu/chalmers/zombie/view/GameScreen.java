@@ -279,7 +279,7 @@ public class GameScreen implements Screen{
             //Skapa path finding        //TODO debug
 
             if (steps % 60 == 0) {   //uppdaterar varje sekund
-                updateZombiePaths();
+               // updateZombiePaths();
             }
         /*-----------------SLUTTESTAT---------------------*/
 
@@ -400,7 +400,7 @@ public class GameScreen implements Screen{
 
         mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
         mapController.setPlayerBufferPosition(null);
-            updateZombiePaths();
+           // updateZombiePaths();
     }
     }
 }

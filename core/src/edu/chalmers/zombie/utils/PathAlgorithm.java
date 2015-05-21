@@ -22,7 +22,7 @@ public class PathAlgorithm {
 
     public static ArrayList<Point> getPath(Point startPos, Point endPos, boolean[][] navigationalMesh) throws NullPointerException, IndexOutOfBoundsException {
         int maxSteps = 50;
-        return getPath(startPos,endPos,navigationalMesh,maxSteps);
+        return getPath(startPos, endPos, navigationalMesh, maxSteps);
     }
 
     /** The start function for calculating the shortest path between two points on the map, a maximum number of steps included
@@ -69,39 +69,41 @@ public class PathAlgorithm {
         int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
         queue.add(new QueueElement(startPos, 0, 0, new ArrayList<Point>()));
 
-        while (!queue.isEmpty() && steps < maxSteps) {
+        while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            if (currentNode.equals(endPos)) {
-                currentElement.getPath().add(currentNode);
-                return currentElement.getPath();
-            }
-            else {
-                int x = currentNode.x;
-                int y = currentNode.y;
-                closedNodes[x][y] = true;
-                for (int i = Math.max(0, x - 1); i <= Math.min(width-1, x + 1); i++) {
-                    for (int j = Math.max(0, y - 1); j <= Math.min(height-1, y + 1); j++) {
-                        if (walkableTile(closedNodes, i, j, navigationalMesh)
-                                && noCornersCut(closedNodes, currentNode, i, j, navigationalMesh)) {
-                            int g;
-                            int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
-                            if(isDiagonal(currentNode, i, j))
-                                g = currentElement.getGCost() + 14;  // 10 * sqrt(2) is approx. 14
-                            else
-                                g = currentElement.getGCost() + 10;
-                            if(gCost[i][j]< g) {        //Since the g value is below 0 this works. Otherwise it would have to be == 0 || < 0
-                                ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
-                                currentPath.add(currentNode);
-                                queue.add(new QueueElement(new Point(i, j), g, h, currentPath));
-                                gCost[i][j]=-g;
+            if(currentElement.getPath()!=null)
+              steps = currentElement.getPath().size();
+            if(steps < maxSteps) {
+                if (currentNode.equals(endPos)) {
+                    currentElement.getPath().add(currentNode);
+                    return currentElement.getPath();
+                } else {
+                    int x = currentNode.x;
+                    int y = currentNode.y;
+                    closedNodes[x][y] = true;
+                    for (int i = Math.max(0, x - 1); i <= Math.min(width - 1, x + 1); i++) {
+                        for (int j = Math.max(0, y - 1); j <= Math.min(height - 1, y + 1); j++) {
+                            if (walkableTile(closedNodes, i, j, navigationalMesh)
+                                    && noCornersCut(closedNodes, currentNode, i, j, navigationalMesh)) {
+                                int g;
+                                int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
+                                if (isDiagonal(currentNode, i, j))
+                                    g = currentElement.getGCost() + 14;  // 10 * sqrt(2) is approx. 14
+                                else
+                                    g = currentElement.getGCost() + 10;
+                                if (gCost[i][j] < g) {        //Since the g value is below 0 this works. Otherwise it would have to be == 0 || < 0
+                                    ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
+                                    currentPath.add(currentNode);
+                                    queue.add(new QueueElement(new Point(i, j), g, h, currentPath));
+                                    gCost[i][j] = -g;
+                                }
                             }
                         }
                     }
                 }
+                steps++;
             }
-            steps++;
-
         }
         return null;    //No path found
     }//calculatePath
