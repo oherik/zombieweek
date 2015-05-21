@@ -44,6 +44,7 @@ public class GameModel {
         currentRoom = 1;   //TODO test
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
+        res.loadTexture("emilia","core/assets/Images/emilia.png");
         res.loadSound("throw","core/assets/Audio/Sound_effects/throw_book.mp3");
         res.loadSound("menu_hover","core/assets/Audio/Sound_effects/menu_hover.mp3");
         res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");
