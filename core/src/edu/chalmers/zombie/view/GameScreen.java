@@ -352,7 +352,27 @@ public class GameScreen implements Screen{
             //System.out.println("");
             float[] collisionPointsArray = convertToArray(collisionPoints);
             collisionPoints.clear();
-            addCorners(collisionPoints);
+            //addCorners(collisionPoints);
+
+
+                /*-----------------ERIK TESTAR--------------------*/
+
+            float windowWidth = Gdx.graphics.getWidth();
+            float windowHeight = Gdx.graphics.getHeight();
+
+            float[] corners = new float[]{
+                    playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight/64,        //Top left
+                    playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,                           //Bottom left
+                    windowWidth/32+playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,           //Bottom right
+                    windowWidth/32 +playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight/64 //Top right
+            };
+
+            for(float fl: corners)
+                    collisionPoints.add(fl);
+
+
+            /*-----------------------slut-------------------*/
+
             collisionPoints.add(gameModel.getPlayer().getX());
             collisionPoints.add(gameModel.getPlayer().getY());
 
@@ -361,18 +381,16 @@ public class GameScreen implements Screen{
             for(float floaten: collisionPointsArray)
               System.out.println(floaten);
             System.out.println("");
+
             float[] region1 = new float[]{
-                    collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[8],
-                    collisionPointsArray[9], collisionPointsArray[10], collisionPointsArray[11],
-                    collisionPointsArray[12], collisionPointsArray[13], collisionPointsArray[14],
-                    collisionPointsArray[15], collisionPointsArray[16], collisionPointsArray[17],
-                    collisionPointsArray[18], collisionPointsArray[19], collisionPointsArray[4],
-                    collisionPointsArray[5], collisionPointsArray[6], collisionPointsArray[7],
-                    collisionPointsArray[2], collisionPointsArray[3]};
+                    collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[0],
+                    collisionPointsArray[1], collisionPointsArray[4], collisionPointsArray[5]
+            };
            ShortArray s = ecp.computeTriangles(region1);
             PolygonRegion darkness = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
             shapeRenderer.setAutoShapeType(true);
             PolygonSpriteBatch psb = new PolygonSpriteBatch();
+
             psb.setProjectionMatrix(camera.combined);
             batchHUD.begin();
             Sprite lightSprite = new Sprite(light);
@@ -434,10 +452,10 @@ public class GameScreen implements Screen{
         table.setFillParent(true);
         pauseStage.addActor(table);
 
-        mainMenuButton.addListener(new ClickListener(){
+        mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
             }
         });
 
