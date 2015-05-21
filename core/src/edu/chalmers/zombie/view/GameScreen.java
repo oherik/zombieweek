@@ -279,7 +279,8 @@ public class GameScreen implements Screen{
 
             float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
             Vector2 v = new Vector2(1,1);
-            v.setLength(10);
+            playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
+            v.setLength(5);
             v.setAngleRad(direction);
             v.add(playerPosition);
             RayCastCallback callback = new RayCastCallback() {
@@ -288,22 +289,23 @@ public class GameScreen implements Screen{
                     if (fixture.getFilterData().categoryBits ==
                             Constants.COLLISION_OBSTACLE){
                         coll.set(point);
-                        return 0;
                     }
-                        return -1;
+                        return 0;
                 }
             };
+
 
             mapController.getWorld().rayCast(callback, playerPosition, v);
 
 
 
-            currentWorld.rayCast(callback, playerPosition, new Vector2(v.x + gameModel.getPlayer().getX(), v.y + gameModel.getPlayer().getY()));
+            currentWorld.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()), new Vector2(v.x + gameModel.getPlayer().getX(), v.y + gameModel.getPlayer().getY()));
+
             /* ----------------- TEST FLASHLIGHT -----------------*/
 
             float coneWidth = Constants.PI/5;
             int numberOfRays = 10;
-            int coneLength = 50;
+            int coneLength = 2;
             Vector2[] rays = new Vector2[numberOfRays];
             for(int i = 0; i<numberOfRays; i++){
                 rays[i] = new Vector2(1,1);
@@ -315,12 +317,12 @@ public class GameScreen implements Screen{
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.begin();
+            shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), v.x, v.y);
+            shapeRenderer.point(coll.x, coll.y, 0);
             for(int i = 0; i<numberOfRays; i++) {
                 shapeRenderer.line(playerPosition, new Vector2(v.x, v.y));
                 shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
             }
-            shapeRenderer.end();
-            shapeRenderer.begin();
             shapeRenderer.end();
 
             /*---------------- END TEST -------------------------*/
