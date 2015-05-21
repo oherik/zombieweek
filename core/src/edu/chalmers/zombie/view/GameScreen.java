@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -16,10 +17,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
@@ -60,6 +63,9 @@ public class GameScreen implements Screen{
     private int steps;
 
     private Stage pauseStage;
+
+    private Stage soundAndSettingStage;
+    private ImageButton soundButton;
 
 
 
@@ -108,11 +114,17 @@ public class GameScreen implements Screen{
         pauseStage = new Stage();
         setUpPauseMenu();
 
+        //Sound and settings
+        soundAndSettingStage = new Stage();
+        setUpSoundAndSettingsMenu();
+
         //Set input
         InputProcessor inputProcessorTwo = pauseStage;
         InputProcessor inputProcessorOne = new InputController();
+        InputProcessor inputProcessorThree = soundAndSettingStage;
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessorTwo);
+        inputMultiplexer.addProcessor(inputProcessorThree);
         inputMultiplexer.addProcessor(inputProcessorOne);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -297,6 +309,10 @@ public class GameScreen implements Screen{
         batchHUD.end();
         }
 
+        /** Render settings and sound buttons **/
+
+        soundAndSettingStage.act();
+        soundAndSettingStage.draw();
     }
 
     /**
@@ -309,6 +325,61 @@ public class GameScreen implements Screen{
 
     }
 
+    /**
+     * Sets up sound and settings icon button
+     */
+    private void setUpSoundAndSettingsMenu(){
+
+        ImageButton.ImageButtonStyle settingsButtonStyle = new ImageButton.ImageButtonStyle();
+        ImageButton.ImageButtonStyle soundButtonStyle = new ImageButton.ImageButtonStyle();
+
+        GameModel.getInstance().res.loadTexture("audio-off","core/assets/Images/audioOff.png");
+        GameModel.getInstance().res.loadTexture("audio-on","core/assets/Images/audioOn.png");
+        GameModel.getInstance().res.loadTexture("settings","core/assets/Images/settings.png");
+
+        settingsButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("settings")));
+        soundButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("audio-on")));
+
+        ImageButton settingsButton = new ImageButton(settingsButtonStyle);
+        soundButton = new ImageButton(soundButtonStyle);
+
+        settingsButton.setSize(40, 40);
+        soundButton.setSize(40, 40);
+
+        settingsButton.setPosition(Gdx.graphics.getWidth() - 50, Gdx.graphics.getHeight() - 50);
+        soundButton.setPosition(Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 50);
+
+        soundAndSettingStage.addActor(settingsButton);
+        soundAndSettingStage.addActor(soundButton);
+
+        soundButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                AudioController audioController = new AudioController();
+                audioController.toggleSound();
+                updateSoundButton();
+            }
+        });
+    }
+
+    /**
+     * Checks whether sound is on or not and adjust image for audio on/off icon thereafter
+     */
+    private void updateSoundButton(){
+        boolean soundOn = GameModel.getInstance().isSoundOn();
+        ImageButton.ImageButtonStyle soundButtonStyle = soundButton.getStyle();
+        Texture newTexture;
+        if (soundOn){
+            newTexture = GameModel.getInstance().res.getTexture("audio-on");
+        } else {
+            newTexture = GameModel.getInstance().res.getTexture("audio-off");
+        }
+        soundButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(newTexture));
+    }
+
+    /**
+     * Sets up the pause menu
+     */
     private void setUpPauseMenu(){
 
         MenuBuilder menuBuilder = new MenuBuilder();
