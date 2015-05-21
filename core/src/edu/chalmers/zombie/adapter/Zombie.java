@@ -15,6 +15,7 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by neda on 2015-03-31.
@@ -26,6 +27,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private ZombieType type;
     private boolean isKnockedOut;
     private boolean isAttacked;
+    private boolean isMoving;
     private Vector2 force;
     private Vector2 point;
     private Sprite sprite;
@@ -164,7 +166,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         Point playerPosition = mapController.getPlayerPosition();
 
-        point = new Vector2(playerPosition.x, playerPosition.y);
+        //point = new Vector2(playerPosition.x, playerPosition.y);
 
         Point zombiePosition = getZombiePosition();
 
@@ -172,6 +174,75 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         setDetectionRadius(5);
 
         Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
+
+        /*ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
+        if(pathToPlayer!=null) {
+            for (Point p : pathToPlayer) {
+                System.out.println(p);
+            }
+        }
+
+        for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
+
+            System.out.println(pathToPlayer.get(i).x + " " + pathToPlayer.get(i).y);
+        }
+
+        for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
+
+            Point p = new Point(pathToPlayer.get(i).x, pathToPlayer.get(i).y);
+            point = new Vector2(p.x, p.y);
+
+            if (p.x == zombiePosition.x && p.y == zombiePosition.y) {
+
+                // TODO: attack
+            } else if (p.y > zombiePosition.y && p.x == zombiePosition.x) {
+
+                setForceY(speed);
+                setForceX(0);
+            } else if (p.x > zombiePosition.x && p.y == zombiePosition.y) {
+
+                setForceY(0);
+                setForceX(speed);
+            } else if (p.x < zombiePosition.x && p.y == zombiePosition.y) {
+
+                setForceY(0);
+                setForceX(-speed);
+            } else if (zombiePosition.y < p.y && p.x == zombiePosition.x) {
+
+                setForceY(-speed);
+                setForceX(0);
+            } else if (p.y > zombiePosition.y && p.x > zombiePosition.x) {
+
+                setForceY(speed);
+                setForceX(speed);
+            } else if (p.y < zombiePosition.y && p.x > zombiePosition.x) {
+
+                setForceY(-speed);
+                setForceX(speed);
+            } else if (p.y > zombiePosition.y && p.x < zombiePosition.x) {
+
+                setForceY(speed);
+                setForceX(-speed);
+            } else if (p.y < zombiePosition.y && p.x < zombiePosition.x) {
+
+                setForceY(-speed);
+                setForceX(-speed);
+            } else {
+                // TODO: some exception management
+            }
+
+            Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
+            Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
+
+            if (super.getBody() != null) {
+
+                if (zcircle.overlaps(pcircle)) {
+
+                    super.getBody().applyForce(force, point, !isKnockedOut);
+                }
+            }
+
+        } */
 
 
         if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
@@ -250,6 +321,15 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public boolean hasBeenAttacked() {
 
         return isAttacked;
+    }
+
+    /**
+     * A method which returns whether a zombie is currently moving or not.
+     * @return boolean isMoving; true if moving, false if not.
+     */
+    public boolean isMoving() {
+
+        return isMoving;
     }
 
     public abstract Zombie spawn(World world, int x, int y);
