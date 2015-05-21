@@ -1,6 +1,8 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.CreatureInterface;
@@ -34,7 +36,6 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private Sprite sprite;
     private FixtureDef fixDef;
     private BodyDef bodyDef;
     private PotionType potion;
@@ -46,15 +47,22 @@ public class Player extends Entity implements CreatureInterface {
     private Hand hand = new Hand(this);
 
     public Player(Sprite sprite, World world, float x, float y) {
-
         super(sprite, world, x, y);
+
+        Texture texture = GameModel.getInstance().res.getTexture("emilia"); //TODO: should get through constructor
+        TextureRegion[] textureRegions = TextureRegion.split(texture,32,32)[0];
+        System.out.println("textures: " + textureRegions.length);
+        setAnimator(textureRegions, 1 / 12f);
+        sprite = new Sprite(getAnimator().getFrame());
+        sprite.setSize(32,32);
+
+
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         width = Constants.PLAYER_SIZE;
         height = Constants.PLAYER_SIZE;
 
-        this.sprite = sprite;
 
         //Load body def
         this.bodyDef = new BodyDef();
@@ -77,13 +85,16 @@ public class Player extends Entity implements CreatureInterface {
 
         //Set body
         super.setBody(bodyDef, fixDef);
-        super.scaleSprite(1f / Constants.TILE_SIZE);
         super.setSprite(sprite);
+        super.scaleSprite(1f / Constants.TILE_SIZE);
         killCount = 0;
         ammunition = 100;
         lives = 100;
         force = new Vector2(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
+
+
+
 
 
     }
@@ -318,10 +329,11 @@ public class Player extends Entity implements CreatureInterface {
         return isAttacked;
     }
 
+    /*
     public Sprite getSprite() {
 
         return sprite;
-    }
+    }*/
 
     @Override
     public void setBody(Body body) {
