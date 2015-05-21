@@ -46,15 +46,8 @@ public class Player extends Entity implements CreatureInterface {
     //The hand is throwing the book and aiming.
     private Hand hand = new Hand(this);
 
-    public Player(Sprite sprite, World world, float x, float y) {
-        super(sprite, world, x, y);
-
-        Texture texture = GameModel.getInstance().res.getTexture("emilia"); //TODO: should get through constructor
-        TextureRegion[] textureRegions = TextureRegion.split(texture,32,32)[0];
-        System.out.println("textures: " + textureRegions.length);
-        setAnimator(textureRegions, 1 / 12f);
-        sprite = new Sprite(getAnimator().getFrame());
-        sprite.setSize(32,32);
+    public Player(Texture texture, World world, float x, float y) {
+        super(texture, world, x, y);
 
 
         legPower =  150; //Styr maxhastigheten
@@ -85,7 +78,6 @@ public class Player extends Entity implements CreatureInterface {
 
         //Set body
         super.setBody(bodyDef, fixDef);
-        super.setSprite(sprite);
         super.scaleSprite(1f / Constants.TILE_SIZE);
         killCount = 0;
         ammunition = 100;
@@ -94,14 +86,10 @@ public class Player extends Entity implements CreatureInterface {
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
 
 
-
-
-
     }
 
     public Player(Player p) {
-
-        this(p.getSprite(), p.getWorld(), p.getX(), p.getY());
+        this(p.getSprite().getTexture(), p.getWorld(), p.getX(), p.getY());
     }
 
     /**
