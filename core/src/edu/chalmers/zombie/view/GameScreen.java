@@ -280,13 +280,14 @@ public class GameScreen implements Screen{
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
 
-
+            collisionPoints.clear();
 
             float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
-            Vector2 v = new Vector2(1,1);
+            //Vector2 v = new Vector2(1,1);
             playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
-            v.setLength(10);
-            v.setAngleRad(direction);
+            //v.setLength(10);
+            //v.setAngleRad(direction);
+
             RayCastCallback callback = new RayCastCallback() {
                 @Override
                 public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
@@ -305,12 +306,18 @@ public class GameScreen implements Screen{
 
             float coneWidth = Constants.PI/5;
             int numberOfRays = 10;
-            int coneLength = 10;
+            int coneLength = 3;
             Vector2[] rays = new Vector2[numberOfRays];
+            Vector2 playerPosition =  new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
+
+            ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
             for(int i = 0; i<numberOfRays; i++){
                 rays[i] = new Vector2(1,1);
                 rays[i].setLength(coneLength);
-                rays[i].setAngleRad(direction - coneWidth/2 + i*coneWidth/numberOfRays);
+                rays[i].setAngleRad(direction - coneWidth / 2 + i * coneWidth / numberOfRays);
+                Vector2 end = new Vector2(rays[i]);
+                end.add(playerPosition);
+                endPoints.add(end);
 
             }
             shapeRenderer.setAutoShapeType(true);
@@ -320,8 +327,13 @@ public class GameScreen implements Screen{
             for (Vector2 line: rays){
                 currentFraction = 1337;
                 foundFixture = false;
+
                 currentWorld.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()), new Vector2(line.x + gameModel.getPlayer().getX(), line.y + gameModel.getPlayer().getY()));
                 if (foundFixture){
+                    Vector2 temp = new Vector2(line);
+                    temp.add(playerPosition);
+                    endPoints.remove(temp);
+                    endPoints.add(new Vector2(coll));
                     shapeRenderer.point(coll.x, coll.y, 0);
                     collisionPoints.add(coll.x);
                     collisionPoints.add(coll.y);
@@ -331,16 +343,20 @@ public class GameScreen implements Screen{
             }
             shapeRenderer.end();
             shapeRenderer.begin();
-            shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), gameModel.getPlayer().getX() + v.x, gameModel.getPlayer().getY() + v.y);
+           // shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), gameModel.getPlayer().getX() + v.x, gameModel.getPlayer().getY() + v.y);
             for(int i = 0; i<numberOfRays; i++) {
                // shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
             }
             shapeRenderer.end();
+            //for(Vector2 floaten: endPoints)
+              //  System.out.println(floaten);
+            //System.out.println("");
             float[] collisionPointsArray = convertToArray(collisionPoints);
             collisionPoints.clear();
             addCorners(collisionPoints);
             collisionPoints.add(gameModel.getPlayer().getX());
             collisionPoints.add(gameModel.getPlayer().getY());
+
             shapeRenderer.setProjectionMatrix(camera.combined);
             EarClippingTriangulator ecp = new EarClippingTriangulator();
             float[] region1 = new float[]{
@@ -351,7 +367,7 @@ public class GameScreen implements Screen{
                     collisionPointsArray[18], collisionPointsArray[19], collisionPointsArray[4],
                     collisionPointsArray[5], collisionPointsArray[6], collisionPointsArray[7],
                     collisionPointsArray[2], collisionPointsArray[3]};
-            ShortArray s = ecp.computeTriangles(region1);
+           ShortArray s = ecp.computeTriangles(region1);
             PolygonRegion darkness = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
             shapeRenderer.setAutoShapeType(true);
             PolygonSpriteBatch psb = new PolygonSpriteBatch();
