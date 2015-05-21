@@ -11,6 +11,7 @@ import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
+import edu.chalmers.zombie.utils.TileRayTracing;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -210,6 +211,12 @@ public class MapController {
                                 (currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null && currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) == null)){
                             room.setZombieNavigationalTile(col,row, true);
                         }
+
+                        /* ------ Create book obstacles -----*/
+                        if (currentCell != null && currentCell.getTile() != null &&
+                                (currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL)!= null)){
+                            room.setThrowingObstructedTiles(col,row, true);
+                        }
                     }
                 }
             }
@@ -371,18 +378,18 @@ public class MapController {
     /**
      * Checks if the path is obstructed by a wall using a modified version of Bresenham's line algorithm while taking into account how the maps are constructed.
      * @param position  The original position
-     * @param metaLayer The map's meta layer
+     * @param room The map
      * @param distance  The distance in which to check
      * @param angle the angle to check, in radians (0 is east, pi is west)
      * @return  true if the path is obstructed, false otherwise
      */
-    public static boolean pathObstructed(Vector2 position, TiledMapTileLayer metaLayer, float distance, float angle){
+    public static boolean pathObstructed(Vector2 position, Room room, float distance, float angle){
     /* Input checks */
-        if(position == null ||metaLayer == null)
+        if(position == null ||room== null)
             throw new NullPointerException("The input mustn't be null");
         if(position.x < 0 || position.y < 0)
             throw new IndexOutOfBoundsException("The position must be positive");   //TODO kanske inte behövs i och med att det checkas i relevant metod
-        if(position.x > metaLayer.getWidth() || position.y > metaLayer.getHeight())
+        if(position.x > room.getTiledWidth() || position.y >room.getTiledHeight())
             throw new IndexOutOfBoundsException("The position must be within meta layer bounds");//TODO kanske inte behövs i och med att det checkas i relevant metod
         if(distance < 0)
             throw new IndexOutOfBoundsException("The distance must be positive");
@@ -393,27 +400,7 @@ public class MapController {
         int x_end = Math.round(endPosition.x - endPosition.x % 1 - 0.5f);
         int y_end = Math.round(endPosition.y - endPosition.y % 1 - 0.5f);
 
-        int dx = x_end - x_origin;
-        int dy = y_end - y_origin;
-        int dxSign = (dx<0) ? -1 : 1;
-        double error = 0;
-        double deltaError = ((double)dy/(double)dx < 0) ? -(double)dy/(double)dx : (double)dy/(double)dx;
-        int ySign = (y_end-y_origin)<0 ? -1 : 1;
-        int y = y_origin;
-        for(int x = x_origin; x != x_end + dxSign && x>=0 && x<metaLayer.getWidth(); x = x + dxSign){
-            if(wallAt(x,y,metaLayer)) {
-                return true;
-            }
-            error = error + deltaError;
-            while(error>=0.5 && y>= 0 && y < metaLayer.getHeight()){
-                if(wallAt(x,y,metaLayer)) {
-                    return true;
-                }
-                y = y + ySign;
-                error = error -1;
-            }
-        }
-        return false;
+        return TileRayTracing.pathObstructed(new Point(x_origin, y_origin), new Point(x_end, y_end), room.getThrowingObstructedTiles());
     }
 
     /**

@@ -27,7 +27,7 @@ public class Room {
     Point playerSpawn, playerReturn;
     TiledMapTileLayer metaLayer;
     TiledMapImageLayer topLayer, bottomLayer;
-    private boolean[][] zombieNavigationMesh;
+    private boolean[][] zombieNavigationMesh, throwingObstructedTiles;
     private PathAlgorithm pathAlgorithm;
 
     /**
@@ -52,6 +52,7 @@ public class Room {
         zombies = new ArrayList<Zombie>();
 
         zombieNavigationMesh = new boolean[metaLayer.getWidth()][metaLayer.getHeight()];
+        throwingObstructedTiles = new boolean[metaLayer.getWidth()][metaLayer.getHeight()];
     }
 
     /**
@@ -85,6 +86,24 @@ public class Room {
     public boolean[][] getZombieNavigationMesh(){
         return zombieNavigationMesh;
     }
+
+    /**
+     * @return  The tiles which should stop books
+     */
+    public boolean[][] getThrowingObstructedTiles(){
+        return throwingObstructedTiles;
+    }
+    /**
+     * Mark a tile as obstructing a throw
+     * @param x The x coordinate
+     * @param y The y coordinate
+     * @param throwable   true if obstructing, false if not
+     */
+    public void setThrowingObstructedTiles(int x, int y, boolean throwable){
+        throwingObstructedTiles[x][y] = throwable;
+    }
+
+
 
     /**
      * @return The map's meta data layer
@@ -213,4 +232,19 @@ public class Room {
     public void setPlayerReturn(Point playerReturn) {
         this.playerReturn = playerReturn;
     }
+
+    /**
+     * @return The map's width in tiles
+     */
+    public int getTiledWidth(){
+        return tiledMap.getProperties().get("width", Integer.class);
+    }
+
+    /**
+     * @return The map's height in tiles
+     */
+    public int getTiledHeight(){
+        return tiledMap.getProperties().get("height", Integer.class);
+    }
+
 }
