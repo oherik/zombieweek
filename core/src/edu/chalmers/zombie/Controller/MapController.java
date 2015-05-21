@@ -199,7 +199,7 @@ public class MapController {
                             }
                             if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
                                 room.setPlayerSpawn(new Point(col, row));
-                                gameModel.setPlayer(new Player(new Sprite(gameModel.res.getTexture("player")), getWorld(), col, row)); //TODO test
+                                gameModel.setPlayer(new Player(gameModel.res.getTexture("emilia"), getWorld(), col, row)); //TODO test
                             }
                             if (currentCell.getTile().getProperties().get(playerReturn) != null) {
                                 room.setPlayerReturn(new Point(col, row));
