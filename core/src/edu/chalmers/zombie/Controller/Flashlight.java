@@ -4,32 +4,54 @@ package edu.chalmers.zombie.controller;
  * Created by daniel on 5/19/2015.
  */
 import com.badlogic.gdx.Gdx;
-import edu.chalmers.zombie.ZombieWeek;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.utils.Constants;
-import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ImageObserver;
-import java.awt.image.RenderedImage;
-import java.awt.image.renderable.RenderableImage;
-import java.text.AttributedCharacterIterator;
-import java.util.Map;
-import javax.swing.*;
+
+import java.util.ArrayList;
+
 public class Flashlight {
-    private int centerX, centerY;
-    private int x1, y1;
-    private int x2, y2;
-    private Area lightCone;
-    private float direction;
-    private Graphics2D g;
-    private BufferedImage image;
+    private Vector2 playerPosition = new Vector2();
+    private Vector2 windowSize = new Vector2();
+    private ArrayList<Float> vertices = new ArrayList<Float>();
+
+    private Texture tex = new Texture("core/assets/darkness.png");
+    private Texture light = new Texture("core/assets/light.png");
+
 
     public Flashlight() {
 
 
+    }
+
+    public void draw(){
+        fetchWindowSize();
+        fetchStandardVertices();
+    }
+
+    private void fetchStandardVertices(){
+        fetchPlayerPosition();
+        fetchCorners();
+    }
+
+    private void fetchPlayerPosition(){
+        GameModel gameModel = GameModel.getInstance();
+        playerPosition =  new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
+    }
+
+
+    private void fetchWindowSize(){
+        windowSize.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    private void fetchCorners(){
+        vertices.add(playerPosition.x - windowSize.x/64);
+        vertices.add(windowSize.y/32 + playerPosition.y - windowSize.y/64);        //Top left
+        vertices.add(playerPosition.x - windowSize.x/64);
+        vertices.add(playerPosition.y - windowSize.y/64);                           //Bottom left
+        vertices.add(windowSize.x/32+playerPosition.x - windowSize.x/64);
+        vertices.add(playerPosition.y - windowSize.y/64);           //Bottom right
+        vertices.add(windowSize.x/32 +playerPosition.x - windowSize.x/64);
+        vertices.add(windowSize.y/32 + playerPosition.y - windowSize.y/64); //Top right
     }
 }

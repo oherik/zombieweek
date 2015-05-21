@@ -281,12 +281,12 @@ public class GameScreen implements Screen{
 
 
 
-
             float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
-            Vector2 v = new Vector2(1,1);
+            //Vector2 v = new Vector2(1,1);
             playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
-            v.setLength(10);
-            v.setAngleRad(direction);
+            //v.setLength(10);
+            //v.setAngleRad(direction);
+
             RayCastCallback callback = new RayCastCallback() {
                 @Override
                 public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
@@ -305,12 +305,18 @@ public class GameScreen implements Screen{
 
             float coneWidth = Constants.PI/5;
             int numberOfRays = 10;
-            int coneLength = 10;
+            int coneLength = 3;
             Vector2[] rays = new Vector2[numberOfRays];
+            Vector2 playerPosition =  new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
+
+            ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
             for(int i = 0; i<numberOfRays; i++){
                 rays[i] = new Vector2(1,1);
                 rays[i].setLength(coneLength);
-                rays[i].setAngleRad(direction - coneWidth/2 + i*coneWidth/numberOfRays);
+                rays[i].setAngleRad(direction - coneWidth / 2 + i * coneWidth / numberOfRays);
+                Vector2 end = new Vector2(rays[i]);
+                end.add(playerPosition);
+                endPoints.add(end);
 
             }
             shapeRenderer.setAutoShapeType(true);
@@ -320,8 +326,13 @@ public class GameScreen implements Screen{
             for (Vector2 line: rays){
                 currentFraction = 1337;
                 foundFixture = false;
+
                 currentWorld.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()), new Vector2(line.x + gameModel.getPlayer().getX(), line.y + gameModel.getPlayer().getY()));
                 if (foundFixture){
+                    Vector2 temp = new Vector2(line);
+                    temp.add(playerPosition);
+                    endPoints.remove(temp);
+                    endPoints.add(new Vector2(coll));
                     shapeRenderer.point(coll.x, coll.y, 0);
                     collisionPoints.add(coll.x);
                     collisionPoints.add(coll.y);
@@ -332,27 +343,43 @@ public class GameScreen implements Screen{
 
             shapeRenderer.end();
             shapeRenderer.begin();
-            shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), gameModel.getPlayer().getX() + v.x, gameModel.getPlayer().getY() + v.y);
+           // shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), gameModel.getPlayer().getX() + v.x, gameModel.getPlayer().getY() + v.y);
             for(int i = 0; i<numberOfRays; i++) {
                // shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
             }
             shapeRenderer.end();
+            //for(Vector2 floaten: endPoints)
+              //  System.out.println(floaten);
+            //System.out.println("");
             float[] collisionPointsArray = convertToArray(collisionPoints);
             collisionPoints.clear();
-            addCorners(collisionPoints);
+            //addCorners(collisionPoints);
+
+
+                /*-----------------ERIK TESTAR--------------------*/
+
+            float windowWidth = Gdx.graphics.getWidth();
+            float windowHeight = Gdx.graphics.getHeight();
+
+            float[] corners = new float[]{
+                    playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight/64,        //Top left
+                    playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,                           //Bottom left
+                    windowWidth/32+playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,           //Bottom right
+                    windowWidth/32 +playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight/64 //Top right
+            };
+
+            for(float fl: corners)
+                    collisionPoints.add(fl);
+
+
+            /*-----------------------slut-------------------*/
+
             collisionPoints.add(gameModel.getPlayer().getX());
             collisionPoints.add(gameModel.getPlayer().getY());
+
             shapeRenderer.setProjectionMatrix(camera.combined);
             EarClippingTriangulator ect = new EarClippingTriangulator();
-            System.out.println(collisionPointsArray.length);
-            float[] region1 = new float[]{
-                    collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[8],
-                    collisionPointsArray[9], collisionPointsArray[10], collisionPointsArray[11],
-                    collisionPointsArray[12], collisionPointsArray[13], collisionPointsArray[14],
-                    collisionPointsArray[15], collisionPointsArray[16], collisionPointsArray[17],
-                    collisionPointsArray[18], collisionPointsArray[19], collisionPointsArray[4],
-                    collisionPointsArray[5], collisionPointsArray[6], collisionPointsArray[7],
-                    collisionPointsArray[2], collisionPointsArray[3]};
+
             float[] region2 = new float[]{};
             if (collisionPointsArray.length == 30) {
                 region2 = new float[]{
@@ -364,23 +391,37 @@ public class GameScreen implements Screen{
                         collisionPointsArray[8],collisionPointsArray[9], collisionPointsArray[18],
                         collisionPointsArray[19]};
             }
-            ShortArray s = ect.computeTriangles(region1);
-            PolygonRegion darkness1 = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
-             s = ect.computeTriangles(region2);
+            //ShortArray s = ect.computeTriangles(region1);
+           // PolygonRegion darkness1 = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
+             //s = ect.computeTriangles(region2);
             PolygonRegion darkness2 = new PolygonRegion(new TextureRegion(tex), new float[]{0,0}, new short[]{});
             if (collisionPointsArray.length == 30) {
-                darkness2 = new PolygonRegion(new TextureRegion(tex), region2, s.toArray());
+               // darkness2 = new PolygonRegion(new TextureRegion(tex), region2, s.toArray());
             }
+
+            EarClippingTriangulator ecp = new EarClippingTriangulator();
+            for(float floaten: collisionPointsArray)
+              System.out.println(floaten);
+            System.out.println("");
+
+            float[] region1 = new float[]{
+                    collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[0],
+                    collisionPointsArray[1], collisionPointsArray[4], collisionPointsArray[5]
+            };
+            ShortArray s = ecp.computeTriangles(region1);
+            PolygonRegion darkness = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
             shapeRenderer.setAutoShapeType(true);
             PolygonSpriteBatch psb = new PolygonSpriteBatch();
+
             psb.setProjectionMatrix(camera.combined);
             batchHUD.begin();
             Sprite lightSprite = new Sprite(light);
-            lightSprite.setAlpha(0.1f);
+            lightSprite.setAlpha(0.13f);
             lightSprite.draw(batchHUD);
             batchHUD.end();
             psb.begin();
             //psb.draw(darkness1, 0, 0);
+            psb.draw(darkness,0,0);
             if (collisionPointsArray.length == 30) {
                 psb.draw(darkness2, 0, 0);
             }
@@ -437,10 +478,10 @@ public class GameScreen implements Screen{
         table.setFillParent(true);
         pauseStage.addActor(table);
 
-        mainMenuButton.addListener(new ClickListener(){
+        mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
             }
         });
 
