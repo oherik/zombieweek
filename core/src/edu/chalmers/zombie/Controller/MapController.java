@@ -10,6 +10,7 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -466,5 +467,57 @@ public class MapController {
 
         return getRoom().getZombieNavigationMesh();
 
+    }
+
+    /**
+     * Creates a path algorithm for a specific room
+     * @param room  The room in which to create the algorithm
+     * @throws NullPointerException if the navigation mesh is null or the room is null
+     */
+    public static void createPathAlgorithm(Room room) throws NullPointerException{
+        if(room==null){
+            throw new NullPointerException("the room pointer was null");
+        }
+        if(room.getZombieNavigationMesh()==null){
+            throw new NullPointerException("createPathAlgorithm: the room's navigation mesh was null");
+        }
+        room.setPathAlgorithm(new PathAlgorithm(room.getZombieNavigationMesh()));
+    }
+
+    /**
+     * Returns the shortest path between two points. Takes obstacles into account.
+     * @param room  The specific room
+     * @param start The start point
+     * @param end   The end point
+     * @return  The shortest path between the two points in the room
+     * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
+     */
+    public static ArrayList<Point> getPath(Room room, Point start, Point end) throws NullPointerException{
+        if(room==null){
+            throw new NullPointerException("the room pointer was null");
+        }
+        if(room.getZombieNavigationMesh()==null){
+            throw new NullPointerException("getPath: the room's navigation mesh was null, can't create path without one");
+        }
+        if(start==null ||end == null){
+            throw new NullPointerException("getPath: The points mustn't be null");
+        }
+        if(room.getPathAlgorithm()==null){
+            throw new NullPointerException("getPath: The path algorithm hasn't been initialized");
+        }
+        return room.getPathAlgorithm().getPath(start,end);
+    }
+
+    /**
+     *
+     * Return the shortest path between two points in the current room
+     * @param start The start point
+     * @param end   The end point
+     * @return  The shortest path between the two points in the current room
+     * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
+     */
+    public static ArrayList<Point> getPath(Point start, Point end) throws NullPointerException {
+        MapController controller = new MapController(); //TODO gör de andra statiska
+        return getPath(controller.getRoom(),start,end);
     }
 }

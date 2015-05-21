@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.ContactListener;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +27,8 @@ public class Room {
     Point playerSpawn, playerReturn;
     TiledMapTileLayer metaLayer;
     TiledMapImageLayer topLayer, bottomLayer;
-    boolean[][] zombieNavigationMesh;
+    private boolean[][] zombieNavigationMesh;
+    private PathAlgorithm pathAlgorithm;
 
     /**
      * Creates a new level based on a tiled map and a Box2D world
@@ -49,6 +52,21 @@ public class Room {
         zombies = new ArrayList<Zombie>();
 
         zombieNavigationMesh = new boolean[metaLayer.getWidth()][metaLayer.getHeight()];
+    }
+
+    /**
+     * Sets the level's path algorithm
+     * @param pathAlgorithm The path algorithm
+     */
+    public void setPathAlgorithm(PathAlgorithm pathAlgorithm){
+        this.pathAlgorithm = pathAlgorithm;
+    }
+
+    /**
+     * @return The level's path algorithm
+     */
+    public PathAlgorithm getPathAlgorithm(){
+        return this.pathAlgorithm;
     }
 
     /**

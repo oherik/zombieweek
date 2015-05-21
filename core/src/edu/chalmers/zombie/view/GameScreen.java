@@ -80,6 +80,7 @@ public class GameScreen implements Screen{
 
         //Lägg till kollisionsobjekt
         mapController.initializeCollisionObjects();
+        MapController.createPathAlgorithm(mapController.getRoom());
         updateRoomIfNeeded();
 
         //Spelaren med
@@ -132,6 +133,16 @@ public class GameScreen implements Screen{
             this.tiledMapTopLayer = mapController.getMapTopLayer(); //TODO test
             mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
             mapController.createBodiesIfNeeded();
+            MapController.createPathAlgorithm(mapController.getRoom());
+            /* ---- path test
+            ArrayList<Point> bana = MapController.getPath(new Point(4, 10), new Point(18, 17));
+            for(Point p : bana) {
+                System.out.println(p + "   " );
+                mapController.getRoom().getZombieNavigationMesh()[p.x][p.y] = false;
+
+
+            }*/
+            mapController.getRoom().getZombieNavigationMesh();
             if(GameModel.getInstance().getPlayer().getBody() == null){
                 GameModel.getInstance().getPlayer().createDefaultBody(currentWorld, mapController.getPlayerBufferPosition());
             }
