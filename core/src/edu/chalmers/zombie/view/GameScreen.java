@@ -278,12 +278,11 @@ public class GameScreen implements Screen{
                     if (fixture.getFilterData().categoryBits ==
                             Constants.COLLISION_OBSTACLE){
                         coll.set(point);
-                        return 0;
                     }
-                        return -1;
+                        return 0;
                 }
             };
-            currentWorld.rayCast(callback, playerPosition, new Vector2(v.x + gameModel.getPlayer().getX(), v.y + gameModel.getPlayer().getY()));
+            currentWorld.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()), new Vector2(v.x + gameModel.getPlayer().getX(), v.y + gameModel.getPlayer().getY()));
             /* ----------------- TEST FLASHLIGHT -----------------*/
             float coneWidth = Constants.PI/5;
             int numberOfRays = 10;
@@ -298,11 +297,12 @@ public class GameScreen implements Screen{
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.begin();
+            v.add(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
+            shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), v.x, v.y);
+            shapeRenderer.point(coll.x, coll.y, 0);
             for(int i = 0; i<numberOfRays; i++) {
                 shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
             }
-            shapeRenderer.end();
-            shapeRenderer.begin();
             shapeRenderer.end();
 
             /*---------------- END TEST -------------------------*/
