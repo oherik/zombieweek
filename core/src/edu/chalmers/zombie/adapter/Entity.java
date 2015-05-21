@@ -115,8 +115,10 @@ public abstract class Entity {
             updatePosition();
         }
 
-        if(isAnimated){ //only for player atm
-            animator.update(1/100f);
+        if(isAnimated){ //only if Entity should be animated
+            float deltaTime = 1/(300f - getBodySpeed()*28); //fix to get a realistic movement
+            if (getBodySpeed()<0.2f)  deltaTime=0; //should get "standing still"-image here
+            animator.update(deltaTime);
             sprite.setRegion(animator.getFrame());
         }
 
@@ -266,5 +268,7 @@ public abstract class Entity {
         newFilter.maskBits = bits;
         getBody().getFixtureList().get(0).setFilterData(newFilter);
     }
+    
+    public float getBodySpeed(){ return body.getLinearVelocity().len();}
 
 }
