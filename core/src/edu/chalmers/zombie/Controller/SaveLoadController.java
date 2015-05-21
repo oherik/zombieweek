@@ -60,7 +60,7 @@ public class SaveLoadController {
             System.out.println("--- LOADING GAMEFILE PROPERTIES ---");
 
             int highestReachedLevel = getHighestLevelFromProperties();
-            gameModel.setHighestCompletedLevel(highestReachedLevel);
+            gameModel.setHighestCompletedRoom(highestReachedLevel);
 
             //TODO: Save properties to gameModel
 
@@ -84,7 +84,7 @@ public class SaveLoadController {
      * Updates properties from current game data
      */
     private void updateProperties(){
-        int level = gameModel.getCurrentLevelIndex();
+        int level = gameModel.getCurrentRoomIndex();
         int health = gameModel.getPlayer().getLives();
         int ammo = gameModel.getPlayer().getAmmunition();
         int highestReachedLevel = getHighestLevelFromProperties();
@@ -92,10 +92,10 @@ public class SaveLoadController {
         //checks if player has reached a higher level than before
         if (level>=highestReachedLevel){
             properties.setProperty("highestReachedLevel", Integer.toString(level));
-            gameModel.setHighestCompletedLevel(level); //gives model the new highest completed level
+            gameModel.setHighestCompletedRoom(level); //gives model the new highest completed level
         } else {
             properties.setProperty("highestReachedLevel", Integer.toString(highestReachedLevel));
-            gameModel.setHighestCompletedLevel(highestReachedLevel);
+            gameModel.setHighestCompletedRoom(highestReachedLevel);
         }
 
         properties.setProperty("level", Integer.toString(level));
@@ -109,7 +109,7 @@ public class SaveLoadController {
      */
     private int getHighestLevelFromProperties(){
         int highestReachedLevel;
-        int level = gameModel.getCurrentLevelIndex();
+        int level = gameModel.getCurrentRoomIndex();
         String highest = properties.getProperty("highestReachedLevel");
         if (highest!=null){ //if property not saved
             highestReachedLevel = Integer.parseInt(highest);
