@@ -457,21 +457,6 @@ public class MapController {
     }
 
     /**
-     * Creates a path algorithm for a specific room
-     * @param room  The room in which to create the algorithm
-     * @throws NullPointerException if the navigation mesh is null or the room is null
-     */
-    public static void createPathAlgorithm(Room room) throws NullPointerException{
-        if(room==null){
-            throw new NullPointerException("the room pointer was null");
-        }
-        if(room.getZombieNavigationMesh()==null){
-            throw new NullPointerException("createPathAlgorithm: the room's navigation mesh was null");
-        }
-        room.setPathAlgorithm(new PathAlgorithm(room.getZombieNavigationMesh()));
-    }
-
-    /**
      * Returns the shortest path between two points. Takes obstacles into account. Since the algorithm is layout a bit different from the map tiles, 1 must be subtracted from the x and y values.
      * @param room  The specific room
      * @param start The start point
@@ -490,14 +475,11 @@ public class MapController {
         if(start==null ||end == null){
             throw new NullPointerException("getPath: The points mustn't be null");
         }
-        if(room.getPathAlgorithm()==null){
-            throw new NullPointerException("getPath: The path algorithm hasn't been initialized");
-        }
         if(start.x < 0 || start.x >= room.getZombieNavigationMesh().length || start.y < 0 ||start.y >= room.getZombieNavigationMesh()[0].length)
             throw new IndexOutOfBoundsException("getPath: start point out of bounds");
         if(end.x < 0 || end.x >= room.getZombieNavigationMesh().length || end.y < 0 ||end.y >= room.getZombieNavigationMesh()[0].length)
             throw new IndexOutOfBoundsException("getPath: end point out of bounds");
-        return room.getPathAlgorithm().getPath(start, end);
+        return PathAlgorithm.getPath(start, end, room.getZombieNavigationMesh());
     }
 
     /**

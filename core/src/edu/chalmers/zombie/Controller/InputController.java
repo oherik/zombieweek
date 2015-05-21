@@ -208,18 +208,4 @@ public class InputController implements InputProcessor{
         return false;
     }
 
-    /**
-     * For debug only
-     * @param start
-     * @param end
-     * @param metaLayerName
-     * @param collisionProperty
-     */
-   private void drawPath(Point start, Point end ,String metaLayerName, String collisionProperty){       //TODO ej klar
-        World world = gameModel.getRoom().getWorld();
-        TiledMap tiledMap =  gameModel.getRoom().getMap();
-        BodyDef bodyDef = new BodyDef();
-        PathAlgorithm pA = new PathAlgorithm((TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName), collisionProperty);
-        ArrayList<Point> it = pA.getPath(start, end);
-    }
 }
