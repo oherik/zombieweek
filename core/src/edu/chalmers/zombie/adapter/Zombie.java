@@ -102,6 +102,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         speed = newSpeed;
     }
 
+    public int getSpeed() {
+
+        return speed;
+    }
+
     /**
      * A method which decreases the zombie's hp (life measured in points).
      */
@@ -163,6 +168,21 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         this.radius = radius;
     }
 
+    public float getDetectionRadius() {
+
+        return radius;
+    }
+
+    public Vector2 getForce() {
+
+        return force;
+    }
+
+    public Vector2 getPoint() {
+
+        return point;
+    }
+
     //@Override
     public void moveToPlayer(PathAlgorithm path) {
 
@@ -173,79 +193,54 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         Point playerPosition = mapController.getPlayerPosition();
 
         setSpeed(80);
-        setDetectionRadius(5);
+        setDetectionRadius(10);
 
-        /* --------------------- BÖRJAN ERIKS ÄNDRINGAR -------------------*/
-        Player player =GameModel.getInstance().getPlayer();
-        Point playerTile = new Point(Math.round(player.getX()-0.5f), Math.round(player.getY()-0.5f));
-        Point zombieTile = new Point(Math.round(super.getX()-0.5f), Math.round(super.getY()-0.5f));
-        ArrayList<Point> pathToPlayer = MapController.getPath(zombieTile, playerTile);
 
-        if(pathToPlayer!=null){
-            if(pathToPlayer.size()>1){
-                pathToPlayer.remove(0); //Ta ej med tilen zombien står på
-            }
-            Iterator<Point> iteratorToPlayer = pathToPlayer.iterator();
-            if(iteratorToPlayer.hasNext()) {
-                Point temp = iteratorToPlayer.next();
-                if (nextPathTile == null || zombieTile.equals(nextPathTile) || !temp.equals(nextPathTile)) {
-                    nextPathTile = temp;
-                }
-            }
-        }
-
-        //För att få dit bodyn ska röra sig, ta nextPathTile med +0.5 på x och y. Det ger då mitten av tilen.
-
-        /* --------------------- SLUT ERIKS ÄNDRINGAR ---------------------*/
-
-        if(pathToPlayer!=null) {
-            for (Point p : pathToPlayer) {
-                System.out.println(p);
-            }
-        }
 /*
         for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
 
-            System.out.println(pathToPlayer.get(i).x + " " + pathToPlayer.get(i).y);
+        Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
+
+
+        ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
+
+        if(pathToPlayer!=null && super.getBody() != null) {
+
+            zombiePosition = new Point(Math.round(super.getX()), Math.round(super.getY()));
         }
 
-        for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
-
-            Point p = new Point(pathToPlayer.get(i).x, pathToPlayer.get(i).y);
-            point = new Vector2(p.x, p.y);
-
-            if (p.x == zombiePosition.x && p.y == zombiePosition.y) {
+            if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
                 // TODO: attack
-            } else if (p.y > zombiePosition.y && p.x == zombiePosition.x) {
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
 
                 setForceY(speed);
                 setForceX(0);
-            } else if (p.x > zombiePosition.x && p.y == zombiePosition.y) {
+            } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
                 setForceY(0);
                 setForceX(speed);
-            } else if (p.x < zombiePosition.x && p.y == zombiePosition.y) {
+            } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
                 setForceY(0);
                 setForceX(-speed);
-            } else if (zombiePosition.y < p.y && p.x == zombiePosition.x) {
+            } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
 
                 setForceY(-speed);
                 setForceX(0);
-            } else if (p.y > zombiePosition.y && p.x > zombiePosition.x) {
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
                 setForceY(speed);
                 setForceX(speed);
-            } else if (p.y < zombiePosition.y && p.x > zombiePosition.x) {
+            } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
                 setForceY(-speed);
                 setForceX(speed);
-            } else if (p.y > zombiePosition.y && p.x < zombiePosition.x) {
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
                 setForceY(speed);
                 setForceX(-speed);
-            } else if (p.y < zombiePosition.y && p.x < zombiePosition.x) {
+            } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
                 setForceY(-speed);
                 setForceX(-speed);
@@ -261,71 +256,9 @@ public abstract class Zombie extends Entity implements CreatureInterface {
                 if (zcircle.overlaps(pcircle)) {
 
                     super.getBody().applyForce(force, point, !isKnockedOut);
+                    isMoving = true;
                 }
-            }
-
-        } */
-
-
-        if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
-
-            // TODO: attack
-        } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
-
-            setForceY(speed);
-            setForceX(0);
-        } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
-
-            setForceY(0);
-            setForceX(speed);
-        } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
-
-            setForceY(0);
-            setForceX(-speed);
-        } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
-
-            setForceY(-speed);
-            setForceX(0);
-        } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
-
-            setForceY(speed);
-            setForceX(speed);
-        } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
-
-            setForceY(-speed);
-            setForceX(speed);
-        } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
-
-            setForceY(speed);
-            setForceX(-speed);
-        } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
-
-            setForceY(-speed);
-            setForceX(-speed);
-        } else {
-            // TODO: some exception management
-        }
-
-        Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
-        Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
-
-        if (super.getBody() != null) {
-
-            if (zcircle.overlaps(pcircle)) {
-
-                super.getBody().applyForce(force, point, !isKnockedOut);
-            }
-        }
-
-
-        /*while(path.getPath(position, playerPos).hasNext()){
-
-            Point po = path.getPath(position, playerPos).next();
-            point = new Vector2(po.x, po.y);
-            setForceY(500);
-            force.x = 0;
-            super.getBody().applyForce(force, point, !isKnockedOut);
-        }*/
+            }*/
     }
 
     /**
@@ -354,12 +287,29 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return isMoving;
     }
 
+    public void setIsMoving(boolean isMoving) {
+
+        this.isMoving = isMoving;
+    }
+
+    public MapController getThisMapController() {
+
+        return mapController;
+    }
+
     public abstract Zombie spawn(World world, int x, int y);
 
+    /**
+     * @return  The next tile the zombie should traverse to. Add 0.5 to x and y for the center of the tile
+     */
     public Point getNextPathTile(){
         return this.nextPathTile;
     }
 
+    /**
+     * Set the next tile the zombie should traverse to
+     * @param nextPathTile  The next tile
+     */
     public void setNextPathTile(Point nextPathTile){
         this.nextPathTile = nextPathTile;
     }
