@@ -1,10 +1,14 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Animator;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
@@ -16,6 +20,8 @@ public abstract class Entity {
     private Body body;
     private World world;
     private boolean remove = false;
+    private Animator animator;
+    private boolean isAnimated = false; //is entity is animated
 
     /**
      * Creates an entity without a sprite
@@ -33,10 +39,28 @@ public abstract class Entity {
      * @param y         The sprite's y coordinate
      */
     public Entity(Sprite sprite, World world, float x, float y){
+        this(world);
         this.sprite = sprite;
         sprite.setX(x);
         sprite.setY(y);
-        this.world = world;
+    }
+
+    public Entity(Texture texture, World world, float x, float y){
+        this(world);
+        animator = new Animator();
+        isAnimated = true;
+
+        TextureRegion[] textureRegions = TextureRegion.split(texture,32,32)[0];
+        setAnimator(textureRegions, 1 / 12f);
+        sprite = new Sprite(getAnimator().getFrame()); //gets the first frame to start with
+        sprite.setSize(32,32);
+        sprite.setX(x);
+        sprite.setY(y);
+    }
+
+
+    public void setAnimator(TextureRegion[] frames, float delay){
+        animator.setFrames(frames, delay);
     }
 
     /**
@@ -90,6 +114,12 @@ public abstract class Entity {
             updateRotation();
             updatePosition();
         }
+
+        if(isAnimated){ //only for player atm
+            animator.update(1/100f);
+            sprite.setRegion(animator.getFrame());
+        }
+
         sprite.draw(batch);
 
     }
@@ -180,6 +210,10 @@ public abstract class Entity {
         this.world.destroyBody(body);
         this.body = null;}
 
+    public void nullifyBody(){
+        this.body = null;
+    }
+
     /**
      * Sets this entity to be removed in the next world update
      */
@@ -193,5 +227,17 @@ public abstract class Entity {
     public boolean toRemove(){
         return this.remove;
     }
+
+    /**
+     * Sets the current player world
+     * @param world The current world
+     */
+    public void setWorld(World world){
+        this.world=world;
+    }
+
+    public Animator getAnimator(){return animator;}
+
+    public Sprite getSprite(){return sprite;}
 
 }

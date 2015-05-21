@@ -41,12 +41,12 @@ public class ZombieTest extends Zombie {
     }
 
     @Override
-    public void attack(Player player) {
+    public void attack() {
 
     }
 
     @Override
-    public Zombie spawn(World world, ZombieType type, int x, int y) {
+    public Zombie spawn(World world, int x, int y) {
 
         return new ZombieTest(world, x, y);
     }

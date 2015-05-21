@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -17,6 +18,8 @@ public class ResourceManager {
     //Sprites?
     private HashMap<String, Texture> textureMap;
     private HashMap<String, TiledMap> tiledmapMap;
+    private HashMap<String, Sound> soundMap;
+
 
     /**
      * Initializes the hashmaps
@@ -24,6 +27,43 @@ public class ResourceManager {
     public ResourceManager(){
         textureMap = new HashMap<String, Texture>();
         tiledmapMap = new HashMap<String, TiledMap>();
+        soundMap = new HashMap<String, Sound>();
+    }
+
+    /**
+     * Save sound using path and key
+     * @param key The key
+     * @param path The path to the sound
+     * @throws NullPointerException if the path is incorrect or not found
+     */
+    public void loadSound(String key, String path){
+        if (path == null) {
+            throw new NullPointerException("Sound: no path recieved");
+        }
+
+        Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
+
+        if (sound == null) {
+            throw new NullPointerException("Sound: incorrect path name");
+        }
+
+        soundMap.put(key,sound);
+    }
+
+    /**
+     * Get sound
+     * @param key The sound
+     * @return sound
+     */
+    public Sound getSound(String key){ return soundMap.get(key);}
+
+    /**
+     * Dispose sound
+     * @param key The sound
+     */
+    public void disposeSound(String key){
+        Sound sound = soundMap.get(key);
+        if (sound!=null){sound.dispose();}
     }
 
 

@@ -10,12 +10,13 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * This controller class makes all the different calculations regarding the maps, levels, worlds and objects in them.
+ * This controller class makes all the different calculations regarding the maps, rooms, worlds and objects in them.
  */
 public class MapController {
     GameModel gameModel;
@@ -30,30 +31,30 @@ public class MapController {
      /**
      * @return the current map from the model
      */
-    public TiledMap getMap(){return gameModel.getLevel().getMap();}
+    public TiledMap getMap(){return gameModel.getRoom().getMap();}
 
     /**
      * @return the current world from the model
      */
-    public World getWorld(){return gameModel.getLevel().getWorld();}
+    public World getWorld(){return gameModel.getRoom().getWorld();}
 
     /**
-     * @return the current level from the model
+     * @return the current room from the model
      */
-    public Level getLevel(){return gameModel.getLevel();}
+    public Room getRoom(){return gameModel.getRoom();}
 
     /**
-     * Creates the different levels and stores them in the model
+     * Creates the different rooms and stores them in the model
      */
 
-    public void initializeLevels(){ //TODO varifrån ska vi hämta dessa?
-        gameModel.res.loadTiledMap("level0","core/assets/Map/Test_world_2_previous.tmx");
-        gameModel.res.loadTiledMap("level1","core/assets/Map/Test_world_3.tmx");
-        gameModel.res.loadTiledMap("level2","core/assets/Map/Test_world_2_next.tmx");
+    public void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
+        gameModel.res.loadTiledMap("room0","core/assets/Map/Test_world_2_previous.tmx");
+        gameModel.res.loadTiledMap("room1","core/assets/Map/Test_world_3.tmx");
+        gameModel.res.loadTiledMap("room2","core/assets/Map/Test_world_2_next.tmx");
 
-        gameModel.addLevel(new Level(gameModel.res.getTiledMap("level0"))); //0
-        gameModel.addLevel(new Level(gameModel.res.getTiledMap("level1"))); //1
-        gameModel.addLevel(new Level(gameModel.res.getTiledMap("level2"))); //2
+        gameModel.addRoom(new Room(gameModel.res.getTiledMap("room0"))); //0
+        gameModel.addRoom(new Room(gameModel.res.getTiledMap("room1"))); //1
+        gameModel.addRoom(new Room(gameModel.res.getTiledMap("room2"))); //2
     }
 
     /**
@@ -74,7 +75,7 @@ public class MapController {
         //Create a new ArrayList to store the objects
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
 
-        //Water
+        //Water, sensor
         FixtureDef fixDef = new FixtureDef();
         fixDef.friction = 0;
         fixDef.restitution = .1f;
@@ -82,6 +83,15 @@ public class MapController {
         fixDef.filter.categoryBits = Constants.COLLISION_WATER;
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         fixDef.isSensor = true;
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
+
+        //Water, collision
+        fixDef = new FixtureDef();
+        fixDef.friction = 0;
+        fixDef.restitution = .1f;
+        fixDef.shape = standardBoxShape;
+        fixDef.filter.categoryBits = Constants.COLLISION_WATER;
+        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
 
         //Collision for all
@@ -100,14 +110,25 @@ public class MapController {
         fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         collisionObjects.add(new CollisionObject(Constants.DOOR_PROPERTY, bodyDef, fixDef));
 
-        //Sneak
+        //Sneak, sensor
         fixDef = new FixtureDef();
-        fixDef.friction = 0.2f;
+        fixDef.friction = 0f;
+        fixDef.restitution = .1f;
+        fixDef.shape = standardBoxShape;
+        fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
+        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
+        fixDef.isSensor = true;
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+
+        //Sneak, collision
+        fixDef = new FixtureDef();
+        fixDef.friction = 0f;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+
 
         //Add to game model
         gameModel.setCollisionObjects(collisionObjects);
@@ -127,16 +148,18 @@ public class MapController {
      * during the collision detection.
      *
      * If a tile is found where a door should be placed the door property is stored as a property in the door collision
-     * object. The door property is the level which should be loaded if the player touches the door. A new door collision
+     * object. The door property is the room which should be loaded if the player touches the door. A new door collision
      * object is then added to the collision object array list, in case any more door is found (the same can't be re-used
      * since the property of the doors in most cases are unique). The door is then removed from the array list.
+     *
+     * If a collision_all or collision_zombie property isn't found the specific tile is added to the room's zombie navigational mesh
      *
      * @param collisionObjects the list of all the collision objects that can be placed in the world
      */
 
     private void createBodiesIfNeeded(ArrayList<CollisionObject> collisionObjects) {
-        Level level = getLevel();
-        if(!level.hasInitializedBodies()) { //if the level already has these initialized there's no point in continuing
+        Room room = getRoom();
+        if(!room.hasInitializedBodies()) { //if the room already has these initialized there's no point in continuing
             World world = getWorld();
             TiledMapTileLayer metaLayer = getMapMetaLayer();
 
@@ -172,20 +195,25 @@ public class MapController {
                             }
                             if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {           //TODO skapa en spawnEntities-metod istället. Och en huvudmetod som går igenom båda metoderna
                                 Zombie zombie = new ZombieTest(getWorld(), col, row);           //TODO test
-                                getLevel().addZombie(zombie);
+                                getRoom().addZombie(zombie);
                             }
                             if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
-                                level.setPlayerSpawn(new Point(col, row));
-                                gameModel.setPlayer(new Player(new Sprite(gameModel.res.getTexture("player")), getWorld(), col, row)); //TODO test
+                                room.setPlayerSpawn(new Point(col, row));
+                                gameModel.setPlayer(new Player(gameModel.res.getTexture("emilia"), getWorld(), col, row)); //TODO test
                             }
                             if (currentCell.getTile().getProperties().get(playerReturn) != null) {
-                                level.setPlayerReturn(new Point(col, row));
+                                room.setPlayerReturn(new Point(col, row));
                             }
+                        }
+                        /* ----- Create zombie path finding ----*/
+                        if (currentCell == null || currentCell.getTile() == null ||
+                                (currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null && currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) == null)){
+                            room.setZombieNavigationalTile(col,row, true);
                         }
                     }
                 }
             }
-            level.setInitializedBodies(true);
+            room.setInitializedBodies(true);
         }
     }
 
@@ -197,92 +225,102 @@ public class MapController {
     }
 
     /**
-     * @param levelIndex the level index that will be accessed
-     * @return The level specified by the index
-     * @throws  IndexOutOfBoundsException if the user tries to access a level not in range
+     * @param roomIndex the room index that will be accessed
+     * @return The room specified by the index
+     * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
-    public Level getLevel(int levelIndex){
-        int maxSize = gameModel.getLevels().size() -1;
-        if(levelIndex<0 ||levelIndex > maxSize)
-            throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
-        return gameModel.getLevel(levelIndex);
+    public Room getRoom(int roomIndex){
+        int maxSize = gameModel.getRooms().size() -1;
+        if(roomIndex<0 ||roomIndex > maxSize)
+            throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
+        return gameModel.getRoom(roomIndex);
     }
 
     /**
-     * @param levelIndex the level index which bottom layer will be accessed
+     * @param roomIndex the room index which bottom layer will be accessed
      * @return The bottom layer specified by the index
      */
-    public TiledMapImageLayer  getMapBottomLayer(int levelIndex){
-        return getLevel(levelIndex).getBottomLayer();
+    public TiledMapImageLayer  getMapBottomLayer(int roomIndex){
+        return getRoom(roomIndex).getBottomLayer();
     }
 
     /**
-     * @param levelIndex the level index which top layer will be accessed
+     * @param roomIndex the room index which top layer will be accessed
      * @return The top layer specified by the index
      */
-    public TiledMapImageLayer  getMapTopLayer(int levelIndex){
-        return getLevel(levelIndex).getTopLayer();
+    public TiledMapImageLayer  getMapTopLayer(int roomIndex){
+        return getRoom(roomIndex).getTopLayer();
     }
 
     /**
-     * @param levelIndex the level index which meta layer will be accessed
+     * @param roomIndex the room index which meta layer will be accessed
      * @return The meta layer specified by the index
      */
-    public TiledMapTileLayer getMapMetaLayer(int levelIndex){
-        return getLevel(levelIndex).getMetaLayer();
+    public TiledMapTileLayer getMapMetaLayer(int roomIndex){
+        return getRoom(roomIndex).getMetaLayer();
     }
 
     /**
      * @return The current bottom layer
      */
     public TiledMapImageLayer getMapBottomLayer(){
-        return getMapBottomLayer(gameModel.getCurrentLevelIndex());
+        return getMapBottomLayer(gameModel.getCurrentRoomIndex());
     }
 
     /**
      * @return The current top layer
      */
     public TiledMapImageLayer getMapTopLayer(){
-        return getMapTopLayer(gameModel.getCurrentLevelIndex());
+        return getMapTopLayer(gameModel.getCurrentRoomIndex());
     }
 
     /**
      * @return The current meta layer
      */
     public TiledMapTileLayer getMapMetaLayer(){
-        return getMapMetaLayer(gameModel.getCurrentLevelIndex());
+        return getMapMetaLayer(gameModel.getCurrentRoomIndex());
     }
 
     /**
-     * Loads the new level in the game model, creates bodies if needed and sets that the renderer needs to update the
+     * Loads the new room in the game model, creates bodies if needed and sets that the renderer needs to update the
      * world. It also updates where the player will be placed after the world step function (it's not possible to do it
-     * at the same time, thus a temporary point is stored in the model). This is decided based on if the level that's
+     * at the same time, thus a temporary point is stored in the model). This is decided based on if the room that's
      * being loaded is before or after the one just shown to the user. It then creates the collision bodies for the new
-     * level, if needed and sets a variable in the game model that the renderer needs to update the world in the next
+     * room, if needed and sets a variable in the game model that the renderer needs to update the world in the next
      * world step.
      *
-     * @param levelIndex the level to load
-     * @throws  IndexOutOfBoundsException if the user tries to access a level not in range
+     * @param roomIndex the room to load
+     * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
-    public void loadLevel(int levelIndex){
-        int maxSize = gameModel.getLevels().size() -1;
-        if(levelIndex<0 ||levelIndex > maxSize)
-            throw new IndexOutOfBoundsException("Not a valid level index, must be between " + 0 + " and  " + maxSize);
-        int oldLevelIndex = gameModel.getCurrentLevelIndex();
-        gameModel.setCurrentLevelIndex(levelIndex);
-        if(oldLevelIndex>levelIndex){
-            if(getLevel().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
-                setPlayerBufferPosition(getLevel().getPlayerSpawn());
-            else
-                setPlayerBufferPosition(getLevel().getPlayerReturn());
+    public void loadRoom(int roomIndex) {
+        int maxSize = gameModel.getRooms().size() - 1;
+        if (roomIndex < 0 || roomIndex > maxSize){
+        throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
         }
-        else
-            setPlayerBufferPosition(getLevel().getPlayerSpawn());
+        gameModel.setWorldNeedsUpdate(true);
+        gameModel.getPlayer().setSneakTilesTouching(0);
+        gameModel.getPlayer().setWaterTilesTouching(0);
+        gameModel.getPlayer().setHidden(false);
+        //TODO sluta simma, sluta sneaka
+        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+        int oldRoomIndex = gameModel.getCurrentRoomIndex();
+        gameModel.setCurrentRoomIndex(roomIndex);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getPlayer());
         for(Book book : gameModel.getBooks()){
             book.markForRemoval();
+            gameModel.addEntityToRemove(book);
         }
+        gameModel.clearBookList();
         createBodiesIfNeeded();
-        gameModel.setWorldNeedsUpdate(true);
+        if(oldRoomIndex>roomIndex){
+            if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
+                setPlayerBufferPosition(getRoom().getPlayerSpawn());
+            else
+                setPlayerBufferPosition(getRoom().getPlayerReturn());
+        }
+        else
+            setPlayerBufferPosition(getRoom().getPlayerSpawn());
+
     }
 
     /**
@@ -312,7 +350,7 @@ public class MapController {
      * @param point Where the player will be placed
      */
     public void updatePlayerPosition(Point point){
-        gameModel.getPlayer().setPosition(point);
+               gameModel.getPlayer().setPosition(point);
     }
 
     /**
@@ -408,5 +446,84 @@ public class MapController {
         if(x<0 ||y < 0 || x > metaLayer.getWidth()-1 ||y > metaLayer.getHeight()-1 )
             throw new IndexOutOfBoundsException("The input coordinates must be withing the meta layer bounds");
         return (metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) != null);
+    }
+
+    /**
+     * @return The current room's zombie navigation mesh
+     */
+    public boolean[][] getZombieNavigationMesh(){
+          //TODO printar navmeshen, debug
+        System.out.println("i: " + getRoom().getZombieNavigationMesh().length    + " j: " + getRoom().getZombieNavigationMesh()[0].length);
+            for(int y = getRoom().getZombieNavigationMesh()[0].length-1; y >= 0; y--){
+                for(int x = 0; x < getRoom().getZombieNavigationMesh().length; x++){
+               // if(getMapMetaLayer().getCell(x,y) == null || getMapMetaLayer().getCell(x, y) == null || getMapMetaLayer().getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null)        //TODO debug
+                if(getRoom().getZombieNavigationMesh()[x][y] == true)
+                        System.out.print("   ");
+                else
+                        System.out.print(" x ");
+            }
+            System.out.println("");
+        }
+
+        return getRoom().getZombieNavigationMesh();
+
+    }
+
+    /**
+     * Creates a path algorithm for a specific room
+     * @param room  The room in which to create the algorithm
+     * @throws NullPointerException if the navigation mesh is null or the room is null
+     */
+    public static void createPathAlgorithm(Room room) throws NullPointerException{
+        if(room==null){
+            throw new NullPointerException("the room pointer was null");
+        }
+        if(room.getZombieNavigationMesh()==null){
+            throw new NullPointerException("createPathAlgorithm: the room's navigation mesh was null");
+        }
+        room.setPathAlgorithm(new PathAlgorithm(room.getZombieNavigationMesh()));
+    }
+
+    /**
+     * Returns the shortest path between two points. Takes obstacles into account. Since the algorithm is layout a bit different from the map tiles, 1 must be subtracted from the x and y values.
+     * @param room  The specific room
+     * @param start The start point
+     * @param end   The end point
+     * @return  The shortest path between the two points in the room
+     * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
+     * @throws IndexOutOfBoundsException if any point is out of bounds
+     */
+    public static ArrayList<Point> getPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{
+        if(room==null){
+            throw new NullPointerException("the room pointer was null");
+        }
+        if(room.getZombieNavigationMesh()==null){
+            throw new NullPointerException("getPath: the room's navigation mesh was null, can't create path without one");
+        }
+        if(start==null ||end == null){
+            throw new NullPointerException("getPath: The points mustn't be null");
+        }
+        if(room.getPathAlgorithm()==null){
+            throw new NullPointerException("getPath: The path algorithm hasn't been initialized");
+        }
+        if(start.x < 0 || start.x >= room.getZombieNavigationMesh().length || start.y < 0 ||start.y >= room.getZombieNavigationMesh()[0].length)
+            throw new IndexOutOfBoundsException("getPath: start point out of bounds");
+        if(end.x < 0 || end.x >= room.getZombieNavigationMesh().length || end.y < 0 ||end.y >= room.getZombieNavigationMesh()[0].length)
+            throw new IndexOutOfBoundsException("getPath: end point out of bounds");
+        return room.getPathAlgorithm().getPath(start, end);
+    }
+
+    /**
+     *
+     * Return the shortest path between two points in the current room
+     * @param start The start point
+     * @param end   The end point
+     * @return  The shortest path between the two points in the current room
+     * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
+     *      * @throws IndexOutOfBoundsException if any point is out of bounds
+     */
+    public static ArrayList<Point> getPath(Point start, Point end) throws NullPointerException, IndexOutOfBoundsException {
+        MapController controller = new MapController(); //TODO gör de andra statiska
+        return getPath(controller.getRoom(),start,end);
     }
 }

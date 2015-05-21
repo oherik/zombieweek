@@ -9,7 +9,7 @@ public class Constants {
     public static final float PIXELS_PER_METER = 32;
     public static final int PLAYER_SIZE = 28;
 
-    //Level
+    //Room
     public static final String META_LAYER = "meta";
     public static final String TOP_LAYER = "top";
     public static final String BOTTOM_LAYER = "bottom";
@@ -27,7 +27,7 @@ public class Constants {
     public static final short COLLISION_OBSTACLE  = 16;
     public static final short COLLISION_WATER  = 32;
     public static final short COLLISION_DOOR  = 64;
-    public static final short COLLISION_SNEAK = 256;
+    public static final short COLLISION_SNEAK = -2;
 
     //Fysikhantering
     public static final float TIMESTEP = 1/60f;
@@ -35,6 +35,7 @@ public class Constants {
     //Rörelse
     public static final float PLAYER_FRICTION_DEFAULT = 30f;
     public static final float PLAYER_FRICTION_WATER = 80f;
+    public static final float PLAYER_FRICTION_SNEAK = 120f;
 
 
     //Matematik

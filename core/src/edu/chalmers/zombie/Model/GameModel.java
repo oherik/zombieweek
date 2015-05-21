@@ -1,10 +1,6 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.graphics.Texture;       //TODO debug
 import com.badlogic.gdx.graphics.g2d.Sprite;    //TODO debug
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.joints.FrictionJoint;
-import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
@@ -12,8 +8,6 @@ import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,8 +20,10 @@ public class GameModel {
     private static GameModel instance = new GameModel();
     private Player player;
     private Zombie zombie;
+    private ArrayList<Room> rooms;
     private ArrayList<Level> levels;
     private int currentLevel;
+    private int currentRoom;
     private ArrayList<Book> books = new ArrayList<Book>();
     private Set entitiesToRemove;
     private ArrayList<CollisionObject> collisionObjects;
@@ -37,7 +33,7 @@ public class GameModel {
     public static ResourceManager res;
     private boolean stepping = false;
     private GameState gameState; //the state of the game
-    private int highestCompletedLevel;
+    private int highestCompletedRoom;
 
 
     /**
@@ -45,10 +41,17 @@ public class GameModel {
      */
     private GameModel(){
         metaLayerName = "meta";
-        currentLevel = 1;   //TODO test
+        currentRoom = 1;   //TODO test
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
-        levels = new ArrayList<Level>();
+        res.loadTexture("emilia","core/assets/Images/emilia.png");
+        res.loadSound("throw","core/assets/Audio/Sound_effects/throw_book.mp3");
+        res.loadSound("menu_hover","core/assets/Audio/Sound_effects/menu_hover.mp3");
+        res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");
+        res.loadSound("pick_up_book","core/assets/Audio/Sound_effects/pick_up_book.mp3");
+        res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
+
+        rooms = new ArrayList<Room>();
         entitiesToRemove = new HashSet<Entity>();
         worldNeedsUpdate = true;
         //addTestLevel();                                 //TODO debug
@@ -61,7 +64,7 @@ public class GameModel {
      * Only for debug
      *//*
     private void addTestLevel(){
-        levels.add(new Level("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
+        rooms.add(new Room("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
     }
 */
     /**
@@ -69,14 +72,14 @@ public class GameModel {
      */
     /*
     private void addTestLevel_2(){
-        levels.add(new Level("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
+        rooms.add(new Room("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
     }
     */
     /**
      * Only for debug
      */
     private void addTestPlayer(){
-        player = new Player(new Sprite(res.getTexture("player")),levels.get(0).getWorld(),0,0);
+        player = new Player(res.getTexture("player"), rooms.get(0).getWorld(),0,0);
 
     }
 
@@ -84,8 +87,8 @@ public class GameModel {
      * Only for debug
      */
     private void addTestZombie(){
-        zombie = new ZombieTest(levels.get(0).getWorld(),2,2);
-        getLevel().addZombie(zombie);
+        zombie = new ZombieTest(rooms.get(0).getWorld(),2,2);
+        getRoom().addZombie(zombie);
     }
 
 
@@ -116,52 +119,52 @@ public class GameModel {
         return zombie;
     }
     /**
-     * Adds a level
+     * Adds a room
      */
-    public void addLevel(Level level){
-        levels.add(level);
+    public void addRoom(Room room){
+        rooms.add(room);
     }
 
     /**
-     * Sets all levels
+     * Sets all rooms
      */
-    private void setLevels(ArrayList<Level> levels){
-        this.levels = levels;
+    private void setRooms(ArrayList<Room> rooms){
+        this.rooms = rooms;
     }
 
 
 
     /**
-     * @return  The current level
+     * @return  The current room
      */
-    public Level getLevel(){return levels.get(currentLevel); }
+    public Room getRoom(){return rooms.get(currentRoom); }
 
     /**
-     * @return  The level specified by an index
+     * @return  The room specified by an index
      * @throws  IndexOutOfBoundsException if the index is non-valid
      */
-    public Level getLevel(int levelIndex){
-        if(levelIndex >= levels.size())
-            throw new IndexOutOfBoundsException("GameModel: the getLevel index exceeds array size");
-        currentLevel = levelIndex;
-        return levels.get(levelIndex);
+    public Room getRoom(int roomIndex){
+        if(roomIndex >= rooms.size())
+            throw new IndexOutOfBoundsException("GameModel: the getRoom index exceeds array size");
+        currentRoom = roomIndex;
+        return rooms.get(roomIndex);
     }
 
     /**
-     * @return  The index for the current level
+     * @return  The index for the current room
      */
-    public int getCurrentLevelIndex(){
-        return this.currentLevel;
+    public int getCurrentRoomIndex(){
+        return this.currentRoom;
     }
 
     /**
-     * @return  Sets the current level
+     * @return  Sets the current room
      * @throws  IndexOutOfBoundsException if the index is < 0
      */
-    public void setCurrentLevelIndex(int i){
+    public void setCurrentRoomIndex(int i){
         if(i < 0)
-            throw new IndexOutOfBoundsException("GameModel: current level must be >= 0");
-        this.currentLevel = i;
+            throw new IndexOutOfBoundsException("GameModel: current room must be >= 0");
+        this.currentRoom = i;
     }
 
     /**
@@ -188,10 +191,10 @@ public class GameModel {
     public Set<Entity> getEntitiesToRemove() {return this.entitiesToRemove; }
 
     /**
-     * @return The current level's zombies
+     * @return The current room's zombies
      */
     public ArrayList<Zombie> getZombies(){
-        return getLevel().getZombies();
+        return getRoom().getZombies();
     }
 
     public ArrayList<CollisionObject> getCollisionObjects(){
@@ -210,8 +213,8 @@ public class GameModel {
         return this.metaLayerName;
     }
 
-    public ArrayList<Level> getLevels(){
-        return levels;
+    public ArrayList<Room> getRooms(){
+        return rooms;
     }
 
     public void setWorldNeedsUpdate(boolean bool){
@@ -241,7 +244,11 @@ public class GameModel {
 
     public void setGameState(GameState gameState){this.gameState = gameState;}
 
-    public void setHighestCompletedLevel(int level){this.highestCompletedLevel = level;}
+    public void setHighestCompletedRoom(int room){this.highestCompletedRoom = room;}
 
-    public int getHighestCompletedLevel(){return highestCompletedLevel;}
+    public int getHighestCompletedRoom(){return highestCompletedRoom;}
+
+    public void clearBookList(){
+        this.books.clear();
+    }
 }

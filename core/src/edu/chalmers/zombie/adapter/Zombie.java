@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -14,6 +15,8 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by neda on 2015-03-31.
@@ -21,14 +24,18 @@ import java.awt.*;
 public abstract class Zombie extends Entity implements CreatureInterface {
 
     private int speed;
+    private float radius;
     private ZombieType type;
     private boolean isKnockedOut;
+    private boolean isAttacked;
+    private boolean isMoving;
     private Vector2 force;
     private Vector2 point;
     private Sprite sprite;
     private Point position;
     private MapController mapController;
     private int hp;
+    private Point nextPathTile;
 
     /**
      * Creates a new zombie
@@ -61,11 +68,13 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_ZOMBIE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER | Constants.COLLISION_SNEAK;
 
         //Set vectors
         force = new Vector2(0,0);
         point = new Vector2(0,0);
+
+        position = new Point((int)x,(int)y);
         
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -75,14 +84,14 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         mapController = new MapController();
         mapController.initializeCollisionObjects();
-        mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
+        mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
+
+        super.getBody().setAngularDamping(10000);
 
         isKnockedOut = false;
 
     }
 
-
-    private boolean isAttacked;
 
     /**
      * A method which sets the zombie's speed to a new speed.
@@ -93,6 +102,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         speed = newSpeed;
     }
 
+    public int getSpeed() {
+
+        return speed;
+    }
+
     /**
      * A method which decreases the zombie's hp (life measured in points).
      */
@@ -101,13 +115,24 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         hp = hp--;
     }
 
-    public abstract ZombieType getType();
+    public void setStartingHp(int hp) {
 
-    public abstract void setType(ZombieType type);
+        this.hp = hp;
+    }
 
-    public abstract Vector2 getVelocity();
+    public ZombieType getType() {
 
-    public abstract void attack(Player player);
+        return type;
+    }
+
+    public void setType(ZombieType type) {
+
+        this.type = type;
+    }
+
+    //public abstract Vector2 getVelocity();
+
+    public abstract void attack();
 
     public void setZombiePosition(Point pos) {
 
@@ -126,7 +151,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void setForceY(int speed) {
 
         force.y = speed;
-        
+    }
+
+    public void setForceX(int speed) {
+
+        force.x = speed;
     }
 
     public void remove(Zombie zombie) {
@@ -134,18 +163,102 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //TODO: remove zombie
     }
 
+    public void setDetectionRadius(float radius) {
+
+        this.radius = radius;
+    }
+
+    public float getDetectionRadius() {
+
+        return radius;
+    }
+
+    public Vector2 getForce() {
+
+        return force;
+    }
+
+    public Vector2 getPoint() {
+
+        return point;
+    }
+
     //@Override
     public void moveToPlayer(PathAlgorithm path) {
 
-        Point playerPos = mapController.getPlayerPosition();
 
-        while(path.getPath(position, playerPos).hasNext()){
+        //point = new Vector2(playerPosition.x, playerPosition.y);
 
-            Point p = path.getPath(position, playerPos).next();
-            point = new Vector2(p.x, p.y);
-            setForceY(7);
-            this.getBody().applyForce(force, point, !isKnockedOut);
+        Point zombiePosition = getZombiePosition();
+        Point playerPosition = mapController.getPlayerPosition();
+
+        setSpeed(80);
+        setDetectionRadius(10);
+
+
+/*
+        for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
+
+        Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
+
+
+        ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
+
+        if(pathToPlayer!=null && super.getBody() != null) {
+
+            zombiePosition = new Point(Math.round(super.getX()), Math.round(super.getY()));
         }
+
+            if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
+
+                // TODO: attack
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
+
+                setForceY(speed);
+                setForceX(0);
+            } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
+
+                setForceY(0);
+                setForceX(speed);
+            } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
+
+                setForceY(0);
+                setForceX(-speed);
+            } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
+
+                setForceY(-speed);
+                setForceX(0);
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
+
+                setForceY(speed);
+                setForceX(speed);
+            } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
+
+                setForceY(-speed);
+                setForceX(speed);
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
+
+                setForceY(speed);
+                setForceX(-speed);
+            } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
+
+                setForceY(-speed);
+                setForceX(-speed);
+            } else {
+                // TODO: some exception management
+            }
+
+            Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
+            Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
+
+            if (super.getBody() != null) {
+
+                if (zcircle.overlaps(pcircle)) {
+
+                    super.getBody().applyForce(force, point, !isKnockedOut);
+                    isMoving = true;
+                }
+            }*/
     }
 
     /**
@@ -165,6 +278,41 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return isAttacked;
     }
 
-    public abstract Zombie spawn(World world, ZombieType type, int x, int y);
+    /**
+     * A method which returns whether a zombie is currently moving or not.
+     * @return boolean isMoving; true if moving, false if not.
+     */
+    public boolean isMoving() {
+
+        return isMoving;
+    }
+
+    public void setIsMoving(boolean isMoving) {
+
+        this.isMoving = isMoving;
+    }
+
+    public MapController getThisMapController() {
+
+        return mapController;
+    }
+
+    public abstract Zombie spawn(World world, int x, int y);
+
+    /**
+     * @return  The next tile the zombie should traverse to. Add 0.5 to x and y for the center of the tile
+     */
+    public Point getNextPathTile(){
+        return this.nextPathTile;
+    }
+
+    /**
+     * Set the next tile the zombie should traverse to
+     * @param nextPathTile  The next tile
+     */
+    public void setNextPathTile(Point nextPathTile){
+        this.nextPathTile = nextPathTile;
+    }
+
 
 }

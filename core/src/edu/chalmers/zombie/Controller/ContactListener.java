@@ -1,8 +1,5 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
@@ -73,32 +70,22 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.remove(b);
                         break;
                 }
-                break;
-            case (Constants.COLLISION_PLAYER):
-                switch (contact.getFixtureA().getFilterData().categoryBits){        //Not made as an if-statement if more collision alternatives are to be added
-                    case Constants.COLLISION_DOOR:
-                        CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
-                        int levelToLoad = Integer.parseInt(door.getProperty());
-                        mapController.loadLevel(levelToLoad);
-                        break;
-
-                }
-                break;
-            case (Constants.COLLISION_DOOR):
-                switch(contact.getFixtureA().getFilterData().categoryBits){
-                    case Constants.COLLISION_PLAYER:
-                        CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
-                        int levelToLoad = Integer.parseInt(door.getProperty());
-                        mapController.loadLevel(levelToLoad);
-                        break;
-                }
-            break;
+              break;
             case (Constants.COLLISION_WATER):
                 switch(contact.getFixtureA().getFilterData().categoryBits){
                     case Constants.COLLISION_PLAYER:
                         //TODO Ner i vatten
                         gameModel.getPlayer().setWaterTilesTouching(gameModel.getPlayer().getWaterTilesTouching()+1);
                         EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_WATER, Constants.PLAYER_FRICTION_WATER);
+                        break;
+                }
+            case (Constants.COLLISION_SNEAK):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_PLAYER:
+                        //TODO Sneaka
+                        gameModel.getPlayer().setHidden(true);
+                        gameModel.getPlayer().setSneakTilesTouching(gameModel.getPlayer().getSneakTilesTouching() + 1);
+                        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);
                         break;
                 }
 
@@ -110,7 +97,6 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
      * @param contact The contact object between two objects
      */
     public void endContact (Contact contact){
-        gameModel.clearEntitiesToRemove();
         switch(contact.getFixtureB().getFilterData().categoryBits) {
             case (Constants.COLLISION_WATER):
                 switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
@@ -123,6 +109,20 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         }
                         break;
                 }
+            case (Constants.COLLISION_SNEAK):
+                switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
+                    case Constants.COLLISION_PLAYER:
+                        Player player = gameModel.getPlayer();
+                        player.setSneakTilesTouching(player.getSneakTilesTouching() - 1);
+                        if(player.getSneakTilesTouching()<1) {
+                            //TODO Sluta sneaka
+                            player.setHidden(false);
+                            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+                        }
+                        break;
+                }
+
+
         }
      }
 
@@ -131,7 +131,27 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
      * @param contact The contact object between two objects
      */
     public  void preSolve(Contact contact, Manifold manifold){
+        switch(contact.getFixtureB().getFilterData().categoryBits) {
+            case (Constants.COLLISION_PLAYER):
+                switch (contact.getFixtureA().getFilterData().categoryBits){        //Not made as an if-statement if more collision alternatives are to be added
+                    case Constants.COLLISION_DOOR:
+                             CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
+                            int levelToLoad = Integer.parseInt(door.getProperty());
+                          mapController.loadRoom(levelToLoad);
+                        break;
 
+                }
+                break;
+            case (Constants.COLLISION_DOOR):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_PLAYER:
+                            CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
+                          int levelToLoad = Integer.parseInt(door.getProperty());
+                         mapController.loadRoom(levelToLoad);
+                        break;
+                }
+                break;
+        }
     }
     /**
      * Not used in the current version
