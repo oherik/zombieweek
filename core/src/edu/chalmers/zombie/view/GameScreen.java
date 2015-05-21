@@ -329,6 +329,7 @@ public class GameScreen implements Screen{
 
 
             }
+
             shapeRenderer.end();
             shapeRenderer.begin();
             shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), gameModel.getPlayer().getX() + v.x, gameModel.getPlayer().getY() + v.y);
@@ -342,7 +343,8 @@ public class GameScreen implements Screen{
             collisionPoints.add(gameModel.getPlayer().getX());
             collisionPoints.add(gameModel.getPlayer().getY());
             shapeRenderer.setProjectionMatrix(camera.combined);
-            EarClippingTriangulator ecp = new EarClippingTriangulator();
+            EarClippingTriangulator ect = new EarClippingTriangulator();
+            System.out.println(collisionPointsArray.length);
             float[] region1 = new float[]{
                     collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[8],
                     collisionPointsArray[9], collisionPointsArray[10], collisionPointsArray[11],
@@ -351,8 +353,24 @@ public class GameScreen implements Screen{
                     collisionPointsArray[18], collisionPointsArray[19], collisionPointsArray[4],
                     collisionPointsArray[5], collisionPointsArray[6], collisionPointsArray[7],
                     collisionPointsArray[2], collisionPointsArray[3]};
-            ShortArray s = ecp.computeTriangles(region1);
-            PolygonRegion darkness = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
+            float[] region2 = new float[]{};
+            if (collisionPointsArray.length == 30) {
+                region2 = new float[]{
+                        collisionPointsArray[18], collisionPointsArray[19], collisionPointsArray[20],
+                        collisionPointsArray[21], collisionPointsArray[22], collisionPointsArray[23],
+                        collisionPointsArray[24], collisionPointsArray[25], collisionPointsArray[26],
+                        collisionPointsArray[27], collisionPointsArray[28], collisionPointsArray[29],
+                        collisionPointsArray[8], collisionPointsArray[9], collisionPointsArray[0], collisionPointsArray[1],
+                        collisionPointsArray[8],collisionPointsArray[9], collisionPointsArray[18],
+                        collisionPointsArray[19]};
+            }
+            ShortArray s = ect.computeTriangles(region1);
+            PolygonRegion darkness1 = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
+             s = ect.computeTriangles(region2);
+            PolygonRegion darkness2 = new PolygonRegion(new TextureRegion(tex), new float[]{0,0}, new short[]{});
+            if (collisionPointsArray.length == 30) {
+                darkness2 = new PolygonRegion(new TextureRegion(tex), region2, s.toArray());
+            }
             shapeRenderer.setAutoShapeType(true);
             PolygonSpriteBatch psb = new PolygonSpriteBatch();
             psb.setProjectionMatrix(camera.combined);
@@ -362,7 +380,10 @@ public class GameScreen implements Screen{
             lightSprite.draw(batchHUD);
             batchHUD.end();
             psb.begin();
-            psb.draw(darkness, 0, 0);
+            //psb.draw(darkness1, 0, 0);
+            if (collisionPointsArray.length == 30) {
+                psb.draw(darkness2, 0, 0);
+            }
             psb.end();
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
@@ -507,11 +528,11 @@ public class GameScreen implements Screen{
         return floatArray;
     }
     private void addCorners(ArrayList<Float> floats){
-        floats.add(0f);
-        floats.add(0f);
+        floats.add(-100f);
+        floats.add(-100f);
         floats.add(100f);
-        floats.add(0f);
-        floats.add(0f);
+        floats.add(-1000f);
+        floats.add(-1000f);
         floats.add(100f);
         floats.add(100f);
         floats.add(100f);
