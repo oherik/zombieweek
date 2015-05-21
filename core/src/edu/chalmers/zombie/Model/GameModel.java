@@ -79,7 +79,7 @@ public class GameModel {
      * Only for debug
      */
     private void addTestPlayer(){
-        player = new Player(new Sprite(res.getTexture("player")), rooms.get(0).getWorld(),0,0);
+        player = new Player(res.getTexture("player"), rooms.get(0).getWorld(),0,0);
 
     }
 
