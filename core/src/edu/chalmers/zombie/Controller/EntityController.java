@@ -1,9 +1,9 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Filter;
+//import com.badlogic.gdx.graphics.Texture;
+//import com.badlogic.gdx.graphics.g2d.Sprite;
+//import com.badlogic.gdx.math.Vector2;
+//import com.badlogic.gdx.physics.box2d.Filter;
 import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Player;
@@ -69,10 +69,7 @@ public class EntityController {
      * @return  The damage caused by the book
      */
     public static double getDamage(Book b){
-        Vector2 vel = b.getVelocity();
-        float mass = b.getMass();
-        return Math.sqrt(vel.x*vel.x + vel.y*vel.y);    //TODO ta med massan h�r och n�n konstant
-
+        return b.getSpeed()*b.getMass();    //TODO ta med massan h�r och n�n konstant
     }
 
     /**
