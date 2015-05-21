@@ -9,7 +9,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ShortArray;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.*;
@@ -68,7 +70,9 @@ public class GameScreen implements Screen{
     private Vector2 playerPosition = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
     Vector2 coll = new Vector2();
     private float currentFraction = 1337;
-
+    private boolean foundFixture;
+    private ArrayList<Float> collisionPoints = new ArrayList<Float>();
+    private ArrayList<Float> corners = new ArrayList<Float>();
 
 
 
@@ -121,6 +125,7 @@ public class GameScreen implements Screen{
         inputMultiplexer.addProcessor(inputProcessorOne);
         inputMultiplexer.addProcessor(inputProcessorTwo);
         Gdx.input.setInputProcessor(inputMultiplexer);
+        addCorners(collisionPoints);
 
     }
 
@@ -268,8 +273,18 @@ public class GameScreen implements Screen{
             bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight() - 25);
             bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight() - 40);
             batchHUD.end();
+
+
+
+
+                        /* ----------------- TEST FLASHLIGHT -----------------*/
+
+
+
+
             float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
             Vector2 v = new Vector2(1,1);
+            playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
             v.setLength(10);
             v.setAngleRad(direction);
             RayCastCallback callback = new RayCastCallback() {
@@ -281,35 +296,74 @@ public class GameScreen implements Screen{
                             currentFraction = fraction;
                             coll.set(point);
                         }
-
+                        foundFixture =  true;
                     }
                         return 1;
                 }
             };
-            currentFraction = 1337;
-            currentWorld.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()), new Vector2(v.x + gameModel.getPlayer().getX(), v.y + gameModel.getPlayer().getY()));
             /* ----------------- TEST FLASHLIGHT -----------------*/
+
             float coneWidth = Constants.PI/5;
             int numberOfRays = 10;
-            int coneLength = 200;
+            int coneLength = 10;
             Vector2[] rays = new Vector2[numberOfRays];
             for(int i = 0; i<numberOfRays; i++){
                 rays[i] = new Vector2(1,1);
                 rays[i].setLength(coneLength);
                 rays[i].setAngleRad(direction - coneWidth/2 + i*coneWidth/numberOfRays);
+
             }
             shapeRenderer.setAutoShapeType(true);
+            shapeRenderer.begin();
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(Color.WHITE);
-            shapeRenderer.begin();
-            v.add(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
-            shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), v.x, v.y);
-            shapeRenderer.point(coll.x, coll.y, 0);
-            for(int i = 0; i<numberOfRays; i++) {
-                shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
+            for (Vector2 line: rays){
+                currentFraction = 1337;
+                foundFixture = false;
+                currentWorld.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()), new Vector2(line.x + gameModel.getPlayer().getX(), line.y + gameModel.getPlayer().getY()));
+                if (foundFixture){
+                    shapeRenderer.point(coll.x, coll.y, 0);
+                    collisionPoints.add(coll.x);
+                    collisionPoints.add(coll.y);
+                }
+
+
             }
             shapeRenderer.end();
-
+            shapeRenderer.begin();
+            shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), gameModel.getPlayer().getX() + v.x, gameModel.getPlayer().getY() + v.y);
+            for(int i = 0; i<numberOfRays; i++) {
+               // shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
+            }
+            shapeRenderer.end();
+            float[] collisionPointsArray = convertToArray(collisionPoints);
+            collisionPoints.clear();
+            addCorners(collisionPoints);
+            collisionPoints.add(gameModel.getPlayer().getX());
+            collisionPoints.add(gameModel.getPlayer().getY());
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            EarClippingTriangulator ecp = new EarClippingTriangulator();
+            float[] region1 = new float[]{
+                    collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[8],
+                    collisionPointsArray[9], collisionPointsArray[10], collisionPointsArray[11],
+                    collisionPointsArray[12], collisionPointsArray[13], collisionPointsArray[14],
+                    collisionPointsArray[15], collisionPointsArray[16], collisionPointsArray[17],
+                    collisionPointsArray[18], collisionPointsArray[19], collisionPointsArray[4],
+                    collisionPointsArray[5], collisionPointsArray[6], collisionPointsArray[7],
+                    collisionPointsArray[2], collisionPointsArray[3]};
+            ShortArray s = ecp.computeTriangles(region1);
+            PolygonRegion darkness = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
+            shapeRenderer.setAutoShapeType(true);
+            PolygonSpriteBatch psb = new PolygonSpriteBatch();
+            psb.setProjectionMatrix(camera.combined);
+            batchHUD.begin();
+            Sprite lightSprite = new Sprite(light);
+            lightSprite.setAlpha(0.1f);
+            lightSprite.draw(batchHUD);
+            batchHUD.end();
+            psb.begin();
+            psb.draw(darkness, 0, 0);
+            psb.end();
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
@@ -442,5 +496,24 @@ public class GameScreen implements Screen{
 
 //>>>>>>> 1ffaac9a2ec5c13ece91b3a017e86c6c456154c3
     }
+    }
+    private float[] convertToArray(ArrayList<Float> floatList){
+        float[] floatArray = new float[floatList.size()];
+        int i = 0;
+        for (float f: floatList){
+            floatArray[i] = f;
+            i++;
+        }
+        return floatArray;
+    }
+    private void addCorners(ArrayList<Float> floats){
+        floats.add(0f);
+        floats.add(0f);
+        floats.add(100f);
+        floats.add(0f);
+        floats.add(0f);
+        floats.add(100f);
+        floats.add(100f);
+        floats.add(100f);
     }
 }
