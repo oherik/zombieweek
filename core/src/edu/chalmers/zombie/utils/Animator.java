@@ -3,70 +3,89 @@ package edu.chalmers.zombie.utils;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
+ * An animator to animate images using texture frames
+ *
  * Created by Tobias on 15-05-21.
  */
 public class Animator {
 
-    private TextureRegion[] frames;
+    private TextureRegion[] textureFrames;
     private float time;
-    private float delay;
+    private float timeDelay;
     private int currentFrame;
-    private int timesPlayed;
 
+    /**
+     * Creates an empty Animator
+     */
     public Animator(){}
 
-    public Animator(TextureRegion frames[]){
-        this(frames, 1/12f);
+
+    /**
+     * Created an Animator with frames and a time delay.
+     * @param textureFrames The frames that will be animated
+     * @param timeDelay The time delay
+     */
+    public Animator(TextureRegion textureFrames[], float timeDelay){
+        setFrames(textureFrames, timeDelay);
     }
 
-    public Animator(TextureRegion frames[], float delay){
-        setFrames(frames, delay);
-        System.out.println("Number of frames: " + frames.length);
-    }
-
-    public void setFrames(TextureRegion[] frames, float delay){
-        this.delay = delay;
-        this.frames = frames;
+    /**
+     * Sets the frames of the animator
+     * @param textureFrames The frames
+     * @param timeDelay The time delay
+     */
+    public void setFrames(TextureRegion[] textureFrames, float timeDelay){
+        this.timeDelay = timeDelay;
+        this.textureFrames = textureFrames;
         time = 0;
         currentFrame = 0;
-        timesPlayed = 0;
-
-
     }
 
+    /**
+     * Updates the animation
+     * @param deltaTime The delta time
+     */
     public void update(float deltaTime){
-        if(delay<=0){
+        if(timeDelay <=0){
             return;
         }
         time +=deltaTime;
-        while (time>=delay){
+
+        while (time>= timeDelay){
             step();
         }
     }
 
+    /**
+     * Makes animation step once
+     */
     public void stepOnce(){
         step();
     }
 
+    /**
+     * Makes animation step
+     */
     private void step(){
-        System.out.println("STEP");
-        time -= delay;
+        time -= timeDelay;
         currentFrame++;
-        if(currentFrame == frames.length){
+        if(currentFrame == textureFrames.length){ //if end of frames array, start from beginning
             currentFrame = 0;
-            timesPlayed++;
         }
     }
 
+    /**
+     * Get all frames of the animation
+     * @return TextureRegion the frames of the animation
+     */
     public TextureRegion getFrame() {
-        System.out.println("Return frame: " + currentFrame);
-        return frames[currentFrame];
+        return textureFrames[currentFrame];
     }
 
-    public int getTimesPlayed(){return timesPlayed;}
-
-
-
+    /**
+     * @param timeDelay The time delay
+     */
+    public void setTimeDelay(float timeDelay){this.timeDelay = timeDelay;}
 
 
 }
