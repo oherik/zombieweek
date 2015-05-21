@@ -102,7 +102,6 @@ public class PathAlgorithm {
                         }
                     }
                 }
-                steps++;
             }
         }
         return null;    //No path found
