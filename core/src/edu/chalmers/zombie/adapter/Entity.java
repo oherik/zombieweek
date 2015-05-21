@@ -3,8 +3,10 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import edu.chalmers.zombie.utils.Animator;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
@@ -16,6 +18,7 @@ public abstract class Entity {
     private Body body;
     private World world;
     private boolean remove = false;
+    private Animator animator;
 
     /**
      * Creates an entity without a sprite
@@ -37,6 +40,12 @@ public abstract class Entity {
         sprite.setX(x);
         sprite.setY(y);
         this.world = world;
+    }
+
+
+    public void setAnimator(TextureRegion[] frames, float delay){
+        animator = new Animator();
+        animator.setFrames(frames, delay);
     }
 
     /**
@@ -90,7 +99,15 @@ public abstract class Entity {
             updateRotation();
             updatePosition();
         }
-        sprite.draw(batch);
+        //sprite.draw(batch);
+
+        if(animator!=null){ //only for player atm
+            animator.update(1/100f);
+            sprite.setRegion(animator.getFrame());
+            sprite.draw(batch);
+        } else {
+            sprite.draw(batch);
+        }
 
     }
 
@@ -205,5 +222,9 @@ public abstract class Entity {
     public void setWorld(World world){
         this.world=world;
     }
+
+    public Animator getAnimator(){return animator;}
+
+    public Sprite getSprite(){return sprite;}
 
 }
