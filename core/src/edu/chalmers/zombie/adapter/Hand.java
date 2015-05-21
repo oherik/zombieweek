@@ -97,8 +97,7 @@ public class Hand {
         if (mouseAiming) {
             float deltaX = Gdx.graphics.getWidth() / 2 - x;
             float deltaY = y - Gdx.graphics.getHeight() / 2;
-            Vector2 directionVector = new Vector2(deltaX, deltaY);
-            direction = (float) (directionVector.angle() / 57.2957795) + Constants.PI / 2;
+            direction = (float)Math.atan2((double)deltaY, (double)deltaX) + Constants.PI/2;
         }
     }
 

@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -31,6 +32,7 @@ import edu.chalmers.zombie.utils.MenuBuilder;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -59,6 +61,11 @@ public class GameScreen implements Screen{
     private int steps;
 
     private Stage pauseStage;
+
+    private Texture tex = new Texture("core/assets/darkness.png");
+    private Texture light = new Texture("core/assets/light.png");
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Vector2 playerPosition = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 
 
 
@@ -193,7 +200,6 @@ public class GameScreen implements Screen{
         gameModel.setStepping(true);
         currentWorld.step(Constants.TIMESTEP, 6, 2);
         gameModel.setStepping(false);
-
         removeEntities();
         if(!gameModel.worldNeedsUpdate()) {
 
@@ -206,6 +212,7 @@ public class GameScreen implements Screen{
             int[] foregroundLayers = {1};
             mapRenderer.render(backgroundLayers);
             mapRenderer.setView(camera);
+
             //mapRenderer.render();
             steps++;
             mapRenderer.getBatch().begin();
@@ -259,7 +266,14 @@ public class GameScreen implements Screen{
             bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight() - 25);
             bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight() - 40);
             batchHUD.end();
-
+            float direction = gameModel.getPlayer().getHand().getDirection();
+            Vector2 v = new Vector2(1,1);
+            v.setLength(100);
+            v.setAngle((direction)*180/Constants.PI);
+            shapeRenderer.setAutoShapeType(true);
+            shapeRenderer.begin();
+            shapeRenderer.line(playerPosition, v);
+            shapeRenderer.end();
 
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
@@ -270,13 +284,13 @@ public class GameScreen implements Screen{
             }
         /*-----------------SLUTTESTAT---------------------*/
 
-        //rita box2d debug
-        boxDebug.render(mapController.getWorld(), camera.combined);
+            //rita box2d debug
+            boxDebug.render(mapController.getWorld(), camera.combined);
         //render HUD
         playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
         playerHealth = "Health: " + gameModel.getPlayer().getLives();
         playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
-        batchHUD.begin();
+            batchHUD.begin();
         bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
         bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
@@ -365,6 +379,8 @@ public class GameScreen implements Screen{
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
         currentWorld.dispose();
+        batchHUD.dispose();
+        shapeRenderer.dispose();
     }
 
     /**
