@@ -74,7 +74,7 @@ public class PathAlgorithm {
             Point currentNode = currentElement.getNode();
             if(currentElement.getPath()!=null)
               steps = currentElement.getPath().size();
-            if(steps < maxSteps) {
+            if(steps <= maxSteps) {
                 if (currentNode.equals(endPos)) {
                     currentElement.getPath().add(currentNode);
                     return currentElement.getPath();
