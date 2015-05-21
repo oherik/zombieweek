@@ -277,7 +277,8 @@ public class GameScreen implements Screen{
                 @Override
                 public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
                     System.out.println(point.x + ", " + point.y);
-                    if (fixture.getFilterData().categoryBits == Constants.COLLISION_OBSTACLE){
+                    if (fixture.getFilterData().categoryBits ==
+                            Constants.COLLISION_OBSTACLE){
                         System.out.println("Raycast!");
                         return 0;
                     }
