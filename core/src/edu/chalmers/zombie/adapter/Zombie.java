@@ -16,6 +16,7 @@ import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by neda on 2015-03-31.
@@ -34,6 +35,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private Point position;
     private MapController mapController;
     private int hp;
+    private Point nextPathTile;
 
     /**
      * Creates a new zombie
@@ -164,19 +166,39 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     //@Override
     public void moveToPlayer(PathAlgorithm path) {
 
-        Point playerPosition = mapController.getPlayerPosition();
 
         //point = new Vector2(playerPosition.x, playerPosition.y);
 
         Point zombiePosition = getZombiePosition();
+        Point playerPosition = mapController.getPlayerPosition();
 
         setSpeed(80);
         setDetectionRadius(5);
 
-        Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
-        zombiePosition = new Point(Math.round(super.getX()), Math.round(super.getY()));
-        ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
-       /* if(pathToPlayer!=null) {
+        /* --------------------- BÖRJAN ERIKS ÄNDRINGAR -------------------*/
+        Player player =GameModel.getInstance().getPlayer();
+        Point playerTile = new Point(Math.round(player.getX()-0.5f), Math.round(player.getY()-0.5f));
+        Point zombieTile = new Point(Math.round(super.getX()-0.5f), Math.round(super.getY()-0.5f));
+        ArrayList<Point> pathToPlayer = MapController.getPath(zombieTile, playerTile);
+
+        if(pathToPlayer!=null){
+            if(pathToPlayer.size()>1){
+                pathToPlayer.remove(0); //Ta ej med tilen zombien står på
+            }
+            Iterator<Point> iteratorToPlayer = pathToPlayer.iterator();
+            if(iteratorToPlayer.hasNext()) {
+                Point temp = iteratorToPlayer.next();
+                if (nextPathTile == null || zombieTile.equals(nextPathTile) || !temp.equals(nextPathTile)) {
+                    nextPathTile = temp;
+                }
+            }
+        }
+
+        //För att få dit bodyn ska röra sig, ta nextPathTile med +0.5 på x och y. Det ger då mitten av tilen.
+
+        /* --------------------- SLUT ERIKS ÄNDRINGAR ---------------------*/
+
+        if(pathToPlayer!=null) {
             for (Point p : pathToPlayer) {
                 System.out.println(p);
             }
@@ -333,5 +355,14 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     }
 
     public abstract Zombie spawn(World world, int x, int y);
+
+    public Point getNextPathTile(){
+        return this.nextPathTile;
+    }
+
+    public void setNextPathTile(Point nextPathTile){
+        this.nextPathTile = nextPathTile;
+    }
+
 
 }
