@@ -485,14 +485,15 @@ public class MapController {
     }
 
     /**
-     * Returns the shortest path between two points. Takes obstacles into account.
+     * Returns the shortest path between two points. Takes obstacles into account. Since the algorithm is layout a bit different from the map tiles, 1 must be subtracted from the x and y values.
      * @param room  The specific room
      * @param start The start point
      * @param end   The end point
      * @return  The shortest path between the two points in the room
      * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
+     * @throws IndexOutOfBoundsException if any point is out of bounds
      */
-    public static ArrayList<Point> getPath(Room room, Point start, Point end) throws NullPointerException{
+    public static ArrayList<Point> getPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{
         if(room==null){
             throw new NullPointerException("the room pointer was null");
         }
@@ -505,7 +506,13 @@ public class MapController {
         if(room.getPathAlgorithm()==null){
             throw new NullPointerException("getPath: The path algorithm hasn't been initialized");
         }
-        return room.getPathAlgorithm().getPath(start,end);
+        start.setLocation(start.x-1, start.y-1);
+        end.setLocation(end.x-1, end.y-1);
+        if(start.x < 0 || start.x >= room.getZombieNavigationMesh().length || start.y < 0 ||start.y >= room.getZombieNavigationMesh()[0].length)
+            throw new IndexOutOfBoundsException("getPath: start point out of bounds");
+        if(end.x < 0 || end.x >= room.getZombieNavigationMesh().length || end.y < 0 ||end.y >= room.getZombieNavigationMesh()[0].length)
+            throw new IndexOutOfBoundsException("getPath: end point out of bounds");
+        return room.getPathAlgorithm().getPath(start, end);
     }
 
     /**
@@ -515,8 +522,9 @@ public class MapController {
      * @param end   The end point
      * @return  The shortest path between the two points in the current room
      * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
+     *      * @throws IndexOutOfBoundsException if any point is out of bounds
      */
-    public static ArrayList<Point> getPath(Point start, Point end) throws NullPointerException {
+    public static ArrayList<Point> getPath(Point start, Point end) throws NullPointerException, IndexOutOfBoundsException {
         MapController controller = new MapController(); //TODO gör de andra statiska
         return getPath(controller.getRoom(),start,end);
     }

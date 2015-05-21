@@ -134,15 +134,15 @@ public class GameScreen implements Screen{
             mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
             mapController.createBodiesIfNeeded();
             MapController.createPathAlgorithm(mapController.getRoom());
-            /* ---- path test
-            ArrayList<Point> bana = MapController.getPath(new Point(4, 10), new Point(18, 17));
+             //path test
+            /*ArrayList<Point> bana = MapController.getPath(new Point(3, 11), new Point(19, 18));
             for(Point p : bana) {
                 System.out.println(p + "   " );
                 mapController.getRoom().getZombieNavigationMesh()[p.x][p.y] = false;
 
 
-            }*/
-            mapController.getRoom().getZombieNavigationMesh();
+            }
+            mapController.getRoom().getZombieNavigationMesh();*/
             if(GameModel.getInstance().getPlayer().getBody() == null){
                 GameModel.getInstance().getPlayer().createDefaultBody(currentWorld, mapController.getPlayerBufferPosition());
             }
