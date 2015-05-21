@@ -67,7 +67,7 @@ public class GameScreen implements Screen{
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Vector2 playerPosition = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
     Vector2 coll = new Vector2();
-
+    private float currentFraction = 1337;
 
 
 
@@ -277,11 +277,16 @@ public class GameScreen implements Screen{
                 public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
                     if (fixture.getFilterData().categoryBits ==
                             Constants.COLLISION_OBSTACLE){
-                        coll.set(point);
+                        if (fraction < currentFraction) {
+                            currentFraction = fraction;
+                            coll.set(point);
+                        }
+
                     }
-                        return 0;
+                        return 1;
                 }
             };
+            currentFraction = 1337;
             currentWorld.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()), new Vector2(v.x + gameModel.getPlayer().getX(), v.y + gameModel.getPlayer().getY()));
             /* ----------------- TEST FLASHLIGHT -----------------*/
             float coneWidth = Constants.PI/5;
