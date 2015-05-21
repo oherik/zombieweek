@@ -14,6 +14,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -66,6 +68,7 @@ public class GameScreen implements Screen{
     private Texture light = new Texture("core/assets/light.png");
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Vector2 playerPosition = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+
 
 
 
@@ -270,7 +273,18 @@ public class GameScreen implements Screen{
             Vector2 v = new Vector2(1,1);
             v.setLength(100);
             v.setAngleRad(direction + Constants.PI/2);
-
+            RayCastCallback callback = new RayCastCallback() {
+                @Override
+                public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                    System.out.println(point.x + ", " + point.y);
+                    if (fixture.getFilterData().categoryBits == Constants.COLLISION_OBSTACLE){
+                        System.out.println("Raycast!");
+                        return 0;
+                    }
+                        return 0;
+                }
+            };
+            currentWorld.rayCast(callback, playerPosition, v);
             shapeRenderer.setAutoShapeType(true);
             shapeRenderer.begin();
             shapeRenderer.line(playerPosition, new Vector2(v.x + playerPosition.x, v.y + playerPosition.y));
