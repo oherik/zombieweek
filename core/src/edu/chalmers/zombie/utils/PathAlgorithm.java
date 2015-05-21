@@ -64,6 +64,12 @@ public class PathAlgorithm {
             throw new IndexOutOfBoundsException("PathAlgorithm: the start position must be positive");
         if(endPos.x<0 || endPos.y<0)
             throw new IndexOutOfBoundsException("PathAlgorithm: the end position must be positive");
+        if(startPos.equals(endPos)){
+            ArrayList<Point> singlePointArray = new ArrayList<Point>();
+            singlePointArray.add(endPos);
+            return singlePointArray;
+        }
+
         this.startPos = startPos;
         this.endPos = endPos;
         maxSteps = 50;
