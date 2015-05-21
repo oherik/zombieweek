@@ -247,4 +247,24 @@ public abstract class Entity {
 
     public Sprite getSprite(){return sprite;}
 
+    /**
+     * Sets the entity's category bits, used for collision detection
+     * @param bits  The category bits
+     */
+    public void setCategoryBits(short bits){
+        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
+        newFilter.categoryBits = bits;
+        getBody().getFixtureList().get(0).setFilterData(newFilter);
+    }
+
+    /**
+     * Sets the entity's mask bits, used for collision detection
+     * @param bits  The mask bits
+     */
+    public void setMaskBits(short bits){
+        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
+        newFilter.maskBits = bits;
+        getBody().getFixtureList().get(0).setFilterData(newFilter);
+    }
+
 }

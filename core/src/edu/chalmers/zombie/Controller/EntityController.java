@@ -1,9 +1,5 @@
 package edu.chalmers.zombie.controller;
 
-//import com.badlogic.gdx.graphics.Texture;
-//import com.badlogic.gdx.graphics.g2d.Sprite;
-//import com.badlogic.gdx.math.Vector2;
-//import com.badlogic.gdx.physics.box2d.Filter;
 import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Player;
@@ -122,9 +118,7 @@ public class EntityController {
             throw new NullPointerException("setMaskBits: the entity can't be null");
         if(entity.getBody() == null)
             throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        Filter newFilter = entity.getBody().getFixtureList().get(0).getFilterData();
-        newFilter.categoryBits = bits;
-        entity.getBody().getFixtureList().get(0).setFilterData(newFilter);
+        entity.setCategoryBits(bits);
     }
 
     /**
@@ -137,8 +131,6 @@ public class EntityController {
             throw new NullPointerException("setMaskBits: the entity can't be null");
         if(entity.getBody() == null)
             throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        Filter newFilter = entity.getBody().getFixtureList().get(0).getFilterData();
-        newFilter.maskBits = bits;
-        entity.getBody().getFixtureList().get(0).setFilterData(newFilter);
+        entity.setMaskBits(bits);
     }
 }
