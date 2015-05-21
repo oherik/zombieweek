@@ -124,8 +124,15 @@ public class Book extends Entity {
         setAngularVelocity(omega);
     }
 
-
-
+    /**
+     * @return  The book's mass
+     * @throws  NullPointerException if no body found
+     */
+    public float getMass() throws NullPointerException{
+        if(getBody()==null)
+            throw new NullPointerException("getMass: no body found");
+        return getBody().getMass();
+    }
 
     /**
      * @return System time created

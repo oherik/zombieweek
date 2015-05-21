@@ -70,7 +70,7 @@ public class EntityController {
      */
     public static double getDamage(Book b){
         Vector2 vel = b.getVelocity();
-        float mass = b.getBody().getMass();
+        float mass = b.getMass();
         return Math.sqrt(vel.x*vel.x + vel.y*vel.y);    //TODO ta med massan h�r och n�n konstant
 
     }
