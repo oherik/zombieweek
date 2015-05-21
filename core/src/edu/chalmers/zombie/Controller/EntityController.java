@@ -24,7 +24,8 @@ public class EntityController {
         z.scaleSprite(1f / Constants.TILE_SIZE);
         GameModel.getInstance().addEntityToRemove(z);
         z.knockOut();                                                                   //TODO Zombie b�r f� en hit() eller n�t ist�llet
-        GameModel.getInstance().res.getSound("zombie_sleeping").play();
+        AudioController.playSound(GameModel.getInstance().res.getSound("zombie_sleeping"));
+
     }
 
     /* ---------------- PLAYER --------------------*/
@@ -56,7 +57,7 @@ public class EntityController {
         knockOut(z);
         GameModel.getInstance().addEntityToRemove(b);
         b.markForRemoval();
-        GameModel.getInstance().res.getSound("zombie_hit").play();
+        AudioController.playSound(GameModel.getInstance().res.getSound("zombie_hit"));
     }
 
     /**
@@ -77,7 +78,7 @@ public class EntityController {
             GameModel.getInstance().addEntityToRemove(b); //TODO beh�vs b�da dessa?
             b.markForRemoval();             //TODO beh�vs b�da dessa?
             p.increaseAmmunition();
-            GameModel.getInstance().res.getSound("pick_up_book").play();
+            AudioController.playSound(GameModel.getInstance().res.getSound("pick_up_book"));
     }
 
 
