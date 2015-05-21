@@ -266,16 +266,27 @@ public class GameScreen implements Screen{
             bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight() - 25);
             bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight() - 40);
             batchHUD.end();
-            float direction = gameModel.getPlayer().getHand().getDirection();
-            Vector2 v = new Vector2(1,1);
-            v.setLength(100);
-            v.setAngleRad(direction + Constants.PI/2);
 
+            /* ----------------- TEST FLASHLIGHT -----------------*/
+            float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI / 2;
+            float coneWidth = Constants.PI/5;
+            int numberOfRays = 10;
+            int coneLength = 200;
+            Vector2[] rays = new Vector2[numberOfRays];
+            for(int i = 0; i<numberOfRays; i++){
+                rays[i] = new Vector2(1,1);
+                rays[i].setLength(coneLength);
+                rays[i].setAngleRad(direction - coneWidth/2 + i*coneWidth/numberOfRays);
+            }
+            
             shapeRenderer.setAutoShapeType(true);
             shapeRenderer.begin();
-            shapeRenderer.line(playerPosition, new Vector2(v.x + playerPosition.x, v.y + playerPosition.y));
+            for(int i = 0; i<numberOfRays; i++) {
+                shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
+            }
             shapeRenderer.end();
 
+            /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
             //Skapa path finding        //TODO debug
