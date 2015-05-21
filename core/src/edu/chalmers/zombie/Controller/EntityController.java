@@ -1,9 +1,5 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Filter;
 import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Player;
@@ -24,7 +20,7 @@ public class EntityController {
      * @param z The zombie
      */
     public static void knockOut(Zombie z){
-        z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp, borde vara z.getDeadSprite() eller n�t
+        z.setSprite("core/assets/zombie_test_sleep.png");      //TODO temp, borde vara z.getDeadSprite() eller n�t
         z.scaleSprite(1f / Constants.TILE_SIZE);
         GameModel.getInstance().addEntityToRemove(z);
         z.knockOut();                                                                   //TODO Zombie b�r f� en hit() eller n�t ist�llet
@@ -69,10 +65,7 @@ public class EntityController {
      * @return  The damage caused by the book
      */
     public static double getDamage(Book b){
-        Vector2 vel = b.getVelocity();
-        float mass = b.getBody().getMass();
-        return Math.sqrt(vel.x*vel.x + vel.y*vel.y);    //TODO ta med massan h�r och n�n konstant
-
+        return b.getSpeed()*b.getMass();    //TODO ta med massan h�r och n�n konstant
     }
 
     /**
@@ -125,9 +118,7 @@ public class EntityController {
             throw new NullPointerException("setMaskBits: the entity can't be null");
         if(entity.getBody() == null)
             throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        Filter newFilter = entity.getBody().getFixtureList().get(0).getFilterData();
-        newFilter.categoryBits = bits;
-        entity.getBody().getFixtureList().get(0).setFilterData(newFilter);
+        entity.setCategoryBits(bits);
     }
 
     /**
@@ -140,8 +131,6 @@ public class EntityController {
             throw new NullPointerException("setMaskBits: the entity can't be null");
         if(entity.getBody() == null)
             throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        Filter newFilter = entity.getBody().getFixtureList().get(0).getFilterData();
-        newFilter.maskBits = bits;
-        entity.getBody().getFixtureList().get(0).setFilterData(newFilter);
+        entity.setMaskBits(bits);
     }
 }

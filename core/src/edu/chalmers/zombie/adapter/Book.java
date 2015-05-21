@@ -86,6 +86,16 @@ public class Book extends Entity {
         return getBody().getLinearVelocity();
     }
 
+    /**
+     * @return The book's speed
+     * @throws NullPointerException if no body is found
+     */
+    public float getSpeed() throws NullPointerException{
+        if(getBody()==null)
+            throw new NullPointerException("getSpeed: no body found");
+        return getBody().getLinearVelocity().len();
+    }
+
     @Override
     protected void setBodyVelocity(Vector2 velocity){
         super.setBodyVelocity(velocity);
@@ -124,8 +134,15 @@ public class Book extends Entity {
         setAngularVelocity(omega);
     }
 
-
-
+    /**
+     * @return  The book's mass
+     * @throws  NullPointerException if no body found
+     */
+    public float getMass() throws NullPointerException{
+        if(getBody()==null)
+            throw new NullPointerException("getMass: no body found");
+        return getBody().getMass();
+    }
 
     /**
      * @return System time created

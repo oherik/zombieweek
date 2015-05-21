@@ -203,6 +203,13 @@ public abstract class Entity {
     }
 
     /**
+     * Sets the entity's sprite based on a path //TODO must throw exceptions
+     * @param spritePath    The path to the sprite
+     */
+    public void setSprite(String spritePath){
+        this.sprite = new Sprite(new Texture(spritePath));
+    }
+    /**
      * Removes the body from the world in which it resides. It also sets the body to null, since it otherwise can cause
      * null pointer exceptions.
      */
@@ -239,5 +246,25 @@ public abstract class Entity {
     public Animator getAnimator(){return animator;}
 
     public Sprite getSprite(){return sprite;}
+
+    /**
+     * Sets the entity's category bits, used for collision detection
+     * @param bits  The category bits
+     */
+    public void setCategoryBits(short bits){
+        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
+        newFilter.categoryBits = bits;
+        getBody().getFixtureList().get(0).setFilterData(newFilter);
+    }
+
+    /**
+     * Sets the entity's mask bits, used for collision detection
+     * @param bits  The mask bits
+     */
+    public void setMaskBits(short bits){
+        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
+        newFilter.maskBits = bits;
+        getBody().getFixtureList().get(0).setFilterData(newFilter);
+    }
 
 }
