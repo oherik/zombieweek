@@ -203,6 +203,13 @@ public abstract class Entity {
     }
 
     /**
+     * Sets the entity's sprite based on a path //TODO must throw exceptions
+     * @param spritePath    The path to the sprite
+     */
+    public void setSprite(String spritePath){
+        this.sprite = new Sprite(new Texture(spritePath));
+    }
+    /**
      * Removes the body from the world in which it resides. It also sets the body to null, since it otherwise can cause
      * null pointer exceptions.
      */

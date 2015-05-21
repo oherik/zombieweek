@@ -24,7 +24,7 @@ public class EntityController {
      * @param z The zombie
      */
     public static void knockOut(Zombie z){
-        z.setSprite(new Sprite(new Texture("core/assets/zombie_test_sleep.png")));      //TODO temp, borde vara z.getDeadSprite() eller n�t
+        z.setSprite("core/assets/zombie_test_sleep.png");      //TODO temp, borde vara z.getDeadSprite() eller n�t
         z.scaleSprite(1f / Constants.TILE_SIZE);
         GameModel.getInstance().addEntityToRemove(z);
         z.knockOut();                                                                   //TODO Zombie b�r f� en hit() eller n�t ist�llet
