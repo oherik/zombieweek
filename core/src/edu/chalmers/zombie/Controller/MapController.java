@@ -506,13 +506,13 @@ public class MapController {
         if(room.getPathAlgorithm()==null){
             throw new NullPointerException("getPath: The path algorithm hasn't been initialized");
         }
-        start.setLocation(start.x-1, start.y-1);
-        end.setLocation(end.x-1, end.y-1);
-        if(start.x < 0 || start.x >= room.getZombieNavigationMesh().length || start.y < 0 ||start.y >= room.getZombieNavigationMesh()[0].length)
+        Point startAlg = new Point(start.x-1, start.y-1);
+        Point endAlg = new Point(end.x-1, end.y-1);
+        if(startAlg.x < 0 || startAlg.x >= room.getZombieNavigationMesh().length || startAlg.y < 0 ||startAlg.y >= room.getZombieNavigationMesh()[0].length)
             throw new IndexOutOfBoundsException("getPath: start point out of bounds");
-        if(end.x < 0 || end.x >= room.getZombieNavigationMesh().length || end.y < 0 ||end.y >= room.getZombieNavigationMesh()[0].length)
+        if(endAlg.x < 0 || endAlg.x >= room.getZombieNavigationMesh().length || endAlg.y < 0 ||endAlg.y >= room.getZombieNavigationMesh()[0].length)
             throw new IndexOutOfBoundsException("getPath: end point out of bounds");
-        return room.getPathAlgorithm().getPath(start, end);
+        return room.getPathAlgorithm().getPath(startAlg, endAlg);
     }
 
     /**
