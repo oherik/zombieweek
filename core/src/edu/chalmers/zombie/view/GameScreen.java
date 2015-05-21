@@ -1,10 +1,8 @@
 package edu.chalmers.zombie.view;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -68,6 +66,7 @@ public class GameScreen implements Screen{
     private Texture light = new Texture("core/assets/light.png");
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Vector2 playerPosition = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+    Vector2 coll = new Vector2();
 
 
 
@@ -271,22 +270,20 @@ public class GameScreen implements Screen{
             batchHUD.end();
             float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
             Vector2 v = new Vector2(1,1);
-            v.setLength(100);
+            v.setLength(10);
             v.setAngleRad(direction);
             RayCastCallback callback = new RayCastCallback() {
                 @Override
                 public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-                    System.out.println(point.x + ", " + point.y);
                     if (fixture.getFilterData().categoryBits ==
                             Constants.COLLISION_OBSTACLE){
-                        System.out.println("Raycast!");
+                        coll.set(point);
                         return 0;
                     }
-                        return 0;
+                        return -1;
                 }
             };
-            currentWorld.rayCast(callback, playerPosition, v);
-
+            currentWorld.rayCast(callback, playerPosition, new Vector2(v.x + gameModel.getPlayer().getX(), v.y + gameModel.getPlayer().getY()));
             /* ----------------- TEST FLASHLIGHT -----------------*/
             float coneWidth = Constants.PI/5;
             int numberOfRays = 10;
@@ -298,10 +295,14 @@ public class GameScreen implements Screen{
                 rays[i].setAngleRad(direction - coneWidth/2 + i*coneWidth/numberOfRays);
             }
             shapeRenderer.setAutoShapeType(true);
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.begin();
             for(int i = 0; i<numberOfRays; i++) {
                 shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
             }
+            shapeRenderer.end();
+            shapeRenderer.begin();
             shapeRenderer.end();
 
             /*---------------- END TEST -------------------------*/
