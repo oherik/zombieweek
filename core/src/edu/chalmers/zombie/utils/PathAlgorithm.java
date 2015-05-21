@@ -11,7 +11,6 @@ import java.util.*;
  */
 public class PathAlgorithm {
     private Point startPos, endPos;
-    private String collision;
     private int maxSteps;
     private boolean[][] navigationalMesh;
 
