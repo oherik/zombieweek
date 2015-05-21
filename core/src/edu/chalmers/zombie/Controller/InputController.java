@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -60,54 +61,59 @@ public class InputController implements InputProcessor{
      */
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode){
-            case Input.Keys.W:
-                //move north
-                gameModel.movePlayer(Direction.NORTH);
-                break;
-            case Input.Keys.S:
-                //move south
-                gameModel.movePlayer(Direction.SOUTH);
-                break;
-            case Input.Keys.D:
-                //move east
-                gameModel.movePlayer(Direction.EAST);
-                break;
-            case Input.Keys.A:
-                //move west
-                gameModel.movePlayer(Direction.WEST);
-                break;
-            case Input.Keys.SPACE:
-                //throw book
-                tryThrowingBook();
-                break;
-            case Input.Keys.UP:
-                //aim left
-                getPlayer().getHand().startAimingLeft();
-                break;
-            case Input.Keys.DOWN:
-                //aim right
-                getPlayer().getHand().startAimingRight();
-                break;
-            case Input.Keys.C:
-                //change aiming type
-                getPlayer().getHand().toggleMouseAiming();
-                break;
-            case Input.Keys.ESCAPE:
+        switch (gameModel.getGameState()){
+            case GAME_RUNNING:
+                switch (keycode) {
+                    case Input.Keys.W:
+                        //move north
+                        gameModel.movePlayer(Direction.NORTH);
+                        break;
+                    case Input.Keys.S:
+                        //move south
+                        gameModel.movePlayer(Direction.SOUTH);
+                        break;
+                    case Input.Keys.D:
+                        //move east
+                        gameModel.movePlayer(Direction.EAST);
+                        break;
+                    case Input.Keys.A:
+                        //move west
+                        gameModel.movePlayer(Direction.WEST);
+                        break;
+                    case Input.Keys.SPACE:
+                        //throw book
+                        tryThrowingBook();
+                        break;
+                    case Input.Keys.UP:
+                        //aim left
+                        getPlayer().getHand().startAimingLeft();
+                        break;
+                    case Input.Keys.DOWN:
+                        //aim right
+                        getPlayer().getHand().startAimingRight();
+                        break;
+                    case Input.Keys.C:
+                        //change aiming type
+                        getPlayer().getHand().toggleMouseAiming();
+                        break;
+                    case Input.Keys.ESCAPE:
 
-                switch (gameModel.getGameState()){
-                    case GAME_RUNNING:
                         System.out.println("GAME PAUSED");
                         gameModel.setGameState(GameState.GAME_PAUSED);
                         break;
-                    case GAME_PAUSED:
+
+                    default:
+                }
+                return false;
+            case GAME_PAUSED:
+                switch (keycode) {
+                    case Input.Keys.ESCAPE:
                         System.out.println("GAME STARTED");
                         gameModel.setGameState(GameState.GAME_RUNNING);
                         break;
+                    default:
                 }
                 break;
-            default:
-                return false;
         }
         return true;
     }
@@ -168,7 +174,11 @@ public class InputController implements InputProcessor{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        tryThrowingBook();
+        switch (gameModel.getGameState()) {
+            case GAME_RUNNING:
+                tryThrowingBook();
+                break;
+        }
         return true;
     }
 
@@ -184,7 +194,12 @@ public class InputController implements InputProcessor{
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        getPlayer().getHand().setMouseDirection(screenX, screenY);
+        switch (gameModel.getGameState()) {
+            case GAME_RUNNING:
+                getPlayer().getHand().setMouseDirection(screenX, screenY);
+                break;
+        }
+
         return false;
     }
 
