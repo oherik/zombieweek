@@ -100,6 +100,11 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         speed = newSpeed;
     }
 
+    public int getSpeed() {
+
+        return speed;
+    }
+
     /**
      * A method which decreases the zombie's hp (life measured in points).
      */
@@ -159,6 +164,21 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void setDetectionRadius(float radius) {
 
         this.radius = radius;
+    }
+
+    public float getDetectionRadius() {
+
+        return radius;
+    }
+
+    public Vector2 getForce() {
+
+        return force;
+    }
+
+    public Vector2 getPoint() {
+
+        return point;
     }
 
     //@Override
@@ -258,6 +278,16 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public boolean isMoving() {
 
         return isMoving;
+    }
+
+    public void setIsMoving(boolean isMoving) {
+
+        this.isMoving = isMoving;
+    }
+
+    public MapController getThisMapController() {
+
+        return mapController;
     }
 
     public abstract Zombie spawn(World world, int x, int y);
