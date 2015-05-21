@@ -178,21 +178,14 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
 
         if(pathToPlayer!=null) {
+
+            zombiePosition = new Point(Math.round(super.getX()), Math.round(super.getY()));
+
+       /* if(pathToPlayer!=null) {
             for (Point p : pathToPlayer) {
                 System.out.println(p);
             }
         }
-
-        if (pathToPlayer != null) {
-
-            for (int i = 0; i < (pathToPlayer.size() - 1); i++) {
-
-                System.out.println(pathToPlayer.get(i).x + " " + pathToPlayer.get(i).y);
-            }
-        } else {
-            System.out.println("Slut på väg");
-        }
-         /*
 
         for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
 
@@ -252,54 +245,55 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         } */
 
 
-        if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
+            if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
-            // TODO: attack
-        } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
+                // TODO: attack
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
 
-            setForceY(speed);
-            setForceX(0);
-        } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
+                setForceY(speed);
+                setForceX(0);
+            } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
-            setForceY(0);
-            setForceX(speed);
-        } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
+                setForceY(0);
+                setForceX(speed);
+            } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
 
-            setForceY(0);
-            setForceX(-speed);
-        } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
+                setForceY(0);
+                setForceX(-speed);
+            } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
 
-            setForceY(-speed);
-            setForceX(0);
-        } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
+                setForceY(-speed);
+                setForceX(0);
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
-            setForceY(speed);
-            setForceX(speed);
-        } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
+                setForceY(speed);
+                setForceX(speed);
+            } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
 
-            setForceY(-speed);
-            setForceX(speed);
-        } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
+                setForceY(-speed);
+                setForceX(speed);
+            } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
-            setForceY(speed);
-            setForceX(-speed);
-        } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
+                setForceY(speed);
+                setForceX(-speed);
+            } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
 
-            setForceY(-speed);
-            setForceX(-speed);
-        } else {
-            // TODO: some exception management
-        }
+                setForceY(-speed);
+                setForceX(-speed);
+            } else {
+                // TODO: some exception management
+            }
 
-        Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
-        Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
+            Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
+            Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
 
-        if (super.getBody() != null) {
+            if (super.getBody() != null) {
 
-            if (zcircle.overlaps(pcircle)) {
+                if (zcircle.overlaps(pcircle)) {
 
-                super.getBody().applyForce(force, point, !isKnockedOut);
-                isMoving = true;
+                    super.getBody().applyForce(force, point, !isKnockedOut);
+                    isMoving = true;
+                }
             }
         }
 
