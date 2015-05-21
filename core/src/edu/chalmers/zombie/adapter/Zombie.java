@@ -175,17 +175,24 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
 
-        /*ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
+        ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
+
         if(pathToPlayer!=null) {
             for (Point p : pathToPlayer) {
                 System.out.println(p);
             }
         }
 
-        for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
+        if (pathToPlayer != null) {
 
-            System.out.println(pathToPlayer.get(i).x + " " + pathToPlayer.get(i).y);
+            for (int i = 0; i < (pathToPlayer.size() - 1); i++) {
+
+                System.out.println(pathToPlayer.get(i).x + " " + pathToPlayer.get(i).y);
+            }
+        } else {
+            System.out.println("Slut på väg");
         }
+         /*
 
         for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
 
@@ -292,6 +299,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
             if (zcircle.overlaps(pcircle)) {
 
                 super.getBody().applyForce(force, point, !isKnockedOut);
+                isMoving = true;
             }
         }
 
