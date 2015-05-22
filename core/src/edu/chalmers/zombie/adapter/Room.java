@@ -15,7 +15,8 @@ import java.util.ArrayList;
 /**
  * The general model for storing a specific level. The level contains a tiled map, which is the graphical representation
  * of the level and its meta data, and a box2d World which handles the physics. It also stores the zombies for the current
- * level.
+ * level. It furthermore stores a 2d short array which hold the collision data for fast collision lookups in path finding
+ * and other algorithms.
  */
 public class Room {
     private World world;
@@ -25,7 +26,7 @@ public class Room {
     Point playerSpawn, playerReturn;
     TiledMapTileLayer metaLayer;
     TiledMapImageLayer topLayer, bottomLayer;
-    private boolean[][] zombieNavigationMesh, throwingObstructedTiles;
+    private short[][] collisionTileGrid;
 
     /**
      * Creates a new level based on a tiled map and a Box2D world
@@ -48,45 +49,36 @@ public class Room {
 
         zombies = new ArrayList<Zombie>();
 
-        zombieNavigationMesh = new boolean[metaLayer.getWidth()][metaLayer.getHeight()];
-        throwingObstructedTiles = new boolean[metaLayer.getWidth()][metaLayer.getHeight()];
+        collisionTileGrid = new short[metaLayer.getWidth()][metaLayer.getHeight()];
+
     }
 
-
     /**
-     * Mark a tile as traversable for the zombies
+     * Add collision to a tile tile
      * @param x The x coordinate
      * @param y The y coordinate
-     * @param traversable   true if traversable, false if not
+     * @param bit   The collision bit
      */
-    public void setZombieNavigationalTile(int x, int y, boolean traversable){
-        zombieNavigationMesh[x][y] = traversable;
+    public void addCollision(int x, int y, short bit){
+        collisionTileGrid[x][y] += bit;
     }
 
     /**
-     * @return  The traverasble tiles for the zombies
-     */
-    public boolean[][] getZombieNavigationMesh(){
-        return zombieNavigationMesh;
-    }
-
-    /**
-     * @return  The tiles which should stop books
-     */
-    public boolean[][] getThrowingObstructedTiles(){
-        return throwingObstructedTiles;
-    }
-    /**
-     * Mark a tile as obstructing a throw
+     * Remove collision from a tile
      * @param x The x coordinate
      * @param y The y coordinate
-     * @param throwable   true if obstructing, false if not
+     * @param bit   The collision bit
      */
-    public void setThrowingObstructedTiles(int x, int y, boolean throwable){
-        throwingObstructedTiles[x][y] = throwable;
+    public void removeCollision(int x, int y, short bit){
+        collisionTileGrid[x][y] -= bit;
     }
 
-
+    /**
+     * @return  The collision grid for the zombies as a 2d short array.
+     */
+    public short[][] getCollisionTileGrid(){
+        return collisionTileGrid;
+    }
 
     /**
      * @return The map's meta data layer

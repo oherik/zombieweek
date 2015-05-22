@@ -15,7 +15,7 @@ public class TileRayTracing {
      * @throws NullPointerException if either parameter is null
      * @throws IndexOutOfBoundsException if either point is out of bounds
      */
-    public static boolean pathObstructed(Point start, Point end, boolean[][] obstructedTiles) throws NullPointerException, IndexOutOfBoundsException{
+    public static boolean pathObstructed(Point start, Point end, short[][] obstructedTiles, short collisionBit) throws NullPointerException, IndexOutOfBoundsException{
         if(obstructedTiles == null)
             throw new NullPointerException("pathObstructed: obstructed tile grid was null");
         if(start == null)
@@ -35,12 +35,12 @@ public class TileRayTracing {
         int ySign = (end.y-start.y)<0 ? -1 : 1;
         int y = start.y;
         for(int x = start.x; x != end.x + dxSign && x>=0 && x<obstructedTiles.length; x = x + dxSign){
-            if(obstructedTiles[x][y] == true) {
+            if((obstructedTiles[x][y]&collisionBit) == collisionBit) {
                 return true;
             }
             error = error + deltaError;
             while(error>=0.5 && y>= 0 && y < obstructedTiles[0].length){
-                if(obstructedTiles[x][y] == true) {
+                if((obstructedTiles[x][y]&collisionBit) == collisionBit) {
                     return true;
                 }
                 y = y + ySign;
