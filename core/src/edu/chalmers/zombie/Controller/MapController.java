@@ -1,6 +1,5 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -206,16 +205,17 @@ public class MapController {
                                 room.setPlayerReturn(new Point(col, row));
                             }
                         }
-                        /* ----- Create zombie path finding ----*/
-                        if (currentCell == null || currentCell.getTile() == null ||
-                                (currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null && currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) == null)){
-                            room.setZombieNavigationalTile(col,row, true);
-                        }
+
 
                         /* ------ Create book obstacles -----*/
-                        if (currentCell != null && currentCell.getTile() != null &&
-                                (currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL)!= null)){
-                            room.setThrowingObstructedTiles(col,row, true);
+                        if (currentCell != null && currentCell.getTile() != null){
+                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL)!= null) {
+                                room.addCollision(col, row, Constants.COLLISION_OBSTACLE);
+                            }
+                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) != null){
+                                room.addCollision(col, row, Constants.COLLISION_ZOMBIE);
+                        }
+
                         }
                     }
                 }
@@ -400,7 +400,7 @@ public class MapController {
         int x_end = Math.round(endPosition.x - endPosition.x % 1 - 0.5f);
         int y_end = Math.round(endPosition.y - endPosition.y % 1 - 0.5f);
 
-        return TileRayTracing.pathObstructed(new Point(x_origin, y_origin), new Point(x_end, y_end), room.getThrowingObstructedTiles());
+        return TileRayTracing.pathObstructed(new Point(x_origin, y_origin), new Point(x_end, y_end), room.getCollisionTileGrid(), Constants.COLLISION_OBSTACLE);
     }
 
     /**
@@ -417,7 +417,7 @@ public class MapController {
         int x = Math.round(position.x - position.x%1);
         int y = Math.round(position.y - position.y%1);
 
-        return wallAt(x,y,metaLayer);
+        return wallAt(x, y, metaLayer);
     }
 
     /**
@@ -438,21 +438,21 @@ public class MapController {
     /**
      * @return The current room's zombie navigation mesh
      */
-    public boolean[][] getZombieNavigationMesh(){
+    public short[][] getCollisionTileGrid(){
           //TODO printar navmeshen, debug
-        System.out.println("i: " + getRoom().getZombieNavigationMesh().length    + " j: " + getRoom().getZombieNavigationMesh()[0].length);
-            for(int y = getRoom().getZombieNavigationMesh()[0].length-1; y >= 0; y--){
-                for(int x = 0; x < getRoom().getZombieNavigationMesh().length; x++){
-               // if(getMapMetaLayer().getCell(x,y) == null || getMapMetaLayer().getCell(x, y) == null || getMapMetaLayer().getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) == null)        //TODO debug
-                if(getRoom().getZombieNavigationMesh()[x][y] == true)
-                        System.out.print("   ");
+        System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +": printing collision detection tiles.");
+        System.out.println("Width: " + getRoom().getCollisionTileGrid().length    + " Height: " + getRoom().getCollisionTileGrid()[0].length);
+            for(int y = getRoom().getCollisionTileGrid()[0].length-1; y >= 0; y--){
+                for(int x = 0; x < getRoom().getCollisionTileGrid().length; x++){
+                if(getRoom().getCollisionTileGrid()[x][y] == 0)
+                        System.out.print("\t ");
                 else
-                        System.out.print(" x ");
+                        System.out.print("\t" + getRoom().getCollisionTileGrid()[x][y]);
             }
             System.out.println("");
         }
 
-        return getRoom().getZombieNavigationMesh();
+        return getRoom().getCollisionTileGrid();
 
     }
 
@@ -469,17 +469,17 @@ public class MapController {
         if(room==null){
             throw new NullPointerException("the room pointer was null");
         }
-        if(room.getZombieNavigationMesh()==null){
+        if(room.getCollisionTileGrid()==null){
             throw new NullPointerException("getPath: the room's navigation mesh was null, can't create path without one");
         }
         if(start==null ||end == null){
             throw new NullPointerException("getPath: The points mustn't be null");
         }
-        if(start.x < 0 || start.x >= room.getZombieNavigationMesh().length || start.y < 0 ||start.y >= room.getZombieNavigationMesh()[0].length)
+        if(start.x < 0 || start.x >= room.getCollisionTileGrid().length || start.y < 0 ||start.y >= room.getCollisionTileGrid()[0].length)
             throw new IndexOutOfBoundsException("getPath: start point out of bounds");
-        if(end.x < 0 || end.x >= room.getZombieNavigationMesh().length || end.y < 0 ||end.y >= room.getZombieNavigationMesh()[0].length)
+        if(end.x < 0 || end.x >= room.getCollisionTileGrid().length || end.y < 0 ||end.y >= room.getCollisionTileGrid()[0].length)
             throw new IndexOutOfBoundsException("getPath: end point out of bounds");
-        return PathAlgorithm.getPath(start, end, room.getZombieNavigationMesh());
+        return PathAlgorithm.getPath(start, end, room.getCollisionTileGrid(), Constants.COLLISION_ZOMBIE);
     }
 
     /**
@@ -493,6 +493,6 @@ public class MapController {
      */
     public static ArrayList<Point> getPath(Point start, Point end) throws NullPointerException, IndexOutOfBoundsException {
         MapController controller = new MapController(); //TODO gör de andra statiska
-        return getPath(controller.getRoom(),start,end);
+        return getPath(controller.getRoom(), start, end);
     }
 }

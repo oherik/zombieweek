@@ -20,9 +20,9 @@ public class PathAlgorithm {
      * @throws  NullPointerException    if either of the points is null
      */
 
-    public static ArrayList<Point> getPath(Point startPos, Point endPos, boolean[][] navigationalMesh) throws NullPointerException, IndexOutOfBoundsException {
+    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] navigationalMesh, short collisionBit) throws NullPointerException, IndexOutOfBoundsException {
         int maxSteps = 50;
-        return getPath(startPos, endPos, navigationalMesh, maxSteps);
+        return getPath(startPos, endPos, navigationalMesh, maxSteps, collisionBit);
     }
 
     /** The start function for calculating the shortest path between two points on the map, a maximum number of steps included
@@ -34,7 +34,7 @@ public class PathAlgorithm {
      * @throws IndexOutOfBoundsException if the start or end position is negative
      * @throws  NullPointerException    if either of the points is null
      */
-    public static ArrayList<Point> getPath(Point startPos, Point endPos, boolean[][] navigationalMesh, int maxSteps) throws NullPointerException, IndexOutOfBoundsException {
+    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] navigationalMesh, int maxSteps, short collisionBit) throws NullPointerException, IndexOutOfBoundsException {
         if (navigationalMesh == null)
             throw new NullPointerException("PathAlgorithm: the navigational mesh cannot be null");
         if(startPos == null || endPos == null)
@@ -50,7 +50,7 @@ public class PathAlgorithm {
             singlePointArray.add(endPos);
             return singlePointArray;
         }
-        return calculatePath(startPos,endPos,navigationalMesh,maxSteps);
+        return calculatePath(startPos,endPos,navigationalMesh,maxSteps, collisionBit);
     }
 
     /**
@@ -59,7 +59,7 @@ public class PathAlgorithm {
      * @return the shortest path or, if none found, null
      */
 
-    private static ArrayList<Point> calculatePath(Point startPos, Point endPos, boolean[][] navigationalMesh, int maxSteps) {
+    private static ArrayList<Point> calculatePath(Point startPos, Point endPos, short[][] navigationalMesh, int maxSteps, short collisionBit) {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
         QueueElement currentElement;
         int width = navigationalMesh.length;
@@ -84,8 +84,8 @@ public class PathAlgorithm {
                     closedNodes[x][y] = true;
                     for (int i = Math.max(0, x - 1); i <= Math.min(width - 1, x + 1); i++) {
                         for (int j = Math.max(0, y - 1); j <= Math.min(height - 1, y + 1); j++) {
-                            if (walkableTile(closedNodes, i, j, navigationalMesh)
-                                    && noCornersCut(closedNodes, currentNode, i, j, navigationalMesh)) {
+                            if (walkableTile(closedNodes, i, j, navigationalMesh, collisionBit)
+                                    && noCornersCut(closedNodes, currentNode, i, j, navigationalMesh, collisionBit)) {
                                 int g;
                                 int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
                                 if (isDiagonal(currentNode, i, j))
@@ -113,8 +113,8 @@ public class PathAlgorithm {
      * @param y     The node's y variable
      * @return  true if it's walkable, false if it isn't
      */
-    private static boolean walkableTile(boolean[][] closedNodes, int x, int y, boolean[][] navigationalMesh){
-            return !closedNodes[x][y] == true && navigationalMesh[x][y];
+    private static boolean walkableTile(boolean[][] closedNodes, int x, int y, short[][] navigationalMesh, short collisionBit){
+            return !closedNodes[x][y] && !((navigationalMesh[x][y] & collisionBit) == collisionBit);
     }
 
 
@@ -125,11 +125,11 @@ public class PathAlgorithm {
      * @param y     The node's y variable
      * @return true if it's walkable, false if it cuts corners
      */
-    private static boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y, boolean[][] navigationalMesh){
+    private static boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y, short[][] navigationalMesh, short collisionBit){
         int parentX = parent.x;
         int parentY = parent.y;
         if(isDiagonal(parent, x, y))
-            return walkableTile(closedNodes, parentX, y, navigationalMesh) && walkableTile(closedNodes, x, parentY, navigationalMesh);
+            return walkableTile(closedNodes, parentX, y, navigationalMesh, collisionBit) && walkableTile(closedNodes, x, parentY, navigationalMesh, collisionBit);
         else
             return true;
     }

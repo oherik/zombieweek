@@ -105,7 +105,7 @@ public class GameScreen implements Screen{
         /*---TEST--*/
         steps = 0;
         TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getRoom().getMetaLayer();
-        boolean[][] zombieNavMesh = mapController.getZombieNavigationMesh();
+        short[][] zombieNavMesh = mapController.getCollisionTileGrid();
         /*---SLUTTEST---*/
 
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
@@ -148,11 +148,11 @@ public class GameScreen implements Screen{
             /*ArrayList<Point> bana = MapController.getPath(new Point(3, 11), new Point(19, 18));
             for(Point p : bana) {
                 System.out.println(p + "   " );
-                mapController.getRoom().getZombieNavigationMesh()[p.x][p.y] = false;
+                mapController.getRoom().getCollisionTileGrid()[p.x][p.y] = false;
 
 
             }
-            mapController.getRoom().getZombieNavigationMesh();*/
+            mapController.getRoom().getCollisionTileGrid();*/
             if(GameModel.getInstance().getPlayer().getBody() == null){
                 GameModel.getInstance().getPlayer().createDefaultBody(currentWorld, mapController.getPlayerBufferPosition());
             }
@@ -352,7 +352,7 @@ public class GameScreen implements Screen{
         soundAndSettingStage.addActor(settingsButton);
         soundAndSettingStage.addActor(soundButton);
 
-        soundButton.addListener(new ClickListener(){
+        soundButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 AudioController audioController = new AudioController();
@@ -429,7 +429,7 @@ public class GameScreen implements Screen{
                Player player = gameModel.getPlayer();
                Point end = new Point(Math.round(player.getX()-0.5f), Math.round(player.getY()-0.5f));
                Point start = new Point(Math.round(z.getX()-0.5f), Math.round(z.getY()-0.5f));
-               path = pathFinding.getPath(start, end, mapController.getRoom().getZombieNavigationMesh(), 20);                 //TODO gör nåt vettigt här istälelt för att abra printa.
+               path = pathFinding.getPath(start, end, mapController.getRoom().getCollisionTileGrid(), 20, Constants.COLLISION_ZOMBIE);                 //TODO gör nåt vettigt här istälelt för att abra printa.
                System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
                if (path == null) {
                     System.out.println("Ingen path hittad");
