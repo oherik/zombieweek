@@ -114,7 +114,7 @@ public class PathAlgorithm {
      * @return  true if it's walkable, false if it isn't
      */
     private static boolean walkableTile(boolean[][] closedNodes, int x, int y, boolean[][] navigationalMesh){
-            return !closedNodes[x][y] == true && navigationalMesh[x][y]==true;
+            return !closedNodes[x][y] == true && navigationalMesh[x][y];
     }
 
 
