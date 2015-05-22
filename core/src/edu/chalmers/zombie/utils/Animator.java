@@ -13,6 +13,8 @@ public class Animator {
     private float time;
     private float timeDelay;
     private int currentFrame;
+    private TextureRegion stillFrame; //still frame for animation, e.g. when player/zombie is standing still
+
 
     /**
      * Creates an empty Animator
@@ -40,6 +42,16 @@ public class Animator {
         time = 0;
         currentFrame = 0;
     }
+
+    /**
+     * Sets a still image for animation.
+     * @param stillFrame The still frame
+     */
+    public void setStillFrame(TextureRegion stillFrame){
+        this.stillFrame = stillFrame;
+    }
+
+
 
     /**
      * Updates the animation
@@ -81,6 +93,12 @@ public class Animator {
     public TextureRegion getFrame() {
         return textureFrames[currentFrame];
     }
+
+    /**
+     * Get the still frame of the animation
+     * @return TextureRegion still frame
+     */
+    public TextureRegion getStillFrame() {return  stillFrame;}
 
     /**
      * @param timeDelay The time delay
