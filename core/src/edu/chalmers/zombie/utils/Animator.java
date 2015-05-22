@@ -18,7 +18,7 @@ public class Animator {
     private TextureRegion stillFrame; //still frame for animation, e.g. when player/zombie is standing still
     private int overlayTime;
     private boolean overlay = false;
-    private TextureRegion overlayFrame;
+    private TextureRegion overlayFrame; //frame that will overlay
     private long systemTime; //stores system time
 
 
@@ -76,7 +76,7 @@ public class Animator {
      * @param deltaTime The delta time
      */
     public void update(float deltaTime){
-        
+
         //Checks if image should overlay
         if(overlay==true && System.currentTimeMillis()-systemTime>overlayTime){
             overlay = false;
