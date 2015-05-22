@@ -49,6 +49,11 @@ public class Player extends Entity implements CreatureInterface {
     public Player(Texture texture, World world, float x, float y) {
         super(texture, world, x, y);
 
+        //Set still image frame
+        GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
+        Texture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
+        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
+        getAnimator().setStillFrame(stillFrame[0]);
 
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
