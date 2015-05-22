@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class PathAlgorithm {
 
-    /** The start function for calculating the shortest path between two points on the map, with a default maxStep value of 50.
+    /** The start function for calculating the shortest path between two points on the map, with no limitations of number of steps.
      * 
      * @param startPos The starting position (normally the zombie's position)
      * @param endPos   The end position (normally the player position)
@@ -20,22 +20,23 @@ public class PathAlgorithm {
      * @throws  NullPointerException    if either of the points is null
      */
 
-    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] navigationalMesh, short collisionBit) throws NullPointerException, IndexOutOfBoundsException {
-        int maxSteps = 50;
-        return getPath(startPos, endPos, navigationalMesh, maxSteps, collisionBit);
+    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] collisionTileGrid, short collisionBit)
+            throws NullPointerException, IndexOutOfBoundsException {
+        return getPath(startPos, endPos, collisionTileGrid, 0, collisionBit);
     }
 
     /** The start function for calculating the shortest path between two points on the map, a maximum number of steps included
      *
      * @param startPos The starting position (normally the zombie's position)
      * @param endPos   The end position (normally the player position)
-     * @param maxSteps  The maximum number of steps
+     * @param maxSteps  The maximum number of steps, 0 for infinite steps
      * @return  the shortest path as an iterator over points
      * @throws IndexOutOfBoundsException if the start or end position is negative
      * @throws  NullPointerException    if either of the points is null
      */
-    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] navigationalMesh, int maxSteps, short collisionBit) throws NullPointerException, IndexOutOfBoundsException {
-        if (navigationalMesh == null)
+    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] collisionTileGrid, int maxSteps, short collisionBit)
+            throws NullPointerException, IndexOutOfBoundsException {
+        if (collisionTileGrid == null)
             throw new NullPointerException("PathAlgorithm: the navigational mesh cannot be null");
         if(startPos == null || endPos == null)
             throw new NullPointerException("PathAlgorithm: the points given cannot be null");
@@ -43,14 +44,14 @@ public class PathAlgorithm {
             throw new IndexOutOfBoundsException("PathAlgorithm: the start position must be positive");
         if(endPos.x<0 || endPos.y<0)
             throw new IndexOutOfBoundsException("PathAlgorithm: the end position must be positive");
-        if(maxSteps<1)
-            throw new IndexOutOfBoundsException("The number of steps must be >0");
+        if(maxSteps<0)
+            throw new IndexOutOfBoundsException("The number of steps must be 0 (=infinite) or greater");
         if(startPos.equals(endPos)){
             ArrayList<Point> singlePointArray = new ArrayList<Point>();
             singlePointArray.add(endPos);
             return singlePointArray;
         }
-        return calculatePath(startPos,endPos,navigationalMesh,maxSteps, collisionBit);
+        return calculatePath(startPos,endPos,collisionTileGrid,maxSteps, collisionBit);
     }
 
     /**
@@ -59,12 +60,11 @@ public class PathAlgorithm {
      * @return the shortest path or, if none found, null
      */
 
-    private static ArrayList<Point> calculatePath(Point startPos, Point endPos, short[][] navigationalMesh, int maxSteps, short collisionBit) {
+    private static ArrayList<Point> calculatePath(Point startPos, Point endPos, short[][] collisionTileGrid, int maxSteps, short collisionBit) {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
         QueueElement currentElement;
-        int width = navigationalMesh.length;
-        int height = navigationalMesh[0].length;
-        int steps = 0;
+        int width = collisionTileGrid.length;
+        int height = collisionTileGrid[0].length;
         boolean[][] closedNodes = new boolean[width][height];
         int[][] gCost = new int[width][height];         //holds the negative g value, since that will make the comparison easier.
         queue.add(new QueueElement(startPos, 0, 0, new ArrayList<Point>()));
@@ -72,9 +72,7 @@ public class PathAlgorithm {
         while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            if(currentElement.getPath()!=null)
-              steps = currentElement.getPath().size();
-            if(steps <= maxSteps) {
+            if (currentElement.getPath() != null && (maxSteps == 0 || currentElement.getPath().size() < maxSteps)) //The size of the path array is how many steps it takes
                 if (currentNode.equals(endPos)) {
                     currentElement.getPath().add(currentNode);
                     return currentElement.getPath();
@@ -84,8 +82,8 @@ public class PathAlgorithm {
                     closedNodes[x][y] = true;
                     for (int i = Math.max(0, x - 1); i <= Math.min(width - 1, x + 1); i++) {
                         for (int j = Math.max(0, y - 1); j <= Math.min(height - 1, y + 1); j++) {
-                            if (walkableTile(closedNodes, i, j, navigationalMesh, collisionBit)
-                                    && noCornersCut(closedNodes, currentNode, i, j, navigationalMesh, collisionBit)) {
+                            if (walkableTile(closedNodes, i, j, collisionTileGrid, collisionBit)
+                                    && noCornersCut(closedNodes, currentNode, i, j, collisionTileGrid, collisionBit)) {
                                 int g;
                                 int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
                                 if (isDiagonal(currentNode, i, j))
@@ -102,7 +100,6 @@ public class PathAlgorithm {
                         }
                     }
                 }
-            }
         }
         return null;    //No path found
     }//calculatePath
@@ -113,8 +110,8 @@ public class PathAlgorithm {
      * @param y     The node's y variable
      * @return  true if it's walkable, false if it isn't
      */
-    private static boolean walkableTile(boolean[][] closedNodes, int x, int y, short[][] navigationalMesh, short collisionBit){
-            return !closedNodes[x][y] && !((navigationalMesh[x][y] & collisionBit) == collisionBit);
+    private static boolean walkableTile(boolean[][] closedNodes, int x, int y, short[][] collisionTileGrid, short collisionBit){
+            return !closedNodes[x][y] && !((collisionTileGrid[x][y] & collisionBit) == collisionBit);
     }
 
 
@@ -125,11 +122,11 @@ public class PathAlgorithm {
      * @param y     The node's y variable
      * @return true if it's walkable, false if it cuts corners
      */
-    private static boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y, short[][] navigationalMesh, short collisionBit){
+    private static boolean noCornersCut(boolean[][] closedNodes, Point parent, int x, int y, short[][]collisionTileGrid, short collisionBit){
         int parentX = parent.x;
         int parentY = parent.y;
         if(isDiagonal(parent, x, y))
-            return walkableTile(closedNodes, parentX, y, navigationalMesh, collisionBit) && walkableTile(closedNodes, x, parentY, navigationalMesh, collisionBit);
+            return walkableTile(closedNodes, parentX, y, collisionTileGrid, collisionBit) && walkableTile(closedNodes, x, parentY, collisionTileGrid, collisionBit);
         else
             return true;
     }
