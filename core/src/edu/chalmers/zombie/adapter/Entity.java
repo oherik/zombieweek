@@ -118,10 +118,11 @@ public abstract class Entity {
         if(isAnimated){ //only if Entity should be animated
             float deltaTime = 1/(300f - getBodySpeed()*28); //fix to get a realistic movement
 
+            animator.update(deltaTime);
+
             if (getBodySpeed()<0.2f){ //not moving
                 sprite.setRegion(animator.getStillFrame());
             } else { //is moving
-                animator.update(deltaTime);
                 sprite.setRegion(animator.getFrame());
             }
         }
