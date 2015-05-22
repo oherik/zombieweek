@@ -34,6 +34,7 @@ public class GameModel {
     private boolean stepping = false;
     private GameState gameState; //the state of the game
     private int highestCompletedRoom;
+    private boolean soundOn;
 
 
     /**
@@ -58,7 +59,9 @@ public class GameModel {
         //addTestLevel_2();                                 //TODO debug
         //addTestPlayer();                                //TODO debug
        // addTestZombie();                                //TODO debug
-    }
+
+        soundOn = true;
+       }
 
     /**
      * Only for debug
@@ -251,4 +254,8 @@ public class GameModel {
     public void clearBookList(){
         this.books.clear();
     }
+
+    public boolean isSoundOn(){return soundOn;}
+
+    public void setSoundOn(boolean soundOn){this.soundOn=soundOn;}
 }

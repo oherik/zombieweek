@@ -49,6 +49,18 @@ public class Player extends Entity implements CreatureInterface {
     public Player(Texture texture, World world, float x, float y) {
         super(texture, world, x, y);
 
+        //Set still image frame
+        GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
+        Texture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
+        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
+        getAnimator().setStillFrame(stillFrame[0]);
+
+        //Set overlay image (Hand)
+        GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
+        Texture overlayTexture = GameModel.getInstance().res.getTexture("emilia-hand");
+        TextureRegion overlayFrame = new TextureRegion(overlayTexture);
+        getAnimator().setOverlayFrame(overlayFrame);
+
 
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
@@ -440,6 +452,7 @@ public class Player extends Entity implements CreatureInterface {
     }
     public void throwBook(){
         hand.throwBook();
+        getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
 
     public int getWaterTilesTouching(){
