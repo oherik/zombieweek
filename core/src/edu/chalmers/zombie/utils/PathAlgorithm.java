@@ -111,7 +111,7 @@ public class PathAlgorithm {
      * @return  true if it's walkable, false if it isn't
      */
     private static boolean walkableTile(boolean[][] closedNodes, int x, int y, short[][] collisionTileGrid, short collisionBit){
-            return !closedNodes[x][y] && !((collisionTileGrid[x][y] & collisionBit) == collisionBit);
+            return !closedNodes[x][y] && ((collisionTileGrid[x][y] & collisionBit) == 0);
     }
 
 
