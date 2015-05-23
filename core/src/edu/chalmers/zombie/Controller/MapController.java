@@ -439,20 +439,58 @@ public class MapController {
      * @return The current room's zombie navigation mesh
      */
     public short[][] getCollisionTileGrid(){
-          //TODO printar navmeshen, debug
+        return getRoom().getCollisionTileGrid();
+
+    }
+
+
+    public void printCollisionTileGrid(){       //TODO debugmetod
         System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +": printing collision detection tiles.");
         System.out.println("Width: " + getRoom().getCollisionTileGrid().length    + " Height: " + getRoom().getCollisionTileGrid()[0].length);
-            for(int y = getRoom().getCollisionTileGrid()[0].length-1; y >= 0; y--){
-                for(int x = 0; x < getRoom().getCollisionTileGrid().length; x++){
+        for(int y = getRoom().getCollisionTileGrid()[0].length-1; y >= 0; y--){
+            for(int x = 0; x < getRoom().getCollisionTileGrid().length; x++){
                 if(getRoom().getCollisionTileGrid()[x][y] == 0)
-                        System.out.print("\t ");
+                    System.out.print("\t ");
                 else
-                        System.out.print("\t" + getRoom().getCollisionTileGrid()[x][y]);
+                    System.out.print("\t" + getRoom().getCollisionTileGrid()[x][y]);
             }
             System.out.println("");
         }
+    }
 
-        return getRoom().getCollisionTileGrid();
+
+    public void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
+            ArrayList<Point> path = getPath(room, start, end);
+            System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +
+                    ": printing collision detection tiles and path from " + start.x + ", " + start.y + " to " + end.x + ", " + end.y + ".");
+        if(path != null) {
+            System.out.println("Width: " + getRoom().getCollisionTileGrid().length + " Height: " + getRoom().getCollisionTileGrid()[0].length);
+            for (int y = getRoom().getCollisionTileGrid()[0].length - 1; y >= 0; y--) {
+                for (int x = 0; x < getRoom().getCollisionTileGrid().length; x++) {
+                    Point point = new Point(x, y);
+                    if (getRoom().getCollisionTileGrid()[x][y] == 0 && !path.contains(point)) {
+                        System.out.print("\t ");
+                    } else if (path.contains(point)) {
+                        if (point.equals(start)) {
+                            System.out.print("\t o");
+                        } else if(point.equals(end)) {
+                            System.out.print("\t x");
+                        } else {
+                            System.out.print("\t -");
+                        }
+                    } else {
+                        System.out.print("\t" + getRoom().getCollisionTileGrid()[x][y]);
+                    }
+                }
+                System.out.println("");
+            }
+            System.out.print("Points in path:\n");
+            for (Point p : path) {
+                System.out.println(p.x + ", " + p.y);
+            }
+            System.out.print("Number of points: " + path.size());
+        }
+        else System.out.print("No path found");
 
     }
 

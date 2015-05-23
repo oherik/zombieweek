@@ -128,6 +128,8 @@ public class GameScreen implements Screen{
         inputMultiplexer.addProcessor(inputProcessorOne);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
+        //Debug
+        mapController.printCollisionTileGrid();
 
 
     }
@@ -165,6 +167,9 @@ public class GameScreen implements Screen{
             //Save game
             SaveLoadController saveLoadController = new SaveLoadController();
             saveLoadController.saveGame();
+
+            //TODO debug
+            mapController.printCollisionTileGrid();
         }
     }
 
@@ -291,7 +296,7 @@ public class GameScreen implements Screen{
             //Skapa path finding        //TODO debug
 
             if (steps % 60 == 0) {   //uppdaterar varje sekund
-               // updateZombiePaths();
+               updateZombiePaths();
             }
         /*-----------------SLUTTESTAT---------------------*/
 
@@ -422,32 +427,17 @@ public class GameScreen implements Screen{
     /**
      * Updates the zombie paths to the player.
      */
-    private void updateZombiePaths(){   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?
+    private void updateZombiePaths() {   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?
         GameModel gameModel = GameModel.getInstance();
-        for(Zombie z : gameModel.getZombies()) {
-           if(!z.isKnockedOut()) {
-               Player player = gameModel.getPlayer();
-               Point end = new Point(Math.round(player.getX()-0.5f), Math.round(player.getY()-0.5f));
-               Point start = new Point(Math.round(z.getX()-0.5f), Math.round(z.getY()-0.5f));
-               path = pathFinding.getPath(start, end, mapController.getRoom().getCollisionTileGrid(), 20, Constants.COLLISION_ZOMBIE);                 //TODO gör nåt vettigt här istälelt för att abra printa.
-               System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
-               if (path == null) {
-                    System.out.println("Ingen path hittad");
-               } else {
+        for (Zombie z : gameModel.getZombies()) {
+            if (!z.isKnockedOut()) {
+                Player player = gameModel.getPlayer();
+                Point end = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
+                Point start = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
+                mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
 
-                   int i = 0;
-                   Iterator<Point> test = path.iterator();
-                   while (test.hasNext()) {
-                       Point tile = test.next();
-                       System.out.println(tile.x + " " + tile.y);
-                       i++;
-                   }
-                   System.out.println("Antal steg: " + i);
-               }
-
-           }
+            }
         }
-
     }
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
