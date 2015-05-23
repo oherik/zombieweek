@@ -55,7 +55,15 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         GameModel.getInstance().res.loadTexture("zombie-still","core/assets/Images/zombie-still.png"); //TODO: shouldnt be done here
         Texture stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
         TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
-        getAnimator().setStillFrame(stillFrame[0]);
+        getAnimator().addStillFrame(stillFrame[0]);
+
+        //Set dead image frame
+        GameModel.getInstance().res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png"); //TODO: shouldnt be done here
+        Texture deadTexture = GameModel.getInstance().res.getTexture("zombie-dead");
+        TextureRegion[] deadFrame = TextureRegion.split(deadTexture,32,32)[0];
+        getAnimator().addStillFrame(deadFrame[0]);
+
+
 
 
         int width = Constants.TILE_SIZE;
@@ -277,6 +285,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     @Override
     public void knockOut() {
         isKnockedOut = true;
+        getAnimator().setCurrentStillFrame(1);
     }
 
     public boolean isKnockedOut(){
