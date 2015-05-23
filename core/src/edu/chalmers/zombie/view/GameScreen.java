@@ -125,7 +125,6 @@ public class GameScreen implements Screen{
         inputMultiplexer.addProcessor(inputProcessorOne);
         inputMultiplexer.addProcessor(inputProcessorTwo);
         Gdx.input.setInputProcessor(inputMultiplexer);
-        addCorners(collisionPoints);
 
     }
 
@@ -280,13 +279,19 @@ public class GameScreen implements Screen{
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
 
-
+            //------------------------------------------------------------------------
+            PolygonSpriteBatch psb = new PolygonSpriteBatch();
+            SpriteBatch sb = new SpriteBatch();
+            sb.begin();
+            psb.setProjectionMatrix(camera.combined);
+            psb.begin();
+            Flashlight flashlight = new Flashlight(currentWorld);
+            flashlight.draw(psb, sb);
+            psb.end();
+            sb.end();
+            /*
             float direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
-            //Vector2 v = new Vector2(1,1);
             playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
-            //v.setLength(10);
-            //v.setAngleRad(direction);
-
             RayCastCallback callback = new RayCastCallback() {
                 @Override
                 public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
@@ -302,13 +307,12 @@ public class GameScreen implements Screen{
                 }
             };
             /* ----------------- TEST FLASHLIGHT -----------------*/
-
-            float coneWidth = Constants.PI/5;
-            int numberOfRays = 10;
-            int coneLength = 3;
+            /*
+            float coneWidth = Constants.PI/4;
+            int numberOfRays = 100;
+            int coneLength = 8;
             Vector2[] rays = new Vector2[numberOfRays];
             Vector2 playerPosition =  new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
-
             ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
             for(int i = 0; i<numberOfRays; i++){
                 rays[i] = new Vector2(1,1);
@@ -320,7 +324,6 @@ public class GameScreen implements Screen{
 
             }
             shapeRenderer.setAutoShapeType(true);
-            shapeRenderer.begin();
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.setColor(Color.WHITE);
             for (Vector2 line: rays){
@@ -331,32 +334,30 @@ public class GameScreen implements Screen{
                 if (foundFixture){
                     Vector2 temp = new Vector2(line);
                     temp.add(playerPosition);
+                    int tempIndex = endPoints.indexOf(temp);
                     endPoints.remove(temp);
-                    endPoints.add(new Vector2(coll));
-                    shapeRenderer.point(coll.x, coll.y, 0);
-                    collisionPoints.add(coll.x);
-                    collisionPoints.add(coll.y);
+                    endPoints.add(tempIndex,new Vector2(coll));
                 }
 
 
             }
 
-            shapeRenderer.end();
-            shapeRenderer.begin();
-           // shapeRenderer.line(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), gameModel.getPlayer().getX() + v.x, gameModel.getPlayer().getY() + v.y);
-            for(int i = 0; i<numberOfRays; i++) {
-               // shapeRenderer.line(playerPosition, new Vector2(rays[i].x + playerPosition.x, rays[i].y + playerPosition.y));
-            }
-            shapeRenderer.end();
-            //for(Vector2 floaten: endPoints)
-              //  System.out.println(floaten);
-            //System.out.println("");
-            float[] collisionPointsArray = convertToArray(collisionPoints);
             collisionPoints.clear();
             //addCorners(collisionPoints);
 
 
                 /*-----------------ERIK TESTAR--------------------*/
+            /*
+            endPoints.add(new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()));
+            float maxY = 0;
+            int maxYIndex = -1;
+            for(int i = 0; i<endPoints.size(); i++){
+                float currentY = endPoints.get(i).y;
+                if(currentY>maxY){
+                    maxY = currentY;
+                    maxYIndex = i;
+                }
+            }
 
             float windowWidth = Gdx.graphics.getWidth();
             float windowHeight = Gdx.graphics.getHeight();
@@ -365,50 +366,43 @@ public class GameScreen implements Screen{
                     playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight/64,        //Top left
                     playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,                           //Bottom left
                     windowWidth/32+playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,           //Bottom right
-                    windowWidth/32 +playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight/64 //Top right
+                    windowWidth/32 +playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight / 64 //Top right
             };
 
+            collisionPoints.add(corners[0]);
+            collisionPoints.add(corners[1]);
+            for(int i = maxYIndex; i >= 0; i--) {
+                collisionPoints.add(endPoints.get(i).x);
+                collisionPoints.add(endPoints.get(i).y);
+            }
+            for(int i =endPoints.size()-1; i >= maxYIndex; i--) {
+                collisionPoints.add(endPoints.get(i).x);
+                collisionPoints.add(endPoints.get(i).y);
+            }
+           // collisionPoints.add(endPoints.get(maxYIndex).x);
+            //collisionPoints.add(endPoints.get(maxYIndex).y);
             for(float fl: corners)
-                    collisionPoints.add(fl);
+                collisionPoints.add(fl);
+            float[] collisionPointsArray = convertToArray(collisionPoints);
 
 
-            /*-----------------------slut-------------------*/
-
-            collisionPoints.add(gameModel.getPlayer().getX());
-            collisionPoints.add(gameModel.getPlayer().getY());
+            //---------------------------------------------------------------------
 
             shapeRenderer.setProjectionMatrix(camera.combined);
-            EarClippingTriangulator ect = new EarClippingTriangulator();
 
-            float[] region2 = new float[]{};
-            if (collisionPointsArray.length == 30) {
-                region2 = new float[]{
-                        collisionPointsArray[18], collisionPointsArray[19], collisionPointsArray[20],
-                        collisionPointsArray[21], collisionPointsArray[22], collisionPointsArray[23],
-                        collisionPointsArray[24], collisionPointsArray[25], collisionPointsArray[26],
-                        collisionPointsArray[27], collisionPointsArray[28], collisionPointsArray[29],
-                        collisionPointsArray[8], collisionPointsArray[9], collisionPointsArray[0], collisionPointsArray[1],
-                        collisionPointsArray[8],collisionPointsArray[9], collisionPointsArray[18],
-                        collisionPointsArray[19]};
-            }
-            //ShortArray s = ect.computeTriangles(region1);
-           // PolygonRegion darkness1 = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
-             //s = ect.computeTriangles(region2);
-            PolygonRegion darkness2 = new PolygonRegion(new TextureRegion(tex), new float[]{0,0}, new short[]{});
-            if (collisionPointsArray.length == 30) {
-               // darkness2 = new PolygonRegion(new TextureRegion(tex), region2, s.toArray());
-            }
 
             EarClippingTriangulator ecp = new EarClippingTriangulator();
-            for(float floaten: collisionPointsArray)
-              System.out.println(floaten);
-            System.out.println("");
 
-            float[] region1 = new float[]{
-                    collisionPointsArray[2], collisionPointsArray[3], collisionPointsArray[0],
-                    collisionPointsArray[1], collisionPointsArray[4], collisionPointsArray[5]
-            };
-            ShortArray s = ecp.computeTriangles(region1);
+
+            //ShortArray s = ecp.computeTriangles(region1);
+
+            float[] region1 = new float[collisionPointsArray.length];
+
+            for(int i = 0; i < region1.length; i++)
+                region1[i] = collisionPointsArray[i];
+
+
+           ShortArray s = ecp.computeTriangles(region1);
             PolygonRegion darkness = new PolygonRegion(new TextureRegion(tex), region1, s.toArray());
             shapeRenderer.setAutoShapeType(true);
             PolygonSpriteBatch psb = new PolygonSpriteBatch();
@@ -416,16 +410,14 @@ public class GameScreen implements Screen{
             psb.setProjectionMatrix(camera.combined);
             batchHUD.begin();
             Sprite lightSprite = new Sprite(light);
-            lightSprite.setAlpha(0.13f);
+            lightSprite.setAlpha(0.15f);
             lightSprite.draw(batchHUD);
             batchHUD.end();
             psb.begin();
             //psb.draw(darkness1, 0, 0);
             psb.draw(darkness,0,0);
-            if (collisionPointsArray.length == 30) {
-                psb.draw(darkness2, 0, 0);
-            }
             psb.end();
+
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
@@ -567,15 +559,5 @@ public class GameScreen implements Screen{
             i++;
         }
         return floatArray;
-    }
-    private void addCorners(ArrayList<Float> floats){
-        floats.add(-100f);
-        floats.add(-100f);
-        floats.add(100f);
-        floats.add(-1000f);
-        floats.add(-1000f);
-        floats.add(100f);
-        floats.add(100f);
-        floats.add(100f);
     }
 }

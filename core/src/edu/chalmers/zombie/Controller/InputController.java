@@ -95,7 +95,7 @@ public class InputController implements InputProcessor{
                 getPlayer().getHand().toggleMouseAiming();
                 break;
             case Input.Keys.F:
-                    Flashlight f = new Flashlight();
+                    //Flashlight f = new Flashlight();
 
             break;
             case Input.Keys.ESCAPE:
