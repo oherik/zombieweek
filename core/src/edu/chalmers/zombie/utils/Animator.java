@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.ArrayList;
+
 /**
  * An animator to animate images using texture frames
  *
@@ -15,17 +17,20 @@ public class Animator {
     private float time;
     private float timeDelay;
     private int currentFrame;
-    private TextureRegion stillFrame; //still frame for animation, e.g. when player/zombie is standing still
+    private ArrayList<TextureRegion> stillFrames; //still frame for animation, e.g. when player/zombie is standing still
     private int overlayTime;
     private boolean overlay = false;
     private TextureRegion overlayFrame; //frame that will overlay
     private long systemTime; //stores system time
+    private int currentStillFrame;
 
 
     /**
      * Creates an empty Animator
      */
-    public Animator(){}
+    public Animator(){
+        stillFrames = new ArrayList<TextureRegion>();
+    }
 
 
     /**
@@ -34,6 +39,7 @@ public class Animator {
      * @param timeDelay The time delay
      */
     public Animator(TextureRegion textureFrames[], float timeDelay){
+        this();
         setFrames(textureFrames, timeDelay);
     }
 
@@ -51,10 +57,14 @@ public class Animator {
 
     /**
      * Sets a still image for animation.
-     * @param stillFrame The still frame
+     * @param stillFrames The still frames
      */
-    public void setStillFrame(TextureRegion stillFrame){
-        this.stillFrame = stillFrame;
+    public void setStillFrame(ArrayList<TextureRegion> stillFrames){
+        this.stillFrames = stillFrames;
+    }
+
+    public void addStillFrame(TextureRegion stillFrame){
+        stillFrames.add(stillFrame);
     }
 
 
@@ -128,10 +138,18 @@ public class Animator {
      */
     public TextureRegion getStillFrame() {
         if (overlay){
-            return createOverlay(stillFrame.getTexture(),0,0);
+            return createOverlay(stillFrames.get(currentStillFrame).getTexture(), 0, 0);
         }
 
-        return  stillFrame;
+        return  stillFrames.get(currentStillFrame);
+    }
+
+    /**
+     * Sets the current still frame
+     * @param index
+     */
+    public void setCurrentStillFrame(int index){
+        this.currentStillFrame = index;
     }
 
     /**
