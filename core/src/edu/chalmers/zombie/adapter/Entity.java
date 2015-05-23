@@ -23,6 +23,7 @@ public abstract class Entity {
     private Animator animator;
     private boolean isAnimated = false; //is entity is animated
 
+
     /**
      * Creates an entity without a sprite
      * @param world The world in which to create it
@@ -283,7 +284,6 @@ public abstract class Entity {
         try {
         return body.getLinearVelocity().len();
         } catch (NullPointerException e) {
-            System.out.println("Velocty is 0");
             return 0f;
         }
     }
