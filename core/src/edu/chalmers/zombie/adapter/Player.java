@@ -53,7 +53,7 @@ public class Player extends Entity implements CreatureInterface {
         GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
         Texture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
         TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
-        getAnimator().setStillFrame(stillFrame[0]);
+        getAnimator().addStillFrame(stillFrame[0]);
 
         //Set overlay image (Hand)
         GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
