@@ -35,6 +35,7 @@ public class GameModel {
     private GameState gameState; //the state of the game
     private int highestCompletedRoom;
     private boolean soundOn;
+    private Renderer renderer;
 
 
     /**
@@ -52,6 +53,8 @@ public class GameModel {
         res.loadSound("pick_up_book","core/assets/Audio/Sound_effects/pick_up_book.mp3");
         res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
 
+        renderer = new Renderer();
+
         rooms = new ArrayList<Room>();
         entitiesToRemove = new HashSet<Entity>();
         worldNeedsUpdate = true;
@@ -63,6 +66,12 @@ public class GameModel {
         soundOn = true;
        }
 
+    /**
+     * @return The game's renderer
+     */
+    public Renderer getRenderer(){
+        return this.renderer;
+    }
     /**
      * Only for debug
      *//*

@@ -364,7 +364,7 @@ public class MapController {
     /**
      * If the room has changed the map and renderer need to change as well
      */
-    public void updateRoomIfNeeded(GameScreen screen) {
+    public void updateRoomIfNeeded() {
         if (worldNeedsUpdate()) {
             World currentWorld = getWorld();
             Player player = GameModel.getInstance().getPlayer();
@@ -381,8 +381,7 @@ public class MapController {
             }
 
             /* ------ Update screen ------ */
-            screen.setDisplayedWorld(currentWorld);
-            screen.setMapRenderer(new OrthogonalTiledMapRenderer(getMap(), 1f/(float)Constants.TILE_SIZE));
+            gameModel.getRenderer().setMapRenderer(new OrthogonalTiledMapRenderer(getMap(), 1f/(float)Constants.TILE_SIZE));
 
             /* ------ Save game ------ */
             SaveLoadController saveLoadController = new SaveLoadController();
@@ -393,6 +392,67 @@ public class MapController {
 
             //TODO debug
             printCollisionTileGrid();
+        }
+        /* ------ Update physics ------ */
+        stepWorld();
+
+        /* ------ Remove old entities ------ */
+        removeEntities();
+
+         /* ------ Move zombies ------ */
+        moveZombies();
+
+        /* ------- Updates projectiles ------*/
+        updateBooks();
+
+        gameModel.getPlayer().moveIfNeeded();
+    }
+
+    /**
+     * Updates the physical world
+     */
+    private void stepWorld(){
+
+        /* ------ Step the world, i.e. update the game physics. The model gets a variable set to tell it that the world is stepping and no physic operations should be performed ------ */
+        gameModel.setStepping(true);
+        getWorld().step(Constants.TIMESTEP, 6, 2);    //TODO är det floaten ovan som ska vara här?
+        gameModel.setStepping(false);
+    }
+
+    /**
+     * Removes the entity bodies from the world if necessary
+     */
+    private void removeEntities(){
+        for(Entity e: gameModel.getEntitiesToRemove()){
+            gameModel.getRoom().destroyBody(e);
+        }
+        gameModel.clearEntitiesToRemove();
+    }
+
+    /* ------ Make all the zombies move toward the player if appropriate ------ */
+    private void moveZombies() {
+        for (Zombie z : gameModel.getZombies()) {
+            z.moveToPlayer(new PathAlgorithm());
+        }
+    }
+
+    /**
+     * Updates projectiles
+     */
+    private void updateBooks(){
+        ArrayList<Book> books = gameModel.getBooks();
+        for (int i = 0; i < books.size(); i++) {
+            Book b = books.get(i);
+            long airTime = 500;
+            long lifeTime = 5000; //life time for book in millisec
+            if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
+                EntityController.hitGround(b);
+            if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
+                gameModel.addEntityToRemove(b);
+                b.markForRemoval();
+            }
+            if (b.toRemove())
+                books.remove(i); //Förenklad forsats skulle göra detta svårt
         }
     }
 
