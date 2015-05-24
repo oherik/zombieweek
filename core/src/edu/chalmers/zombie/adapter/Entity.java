@@ -119,19 +119,30 @@ public abstract class Entity {
         }
 
         if(isAnimated){ //only if Entity should be animated
+            if(getBody()!=null) {
+                float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
 
-            float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
+                animator.update(deltaTime);
 
-            animator.update(deltaTime);
+                if (getBodySpeed() < 0.2f) { //not moving
+                    TextureRegion stillFrame = animator.getStillFrame();
+                    if (stillFrame != null) {
+                        sprite.setRegion(stillFrame);
+                    } else {
+                        sprite.setRegion(animator.getFrame());
+                    }
 
-            if (getBodySpeed()<0.2f){ //not moving
+                } else { //is moving
+                    sprite.setRegion(animator.getFrame());
+                }
+            }
+            else{
                 TextureRegion stillFrame = animator.getStillFrame();
-                if (stillFrame!=null){
+                if (stillFrame != null) {
                     sprite.setRegion(stillFrame);
-                } else { sprite.setRegion(animator.getFrame());}
-
-            } else { //is moving
-                sprite.setRegion(animator.getFrame());
+                } else {
+                    sprite.setRegion(animator.getFrame());
+                }
             }
         }
 
