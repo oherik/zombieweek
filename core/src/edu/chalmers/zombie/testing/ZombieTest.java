@@ -20,7 +20,7 @@ public class ZombieTest extends Zombie {
     private ZombieType type;
 
     public ZombieTest(World world, float x, float y){
-        super(new Sprite(new Texture("core/assets/zombie_test.png")),world,x,y);
+        super(new Sprite(new Texture("core/assets/Images/zombie.png")),world,x,y);
         setZombiePosition(new Point((int)x, (int)y));
     }
 

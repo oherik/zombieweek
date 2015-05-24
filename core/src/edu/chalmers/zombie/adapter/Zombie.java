@@ -1,6 +1,8 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -31,7 +33,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private boolean isMoving;
     private Vector2 force;
     private Vector2 point;
-    private Sprite sprite;
+    //private Sprite sprite;
     private Point position;
     private MapController mapController;
     private int hp;
@@ -46,8 +48,24 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      */
     public Zombie(Sprite sprite, World world, float x, float y){
 
-        super(sprite,world,x,y);
-        this.sprite = sprite;
+        super(sprite.getTexture(), world, x, y);
+
+
+        //Set still image frame, TODO: should get still frame from constructor
+        GameModel.getInstance().res.loadTexture("zombie-still","core/assets/Images/zombie-still.png"); //TODO: shouldnt be done here
+        Texture stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
+        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
+        getAnimator().addStillFrame(stillFrame[0]);
+
+        //Set dead image frame
+        GameModel.getInstance().res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png"); //TODO: shouldnt be done here
+        Texture deadTexture = GameModel.getInstance().res.getTexture("zombie-dead");
+        TextureRegion[] deadFrame = TextureRegion.split(deadTexture,32,32)[0];
+        getAnimator().addStillFrame(deadFrame[0]);
+
+
+
+
         int width = Constants.TILE_SIZE;
         int height = Constants.TILE_SIZE;
         //Load body def
@@ -267,6 +285,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     @Override
     public void knockOut() {
         isKnockedOut = true;
+        getAnimator().setCurrentStillFrame(1);
     }
 
     public boolean isKnockedOut(){

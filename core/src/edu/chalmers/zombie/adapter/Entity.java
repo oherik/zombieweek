@@ -23,6 +23,7 @@ public abstract class Entity {
     private Animator animator;
     private boolean isAnimated = false; //is entity is animated
 
+
     /**
      * Creates an entity without a sprite
      * @param world The world in which to create it
@@ -116,12 +117,17 @@ public abstract class Entity {
         }
 
         if(isAnimated){ //only if Entity should be animated
-            float deltaTime = 1/(300f - getBodySpeed()*28); //fix to get a realistic movement
+
+            float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
 
             animator.update(deltaTime);
 
             if (getBodySpeed()<0.2f){ //not moving
-                sprite.setRegion(animator.getStillFrame());
+                TextureRegion stillFrame = animator.getStillFrame();
+                if (stillFrame!=null){
+                    sprite.setRegion(stillFrame);
+                } else { sprite.setRegion(animator.getFrame());}
+
             } else { //is moving
                 sprite.setRegion(animator.getFrame());
             }
@@ -274,6 +280,12 @@ public abstract class Entity {
         getBody().getFixtureList().get(0).setFilterData(newFilter);
     }
     
-    public float getBodySpeed(){ return body.getLinearVelocity().len();}
+    public float getBodySpeed(){
+        try {
+        return body.getLinearVelocity().len();
+        } catch (NullPointerException e) {
+            return 0f;
+        }
+    }
 
 }
