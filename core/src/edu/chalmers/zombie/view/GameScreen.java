@@ -52,6 +52,7 @@ public class GameScreen implements Screen{
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
     private TiledMapImageLayer tiledMapTopLayer;
+    private PathAlgorithm pathFinding; //TODO debug
 
     private int steps;
 
@@ -213,7 +214,7 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
 
             for (Zombie z : gameModel.getZombies()) {
-                //z.moveToPlayer(pathFinding);
+                z.moveToPlayer(pathFinding);
             }
 
             ArrayList<Book> books = gameModel.getBooks();
