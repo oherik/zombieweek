@@ -110,28 +110,37 @@ public abstract class Entity {
      * Draws the sprite
      * @param batch The sprite batch in which to draw it
      */
-    public void draw(Batch batch){
-        try {
+    public void draw(Batch batch) {
+        if (getBody() != null) {
             updateRotation();
             updatePosition();
-        }catch(NullPointerException e){
-            System.err.println("Warning: no entity body found in " + this + ". Can't update position or rotation of the sprite.");
-        }
+         }
 
         if(isAnimated){ //only if Entity should be animated
+            if(getBody()!=null) {
+                float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
 
-            float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
+                animator.update(deltaTime);
 
-            animator.update(deltaTime);
+                if (getBodySpeed() < 0.2f) { //not moving
+                    TextureRegion stillFrame = animator.getStillFrame();
+                    if (stillFrame != null) {
+                        sprite.setRegion(stillFrame);
+                    } else {
+                        sprite.setRegion(animator.getFrame());
+                    }
 
-            if (getBodySpeed()<0.2f){ //not moving
+                } else { //is moving
+                    sprite.setRegion(animator.getFrame());
+                }
+            }
+            else{
                 TextureRegion stillFrame = animator.getStillFrame();
-                if (stillFrame!=null){
+                if (stillFrame != null) {
                     sprite.setRegion(stillFrame);
-                } else { sprite.setRegion(animator.getFrame());}
-
-            } else { //is moving
-                sprite.setRegion(animator.getFrame());
+                } else {
+                    sprite.setRegion(animator.getFrame());
+                }
             }
         }
 

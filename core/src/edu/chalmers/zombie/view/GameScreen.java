@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import edu.chalmers.zombie.adapter.Renderer;
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
@@ -75,7 +76,7 @@ public class GameScreen implements Screen{
             /* ------ Initialize room  ------ */
         mapController.initializeRooms();
         mapController.setWorldNeedsUpdate(true);
-        mapController.updateRoomIfNeeded(this);
+        mapController.updateRoomIfNeeded();
 
          /* ------- Create box 2d renderer --------*/
         boxDebug = new Box2DDebugRenderer();
@@ -185,23 +186,15 @@ public class GameScreen implements Screen{
      * @param f The time step
      */
     private void updateRunning(float f){
-
-        mapController.updateRoomIfNeeded(this);
-
         GameModel gameModel = GameModel.getInstance();
+        mapController.updateRoomIfNeeded();
+        setMapRenderer(gameModel.getRenderer().getMapRenderer());
+        setDisplayedWorld(gameModel.getRoom().getWorld());
         Player player = gameModel.getPlayer();
 
         /* ------ Render the background color ------ */
         Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        /* ------ Step the world, i.e. update the game physics. The model gets a variable set to tell it that the world is stepping and no physic operations should be performed ------ */
-        gameModel.setStepping(true);
-        currentWorld.step(Constants.TIMESTEP, 6, 2);    //TODO är det floaten ovan som ska vara här?
-        gameModel.setStepping(false);
-
-        /* ------ Remove the entities that were marked for removal during the world step ------ */
-        removeEntities();
 
         if(!gameModel.worldNeedsUpdate()) {
             /* ------ Update the camera position ------ */
@@ -215,30 +208,12 @@ public class GameScreen implements Screen{
 
             steps++; //TODO debug
 
-             /* ------ Make all the zombies move toward the player if appropriate ------ */
-            for (Zombie z : gameModel.getZombies()) {
-                z.moveToPlayer(pathFinding);
-            }
-
             /* ------ Start rendering the different sprites------ */
             mapRenderer.getBatch().begin();
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
 
-            /* ------ Update the books and remove them if needed, otherwise draw them ------ */
-            ArrayList<Book> books = gameModel.getBooks();
-            for (int i = 0; i < books.size(); i++) {
-                Book b = books.get(i);
-                long airTime = 500;
-                long lifeTime = 5000; //life time for book in millisec
-                if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
-                    EntityController.hitGround(b);
-                if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
-                    gameModel.addEntityToRemove(b);
-                    b.markForRemoval();
-                }
-                if (b.toRemove())
-                    books.remove(i); //Förenklad forsats skulle göra detta svårt
-                else
+            /* ------ Draw books ------ */
+            for (Book b: gameModel.getBooks()){
                     b.draw(mapRenderer.getBatch());
             }
 
@@ -247,9 +222,10 @@ public class GameScreen implements Screen{
                 z.draw(mapRenderer.getBatch());
             }
 
-            /* ------ Move and draw the player ------ */
-            player.moveIfNeeded();
+            /* ------ Draw the player ------ */
             player.draw(mapRenderer.getBatch());
+
+           /* ------ Draw the aimer ------ */
             player.getHand().drawAimer(mapRenderer.getBatch());
 
             /* ------ Finished drawing sprites ------ */
@@ -412,15 +388,6 @@ public class GameScreen implements Screen{
         currentWorld.dispose();
     }
 
-    /**
-     * Removes the entity bodies from the world if necessary
-     */
-    private void removeEntities(){
-        GameModel gameModel = GameModel.getInstance();
-        for(Entity e: gameModel.getEntitiesToRemove()){
-            gameModel.getRoom().destroyBody(e);
-        }
-        gameModel.clearEntitiesToRemove();
-    }
+
 
 }
