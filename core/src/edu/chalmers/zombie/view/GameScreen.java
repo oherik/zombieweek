@@ -3,15 +3,11 @@ package edu.chalmers.zombie.view;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -47,11 +43,9 @@ public class GameScreen implements Screen{
     private Box2DDebugRenderer boxDebug;
     private MapController mapController;
     private float tileSize;
-    private TiledMap tiledMap;
     //HUD variables
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
-    private TiledMapImageLayer tiledMapTopLayer;
     private PathAlgorithm pathFinding; //TODO debug
 
     private int steps;
@@ -61,9 +55,17 @@ public class GameScreen implements Screen{
     private Stage soundAndSettingStage;
     private ImageButton soundButton;
 
-    public GameScreen(World world, float tileSize){
+    /**
+     * Creates a game screen with the default tile size
+     */
+    public GameScreen(){
+        this(Constants.TILE_SIZE);
+    }
 
-        this.currentWorld = world;
+    /**
+     * Creates a new screen based on a set tile size, i.e. pixels per meters.
+     */
+    public GameScreen(float tileSize){
         this.tileSize = tileSize;
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
@@ -77,7 +79,6 @@ public class GameScreen implements Screen{
 
          /* ------- Create box 2d renderer --------*/
         boxDebug = new Box2DDebugRenderer();
-        //mapRenderer = new OrthogonalTiledMapRenderer(mapController.getMap(), 1 / Constants.TILE_SIZE);
 
        /* ------- Create HUD--------*/
         batchHUD = new SpriteBatch();
@@ -106,8 +107,6 @@ public class GameScreen implements Screen{
 
         //TODO debug
         mapController.printCollisionTileGrid();
-
-
 
     }
 
@@ -143,25 +142,29 @@ public class GameScreen implements Screen{
         this.currentWorld = displayedWorld;
     }
 
-    public void setCurrentTopLayer(TiledMapImageLayer topLayer){
-        this.tiledMapTopLayer = topLayer;
-    }
-
+    /**
+     * Resizes the camer view
+     * @param width The width in pixels
+     * @param height    The height in pixels
+     */
     public void resize(int width, int height){
-
-        //Koden nedan kan man ha om man vill att spelv�rlden ut�kas n�r man resizar
         camera.setToOrtho(false, width / tileSize, height / tileSize);
-        //Koden nedan om man vill ha statiskt.
-        //camera.setToOrtho(false, 400 / 32, 400 / 32);
-
     }
 
+   /* ------ Not currently used function ------ */
     public void resume(){
 
     }
+
+    /* ------ Not currently used function ------ */
     public void pause(){
 
     }
+
+    /**
+     * The game screen render method, which draws the appropriate elements.
+     * @param f The time step //TODO eller?
+     */
     public void render(float f){
         GameState gameState = GameModel.getInstance().getGameState();
         switch (gameState){
@@ -177,46 +180,51 @@ public class GameScreen implements Screen{
     }
 
     /**
-     * Render game when game is running
-     * @param f
+     * Render game when game is running. The rendering includes updating the game world and map, drawing the different sprites,
+     * move zombies toward the player and everything else that happens during the small time period in which the game updates.
+     * @param f The time step
      */
     private void updateRunning(float f){
 
         mapController.updateRoomIfNeeded(this);
 
         GameModel gameModel = GameModel.getInstance();
+        Player player = gameModel.getPlayer();
 
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        /* ------ Render the background color ------ */
+        Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //Uppdatera fysik
-        //Tells GameModel when step is happening
+        /* ------ Step the world, i.e. update the game physics. The model gets a variable set to tell it that the world is stepping and no physic operations should be performed ------ */
         gameModel.setStepping(true);
-        currentWorld.step(Constants.TIMESTEP, 6, 2);
+        currentWorld.step(Constants.TIMESTEP, 6, 2);    //TODO är det floaten ovan som ska vara här?
         gameModel.setStepping(false);
 
+        /* ------ Remove the entities that were marked for removal during the world step ------ */
         removeEntities();
-        if(!gameModel.worldNeedsUpdate()) {
 
-            camera.position.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
+        if(!gameModel.worldNeedsUpdate()) {
+            /* ------ Update the camera position ------ */
+            camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
             camera.update();
 
-
-//Rita kartan
+            /* ------ Draw the background map layer ------ */
             int[] backgroundLayers = {0};
-            int[] foregroundLayers = {1};
             mapRenderer.render(backgroundLayers);
             mapRenderer.setView(camera);
-            //mapRenderer.render();
-            steps++;
-            mapRenderer.getBatch().begin();
 
-            mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+            steps++; //TODO debug
 
+             /* ------ Make all the zombies move toward the player if appropriate ------ */
             for (Zombie z : gameModel.getZombies()) {
                 z.moveToPlayer(pathFinding);
             }
 
+            /* ------ Start rendering the different sprites------ */
+            mapRenderer.getBatch().begin();
+            mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+
+            /* ------ Update the books and remove them if needed, otherwise draw them ------ */
             ArrayList<Book> books = gameModel.getBooks();
             for (int i = 0; i < books.size(); i++) {
                 Book b = books.get(i);
@@ -234,30 +242,32 @@ public class GameScreen implements Screen{
                     b.draw(mapRenderer.getBatch());
             }
 
-
+            /* ------ Draw the zombies ------ */
             for (Zombie z : gameModel.getZombies()) {
-
                 z.draw(mapRenderer.getBatch());
-                //    z.moveToPlayer(pathFinding);
             }
 
-            gameModel.getPlayer().moveIfNeeded();
-            gameModel.getPlayer().draw(mapRenderer.getBatch());
-            gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
+            /* ------ Move and draw the player ------ */
+            player.moveIfNeeded();
+            player.draw(mapRenderer.getBatch());
+            player.getHand().drawAimer(mapRenderer.getBatch());
 
+            /* ------ Finished drawing sprites ------ */
             mapRenderer.getBatch().end();
+
+            /* ------Draw the foreground layer ------ */
+            int[] foregroundLayers = {1};
             if (mapController.getMap().getLayers().get("top") != null) {
                 mapRenderer.render(foregroundLayers);
-
             }
 
+            /* ------ Draw the box2d debug ------ */
+            boxDebug.render(mapController.getWorld(), camera.combined); //TODO debug
 
-            //rita box2d debug
-            boxDebug.render(mapController.getWorld(), camera.combined);
-            //render HUD
-            String playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
-            String playerHealth = "Health: " + gameModel.getPlayer().getLives();
-            String playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
+            /* ------ Render HUD ------ */
+            String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
+            String playerHealth = "Health: " + player.getLives();
+            String playerAmmo = "Ammo: " + player.getAmmunition();
             batchHUD.begin();
             bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
             bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight() - 10);
@@ -265,32 +275,13 @@ public class GameScreen implements Screen{
             bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight() - 40);
             batchHUD.end();
 
-
-         /*--------------------------TESTA PATH FINDING------------------------------------*/
-
-            //Skapa path finding        //TODO debug
-
-            if (steps % 60 == 0) {   //uppdaterar varje sekund
+            /* ------ Test path finding ------ */
+            if (steps % 60 == 0) {   //uppdaterar varje sekund  //TODO debug
                updateZombiePaths();
             }
-        /*-----------------SLUTTESTAT---------------------*/
-
-        //rita box2d debug
-        boxDebug.render(mapController.getWorld(), camera.combined);
-        //render HUD
-        playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
-        playerHealth = "Health: " + gameModel.getPlayer().getLives();
-        playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
-        batchHUD.begin();
-        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
-        bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
-        bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
-        batchHUD.end();
         }
 
         /** Render settings and sound buttons **/
-
         soundAndSettingStage.act();
         soundAndSettingStage.draw();
     }
@@ -299,10 +290,8 @@ public class GameScreen implements Screen{
      * Render game when game is paused
      */
     private void updatePaused(){
-
         pauseStage.act();
         pauseStage.draw();
-
     }
 
     /**
@@ -414,6 +403,10 @@ public class GameScreen implements Screen{
             }
         }
     }
+
+    /**
+     * Dispose the world and player
+     */
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
         currentWorld.dispose();
@@ -428,15 +421,6 @@ public class GameScreen implements Screen{
             gameModel.getRoom().destroyBody(e);
         }
         gameModel.clearEntitiesToRemove();
-
     }
 
-    private void movePlayerToBufferIfNeeded() {
-        if (mapController.getPlayerBufferPosition() != null) {
-
-        mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
-        mapController.setPlayerBufferPosition(null);
-           // updateZombiePaths();
-    }
-    }
 }
