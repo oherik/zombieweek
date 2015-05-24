@@ -109,6 +109,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         isKnockedOut = false;
 
+
     }
 
 

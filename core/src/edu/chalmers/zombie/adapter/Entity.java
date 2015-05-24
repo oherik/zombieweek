@@ -111,7 +111,8 @@ public abstract class Entity {
      * @param batch The sprite batch in which to draw it
      */
     public void draw(Batch batch) {
-        if (getBody() != null) {
+
+        if (body != null) {
             updateRotation();
             updatePosition();
          }
