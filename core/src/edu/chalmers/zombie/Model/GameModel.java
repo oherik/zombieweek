@@ -174,7 +174,7 @@ public class GameModel {
      * Updates the player position
      */
     public void movePlayer(Direction direction){
-        player.move(direction);
+            player.move(direction);
     }
 
     public ArrayList<Book> getBooks(){
