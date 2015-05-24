@@ -106,7 +106,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 MapController mapController = new MapController();
                 World currentWorld = mapController.getWorld(); //gets world from singleton gameModel
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen(currentWorld, Constants.TILE_SIZE));
+                ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
             }
         });
 
@@ -149,7 +149,7 @@ public class MainMenuScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     MapController mapController = new MapController();
                     World world = mapController.getRoom(level).getWorld();
-                    ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen(world, Constants.TILE_SIZE));
+                    ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
                 }
             });
         }
