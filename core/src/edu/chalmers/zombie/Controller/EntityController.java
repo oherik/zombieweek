@@ -33,6 +33,16 @@ public class EntityController {
 
     /* ---------------- PLAYER --------------------*/
 
+    /**
+     * @return  The current player
+     */
+    public static Player getPlayer(){
+        return GameModel.getInstance().getPlayer();
+    }
+    /**
+     * Sets the current player
+     * @param player The new player
+     */
     public static void setPlayer(Player player){
         GameModel.getInstance().setPlayer(player);
     }
@@ -48,11 +58,73 @@ public class EntityController {
         ResourceManager res = gameModel.res;
 
         Point position = mapController.getPlayerBufferPosition();
-        if(position == null)
+        Player player;
+        try {
+            player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+        }catch (NullPointerException e){
+            System.err.println("No buffered position found. Placing player at room spawn.");
             position = GameModel.getInstance().getRoom().getPlayerSpawn();
-        Player player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+        }
         setPlayer(player); //TODO test);
         return player;
+    }
+
+    /**
+     * Increse the number of sneak tiles the player is touching by one. The player will start to sneak.
+     * @param player    The player
+     */
+    public static void increaseSneakTilesTouching(Player player){
+        if(player.getSneakTilesTouching()<0) {
+            player.setSneakTilesTouching(0);        //Negative numbers for tiles youching wouldn't make sense
+        }
+        player.setSneakTilesTouching(player.getSneakTilesTouching() + 1);
+        //TODO add more sneak stuff
+        player.setHidden(true); //TODO Nödvändigt? Zombien kommer ändå inte kunna hitta till spelaren
+        setFriction(player, Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);  //TODO onödigt att göra varje gång?
+    }
+
+    /**
+     * Decrease the number of sneak tiles the player is touching by one. The player will stop to sneak if the total number of sneak tiles it's touching is 0.
+     * @param player The player
+     */
+    public static void decreaseSneakTilesTouching(Player player){
+        player.setSneakTilesTouching(player.getSneakTilesTouching() - 1);
+        if(player.getSneakTilesTouching()<1){
+            //TODO Sluta sneaka
+            player.setHidden(false);
+            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+            if(player.getSneakTilesTouching()<0) {
+                player.setSneakTilesTouching(0);        //Negative numbers for tiles touching wouldn't make sense
+            }
+        }
+    }
+
+    /**
+     * Increse the number of water tiles the player is touching by one. The player will slow down.
+     * @param player    The player
+     */
+    public static void increaseWaterTilesTouching(Player player){
+        if(player.getWaterTilesTouching()<0) {
+            player.setWaterTilesTouching(0);
+        }
+        player.setWaterTilesTouching(player.getWaterTilesTouching() + 1);
+            //TODO add water stuff
+        setFriction(player, Constants.PLAYER_FRICTION_WATER, Constants.PLAYER_FRICTION_WATER);
+    }
+
+    /**
+     * Decrease the number of water tiles the player is touching by one. The player will get out of the water if the total number of water tiles it's touching is 0.
+     * @param player The player
+     */
+    public static void decreaseWaterTilesTouching(Player player){
+        player.setWaterTilesTouching(player.getWaterTilesTouching() - 1);
+        if(player.getWaterTilesTouching()<1){
+            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+            if(player.getWaterTilesTouching()<0) {
+                player.setWaterTilesTouching(0);
+            }
+        }
     }
 
 
@@ -138,25 +210,33 @@ public class EntityController {
      * Sets the entity's category bits, used for collision detection
      * @param entity    The entity
      * @param bits  The category bits
+     * @throws NullPointerException if the entity is null
      */
-    public static void setCategoryBits(Entity entity, short bits) {
+    public static void setCategoryBits(Entity entity, short bits) throws NullPointerException{
         if(entity == null)
             throw new NullPointerException("setMaskBits: the entity can't be null");
-        if(entity.getBody() == null)
-            throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        entity.setCategoryBits(bits);
+        try {
+            entity.setCategoryBits(bits);
+        }catch(NullPointerException e){
+            System.err.println("Tried to set mask bits, but the entity's body and/or fixture was null. No category bits set." +
+                    "\nInternal error message: " + e.getMessage());
+        }
     }
 
     /**
      * Sets the entity's mask bits, used for collision detection
      * @param entity    The entity
      * @param bits  The mask bits
+     * @throws NullPointerException if the entity or is null
      */
-    public static void setMaskBits(Entity entity, short bits){
+    public static void setMaskBits(Entity entity, short bits) throws NullPointerException{
         if(entity == null)
             throw new NullPointerException("setMaskBits: the entity can't be null");
-        if(entity.getBody() == null)
-            throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        entity.setMaskBits(bits);
+        try {
+            entity.setMaskBits(bits);
+        }catch(NullPointerException e){
+            System.err.println("Tried to set mask bits, but the entity's body and/or fixture was null. No mask bits set." +
+                    "\nInternal error message: " + e.getMessage());
+        }
     }
 }

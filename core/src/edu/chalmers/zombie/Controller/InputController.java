@@ -63,46 +63,48 @@ public class InputController implements InputProcessor{
     public boolean keyDown(int keycode) {
         switch (gameModel.getGameState()){
             case GAME_RUNNING:
-                switch (keycode) {
-                    case Input.Keys.W:
-                        //move north
-                        gameModel.movePlayer(Direction.NORTH);
-                        break;
-                    case Input.Keys.S:
-                        //move south
-                        gameModel.movePlayer(Direction.SOUTH);
-                        break;
-                    case Input.Keys.D:
-                        //move east
-                        gameModel.movePlayer(Direction.EAST);
-                        break;
-                    case Input.Keys.A:
-                        //move west
-                        gameModel.movePlayer(Direction.WEST);
-                        break;
-                    case Input.Keys.SPACE:
-                        //throw book
-                        tryThrowingBook();
-                        break;
-                    case Input.Keys.UP:
-                        //aim left
-                        getPlayer().getHand().startAimingLeft();
-                        break;
-                    case Input.Keys.DOWN:
-                        //aim right
-                        getPlayer().getHand().startAimingRight();
-                        break;
-                    case Input.Keys.C:
-                        //change aiming type
-                        getPlayer().getHand().toggleMouseAiming();
-                        break;
-                    case Input.Keys.ESCAPE:
+                if(!gameModel.isStepping()) {   //Don't do any movements while the game world is stepping   //TODO oklart om det fungerar
+                    switch (keycode) {
+                        case Input.Keys.W:
+                            //move north
+                            gameModel.movePlayer(Direction.NORTH);
+                            break;
+                        case Input.Keys.S:
+                            //move south
+                            gameModel.movePlayer(Direction.SOUTH);
+                            break;
+                        case Input.Keys.D:
+                            //move east
+                            gameModel.movePlayer(Direction.EAST);
+                            break;
+                        case Input.Keys.A:
+                            //move west
+                            gameModel.movePlayer(Direction.WEST);
+                            break;
+                        case Input.Keys.SPACE:
+                            //throw book
+                            tryThrowingBook();
+                            break;
+                        case Input.Keys.UP:
+                            //aim left
+                            getPlayer().getHand().startAimingLeft();
+                            break;
+                        case Input.Keys.DOWN:
+                            //aim right
+                            getPlayer().getHand().startAimingRight();
+                            break;
+                        case Input.Keys.C:
+                            //change aiming type
+                            getPlayer().getHand().toggleMouseAiming();
+                            break;
+                        case Input.Keys.ESCAPE:
 
-                        System.out.println("GAME PAUSED");
-                        gameModel.setGameState(GameState.GAME_PAUSED);
-                        break;
+                            System.out.println("GAME PAUSED");
+                            gameModel.setGameState(GameState.GAME_PAUSED);
+                            break;
 
-                    default:
+                        default:
+                    }
                 }
                 return false;
             case GAME_PAUSED:
@@ -151,19 +153,20 @@ public class InputController implements InputProcessor{
      */
     @Override
     public boolean keyUp(int keycode) {
+        if(!gameModel.isStepping()) {   //Don't do any movements while the game world is stepping
+            if(keycode == Input.Keys.D || keycode == Input.Keys.A){
+                getPlayer().stopX();
+            }
 
-        if(keycode == Input.Keys.D || keycode == Input.Keys.A){
-            getPlayer().stopX();
+            if (keycode == Input.Keys.W || keycode == Input.Keys.S){
+                getPlayer().stopY();
+            }
+
+            if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
+                //set aiming force to zero
+                getPlayer().getHand().stopAiming();
+            } else {return false;}
         }
-
-        if (keycode == Input.Keys.W || keycode == Input.Keys.S){
-            getPlayer().stopY();
-        }
-
-        if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
-            //set aiming force to zero
-            getPlayer().getHand().stopAiming();
-        } else {return false;}
         return true;
     }
 
