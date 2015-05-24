@@ -76,7 +76,7 @@ public class GameScreen implements Screen{
 
          /* ------- Create box 2d renderer --------*/
         boxDebug = new Box2DDebugRenderer();
-        mapRenderer = new OrthogonalTiledMapRenderer(mapController.getMap(), 1 / Constants.TILE_SIZE);
+        //mapRenderer = new OrthogonalTiledMapRenderer(mapController.getMap(), 1 / Constants.TILE_SIZE);
 
        /* ------- Create HUD--------*/
         batchHUD = new SpriteBatch();
@@ -105,6 +105,7 @@ public class GameScreen implements Screen{
 
         //TODO debug
         mapController.printCollisionTileGrid();
+
 
 
     }
@@ -244,7 +245,7 @@ public class GameScreen implements Screen{
             gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
 
             mapRenderer.getBatch().end();
-            if (tiledMapTopLayer != null) {
+            if (mapController.getMap().getLayers().get("top") != null) {
                 mapRenderer.render(foregroundLayers);
 
             }

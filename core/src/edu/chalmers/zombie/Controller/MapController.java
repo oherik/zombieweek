@@ -382,10 +382,7 @@ public class MapController {
 
             /* ------ Update screen ------ */
             screen.setDisplayedWorld(currentWorld);
-            TiledMap tiledMap = getMap();
-            tiledMap.getLayers().get("meta").setVisible(true);
-            float scale = 1f/(float)Constants.TILE_SIZE;
-            screen.setMapRenderer(new OrthogonalTiledMapRenderer(tiledMap, scale));
+            screen.setMapRenderer(new OrthogonalTiledMapRenderer(getMap(), 1f/(float)Constants.TILE_SIZE));
 
             /* ------ Save game ------ */
             SaveLoadController saveLoadController = new SaveLoadController();
@@ -393,8 +390,6 @@ public class MapController {
 
             /* ------ Mark as updated ------ */
             setWorldNeedsUpdate(false);
-
-            screen.setCurrentTopLayer(getRoom().getTopLayer()); //TODO test
 
             //TODO debug
             printCollisionTileGrid();
