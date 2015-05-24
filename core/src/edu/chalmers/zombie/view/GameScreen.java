@@ -402,7 +402,7 @@ public class GameScreen implements Screen{
     /**
      * Updates the zombie paths to the player.
      */
-    private void updateZombiePaths() {   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?
+    private void updateZombiePaths() {   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?dddddd
         GameModel gameModel = GameModel.getInstance();
         for (Zombie z : gameModel.getZombies()) {
             if (!z.isKnockedOut()) {

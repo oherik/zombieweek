@@ -88,6 +88,20 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);
                         break;
                 }
+            case (Constants.COLLISION_PLAYER):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_SNEAK:
+                        //TODO Sneaka
+                        gameModel.getPlayer().setHidden(true);
+                        gameModel.getPlayer().setSneakTilesTouching(gameModel.getPlayer().getSneakTilesTouching() + 1);
+                        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);
+                        break;
+                    case Constants.COLLISION_WATER:
+                        //TODO Ner i vatten
+                        gameModel.getPlayer().setWaterTilesTouching(gameModel.getPlayer().getWaterTilesTouching() + 1);
+                        EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_WATER, Constants.PLAYER_FRICTION_WATER);
+                        break;
+                }
 
         }
     }
@@ -122,6 +136,26 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         break;
                 }
 
+            case (Constants.COLLISION_PLAYER):
+                switch(contact.getFixtureA().getFilterData().categoryBits){
+                    case Constants.COLLISION_SNEAK:
+                        Player player = gameModel.getPlayer();
+                        player.setSneakTilesTouching(player.getSneakTilesTouching() - 1);
+                        if(player.getSneakTilesTouching()<1) {
+                            //TODO Sluta sneaka
+                            player.setHidden(false);
+                            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+                        }
+                        break;
+                    case Constants.COLLISION_WATER:
+                        player = gameModel.getPlayer();
+                        player.setWaterTilesTouching(player.getWaterTilesTouching() - 1);
+                        if(player.getWaterTilesTouching()<1) {
+                            //TODO upp ur vattnet
+                            EntityController.setFriction(player, Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
+                        }
+                        break;
+                }
 
         }
      }
