@@ -1,10 +1,8 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.CollisionObject;
-import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Room;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.model.GameModel;
@@ -133,8 +131,8 @@ public class PhysicsController {
      * @param collisionObjects the list of all the collision objects that can be placed in the world
      */
 
-    private static void createBodiesIfNeeded(ArrayList<CollisionObject> collisionObjects, Room room) {
-        if(!room.hasInitializedBodies()) { //if the room already has these initialized there's no point in continuing
+    private static void traverseRoomIfNeeded(ArrayList<CollisionObject> collisionObjects, Room room) {
+        if(!room.hasBeenTraversed()) { //if the room already has these initialized there's no point in continuing
             World world = room.getWorld();
             TiledMapTileLayer metaLayer = room.getMetaLayer();
 
@@ -174,7 +172,6 @@ public class PhysicsController {
                             }
                             if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
                                 room.setPlayerSpawn(new Point(col, row));
-                                GameModel.getInstance().setPlayer(new Player(GameModel.getInstance().res.getTexture("emilia"), world, col, row)); //TODO test
                             }
                             if (currentCell.getTile().getProperties().get(playerReturn) != null) {
                                 room.setPlayerReturn(new Point(col, row));
@@ -195,18 +192,18 @@ public class PhysicsController {
                     }
                 }
             }
-            room.setInitializedBodies(true);
+            room.setHasBeenTraversed(true);
         }
     }
 
     /**
-     * Runs createBodiesIfNeeded using the default values stored in the game model. If none are stored new ones are created.
+     * Runs traverseRoomIfNeeded using the default values stored in the game model. If none are stored new ones are created.
      */
-    public static void createBodiesIfNeeded(Room room) {
+    public static void traverseRoomIfNeeded(Room room) {
         if(GameModel.getInstance().getCollisionObjects()==null) {
             setCollisionObjects(createCollisionObjects());
         }
-        createBodiesIfNeeded(GameModel.getInstance().getCollisionObjects(), room);
+        traverseRoomIfNeeded(GameModel.getInstance().getCollisionObjects(), room);
     }
 
 }

@@ -6,6 +6,9 @@ import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.ResourceManager;
+
+import java.awt.*;
 
 /**
  * Handles the calculations that has to do with the zombies, the player, books, etc
@@ -29,6 +32,28 @@ public class EntityController {
     }
 
     /* ---------------- PLAYER --------------------*/
+
+    public static void setPlayer(Player player){
+        GameModel.getInstance().setPlayer(player);
+    }
+
+    /**
+     * Creates a new player and sets it in the game model.
+     * @return  The newly created player
+     */
+    public static Player createNewPlayer(){
+        MapController mapController = new MapController();
+
+        GameModel gameModel = GameModel.getInstance();
+        ResourceManager res = gameModel.res;
+
+        Point position = mapController.getPlayerBufferPosition();
+        if(position == null)
+            position = GameModel.getInstance().getRoom().getPlayerSpawn();
+        Player player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+        setPlayer(player); //TODO test);
+        return player;
+    }
 
 
     /*----------------- BOOK -----------------------*/

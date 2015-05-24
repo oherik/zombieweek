@@ -3,14 +3,15 @@ package edu.chalmers.zombie.controller;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.TileRayTracing;
+import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -144,7 +145,7 @@ public class MapController {
             gameModel.addEntityToRemove(book);
         }
         gameModel.clearBookList();
-        PhysicsController.createBodiesIfNeeded(getRoom());
+        PhysicsController.traverseRoomIfNeeded(getRoom());
         if(oldRoomIndex>roomIndex){
             if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getRoom().getPlayerSpawn());
@@ -359,4 +360,45 @@ public class MapController {
         MapController controller = new MapController(); //TODO gör de andra statiska
         return getPath(controller.getRoom(), start, end);
     }
+
+    /**
+     * If the room has changed the map and renderer need to change as well
+     */
+    public void updateRoomIfNeeded(GameScreen screen) {
+        if (worldNeedsUpdate()) {
+            World currentWorld = getWorld();
+            Player player = GameModel.getInstance().getPlayer();
+
+            /* ------ Update physics ------ */
+            PhysicsController.traverseRoomIfNeeded(getRoom());
+
+            /* ------ Update player ------ */
+            if(player == null){
+               player = EntityController.createNewPlayer();
+            }
+            if(player.getBody() == null){
+                player.createDefaultBody(currentWorld, getPlayerBufferPosition());
+            }
+
+            /* ------ Update screen ------ */
+            screen.setDisplayedWorld(currentWorld);
+            TiledMap tiledMap = getMap();
+            tiledMap.getLayers().get("meta").setVisible(true);
+            float scale = 1f/(float)Constants.TILE_SIZE;
+            screen.setMapRenderer(new OrthogonalTiledMapRenderer(tiledMap, scale));
+
+            /* ------ Save game ------ */
+            SaveLoadController saveLoadController = new SaveLoadController();
+            saveLoadController.saveGame();
+
+            /* ------ Mark as updated ------ */
+            setWorldNeedsUpdate(false);
+
+            screen.setCurrentTopLayer(getRoom().getTopLayer()); //TODO test
+
+            //TODO debug
+            printCollisionTileGrid();
+        }
+    }
+
 }

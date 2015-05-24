@@ -22,7 +22,7 @@ public class Room {
     private World world;
     private TiledMap tiledMap;
     private ArrayList zombies;
-    private boolean initializedBodies;
+    private boolean hasBeenTraversed;
     Point playerSpawn, playerReturn;
     TiledMapTileLayer metaLayer;
     TiledMapImageLayer topLayer, bottomLayer;
@@ -45,7 +45,7 @@ public class Room {
         //Create the world
         world = new World(new Vector2(0, 0), true);
         world.setContactListener(new ContactListener());
-        initializedBodies = false;
+        hasBeenTraversed = false;
 
         zombies = new ArrayList<Zombie>();
 
@@ -165,15 +165,15 @@ public class Room {
      *
      * @param bool true if the collision objects have been initialized, false if not
      */
-    public void setInitializedBodies(boolean bool) {
-        this.initializedBodies = bool;
+    public void setHasBeenTraversed(boolean bool) {
+        this.hasBeenTraversed = bool;
     }
 
     /**
      * @return true if the collision objects have been initialized, false if not
      */
-    public boolean hasInitializedBodies() {
-        return this.initializedBodies;
+    public boolean hasBeenTraversed() {
+        return this.hasBeenTraversed;
     }
 
     /**

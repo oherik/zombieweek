@@ -36,7 +36,6 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Tobias on 15-04-02.
@@ -52,25 +51,14 @@ public class GameScreen implements Screen{
     //HUD variables
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
-    private TiledMapImageLayer tiledMapBottomLayer, tiledMapTopLayer;
+    private TiledMapImageLayer tiledMapTopLayer;
 
-    //För testa av path finding //TODO debug
-    private PathAlgorithm pathFinding;
-    private ArrayList<Point> path;
-    private Pixmap pixmap;
-    private Texture pathTexture;
-    private Sprite pathSprite;
     private int steps;
 
     private Stage pauseStage;
 
     private Stage soundAndSettingStage;
     private ImageButton soundButton;
-
-
-
-
-
 
     public GameScreen(World world, float tileSize){
 
@@ -81,44 +69,31 @@ public class GameScreen implements Screen{
         camera = new OrthographicCamera(width, height);
         mapController = new MapController();
 
-        //Scale the room images
-        float scale= 1f/tileSize;
-//        mapController.scaleImages(scale);
+            /* ------ Initialize room  ------ */
+        mapController.initializeRooms();
+        mapController.setWorldNeedsUpdate(true);
+        mapController.updateRoomIfNeeded(this);
 
-        //Lägg till kollisionsobjekt
-        PhysicsController.setCollisionObjects();
-        updateRoomIfNeeded();
-
-        //Spelaren med
-        mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
-
-        //Starta rendrerare
-        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
+         /* ------- Create box 2d renderer --------*/
         boxDebug = new Box2DDebugRenderer();
+        mapRenderer = new OrthogonalTiledMapRenderer(mapController.getMap(), 1 / Constants.TILE_SIZE);
 
-
-
-        //HUD
+       /* ------- Create HUD--------*/
         batchHUD = new SpriteBatch();
         bitmapFont = new BitmapFont();
 
-        /*---TEST--*/
-        steps = 0;
-        TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getRoom().getMetaLayer();
-        short[][] zombieNavMesh = mapController.getCollisionTileGrid();
-        /*---SLUTTEST---*/
-
+        /* ------- Set game as running --------*/
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
 
-        //Pause menu
+        /* ------- Create pause menu --------*/
         pauseStage = new Stage();
         setUpPauseMenu();
 
-        //Sound and settings
+         /* ------- Create sound and settings pause menu --------*/
         soundAndSettingStage = new Stage();
         setUpSoundAndSettingsMenu();
 
-        //Set input
+         /* ------- Set input --------*/
         InputProcessor inputProcessorTwo = pauseStage;
         InputProcessor inputProcessorOne = new InputController();
         InputProcessor inputProcessorThree = soundAndSettingStage;
@@ -128,49 +103,46 @@ public class GameScreen implements Screen{
         inputMultiplexer.addProcessor(inputProcessorOne);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        //Debug
+        //TODO debug
         mapController.printCollisionTileGrid();
 
 
     }
 
+    /* ------ Setters and getters ------ */
+
     /**
-     * If the room has changed the map and renderer need to change as well
+     * @return The screen's renderer
      */
-    public void updateRoomIfNeeded() {
-        if (mapController.worldNeedsUpdate()) {
-            this.currentWorld = mapController.getWorld();
-            tiledMap = mapController.getMap();
-        /*--- test ---*/
-            this.tiledMapBottomLayer = mapController.getMapBottomLayer(); //TODO test
-            this.tiledMapTopLayer = mapController.getMapTopLayer(); //TODO test
-            mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
-            PhysicsController.createBodiesIfNeeded(mapController.getRoom());
-             //path test
-            /*ArrayList<Point> bana = MapController.getPath(new Point(3, 11), new Point(19, 18));
-            for(Point p : bana) {
-                System.out.println(p + "   " );
-                mapController.getRoom().getCollisionTileGrid()[p.x][p.y] = false;
+    public OrthogonalTiledMapRenderer getMapRenderer(){
+       return this.mapRenderer;
+   }
 
+    /**
+     * Sets the screens renderer
+     * @param renderer  A renderer based on a tile map
+     */
+    public void setMapRenderer(OrthogonalTiledMapRenderer renderer){
+        this.mapRenderer = renderer;
+    }
 
-            }
-            mapController.getRoom().getCollisionTileGrid();*/
-            if(GameModel.getInstance().getPlayer().getBody() == null){
-                GameModel.getInstance().getPlayer().createDefaultBody(currentWorld, mapController.getPlayerBufferPosition());
-            }
-         //   mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
-            mapController.setPlayerBufferPosition(null);
-            TiledMapTileLayer meta = mapController.getMapMetaLayer();
+    /**
+     * @return  The screen's currently displayed world
+     */
+    public World getDisplayedWorld(){
+        return currentWorld;
+    }
 
-            mapController.setWorldNeedsUpdate(false);
+    /**
+     * Sets the screens currently displayed world
+     * @param displayedWorld    The world to be displayed
+     */
+    public void setDisplayedWorld(World displayedWorld){
+        this.currentWorld = displayedWorld;
+    }
 
-            //Save game
-            SaveLoadController saveLoadController = new SaveLoadController();
-            saveLoadController.saveGame();
-
-            //TODO debug
-            mapController.printCollisionTileGrid();
-        }
+    public void setCurrentTopLayer(TiledMapImageLayer topLayer){
+        this.tiledMapTopLayer = topLayer;
     }
 
     public void resize(int width, int height){
@@ -181,6 +153,7 @@ public class GameScreen implements Screen{
         //camera.setToOrtho(false, 400 / 32, 400 / 32);
 
     }
+
     public void resume(){
 
     }
@@ -207,7 +180,7 @@ public class GameScreen implements Screen{
      */
     private void updateRunning(float f){
 
-        updateRoomIfNeeded();
+        mapController.updateRoomIfNeeded(this);
 
         GameModel gameModel = GameModel.getInstance();
 
@@ -239,7 +212,7 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
 
             for (Zombie z : gameModel.getZombies()) {
-                z.moveToPlayer(pathFinding);
+                //z.moveToPlayer(pathFinding);
             }
 
             ArrayList<Book> books = gameModel.getBooks();
