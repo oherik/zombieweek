@@ -86,7 +86,7 @@ public class GameScreen implements Screen{
 //        mapController.scaleImages(scale);
 
         //Lägg till kollisionsobjekt
-        mapController.initializeCollisionObjects();
+        PhysicsController.setCollisionObjects();
         updateRoomIfNeeded();
 
         //Spelaren med
@@ -145,7 +145,7 @@ public class GameScreen implements Screen{
             this.tiledMapBottomLayer = mapController.getMapBottomLayer(); //TODO test
             this.tiledMapTopLayer = mapController.getMapTopLayer(); //TODO test
             mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
-            mapController.createBodiesIfNeeded();
+            PhysicsController.createBodiesIfNeeded(mapController.getRoom());
              //path test
             /*ArrayList<Point> bana = MapController.getPath(new Point(3, 11), new Point(19, 18));
             for(Point p : bana) {
