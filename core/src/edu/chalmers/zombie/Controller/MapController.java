@@ -399,13 +399,17 @@ public class MapController {
         /* ------ Remove old entities ------ */
         removeEntities();
 
-         /* ------ Move zombies ------ */
-        moveZombies();
-
         /* ------- Updates projectiles ------*/
         updateBooks();
 
-        gameModel.getPlayer().moveIfNeeded();
+        if(gameModel.getPlayer().getBody()!=null) {       //Another world is loading
+
+            /* ------ Move player ------*/
+            gameModel.getPlayer().moveIfNeeded();
+
+            /* ------ Move zombies ------ */
+            moveZombies();
+        }
     }
 
     /**
