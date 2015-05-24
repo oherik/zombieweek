@@ -146,7 +146,7 @@ public class GameModel {
      * @return  The room specified by an index
      * @throws  IndexOutOfBoundsException if the index is non-valid
      */
-    public Room getRoom(int roomIndex){
+    public Room getRoom(int roomIndex) throws IndexOutOfBoundsException{
         if(roomIndex >= rooms.size())
             throw new IndexOutOfBoundsException("GameModel: the getRoom index exceeds array size");
         currentRoom = roomIndex;
@@ -164,7 +164,7 @@ public class GameModel {
      * @return  Sets the current room
      * @throws  IndexOutOfBoundsException if the index is < 0
      */
-    public void setCurrentRoomIndex(int i){
+    public void setCurrentRoomIndex(int i) throws IndexOutOfBoundsException{
         if(i < 0)
             throw new IndexOutOfBoundsException("GameModel: current room must be >= 0");
         this.currentRoom = i;

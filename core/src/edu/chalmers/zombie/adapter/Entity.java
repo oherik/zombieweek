@@ -111,9 +111,11 @@ public abstract class Entity {
      * @param batch The sprite batch in which to draw it
      */
     public void draw(Batch batch){
-        if(body!=null) {
+        try {
             updateRotation();
             updatePosition();
+        }catch(NullPointerException e){
+            System.err.println("Warning: no entity body found in " + this + ". Can't update position or rotation of the sprite.");
         }
 
         if(isAnimated){ //only if Entity should be animated
@@ -264,7 +266,7 @@ public abstract class Entity {
      * Sets the entity's category bits, used for collision detection
      * @param bits  The category bits
      */
-    public void setCategoryBits(short bits){
+    public void setCategoryBits(short bits) throws NullPointerException{
         Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
         newFilter.categoryBits = bits;
         getBody().getFixtureList().get(0).setFilterData(newFilter);
@@ -274,7 +276,7 @@ public abstract class Entity {
      * Sets the entity's mask bits, used for collision detection
      * @param bits  The mask bits
      */
-    public void setMaskBits(short bits){
+    public void setMaskBits(short bits) throws NullPointerException{
         Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
         newFilter.maskBits = bits;
         getBody().getFixtureList().get(0).setFilterData(newFilter);
@@ -284,6 +286,7 @@ public abstract class Entity {
         try {
         return body.getLinearVelocity().len();
         } catch (NullPointerException e) {
+            System.err.println("Get body speed: no body found");
             return 0f;
         }
     }

@@ -58,9 +58,14 @@ public class EntityController {
         ResourceManager res = gameModel.res;
 
         Point position = mapController.getPlayerBufferPosition();
-        if(position == null)
+        Player player;
+        try {
+            player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+        }catch (NullPointerException e){
+            System.err.println("No buffered position found. Placing player at room spawn.");
             position = GameModel.getInstance().getRoom().getPlayerSpawn();
-        Player player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+        }
         setPlayer(player); //TODO test);
         return player;
     }
@@ -205,25 +210,33 @@ public class EntityController {
      * Sets the entity's category bits, used for collision detection
      * @param entity    The entity
      * @param bits  The category bits
+     * @throws NullPointerException if the entity is null
      */
-    public static void setCategoryBits(Entity entity, short bits) {
+    public static void setCategoryBits(Entity entity, short bits) throws NullPointerException{
         if(entity == null)
             throw new NullPointerException("setMaskBits: the entity can't be null");
-        if(entity.getBody() == null)
-            throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        entity.setCategoryBits(bits);
+        try {
+            entity.setCategoryBits(bits);
+        }catch(NullPointerException e){
+            System.err.println("Tried to set mask bits, but the entity's body and/or fixture was null. No category bits set." +
+                    "\nInternal error message: " + e.getMessage());
+        }
     }
 
     /**
      * Sets the entity's mask bits, used for collision detection
      * @param entity    The entity
      * @param bits  The mask bits
+     * @throws NullPointerException if the entity or is null
      */
-    public static void setMaskBits(Entity entity, short bits){
+    public static void setMaskBits(Entity entity, short bits) throws NullPointerException{
         if(entity == null)
             throw new NullPointerException("setMaskBits: the entity can't be null");
-        if(entity.getBody() == null)
-            throw new NullPointerException("setMaskBits: the entity's body must be initialized");
-        entity.setMaskBits(bits);
+        try {
+            entity.setMaskBits(bits);
+        }catch(NullPointerException e){
+            System.err.println("Tried to set mask bits, but the entity's body and/or fixture was null. No mask bits set." +
+                    "\nInternal error message: " + e.getMessage());
+        }
     }
 }
