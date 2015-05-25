@@ -71,10 +71,11 @@ public class GameScreen implements Screen{
 
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Flashlight flashlight;
 
     private Stage soundAndSettingStage;
     private ImageButton soundButton;
+
+    private Flashlight flashlight;
 
     /**
      * Creates a game screen with the default tile size
@@ -126,10 +127,10 @@ public class GameScreen implements Screen{
         inputMultiplexer.addProcessor(inputProcessorThree);
         inputMultiplexer.addProcessor(inputProcessorOne);
         Gdx.input.setInputProcessor(inputMultiplexer);
-        flashlight = new Flashlight(currentWorld);
 
         //TODO debug
         mapController.printCollisionTileGrid();
+
 
     }
 
@@ -295,11 +296,15 @@ public class GameScreen implements Screen{
                 sb.begin();
                 psb.setProjectionMatrix(camera.combined);
                 psb.begin();
-                flashlight.draw(psb, sb);
+                if (flashlight==null){
+                    flashlight = new Flashlight(currentWorld);
+                }
+                flashlight.draw(psb,sb);
                 psb.end();
                 sb.end();
                 psb.dispose();
                 sb.dispose();
+
             }
 
             /*---------------- END TEST -------------------------*/

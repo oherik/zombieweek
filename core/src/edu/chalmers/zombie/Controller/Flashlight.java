@@ -35,8 +35,6 @@ public class Flashlight {
     private int maxYIndex;
     private float[] corners = new float[8];
 
-
-    
     public Flashlight(@NotNull World world) throws NullPointerException{
         if (world == null){
             throw new NullPointerException("The world is null");
