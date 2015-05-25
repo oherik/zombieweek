@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ShortArray;
 import com.sun.istack.internal.NotNull;
+import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class Flashlight {
         PolygonRegion darkness = createDarkRegion();
         Sprite light = createLight();
         light.draw(sb);
-        psb.draw(darkness,0,0);
+        psb.draw(darkness, 0, 0);
     }
     private void clearAll(){
         endPoints.clear();
@@ -113,6 +114,7 @@ public class Flashlight {
         endPoints.add(playerPosition);
         collisionPoints.clear();
     }
+
     private void rayCast(Vector2 ray) {
         world.rayCast(callback, playerPosition, sum(ray, playerPosition));
     }

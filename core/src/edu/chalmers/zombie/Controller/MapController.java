@@ -155,6 +155,7 @@ public class MapController {
         else
             setPlayerBufferPosition(getRoom().getPlayerSpawn());
 
+
     }
 
     /**
@@ -376,6 +377,9 @@ public class MapController {
             /* ------ Update physics ------ */
             PhysicsController.traverseRoomIfNeeded(getRoom());
 
+            /* ------ Remove old entities ------ */
+            removeEntities();
+
             /* ------ Update player ------ */
             if(player == null){
                player = EntityController.createNewPlayer();
@@ -400,8 +404,7 @@ public class MapController {
         /* ------ Update physics ------ */
         stepWorld();
 
-        /* ------ Remove old entities ------ */
-        removeEntities();
+
 
         /* ------- Updates projectiles ------*/
         updateBooks();

@@ -226,12 +226,11 @@ public class GameScreen implements Screen{
         gameModel.setStepping(true);
         currentWorld.step(Constants.TIMESTEP, 6, 2);
         gameModel.setStepping(false);
-        //removeEntities();
-        if(!gameModel.worldNeedsUpdate()) {
-            /* ------ Update the camera position ------ */
-            camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
-            camera.update();
 
+        if(!GameModel.getInstance().worldNeedsUpdate()) {
+            /* ------ Update the camera position ------ */
+                camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
+                camera.update();
             /* ------ Draw the background map layer ------ */
             int[] backgroundLayers = {0};
             mapRenderer.render(backgroundLayers);
