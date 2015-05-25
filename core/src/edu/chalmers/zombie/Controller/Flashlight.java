@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ShortArray;
+import com.sun.istack.internal.NotNull;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import java.util.ArrayList;
@@ -35,8 +36,11 @@ public class Flashlight {
     private float[] corners = new float[8];
 
 
-
-    public Flashlight(World world){
+    
+    public Flashlight(@NotNull World world) throws NullPointerException{
+        if (world == null){
+            throw new NullPointerException("The world is null");
+        }
         this.world = world;
         width = Constants.PI/4;
         numberOfRays = 100;
@@ -98,7 +102,7 @@ public class Flashlight {
         endPoints.add(playerPosition);
         collisionPoints.clear();
     }
-    private void rayCast(Vector2 ray){
+    private void rayCast(Vector2 ray) {
         world.rayCast(callback, playerPosition, sum(ray, playerPosition));
     }
     private Vector2 sum(Vector2 v1, Vector2 v2){
