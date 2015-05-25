@@ -34,7 +34,6 @@ import edu.chalmers.zombie.utils.MenuBuilder;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -45,7 +44,7 @@ public class GameScreen implements Screen{
     private World currentWorld;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer mapRenderer;
-    //private Box2DDebugRenderer boxDebug;
+    private Box2DDebugRenderer boxDebug;
     private MapController mapController;
     private float tileSize;
     private TiledMap tiledMap;
@@ -64,17 +63,8 @@ public class GameScreen implements Screen{
 
     private Stage pauseStage;
 
-    private Texture tex = new Texture("core/assets/darkness.png");
-    private Texture light = new Texture("core/assets/light.png");
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Vector2 playerPosition = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-    Vector2 coll = new Vector2();
-    private float currentFraction = 1337;
-    private boolean foundFixture;
-    private ArrayList<Float> collisionPoints = new ArrayList<Float>();
-    private ArrayList<Float> corners = new ArrayList<Float>();
     private Flashlight flashlight;
-
 
 
     public GameScreen(World world, float tileSize){
@@ -99,7 +89,7 @@ public class GameScreen implements Screen{
 
         //Starta rendrerare
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
-       // boxDebug = new Box2DDebugRenderer();
+        boxDebug = new Box2DDebugRenderer();
 
 
 
@@ -263,7 +253,7 @@ public class GameScreen implements Screen{
 
 
             //rita box2d debug
-            //boxDebug.render(mapController.getWorld(), camera.combined);
+            boxDebug.render(mapController.getWorld(), camera.combined);
             //render HUD
             String playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
             String playerHealth = "Health: " + gameModel.getPlayer().getLives();
@@ -282,17 +272,19 @@ public class GameScreen implements Screen{
 
 
             //------------------------------------------------------------------------
+            if (gameModel.isFlashlightEnabled()){
+                PolygonSpriteBatch psb = new PolygonSpriteBatch();
+                SpriteBatch sb = new SpriteBatch();
+                sb.begin();
+                psb.setProjectionMatrix(camera.combined);
+                psb.begin();
+                flashlight.draw(psb, sb);
+                psb.end();
+                sb.end();
+                psb.dispose();
+                sb.dispose();
+            }
 
-            PolygonSpriteBatch psb = new PolygonSpriteBatch();
-            SpriteBatch sb = new SpriteBatch();
-            sb.begin();
-            psb.setProjectionMatrix(camera.combined);
-            psb.begin();
-            flashlight.draw(psb, sb);
-            psb.end();
-            sb.end();
-            psb.dispose();
-            sb.dispose();
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
@@ -304,7 +296,7 @@ public class GameScreen implements Screen{
         /*-----------------SLUTTESTAT---------------------*/
 
             //rita box2d debug
-            //boxDebug.render(mapController.getWorld(), camera.combined);
+        boxDebug.render(mapController.getWorld(), camera.combined);
         //render HUD
         playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
         playerHealth = "Health: " + gameModel.getPlayer().getLives();
@@ -426,13 +418,5 @@ public class GameScreen implements Screen{
 //>>>>>>> 1ffaac9a2ec5c13ece91b3a017e86c6c456154c3
     }
     }
-    private float[] convertToArray(ArrayList<Float> floatList){
-        float[] floatArray = new float[floatList.size()];
-        int i = 0;
-        for (float f: floatList){
-            floatArray[i] = f;
-            i++;
-        }
-        return floatArray;
-    }
+
 }

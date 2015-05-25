@@ -38,7 +38,7 @@ public class GameModel {
     private boolean stepping = false;
     private GameState gameState; //the state of the game
     private int highestCompletedLevel;
-
+    private boolean flashlightEnabled = false;
 
     /**
      * Initializes the game model
@@ -253,5 +253,13 @@ public class GameModel {
 
     public void clearBookList(){
         this.books.clear();
+    }
+
+    public void toggleFlashlight(){
+        flashlightEnabled = !flashlightEnabled;
+    }
+
+    public boolean isFlashlightEnabled(){
+        return flashlightEnabled;
     }
 }

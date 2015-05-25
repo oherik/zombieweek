@@ -19,19 +19,46 @@ public class Flashlight {
     private World world;
     private Texture darkTexture = new Texture("core/assets/darkness.png");
     private Texture lightTexture = new Texture("core/assets/light.png");
-    private Vector2 playerPosition = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+    private Vector2 playerPosition = new Vector2();
     Vector2 collisionPoint = new Vector2();
     private float currentFraction = 1337;
     private boolean foundFixture;
     private ArrayList<Float> collisionPoints = new ArrayList<Float>();
-    private ArrayList<Float> corners = new ArrayList<Float>();
     private float direction;
     private RayCastCallback callback = createCallback();
+    private float width;
+    private int numberOfRays;
+    private int length;
+    private Vector2[] rays;
+    private ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
+    private int maxYIndex;
+    private float[] corners = new float[8];
+
+
 
     public Flashlight(World world){
         this.world = world;
+        width = Constants.PI/4;
+        numberOfRays = 100;
+        length = 8;
+        initializeRays();
     }
-
+    public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
+        clearAll();
+        fetchDirection();
+        fetchPlayerPosition();
+        calculateEndPoints();
+        calculateCollisionPoints();
+        calculateMaxYIndex();
+        calculateCorners();
+        PolygonRegion darkness = createDarkRegion();
+        Sprite light = createLight();
+        light.draw(sb);
+        psb.draw(darkness,0,0);
+    }
+    private void clearAll(){
+        endPoints.clear();
+    }
     private void fetchDirection(){
         GameModel gameModel = GameModel.getInstance();
         direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
@@ -40,33 +67,27 @@ public class Flashlight {
         GameModel gameModel = GameModel.getInstance();
         playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
     }
-
-    public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
-        GameModel gameModel = GameModel.getInstance();
-        fetchDirection();
-        fetchPlayerPosition();
-        float coneWidth = Constants.PI/4;
-        int numberOfRays = 100;
-        int coneLength = 8;
-        Vector2[] rays = new Vector2[numberOfRays];
-        Vector2 playerPosition =  new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
-        ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
+    private void initializeRays(){
+        rays = new Vector2[numberOfRays];
+    }
+    private void calculateEndPoints(){
         for(int i = 0; i<numberOfRays; i++) {
             rays[i] = new Vector2(1, 1);
-            rays[i].setLength(coneLength);
-            rays[i].setAngleRad(direction - coneWidth / 2 + i * coneWidth / numberOfRays);
+            rays[i].setLength(length);
+            rays[i].setAngleRad(direction - width / 2 + i * width / numberOfRays);
             Vector2 end = new Vector2(rays[i]);
             end.add(playerPosition);
             endPoints.add(end);
             int x = 0;
         }
-        for (Vector2 line : rays) {
+    }
+    private void calculateCollisionPoints(){
+        for (Vector2 ray : rays) {
             currentFraction = 1337;
             foundFixture = false;
-            world.rayCast(callback, new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()),
-                    new Vector2(line.x + gameModel.getPlayer().getX(), line.y + gameModel.getPlayer().getY()));
+            rayCast(ray);
             if (foundFixture) {
-                Vector2 temp = new Vector2(line);
+                Vector2 temp = new Vector2(ray);
                 temp.add(playerPosition);
                 int tempIndex = endPoints.indexOf(temp);
                 endPoints.remove(temp);
@@ -74,10 +95,23 @@ public class Flashlight {
             }
 
         }
+        endPoints.add(playerPosition);
         collisionPoints.clear();
-        endPoints.add(new Vector2(gameModel.getPlayer().getX(), gameModel.getPlayer().getY()));
+    }
+    private void rayCast(Vector2 ray){
+        world.rayCast(callback, playerPosition, sum(ray, playerPosition));
+    }
+    private Vector2 sum(Vector2 v1, Vector2 v2){
+        Vector2 tmpVector1 = new Vector2();
+        Vector2 tmpVector2 = new Vector2();
+        tmpVector1.set(v1);
+        tmpVector2.set(v2);
+        Vector2 returnVector = tmpVector1.add(tmpVector2);
+        return returnVector;
+    }
+    private void calculateMaxYIndex(){
         float maxY = 0;
-        int maxYIndex = -1;
+        maxYIndex = -1;
         for(int i = 0; i<endPoints.size(); i++){
             float currentY = endPoints.get(i).y;
             if(currentY>maxY){
@@ -85,17 +119,21 @@ public class Flashlight {
                 maxYIndex = i;
             }
         }
-
+    }
+    private void calculateCorners(){
         float windowWidth = Gdx.graphics.getWidth();
         float windowHeight = Gdx.graphics.getHeight();
+        corners[0] = playerPosition.x - windowWidth/64;
+        corners[1] = windowHeight/32 + playerPosition.y - windowHeight/64;       //Top left
+        corners[2] = playerPosition.x - windowWidth/64;
+        corners[3] = playerPosition.y - windowHeight/64;                          //Bottom left
+        corners[4] = windowWidth/32+playerPosition.x - windowWidth/64;
+        corners[5] = playerPosition.y - windowHeight/64;           //Bottom right
+        corners[6] = windowWidth/32 +playerPosition.x - windowWidth/64;
+        corners[7] = windowHeight/32 + playerPosition.y - windowHeight / 64; //Top right
 
-        float[] corners = new float[]{
-                playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight/64,        //Top left
-                playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,                           //Bottom left
-                windowWidth/32+playerPosition.x - windowWidth/64, playerPosition.y - windowHeight/64,           //Bottom right
-                windowWidth/32 +playerPosition.x - windowWidth/64, windowHeight/32 + playerPosition.y - windowHeight / 64 //Top right
-        };
-
+    }
+    private float[] createArrayOfVertices(){
         collisionPoints.add(corners[0]);
         collisionPoints.add(corners[1]);
         for(int i = maxYIndex; i >= 0; i--) {
@@ -109,21 +147,9 @@ public class Flashlight {
 
         for(float fl: corners)
             collisionPoints.add(fl);
-        float[] collisionPointsArray = convertToArray(collisionPoints);
-
-        EarClippingTriangulator ecp = new EarClippingTriangulator();
-
-        float[] region1 = new float[collisionPointsArray.length];
-
-        for(int i = 0; i < region1.length; i++)
-            region1[i] = collisionPointsArray[i];
-
-
-        ShortArray s = ecp.computeTriangles(region1);
-        PolygonRegion darkness = new PolygonRegion(new TextureRegion(darkTexture), region1, s.toArray());
-        psb.draw(darkness,0,0);
+        float[] vertices = convertToArray(collisionPoints);
+        return vertices;
     }
-
     private float[] convertToArray(ArrayList<Float> floatList){
         float[] floatArray = new float[floatList.size()];
         int i = 0;
@@ -133,7 +159,24 @@ public class Flashlight {
         }
         return floatArray;
     }
-
+    private short[] calculateTriangles(float[] vertices) {
+        EarClippingTriangulator ecp = new EarClippingTriangulator();
+        short[] returnTriangles;
+        ShortArray s = ecp.computeTriangles(vertices);
+        returnTriangles = s.toArray();
+        return returnTriangles;
+    }
+    private PolygonRegion createDarkRegion(){
+        float[] vertices = createArrayOfVertices();
+        short[] triangles = calculateTriangles(vertices);
+        PolygonRegion darkness = new PolygonRegion(new TextureRegion(darkTexture), vertices, triangles);
+        return darkness;
+    }
+    private Sprite createLight(){
+        Sprite light = new Sprite(lightTexture);
+        light.setAlpha(0.2f);
+        return light;
+    }
     private RayCastCallback createCallback(){
         RayCastCallback returnCallback = new RayCastCallback() {
             @Override

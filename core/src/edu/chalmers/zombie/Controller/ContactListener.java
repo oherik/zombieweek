@@ -82,7 +82,6 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_WATER, Constants.PLAYER_FRICTION_WATER);
                         break;
                 }
-
         }
     }
 
