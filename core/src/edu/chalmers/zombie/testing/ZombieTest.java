@@ -51,15 +51,6 @@ public class ZombieTest extends Zombie {
         return new ZombieTest(world, x, y);
     }
 
-    @Override
-    public void setBody(Body body) {
-
-    }
-
-    @Override
-    public Body getBody() {
-        return null;
-    }
 
 
 }
