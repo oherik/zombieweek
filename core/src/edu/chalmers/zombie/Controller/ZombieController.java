@@ -23,6 +23,7 @@ public class ZombieController {
         Point zombiePosition = z.getZombiePosition();
 
         z.setSpeed(80);
+        z.setAngularSpeed(100);
         z.setDetectionRadius(10);
 
         Player player = GameModel.getInstance().getPlayer();
@@ -64,10 +65,12 @@ public class ZombieController {
                         rotation += Constants.PI * 2f;
                     if (rotation > Constants.PI)
                         rotation -= Constants.PI * 2f;
-                    int impulse = rotation > 0 ? -100 : 100;
+                    int impulse = rotation > 0 ? -z.getAngularSpeed() : z.getAngularSpeed();
 
                     //Apply rotation
-                    z.getBody().applyAngularImpulse(impulse, true);
+                    if(Math.abs(rotation-Constants.PI)>0.2) {
+                        z.getBody().applyAngularImpulse(impulse, true);
+                    }
 
                     z.getBody().applyForceToCenter(direction.x, direction.y, true);
                     z.setIsMoving(true);

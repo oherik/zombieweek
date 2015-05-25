@@ -40,6 +40,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private int hp;
     private Point nextPathTile;
     private long timeCreated;
+    private int angularSpeed;
 
     /**
      * Creates a new zombie
@@ -135,6 +136,20 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public int getSpeed() {
 
         return speed;
+    }
+
+    /**
+     * A method which sets the zombie's angular speed to a new speed.
+     * @param angularSpeed The new angular speed
+     */
+    public void setAngularSpeed(int angularSpeed) {
+
+        this.angularSpeed = angularSpeed;
+    }
+
+    public int getAngularSpeed() {
+
+        return angularSpeed;
     }
 
     /**
