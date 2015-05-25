@@ -33,6 +33,8 @@ public class GameModel {
     public static ResourceManager res;
     private boolean stepping = false;
     private GameState gameState; //the state of the game
+    private int highestCompletedLevel;
+    private boolean flashlightEnabled = false;
     private int highestCompletedRoom;
     private boolean soundOn;
     private Renderer renderer;
@@ -264,6 +266,13 @@ public class GameModel {
         this.books.clear();
     }
 
+    public void toggleFlashlight(){
+        flashlightEnabled = !flashlightEnabled;
+    }
+
+    public boolean isFlashlightEnabled(){
+        return flashlightEnabled;
+    }
     public boolean isSoundOn(){return soundOn;}
 
     public void setSoundOn(boolean soundOn){this.soundOn=soundOn;}
