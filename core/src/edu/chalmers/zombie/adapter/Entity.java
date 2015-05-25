@@ -111,13 +111,14 @@ public abstract class Entity {
      * @param batch The sprite batch in which to draw it
      */
     public void draw(Batch batch) {
-        if (getBody() != null) {
+
+        if (body != null) {
             updateRotation();
             updatePosition();
          }
 
         if(isAnimated){ //only if Entity should be animated
-            if(getBody()!=null) {
+            if(body != null) {
                 float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
 
                 animator.update(deltaTime);
