@@ -76,6 +76,7 @@ public class GameScreen implements Screen{
     private ImageButton soundButton;
 
     private Flashlight flashlight;
+    private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
 
     /**
      * Creates a game screen with the default tile size
@@ -287,9 +288,7 @@ public class GameScreen implements Screen{
 
 
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-
-
-            //------------------------------------------------------------------------
+            /*
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -304,8 +303,17 @@ public class GameScreen implements Screen{
                 sb.end();
                 psb.dispose();
                 sb.dispose();
-
+            } else{
+                SpriteBatch sb = new SpriteBatch();
+                sprite.setSize(650,480);
+                sb.begin();
+                sprite.draw(sb);
+                player.draw(sb);
+                sb.end();
             }
+            */
+            //------------------------------------------------------------------------
+
 
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
@@ -319,6 +327,7 @@ public class GameScreen implements Screen{
 
             //rita box2d debug
         boxDebug.render(mapController.getWorld(), camera.combined);
+
         //render HUD
         playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
         playerHealth = "Health: " + gameModel.getPlayer().getLives();
