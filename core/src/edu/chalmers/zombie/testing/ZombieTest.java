@@ -56,10 +56,10 @@ public class ZombieTest extends Zombie {
 
     }
 
-    @Override
-    public Body getBody() {
-        return null;
-    }
+    //@Override
+    //public Body getBody() {
+      //  return null;
+    //}
 
 
 }

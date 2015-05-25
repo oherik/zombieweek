@@ -39,6 +39,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private MapController mapController;
     private int hp;
     private Point nextPathTile;
+    private long timeCreated;
 
     /**
      * Creates a new zombie
@@ -109,7 +110,16 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         isKnockedOut = false;
 
+        //Set system time created
+        timeCreated = System.currentTimeMillis();
 
+
+    }
+    /**
+     * @return System time created
+     */
+    public long getTimeCreated() {
+        return timeCreated;
     }
 
 

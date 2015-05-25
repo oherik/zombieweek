@@ -253,7 +253,7 @@ public class GameScreen implements Screen{
 
             /* ------ Test path finding ------ */
             if (steps % 60 == 0) {   //uppdaterar varje sekund  //TODO debug
-               updateZombiePaths();
+              // updateZombiePaths();
             }
         }
 

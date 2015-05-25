@@ -36,7 +36,8 @@ public class Constants {
     public static final float PLAYER_FRICTION_DEFAULT = 30f;
     public static final float PLAYER_FRICTION_WATER = 80f;
     public static final float PLAYER_FRICTION_SNEAK = 120f;
-
+    public static final int MAX_PATH_STEP = 200;
+    public static final float PATH_UPDATE_MILLIS = 300f;
 
     //Matematik
     public static final float PI = 3.14159265358979323846f; //Oklart om vi behöver så mycket
