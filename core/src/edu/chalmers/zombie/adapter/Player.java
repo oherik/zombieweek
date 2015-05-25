@@ -1,16 +1,17 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
 
 import edu.chalmers.zombie.utils.Direction;
-import edu.chalmers.zombie.utils.Potions;
+import edu.chalmers.zombie.utils.PotionType;
 
 import java.awt.*;
 
@@ -35,10 +36,9 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private Sprite sprite;
     private FixtureDef fixDef;
     private BodyDef bodyDef;
-    private Potions potion;
+    private PotionType potion;
     private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
     private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
 
@@ -46,16 +46,28 @@ public class Player extends Entity implements CreatureInterface {
     //The hand is throwing the book and aiming.
     private Hand hand = new Hand(this);
 
-    public Player(Sprite sprite, World world, float x, float y) {
+    public Player(Texture texture, World world, float x, float y) {
+        super(texture, world, x, y);
 
-        super(sprite, world, x, y);
+        //Set still image frame
+        GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
+        Texture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
+        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
+        getAnimator().addStillFrame(stillFrame[0]);
+
+        //Set overlay image (Hand)
+        GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
+        Texture overlayTexture = GameModel.getInstance().res.getTexture("emilia-hand");
+        TextureRegion overlayFrame = new TextureRegion(overlayTexture);
+        getAnimator().setOverlayFrame(overlayFrame);
+
+
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         width = Constants.PLAYER_SIZE;
         height = Constants.PLAYER_SIZE;
 
-        this.sprite = sprite;
 
         //Load body def
         this.bodyDef = new BodyDef();
@@ -74,12 +86,11 @@ public class Player extends Entity implements CreatureInterface {
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK;
 
         //Set body
         super.setBody(bodyDef, fixDef);
         super.scaleSprite(1f / Constants.TILE_SIZE);
-        super.setSprite(sprite);
         killCount = 0;
         ammunition = 100;
         lives = 100;
@@ -90,8 +101,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     public Player(Player p) {
-
-        this(p.getSprite(), p.getWorld(), p.getX(), p.getY());
+        this(p.getSprite().getTexture(), p.getWorld(), p.getX(), p.getY());
     }
 
     /**
@@ -319,10 +329,11 @@ public class Player extends Entity implements CreatureInterface {
         return isAttacked;
     }
 
+    /*
     public Sprite getSprite() {
 
         return sprite;
-    }
+    }*/
 
     @Override
     public void setBody(Body body) {
@@ -441,6 +452,7 @@ public class Player extends Entity implements CreatureInterface {
     }
     public void throwBook(){
         hand.throwBook();
+        getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
 
     public int getWaterTilesTouching(){
@@ -457,5 +469,9 @@ public class Player extends Entity implements CreatureInterface {
 
     public void setSneakTilesTouching(int i){
         sneakTilesTouching = i;
+    }
+
+    public void setHidden(boolean isHidden) {
+        this.isHidden = isHidden;
     }
 }

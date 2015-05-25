@@ -1,13 +1,20 @@
 package edu.chalmers.zombie.view;
 
 import com.badlogic.gdx.*;
+
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Polygon;
@@ -18,12 +25,19 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import com.badlogic.gdx.utils.ShortArray;
+
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import edu.chalmers.zombie.adapter.Renderer;
+
 import edu.chalmers.zombie.adapter.Entity;
+import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.adapter.Book;
@@ -35,7 +49,6 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Tobias on 15-04-02.
@@ -47,121 +60,134 @@ public class GameScreen implements Screen{
     private Box2DDebugRenderer boxDebug;
     private MapController mapController;
     private float tileSize;
-    private TiledMap tiledMap;
     //HUD variables
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
-    private TiledMapImageLayer tiledMapBottomLayer, tiledMapTopLayer;
+    private PathAlgorithm pathFinding; //TODO debug
 
-    //För testa av path finding //TODO debug
-    private PathAlgorithm pathFinding;
-    private Iterator<Point> path;
-    private Pixmap pixmap;
-    private Texture pathTexture;
-    private Sprite pathSprite;
     private int steps;
 
     private Stage pauseStage;
 
+
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Flashlight flashlight;
 
+    private Stage soundAndSettingStage;
+    private ImageButton soundButton;
 
-    public GameScreen(World world, float tileSize){
+    /**
+     * Creates a game screen with the default tile size
+     */
+    public GameScreen(){
+        this(Constants.TILE_SIZE);
+    }
 
-        this.currentWorld = world;
+
+    /**
+     * Creates a new screen based on a set tile size, i.e. pixels per meters.
+     */
+    public GameScreen(float tileSize){
         this.tileSize = tileSize;
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(width, height);
         mapController = new MapController();
 
-        //Scale the level images
-        float scale= 1f/tileSize;
-//        mapController.scaleImages(scale);
+            /* ------ Initialize room  ------ */
+        mapController.initializeRooms();
+        mapController.setWorldNeedsUpdate(true);
+        mapController.updateRoomIfNeeded();
 
-        //Lägg till kollisionsobjekt
-        mapController.initializeCollisionObjects();
-        updateLevelIfNeeded();
-
-        //Spelaren med
-        mapController.setPlayerBufferPosition(GameModel.getInstance().getLevel().getPlayerSpawn());
-
-        //Starta rendrerare
-        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap,1/tileSize);
+         /* ------- Create box 2d renderer --------*/
         boxDebug = new Box2DDebugRenderer();
 
-
-
-        //HUD
+       /* ------- Create HUD--------*/
         batchHUD = new SpriteBatch();
         bitmapFont = new BitmapFont();
 
-        /*---TEST--*/
-        steps = 0;
-        TiledMapTileLayer meta = (TiledMapTileLayer) GameModel.getInstance().getLevel().getMetaLayer();
-        pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
-        /*---SLUTTEST---*/
-
+        /* ------- Set game as running --------*/
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
 
-        //Pause menu
+        /* ------- Create pause menu --------*/
         pauseStage = new Stage();
         setUpPauseMenu();
 
-        //Set input
-        InputProcessor inputProcessorOne = new InputController();
+         /* ------- Create sound and settings pause menu --------*/
+        soundAndSettingStage = new Stage();
+        setUpSoundAndSettingsMenu();
+
+         /* ------- Set input --------*/
         InputProcessor inputProcessorTwo = pauseStage;
+        InputProcessor inputProcessorOne = new InputController();
+        InputProcessor inputProcessorThree = soundAndSettingStage;
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(inputProcessorOne);
         inputMultiplexer.addProcessor(inputProcessorTwo);
+        inputMultiplexer.addProcessor(inputProcessorThree);
+        inputMultiplexer.addProcessor(inputProcessorOne);
         Gdx.input.setInputProcessor(inputMultiplexer);
         flashlight = new Flashlight(currentWorld);
+
+        //TODO debug
+        mapController.printCollisionTileGrid();
+
+    }
+
+    /* ------ Setters and getters ------ */
+
+    /**
+     * @return The screen's renderer
+     */
+    public OrthogonalTiledMapRenderer getMapRenderer(){
+       return this.mapRenderer;
+   }
+
+    /**
+     * Sets the screens renderer
+     * @param renderer  A renderer based on a tile map
+     */
+    public void setMapRenderer(OrthogonalTiledMapRenderer renderer){
+        this.mapRenderer = renderer;
+    }
+
+    /**
+     * @return  The screen's currently displayed world
+     */
+    public World getDisplayedWorld(){
+        return currentWorld;
+    }
+
+    /**
+     * Sets the screens currently displayed world
+     * @param displayedWorld    The world to be displayed
+     */
+    public void setDisplayedWorld(World displayedWorld){
+        this.currentWorld = displayedWorld;
+    }
+
+    /**
+     * Resizes the camer view
+     * @param width The width in pixels
+     * @param height    The height in pixels
+     */
+    public void resize(int width, int height){
+        camera.setToOrtho(false, width / tileSize, height / tileSize);
+    }
+
+   /* ------ Not currently used function ------ */
+    public void resume(){
+
+    }
+
+    /* ------ Not currently used function ------ */
+    public void pause(){
 
     }
 
     /**
-     * If the level has changed the map and renderer need to change as well
+     * The game screen render method, which draws the appropriate elements.
+     * @param f The time step //TODO eller?
      */
-    public void updateLevelIfNeeded() {
-        if (mapController.worldNeedsUpdate()) {
-            this.currentWorld = mapController.getWorld();
-            tiledMap = mapController.getMap();
-        /*--- test ---*/
-            this.tiledMapBottomLayer = mapController.getMapBottomLayer(); //TODO test
-            this.tiledMapTopLayer = mapController.getMapTopLayer(); //TODO test
-            mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1 / tileSize);
-            mapController.createBodiesIfNeeded();
-            if(GameModel.getInstance().getPlayer().getBody() == null){
-                GameModel.getInstance().getPlayer().createDefaultBody(currentWorld, mapController.getPlayerBufferPosition());
-            }
-         //   mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
-            mapController.setPlayerBufferPosition(null);
-            TiledMapTileLayer meta = mapController.getMapMetaLayer();
-            pathFinding = new PathAlgorithm(meta, Constants.COLLISION_PROPERTY_ZOMBIE);
-
-            mapController.setWorldNeedsUpdate(false);
-
-            //Save game
-            SaveLoadController saveLoadController = new SaveLoadController();
-            saveLoadController.saveGame();
-        }
-    }
-
-    public void resize(int width, int height){
-
-        //Koden nedan kan man ha om man vill att spelv�rlden ut�kas n�r man resizar
-        camera.setToOrtho(false, width / tileSize, height / tileSize);
-        //Koden nedan om man vill ha statiskt.
-        //camera.setToOrtho(false, 400 / 32, 400 / 32);
-
-    }
-    public void resume(){
-
-    }
-    public void pause(){
-
-    }
     public void render(float f){
         GameState gameState = GameModel.getInstance().getGameState();
         switch (gameState){
@@ -173,91 +199,82 @@ public class GameScreen implements Screen{
                 break;
         }
 
-        GameModel gameModel = GameModel.getInstance();
-        for (Zombie z : gameModel.getZombies()) {
 
-            z.moveToPlayer(pathFinding);
-        }
     }
 
     /**
-     * Render game when game is running
-     * @param f
+     * Render game when game is running. The rendering includes updating the game world and map, drawing the different sprites,
+     * move zombies toward the player and everything else that happens during the small time period in which the game updates.
+     * @param f The time step
      */
     private void updateRunning(float f){
-
-        updateLevelIfNeeded();
-
         GameModel gameModel = GameModel.getInstance();
+        mapController.updateRoomIfNeeded();
+        setMapRenderer(gameModel.getRenderer().getMapRenderer());
+        setDisplayedWorld(gameModel.getRoom().getWorld());
+        Player player = gameModel.getPlayer();
 
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        /* ------ Render the background color ------ */
+        Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         //Uppdatera fysik
         //Tells GameModel when step is happening
         gameModel.setStepping(true);
         currentWorld.step(Constants.TIMESTEP, 6, 2);
         gameModel.setStepping(false);
-        removeEntities();
+        //removeEntities();
         if(!gameModel.worldNeedsUpdate()) {
-
-            camera.position.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
+            /* ------ Update the camera position ------ */
+            camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
             camera.update();
 
-
-//Rita kartan
+            /* ------ Draw the background map layer ------ */
             int[] backgroundLayers = {0};
-            int[] foregroundLayers = {1};
             mapRenderer.render(backgroundLayers);
             mapRenderer.setView(camera);
 
-            //mapRenderer.render();
-            steps++;
-            mapRenderer.getBatch().begin();
 
+            //mapRenderer.render();
+            steps++; //TODO debug
+
+            /* ------ Start rendering the different sprites------ */
+            mapRenderer.getBatch().begin();
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
 
-            ArrayList<Book> books = gameModel.getBooks();
-            for (int i = 0; i < books.size(); i++) {
-                Book b = books.get(i);
-                long airTime = 500;
-                long lifeTime = 5000; //life time for book in millisec
-                if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
-                    EntityController.hitGround(b);
-                if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
-                    gameModel.addEntityToRemove(b);
-                    b.markForRemoval();
-                }
-                if (b.toRemove())
-                    books.remove(i); //Förenklad forsats skulle göra detta svårt
-                else
+            /* ------ Draw books ------ */
+            for (Book b: gameModel.getBooks()){
                     b.draw(mapRenderer.getBatch());
             }
 
-
+            /* ------ Draw the zombies ------ */
             for (Zombie z : gameModel.getZombies()) {
-
                 z.draw(mapRenderer.getBatch());
-                //    z.moveToPlayer(pathFinding);
             }
 
-            gameModel.getPlayer().moveIfNeeded();
-            gameModel.getPlayer().draw(mapRenderer.getBatch());
-            gameModel.getPlayer().getHand().drawAimer(mapRenderer.getBatch());
+            /* ------ Draw the player ------ */
+            player.draw(mapRenderer.getBatch());
 
+           /* ------ Draw the aimer ------ */
+            player.getHand().drawAimer(mapRenderer.getBatch());
+
+            /* ------ Finished drawing sprites ------ */
             mapRenderer.getBatch().end();
-            if (tiledMapTopLayer != null) {
-                mapRenderer.render(foregroundLayers);
 
+            /* ------Draw the foreground layer ------ */
+            int[] foregroundLayers = {1};
+            if (mapController.getMap().getLayers().get("top") != null) {
+                mapRenderer.render(foregroundLayers);
             }
 
+            /* ------ Draw the box2d debug ------ */
+            boxDebug.render(mapController.getWorld(), camera.combined); //TODO debug
 
-            //rita box2d debug
-            boxDebug.render(mapController.getWorld(), camera.combined);
-            //render HUD
-            String playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
-            String playerHealth = "Health: " + gameModel.getPlayer().getLives();
-            String playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
+            /* ------ Render HUD ------ */
+            String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
+            String playerHealth = "Health: " + player.getLives();
+            String playerAmmo = "Ammo: " + player.getAmmunition();
             batchHUD.begin();
             bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
             bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight() - 10);
@@ -308,18 +325,80 @@ public class GameScreen implements Screen{
         bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
         batchHUD.end();
         }
+            /* ------ Test path finding ------ */
+            if (steps % 60 == 0) {   //uppdaterar varje sekund  //TODO debug
+               updateZombiePaths();
+            }
+        /** Render settings and sound buttons **/
+        soundAndSettingStage.act();
+        soundAndSettingStage.draw();
+
     }
+
 
     /**
      * Render game when game is paused
      */
     private void updatePaused(){
-
         pauseStage.act();
         pauseStage.draw();
-
     }
 
+    /**
+     * Sets up sound and settings icon button
+     */
+    private void setUpSoundAndSettingsMenu(){
+
+        ImageButton.ImageButtonStyle settingsButtonStyle = new ImageButton.ImageButtonStyle();
+        ImageButton.ImageButtonStyle soundButtonStyle = new ImageButton.ImageButtonStyle();
+
+        GameModel.getInstance().res.loadTexture("audio-off","core/assets/Images/audioOff.png");
+        GameModel.getInstance().res.loadTexture("audio-on","core/assets/Images/audioOn.png");
+        GameModel.getInstance().res.loadTexture("settings","core/assets/Images/settings.png");
+
+        settingsButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("settings")));
+        soundButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("audio-on")));
+
+        ImageButton settingsButton = new ImageButton(settingsButtonStyle);
+        soundButton = new ImageButton(soundButtonStyle);
+
+        settingsButton.setSize(40, 40);
+        soundButton.setSize(40, 40);
+
+        settingsButton.setPosition(Gdx.graphics.getWidth() - 50, Gdx.graphics.getHeight() - 50);
+        soundButton.setPosition(Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 50);
+
+        soundAndSettingStage.addActor(settingsButton);
+        soundAndSettingStage.addActor(soundButton);
+
+        soundButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                AudioController audioController = new AudioController();
+                audioController.toggleSound();
+                updateSoundButton();
+            }
+        });
+    }
+
+    /**
+     * Checks whether sound is on or not and adjust image for audio on/off icon thereafter
+     */
+    private void updateSoundButton(){
+        boolean soundOn = GameModel.getInstance().isSoundOn();
+        ImageButton.ImageButtonStyle soundButtonStyle = soundButton.getStyle();
+        Texture newTexture;
+        if (soundOn){
+            newTexture = GameModel.getInstance().res.getTexture("audio-on");
+        } else {
+            newTexture = GameModel.getInstance().res.getTexture("audio-off");
+        }
+        soundButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(newTexture));
+    }
+
+    /**
+     * Sets up the pause menu
+     */
     private void setUpPauseMenu(){
 
         MenuBuilder menuBuilder = new MenuBuilder();
@@ -362,61 +441,35 @@ public class GameScreen implements Screen{
     /**
      * Updates the zombie paths to the player.
      */
-    private void updateZombiePaths(){   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?
+    private void updateZombiePaths() {   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?dddddd
         GameModel gameModel = GameModel.getInstance();
-        for(Zombie z : gameModel.getZombies()) {
-           if(!z.isKnockedOut()) {
-               Point start = new Point(Math.round(z.getX()), Math.round(z.getY()));
-               Point end = new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
-               path = pathFinding.getPath(start, end, 15);                 //TODO gör nåt vettigt här istälelt för att abra printa.
-               if (path == null) {
-                   // System.out.println("Ingen path hittad");
-               } else {
-                   //System.out.println("\nPath från: " + start.x + " " + start.y + " till " + end.x + " " + end.y + ":");
-                   int i = 0;
-                   while (path.hasNext()) {
-                       Point tile = path.next();
-                       //System.out.println(tile.x + " " + tile.y);
-                       i++;
-                   }
-                   //System.out.println("Antal steg: " + i);
-               }
-
-           }
+        for (Zombie z : gameModel.getZombies()) {
+            if (!z.isKnockedOut()) {
+                Player player = gameModel.getPlayer();
+                Point end = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
+                Point start = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
+                mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
+            }
         }
-
     }
+    /**
+     * Dispose the world, player and the renderers.
+     */
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
         currentWorld.dispose();
         batchHUD.dispose();
         shapeRenderer.dispose();
-
     }
 
-    /**
-     * Removes the entity bodies from the world if necessary
-     */
-    private void removeEntities(){
-        GameModel gameModel = GameModel.getInstance();
-        for(Entity e: gameModel.getEntitiesToRemove()){
-            gameModel.getLevel().destroyBody(e);
-        }
-        gameModel.clearEntitiesToRemove();
 
-    }
 
-    private void movePlayerToBufferIfNeeded() {
-        if (mapController.getPlayerBufferPosition() != null) {
 
-//<<<<<<< HEAD
-        mapController.updatePlayerPosition(mapController.getPlayerBufferPosition());
-        mapController.setPlayerBufferPosition(null);
-            updateZombiePaths();
-//=======
+
 
 //>>>>>>> 1ffaac9a2ec5c13ece91b3a017e86c6c456154c3
-    }
-    }
+
+
+
 
 }

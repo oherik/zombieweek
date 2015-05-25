@@ -1,13 +1,12 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
@@ -15,9 +14,10 @@ import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;
-import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -61,7 +61,7 @@ public class InputController implements InputProcessor{
      */
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode){
+        switch (keycode) {
             case Input.Keys.W:
                 //move north
                 gameModel.movePlayer(Direction.NORTH);
@@ -95,24 +95,73 @@ public class InputController implements InputProcessor{
                 getPlayer().getHand().toggleMouseAiming();
                 break;
             case Input.Keys.F:
-                    gameModel.toggleFlashlight();
-
-            break;
+                gameModel.toggleFlashlight();
+                break;
             case Input.Keys.ESCAPE:
-
-                switch (gameModel.getGameState()){
+                switch (gameModel.getGameState()) {
                     case GAME_RUNNING:
                         System.out.println("GAME PAUSED");
                         gameModel.setGameState(GameState.GAME_PAUSED);
                         break;
                     case GAME_PAUSED:
-                        System.out.println("GAME STARTED");
-                        gameModel.setGameState(GameState.GAME_RUNNING);
-                        break;
+                        switch (gameModel.getGameState()) {
+                            case GAME_RUNNING:
+                                if (!gameModel.isStepping()) {   //Don't do any movements while the game world is stepping   //TODO oklart om det fungerar
+                                    switch (keycode) {
+                                        case Input.Keys.W:
+                                            //move north
+                                            gameModel.movePlayer(Direction.NORTH);
+                                            break;
+                                        case Input.Keys.S:
+                                            //move south
+                                            gameModel.movePlayer(Direction.SOUTH);
+                                            break;
+                                        case Input.Keys.D:
+                                            //move east
+                                            gameModel.movePlayer(Direction.EAST);
+                                            break;
+                                        case Input.Keys.A:
+                                            //move west
+                                            gameModel.movePlayer(Direction.WEST);
+                                            break;
+                                        case Input.Keys.SPACE:
+                                            //throw book
+                                            tryThrowingBook();
+                                            break;
+                                        case Input.Keys.UP:
+                                            //aim left
+                                            getPlayer().getHand().startAimingLeft();
+                                            break;
+                                        case Input.Keys.DOWN:
+                                            //aim right
+                                            getPlayer().getHand().startAimingRight();
+                                            break;
+                                        case Input.Keys.C:
+                                            //change aiming type
+                                            getPlayer().getHand().toggleMouseAiming();
+                                            break;
+                                        case Input.Keys.ESCAPE:
+
+                                            System.out.println("GAME PAUSED");
+                                            gameModel.setGameState(GameState.GAME_PAUSED);
+                                            break;
+
+                                        default:
+                                    }
+                                }
+                                return false;
+                            case GAME_PAUSED:
+                                switch (keycode) {
+                                    case Input.Keys.ESCAPE:
+                                        System.out.println("GAME STARTED");
+                                        gameModel.setGameState(GameState.GAME_RUNNING);
+                                        break;
+                                    default:
+                                }
+                                break;
+                        }
+                        return true;
                 }
-                break;
-            default:
-                return false;
         }
         return true;
     }
@@ -126,7 +175,7 @@ public class InputController implements InputProcessor{
         float angle = player.getHand().getDirection()+Constants.PI*0.5f;
 
 
-        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getMapMetaLayer(),distance,angle) ) {
+        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getRoom(),distance,angle) ) {
             player.decreaseAmmunition();
             throwBook();
         }
@@ -141,7 +190,7 @@ public class InputController implements InputProcessor{
         Player player = gameModel.getPlayer();
         player.throwBook();
 
-        gameModel.res.getSound("throw").play();
+        AudioController.playSound(gameModel.res.getSound("throw"));
     }
     /**
      * Decides what to do when the player releases a key
@@ -150,19 +199,20 @@ public class InputController implements InputProcessor{
      */
     @Override
     public boolean keyUp(int keycode) {
+        if(!gameModel.isStepping()) {   //Don't do any movements while the game world is stepping
+            if(keycode == Input.Keys.D || keycode == Input.Keys.A){
+                getPlayer().stopX();
+            }
 
-        if(keycode == Input.Keys.D || keycode == Input.Keys.A){
-            getPlayer().stopX();
+            if (keycode == Input.Keys.W || keycode == Input.Keys.S){
+                getPlayer().stopY();
+            }
+
+            if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
+                //set aiming force to zero
+                getPlayer().getHand().stopAiming();
+            } else {return false;}
         }
-
-        if (keycode == Input.Keys.W || keycode == Input.Keys.S){
-            getPlayer().stopY();
-        }
-
-        if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
-            //set aiming force to zero
-            getPlayer().getHand().stopAiming();
-        } else {return false;}
         return true;
     }
 
@@ -173,7 +223,11 @@ public class InputController implements InputProcessor{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        tryThrowingBook();
+        switch (gameModel.getGameState()) {
+            case GAME_RUNNING:
+                tryThrowingBook();
+                break;
+        }
         return true;
     }
 
@@ -189,7 +243,12 @@ public class InputController implements InputProcessor{
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        getPlayer().getHand().setMouseDirection(screenX, screenY);
+        switch (gameModel.getGameState()) {
+            case GAME_RUNNING:
+                getPlayer().getHand().setMouseDirection(screenX, screenY);
+                break;
+        }
+
         return false;
     }
 
@@ -198,18 +257,4 @@ public class InputController implements InputProcessor{
         return false;
     }
 
-    /**
-     * For debug only
-     * @param start
-     * @param end
-     * @param metaLayerName
-     * @param collisionProperty
-     */
-   private void drawPath(Point start, Point end ,String metaLayerName, String collisionProperty){       //TODO ej klar
-        World world = gameModel.getLevel().getWorld();
-        TiledMap tiledMap =  gameModel.getLevel().getMap();
-        BodyDef bodyDef = new BodyDef();
-        PathAlgorithm pA = new PathAlgorithm((TiledMapTileLayer) tiledMap.getLayers().get(metaLayerName), collisionProperty);
-        Iterator<Point> it = pA.getPath(start, end);
-    }
 }
