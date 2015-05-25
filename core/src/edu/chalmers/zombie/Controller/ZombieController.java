@@ -18,7 +18,7 @@ import java.util.Iterator;
 public class ZombieController {
 
     public static void move(Zombie z) {
-
+        if (z.getBody() != null) {
         Point playerPosition = z.getThisMapController().getPlayerPosition();
         Point zombiePosition = z.getZombiePosition();
 
@@ -50,7 +50,7 @@ public class ZombieController {
                         z.setNextPathTile(temp);
                     }
                 }
-                if (z.getBody() != null) {
+
                     Vector2 direction = new Vector2(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
                     direction.setLength(z.getSpeed());
 
