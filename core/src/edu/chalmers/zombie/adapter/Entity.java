@@ -118,7 +118,7 @@ public abstract class Entity {
          }
 
         if(isAnimated){ //only if Entity should be animated
-            if(getBody()!=null) {
+            if(body != null) {
                 float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
 
                 animator.update(deltaTime);
