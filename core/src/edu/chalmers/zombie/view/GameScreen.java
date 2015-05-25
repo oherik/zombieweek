@@ -1,15 +1,27 @@
 package edu.chalmers.zombie.view;
 
 import com.badlogic.gdx.*;
+
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,8 +30,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import com.badlogic.gdx.utils.ShortArray;
+
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.zombie.adapter.Renderer;
+
 import edu.chalmers.zombie.adapter.Entity;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
@@ -53,8 +69,14 @@ public class GameScreen implements Screen{
 
     private Stage pauseStage;
 
+
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+
     private Stage soundAndSettingStage;
     private ImageButton soundButton;
+
+    private Flashlight flashlight;
+    private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
 
     /**
      * Creates a game screen with the default tile size
@@ -62,6 +84,7 @@ public class GameScreen implements Screen{
     public GameScreen(){
         this(Constants.TILE_SIZE);
     }
+
 
     /**
      * Creates a new screen based on a set tile size, i.e. pixels per meters.
@@ -108,6 +131,7 @@ public class GameScreen implements Screen{
 
         //TODO debug
         mapController.printCollisionTileGrid();
+
 
     }
 
@@ -196,6 +220,13 @@ public class GameScreen implements Screen{
         Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+        //Uppdatera fysik
+        //Tells GameModel when step is happening
+        gameModel.setStepping(true);
+        currentWorld.step(Constants.TIMESTEP, 6, 2);
+        gameModel.setStepping(false);
+        //removeEntities();
         if(!gameModel.worldNeedsUpdate()) {
             /* ------ Update the camera position ------ */
             camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
@@ -206,6 +237,8 @@ public class GameScreen implements Screen{
             mapRenderer.render(backgroundLayers);
             mapRenderer.setView(camera);
 
+
+            //mapRenderer.render();
             steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
@@ -251,16 +284,71 @@ public class GameScreen implements Screen{
             bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight() - 40);
             batchHUD.end();
 
+
+
+
+                        /* ----------------- TEST FLASHLIGHT -----------------*/
+            /*
+            if (gameModel.isFlashlightEnabled()){
+                PolygonSpriteBatch psb = new PolygonSpriteBatch();
+                SpriteBatch sb = new SpriteBatch();
+                sb.begin();
+                psb.setProjectionMatrix(camera.combined);
+                psb.begin();
+                if (flashlight==null){
+                    flashlight = new Flashlight(currentWorld);
+                }
+                flashlight.draw(psb,sb);
+                psb.end();
+                sb.end();
+                psb.dispose();
+                sb.dispose();
+            } else{
+                SpriteBatch sb = new SpriteBatch();
+                sprite.setSize(650,480);
+                sb.begin();
+                sprite.draw(sb);
+                player.draw(sb);
+                sb.end();
+            }
+            */
+            //------------------------------------------------------------------------
+
+
+            /*---------------- END TEST -------------------------*/
+         /*--------------------------TESTA PATH FINDING------------------------------------*/
+
+            //Skapa path finding        //TODO debug
+
+            if (steps % 60 == 0) {   //uppdaterar varje sekund
+                updateZombiePaths();
+            }
+        /*-----------------SLUTTESTAT---------------------*/
+
+            //rita box2d debug
+        boxDebug.render(mapController.getWorld(), camera.combined);
+
+        //render HUD
+        playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
+        playerHealth = "Health: " + gameModel.getPlayer().getLives();
+        playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
+            batchHUD.begin();
+        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
+        bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
+        bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
+        batchHUD.end();
+        }
             /* ------ Test path finding ------ */
             if (steps % 60 == 0) {   //uppdaterar varje sekund  //TODO debug
               // updateZombiePaths();
             }
-        }
-
         /** Render settings and sound buttons **/
         soundAndSettingStage.act();
         soundAndSettingStage.draw();
+
     }
+
 
     /**
      * Render game when game is paused
@@ -341,10 +429,10 @@ public class GameScreen implements Screen{
         table.setFillParent(true);
         pauseStage.addActor(table);
 
-        mainMenuButton.addListener(new ClickListener(){
+        mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
             }
         });
 
@@ -375,18 +463,26 @@ public class GameScreen implements Screen{
                 Point end = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
                 Point start = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
                 mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
-
             }
         }
     }
-
     /**
-     * Dispose the world and player
+     * Dispose the world, player and the renderers.
      */
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
         currentWorld.dispose();
+        batchHUD.dispose();
+        shapeRenderer.dispose();
     }
+
+
+
+
+
+
+//>>>>>>> 1ffaac9a2ec5c13ece91b3a017e86c6c456154c3
+
 
 
 

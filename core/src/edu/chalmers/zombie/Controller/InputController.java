@@ -61,61 +61,107 @@ public class InputController implements InputProcessor{
      */
     @Override
     public boolean keyDown(int keycode) {
-        switch (gameModel.getGameState()){
-            case GAME_RUNNING:
-                if(!gameModel.isStepping()) {   //Don't do any movements while the game world is stepping   //TODO oklart om det fungerar
-                    switch (keycode) {
-                        case Input.Keys.W:
-                            //move north
-                            gameModel.movePlayer(Direction.NORTH);
-                            break;
-                        case Input.Keys.S:
-                            //move south
-                            gameModel.movePlayer(Direction.SOUTH);
-                            break;
-                        case Input.Keys.D:
-                            //move east
-                            gameModel.movePlayer(Direction.EAST);
-                            break;
-                        case Input.Keys.A:
-                            //move west
-                            gameModel.movePlayer(Direction.WEST);
-                            break;
-                        case Input.Keys.SPACE:
-                            //throw book
-                            tryThrowingBook();
-                            break;
-                        case Input.Keys.UP:
-                            //aim left
-                            getPlayer().getHand().startAimingLeft();
-                            break;
-                        case Input.Keys.DOWN:
-                            //aim right
-                            getPlayer().getHand().startAimingRight();
-                            break;
-                        case Input.Keys.C:
-                            //change aiming type
-                            getPlayer().getHand().toggleMouseAiming();
-                            break;
-                        case Input.Keys.ESCAPE:
-
-                            System.out.println("GAME PAUSED");
-                            gameModel.setGameState(GameState.GAME_PAUSED);
-                            break;
-
-                        default:
-                    }
-                }
-                return false;
-            case GAME_PAUSED:
-                switch (keycode) {
-                    case Input.Keys.ESCAPE:
-                        System.out.println("GAME STARTED");
-                        gameModel.setGameState(GameState.GAME_RUNNING);
-                        break;
-                    default:
-                }
+        switch (keycode) {
+            case Input.Keys.W:
+                //move north
+                gameModel.movePlayer(Direction.NORTH);
                 break;
+            case Input.Keys.S:
+                //move south
+                gameModel.movePlayer(Direction.SOUTH);
+                break;
+            case Input.Keys.D:
+                //move east
+                gameModel.movePlayer(Direction.EAST);
+                break;
+            case Input.Keys.A:
+                //move west
+                gameModel.movePlayer(Direction.WEST);
+                break;
+            case Input.Keys.SPACE:
+                //throw book
+                tryThrowingBook();
+                break;
+            case Input.Keys.UP:
+                //aim left
+                getPlayer().getHand().startAimingLeft();
+                break;
+            case Input.Keys.DOWN:
+                //aim right
+                getPlayer().getHand().startAimingRight();
+                break;
+            case Input.Keys.C:
+                //change aiming type
+                getPlayer().getHand().toggleMouseAiming();
+                break;
+            case Input.Keys.F:
+                gameModel.toggleFlashlight();
+                break;
+            case Input.Keys.ESCAPE:
+                switch (gameModel.getGameState()) {
+                    case GAME_RUNNING:
+                        System.out.println("GAME PAUSED");
+                        gameModel.setGameState(GameState.GAME_PAUSED);
+                        break;
+                    case GAME_PAUSED:
+                        switch (gameModel.getGameState()) {
+                            case GAME_RUNNING:
+                                if (!gameModel.isStepping()) {   //Don't do any movements while the game world is stepping   //TODO oklart om det fungerar
+                                    switch (keycode) {
+                                        case Input.Keys.W:
+                                            //move north
+                                            gameModel.movePlayer(Direction.NORTH);
+                                            break;
+                                        case Input.Keys.S:
+                                            //move south
+                                            gameModel.movePlayer(Direction.SOUTH);
+                                            break;
+                                        case Input.Keys.D:
+                                            //move east
+                                            gameModel.movePlayer(Direction.EAST);
+                                            break;
+                                        case Input.Keys.A:
+                                            //move west
+                                            gameModel.movePlayer(Direction.WEST);
+                                            break;
+                                        case Input.Keys.SPACE:
+                                            //throw book
+                                            tryThrowingBook();
+                                            break;
+                                        case Input.Keys.UP:
+                                            //aim left
+                                            getPlayer().getHand().startAimingLeft();
+                                            break;
+                                        case Input.Keys.DOWN:
+                                            //aim right
+                                            getPlayer().getHand().startAimingRight();
+                                            break;
+                                        case Input.Keys.C:
+                                            //change aiming type
+                                            getPlayer().getHand().toggleMouseAiming();
+                                            break;
+                                        case Input.Keys.ESCAPE:
+
+                                            System.out.println("GAME PAUSED");
+                                            gameModel.setGameState(GameState.GAME_PAUSED);
+                                            break;
+
+                                        default:
+                                    }
+                                }
+                                return false;
+                            case GAME_PAUSED:
+                                switch (keycode) {
+                                    case Input.Keys.ESCAPE:
+                                        System.out.println("GAME STARTED");
+                                        gameModel.setGameState(GameState.GAME_RUNNING);
+                                        break;
+                                    default:
+                                }
+                                break;
+                        }
+                        return true;
+                }
         }
         return true;
     }
