@@ -288,7 +288,7 @@ public class GameScreen implements Screen{
 
 
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-            /*
+
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -311,7 +311,7 @@ public class GameScreen implements Screen{
                 player.draw(sb);
                 sb.end();
             }
-            */
+
             //------------------------------------------------------------------------
 
 

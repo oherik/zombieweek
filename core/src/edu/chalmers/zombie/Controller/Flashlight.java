@@ -29,7 +29,7 @@ public class Flashlight {
     private RayCastCallback callback = createCallback();
     private float width;
     private int numberOfRays;
-    private int length;
+    private float length;
     private Vector2[] rays;
     private ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
     private int maxYIndex;
@@ -42,11 +42,11 @@ public class Flashlight {
         this.world = world;
         width = Constants.PI/4;
         numberOfRays = 100;
-        length = 8;
         initializeRays();
     }
     public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
         clearAll();
+        calculateLength();
         fetchDirection();
         fetchPlayerPosition();
         calculateEndPoints();
@@ -60,6 +60,19 @@ public class Flashlight {
     }
     private void clearAll(){
         endPoints.clear();
+    }
+    private void calculateLength(){
+        float windowHeight = Gdx.graphics.getHeight();
+        float windowWidth = Gdx.graphics.getWidth();
+        float height =  (windowHeight/32 - windowHeight/64) - (windowHeight/32 - windowHeight/64)/4;
+        float width = (windowWidth/32 - windowWidth/64) - (windowWidth/32 - windowWidth/64)/4;
+        if (height > width){
+            length = width;
+        } else{
+            length = height;
+        }
+
+        System.out.println(length);
     }
     private void fetchDirection(){
         GameModel gameModel = GameModel.getInstance();
