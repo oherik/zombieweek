@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
+import edu.chalmers.zombie.adapter.BasicZombie;
 import edu.chalmers.zombie.adapter.CollisionObject;
 import edu.chalmers.zombie.adapter.Room;
 import edu.chalmers.zombie.adapter.Zombie;
@@ -136,13 +137,13 @@ public class PhysicsController {
             World world = room.getWorld();
             TiledMapTileLayer metaLayer = room.getMetaLayer();
 
-            String zombieSpawn = "zombie_spawn"; //TODO test tills vi får flera sorters zombies
-            String playerSpawn = "player_spawn"; //TODO test tills ovan är fixat
-            String playerReturn = "player_return"; //TODO test tills ovan är fixat
+            String zombieSpawn = "zombie_spawn"; //TODO test tills vi fï¿½r flera sorters zombies
+            String playerSpawn = "player_spawn"; //TODO test tills ovan ï¿½r fixat
+            String playerReturn = "player_return"; //TODO test tills ovan ï¿½r fixat
 
             if (metaLayer != null) {
                 metaLayer.setVisible(false);
-                for (int row = 0; row < metaLayer.getHeight(); row++) {       //TODO onödigt att gå igenom allt?
+                for (int row = 0; row < metaLayer.getHeight(); row++) {       //TODO onï¿½digt att gï¿½ igenom allt?
                     for (int col = 0; col < metaLayer.getWidth(); col++) {
                         TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
                         if (currentCell != null && currentCell.getTile() != null) {        //There's a meta data tile on that position
@@ -166,8 +167,8 @@ public class PhysicsController {
                             if(toAdd != null) {
                                 collisionObjects.add(toAdd);
                             }
-                            if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {           //TODO skapa en spawnEntities-metod istället. Och en huvudmetod som går igenom båda metoderna
-                                Zombie zombie = new ZombieTest(world, col, row);           //TODO test
+                            if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {           //TODO skapa en spawnEntities-metod istï¿½llet. Och en huvudmetod som gï¿½r igenom bï¿½da metoderna
+                                Zombie zombie = new BasicZombie(world, col, row);           //TODO test
                                 room.addZombie(zombie);
                             }
                             if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
