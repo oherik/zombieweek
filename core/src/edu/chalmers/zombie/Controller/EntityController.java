@@ -149,12 +149,16 @@ public class EntityController {
      * @param b The book
      */
     public static void applyHit(Zombie z, Book b){
+        z.isAttacked(true);
         double damage = getDamage(b);
-        //TODO f�rst kolla om zombien ska knockas ut
-        knockOut(z);
-        GameModel.getInstance().addEntityToRemove(b);
-        b.markForRemoval();
-        AudioController.playSound(GameModel.getInstance().res.getSound("zombie_hit"));
+        z.setStartingHp(z.getHP()-(int)Math.round(damage));
+        if(z.getHP()<=0) {
+            //TODO f�rst kolla om zombien ska knockas ut
+            knockOut(z);
+            GameModel.getInstance().addEntityToRemove(b);
+            b.markForRemoval();
+            AudioController.playSound(GameModel.getInstance().res.getSound("zombie_hit"));
+        }
     }
 
     /**
@@ -163,7 +167,8 @@ public class EntityController {
      * @return  The damage caused by the book
      */
     public static double getDamage(Book b){
-        return b.getSpeed()*b.getMass();    //TODO ta med massan h�r och n�n konstant
+        return b.getSpeed()*5;
+        //*b.getMass();    //TODO ta med massan h�r och n�n konstant
     }
 
     /**

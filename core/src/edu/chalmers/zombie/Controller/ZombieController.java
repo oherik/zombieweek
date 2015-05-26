@@ -22,10 +22,6 @@ public class ZombieController {
         Point playerPosition = z.getThisMapController().getPlayerPosition();
         Point zombiePosition = z.getZombiePosition();
 
-        z.setSpeed(80);
-        z.setAngularSpeed(100);
-        z.setDetectionRadius(10);
-
         Player player = GameModel.getInstance().getPlayer();
         Point playerTile = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
         Point zombieTile = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
@@ -33,7 +29,7 @@ public class ZombieController {
         Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, z.getDetectionRadius());
         Circle pcircle = new Circle(playerPosition.x, playerPosition.y, z.getDetectionRadius());
 
-        if (zcircle.overlaps(pcircle)) {
+        if (zcircle.overlaps(pcircle) || z.isAttacked()) {
 
             if (System.currentTimeMillis() - z.getTimeSinceLastPath() > Constants.PATH_UPDATE_MILLIS) {
                 //Update path
@@ -55,7 +51,6 @@ public class ZombieController {
                 }
                     Vector2 direction = new Vector2(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
                     direction.setLength(z.getSpeed());
-
                     //Rotate
 
                     float currentAngle = z.getBody().getAngle() % (Constants.PI * 2) - Constants.PI * 0.5f; //TODO fixa så impuls funkar
@@ -77,6 +72,7 @@ public class ZombieController {
                     z.getBody().applyForceToCenter(direction.x, direction.y, true);
                     z.setIsMoving(true);
                 } else {
+                    z.isAttacked(false);    //Lose aggression
                     z.setIsMoving(false);
                 }
 

@@ -30,6 +30,7 @@ public class ITZombie extends Zombie {
         setDetectionRadius(5);
         setStartingHp(100);
         setSpeed(30);
+        setAngularSpeed(50);
     }
 
     @Override

@@ -115,7 +115,24 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //Set system time created
         timeSinceLastPath = System.currentTimeMillis();
 
+        isAttacked = false;
 
+
+    }
+
+    /**
+     * Set the zombie as attacked or not
+     * @param isAttacked    true if attacked, false if not
+     */
+    public void isAttacked(boolean isAttacked){
+        this.isAttacked = isAttacked;
+    }
+
+    /**
+     * @return true if the zombie is attacked, false otherwise
+     */
+    public boolean isAttacked(){
+        return isAttacked;
     }
     /**
      * @return System time when the last path finding was performed
@@ -151,7 +168,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      */
     public void setSpeed(int newSpeed) {
 
-        speed = newSpeed;
+        this.speed = newSpeed;
     }
 
     public int getSpeed() {
@@ -184,6 +201,10 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void setStartingHp(int hp) {
 
         this.hp = hp;
+    }
+
+    public int getHP(){
+        return hp;
     }
 
     public ZombieType getType() {
@@ -258,7 +279,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         Point zombiePosition = getZombiePosition();
         Point playerPosition = mapController.getPlayerPosition();
 
-        setSpeed(80);
+       // setSpeed(80);
         setDetectionRadius(10);
 
 
