@@ -203,6 +203,10 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         this.hp = hp;
     }
 
+    public int getHP(){
+        return hp;
+    }
+
     public ZombieType getType() {
 
         return type;
