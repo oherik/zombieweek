@@ -27,7 +27,7 @@ public class Constants {
     public static final short COLLISION_OBSTACLE  = 16;
     public static final short COLLISION_WATER  = 32;
     public static final short COLLISION_DOOR  = 64;
-    public static final short COLLISION_SNEAK = -2;
+    public static final short COLLISION_SNEAK = 128;
 
     //Fysikhantering
     public static final float TIMESTEP = 1/60f;
