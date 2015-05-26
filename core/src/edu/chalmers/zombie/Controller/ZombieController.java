@@ -79,14 +79,12 @@ public class ZombieController {
                     z.setIsMoving(false);
                 }
 
-        } else if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
-
-            // TODO: attack
+        }
         } else {
             // TODO: some exception management
         }
 
-    }
+
 
 
     }
