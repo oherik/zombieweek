@@ -3,7 +3,6 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -19,7 +18,6 @@ import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by neda on 2015-03-31.
@@ -39,8 +37,9 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private MapController mapController;
     private int hp;
     private Point nextPathTile;
-    private long timeCreated;
+    private long timeSinceLastPath;
     private int angularSpeed;
+    private ArrayList<Point> path;
 
     /**
      * Creates a new zombie
@@ -112,17 +111,37 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         isKnockedOut = false;
 
         //Set system time created
-        timeCreated = System.currentTimeMillis();
+        timeSinceLastPath = System.currentTimeMillis();
 
 
     }
     /**
-     * @return System time created
+     * @return System time when the last path finding was performed
      */
-    public long getTimeCreated() {
-        return timeCreated;
+    public long getTimeSinceLastPath() {
+        return timeSinceLastPath;
     }
 
+    /**
+     * @return Set the system time when the last path finding was performed
+     */
+    public void setTimeSinceLastPath(long timeSinceLastPath){
+        this.timeSinceLastPath = timeSinceLastPath;
+    }
+
+    /**
+     * @return The current path
+     */
+    public ArrayList<Point> getPath() {
+        return path;
+    }
+
+    /**
+     * @return Set the current path
+     */
+    public void setPath(ArrayList<Point> path) {
+        this.path = path;
+    }
 
     /**
      * A method which sets the zombie's speed to a new speed.

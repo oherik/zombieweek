@@ -2,7 +2,6 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.model.GameModel;
@@ -34,11 +33,14 @@ public class ZombieController {
         Circle pcircle = new Circle(playerPosition.x, playerPosition.y, z.getDetectionRadius());
 
         if (zcircle.overlaps(pcircle)) {
-            ArrayList<Point> pathToPlayer = null;
-            if (System.currentTimeMillis() - z.getTimeCreated() > Constants.PATH_UPDATE_MILLIS) {
+
+            if (System.currentTimeMillis() - z.getTimeSinceLastPath() > Constants.PATH_UPDATE_MILLIS) {
                 //Update path
-                pathToPlayer = MapController.getPath(zombieTile, playerTile, Constants.MAX_PATH_STEP);
+                ArrayList<Point> pathToPlayer = MapController.getPath(zombieTile, playerTile, Constants.MAX_PATH_STEP);
+                z.setPath(pathToPlayer);
+                z.setTimeSinceLastPath(System.currentTimeMillis());
             }
+            ArrayList<Point> pathToPlayer = z.getPath();
             if (pathToPlayer != null) {
                 if (pathToPlayer.size() > 1) {
                     pathToPlayer.remove(0); //Ta ej med tilen zombien står på
