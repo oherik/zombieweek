@@ -1,0 +1,12 @@
+Då Erik arbetat från två olika datorer tycks han under commits synas som två olika personer - 
+dels som "Erik ├ûhrn" och dels som "oherik". Däremot syns han enbart som "oherik" där slutsumman 
+över antal rader visas.
+
+
+Vi hade i början med gitinspector in repot, eftersom vi inte insåg att den även räknade med sig själv. 
+Efter en miss i .gitignore åkte den även med i en senare commit, men togs bort igen därefter. 
+En hel del av Eriks additions och deletions består alltså av dessa gitinspectorfiler, 
+även om dessa då naturligtvis inte är med i slutsumman. För att få en bättre bild över det faktiska antalet
+additions och deletions kan det vara nödvändigt att starta gitinspector med flaggan "-f java", då 
+själva projektet är skrivet i Java men gitinspector i Python.
+

@@ -226,12 +226,13 @@ public class GameScreen implements Screen{
         gameModel.setStepping(true);
         currentWorld.step(Constants.TIMESTEP, 6, 2);
         gameModel.setStepping(false);
-        //removeEntities();
-        if(!gameModel.worldNeedsUpdate()) {
-            /* ------ Update the camera position ------ */
-            camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
-            camera.update();
 
+        //TODO vad göra om spelaren är död?
+
+        if(!GameModel.getInstance().worldNeedsUpdate()) {
+            /* ------ Update the camera position ------ */
+                camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
+                camera.update();
             /* ------ Draw the background map layer ------ */
             int[] backgroundLayers = {0};
             mapRenderer.render(backgroundLayers);
@@ -245,6 +246,27 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().begin();
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
 
+            /* ------ Draw the player ------ */
+            player.draw(mapRenderer.getBatch());
+
+           /* ------ Draw the aimer ------ */
+            player.getHand().drawAimer(mapRenderer.getBatch());
+            mapRenderer.getBatch().end();
+             /* ------Draw the middle layer ------ */
+            if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
+                int[] middleLayers = {2};
+                if (mapController.getMap().getLayers().get("middle_dark") != null) {
+                    mapRenderer.render(middleLayers);
+                }
+            }
+            else{
+                int[] middleLayers = {1};
+                if (mapController.getMap().getLayers().get("middle") != null) {
+                    mapRenderer.render(middleLayers);
+                }
+            }
+            mapRenderer.getBatch().begin();
+            mapRenderer.getBatch().setProjectionMatrix(camera.combined);
             /* ------ Draw books ------ */
             for (Book b: gameModel.getBooks()){
                     b.draw(mapRenderer.getBatch());
@@ -255,20 +277,11 @@ public class GameScreen implements Screen{
                 z.draw(mapRenderer.getBatch());
             }
 
-            /* ------ Draw the player ------ */
-            player.draw(mapRenderer.getBatch());
-
-           /* ------ Draw the aimer ------ */
-            player.getHand().drawAimer(mapRenderer.getBatch());
 
             /* ------ Finished drawing sprites ------ */
             mapRenderer.getBatch().end();
 
-            /* ------Draw the foreground layer ------ */
-            int[] foregroundLayers = {1};
-            if (mapController.getMap().getLayers().get("top") != null) {
-                mapRenderer.render(foregroundLayers);
-            }
+
 
             /* ------ Draw the box2d debug ------ */
             boxDebug.render(mapController.getWorld(), camera.combined); //TODO debug
@@ -286,9 +299,8 @@ public class GameScreen implements Screen{
 
 
 
-
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-            /*
+/*
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -311,10 +323,15 @@ public class GameScreen implements Screen{
                 player.draw(sb);
                 sb.end();
             }
-            */
-            //------------------------------------------------------------------------
+*/
+            //-----------------------------------------------------------------------
 
-
+            /*---------------- END TEST -------------------------*/
+        /* ------Draw the foreground layer ------ */
+            int[] foregroundLayers = {3};
+            if (mapController.getMap().getLayers().get("top") != null) {
+                mapRenderer.render(foregroundLayers);
+            }
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
@@ -341,7 +358,7 @@ public class GameScreen implements Screen{
         }
             /* ------ Test path finding ------ */
             if (steps % 60 == 0) {   //uppdaterar varje sekund  //TODO debug
-               updateZombiePaths();
+              // updateZombiePaths();
             }
         /** Render settings and sound buttons **/
         soundAndSettingStage.act();
@@ -462,7 +479,7 @@ public class GameScreen implements Screen{
                 Player player = gameModel.getPlayer();
                 Point end = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
                 Point start = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
-                mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
+                //mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
             }
         }
     }

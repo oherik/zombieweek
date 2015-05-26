@@ -155,6 +155,7 @@ public class MapController {
         else
             setPlayerBufferPosition(getRoom().getPlayerSpawn());
 
+
     }
 
     /**
@@ -287,7 +288,7 @@ public class MapController {
 
 
     public void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
-            ArrayList<Point> path = getPath(room, start, end);
+            ArrayList<Point> path = getPath(room, start, end, Constants.MAX_PATH_STEP);
             System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +
                     ": printing collision detection tiles and path from " + start.x + ", " + start.y + " to " + end.x + ", " + end.y + ".");
         if(path != null) {
@@ -326,11 +327,12 @@ public class MapController {
      * @param room  The specific room
      * @param start The start point
      * @param end   The end point
+     * @param maxSteps The maximum path length
      * @return  The shortest path between the two points in the room
      * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
      * @throws IndexOutOfBoundsException if any point is out of bounds
      */
-    public static ArrayList<Point> getPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{
+    public static ArrayList<Point> getPath(Room room, Point start, Point end, int maxSteps) throws NullPointerException, IndexOutOfBoundsException{
         if(room==null){
             throw new NullPointerException("the room pointer was null");
         }
@@ -344,7 +346,9 @@ public class MapController {
             throw new IndexOutOfBoundsException("getPath: start point out of bounds");
         if(end.x < 0 || end.x >= room.getCollisionTileGrid().length || end.y < 0 ||end.y >= room.getCollisionTileGrid()[0].length)
             throw new IndexOutOfBoundsException("getPath: end point out of bounds");
-        return PathAlgorithm.getPath(start, end, room.getCollisionTileGrid(), Constants.COLLISION_ZOMBIE);
+        if(maxSteps<1)
+            throw new IndexOutOfBoundsException("getPath: max steps must be >0");
+        return PathAlgorithm.getPath(start, end, room.getCollisionTileGrid(), maxSteps, Constants.COLLISION_ZOMBIE);
     }
 
     /**
@@ -352,13 +356,14 @@ public class MapController {
      * Return the shortest path between two points in the current room
      * @param start The start point
      * @param end   The end point
+     * @param maxSteps The maximum length of the path
      * @return  The shortest path between the two points in the current room
      * @throws NullPointerException if either parameter is null or of the path algorithm or navigational mesh haven't been initialized
      *      * @throws IndexOutOfBoundsException if any point is out of bounds
      */
-    public static ArrayList<Point> getPath(Point start, Point end) throws NullPointerException, IndexOutOfBoundsException {
+    public static ArrayList<Point> getPath(Point start, Point end, int maxSteps) throws NullPointerException, IndexOutOfBoundsException {
         MapController controller = new MapController(); //TODO gör de andra statiska
-        return getPath(controller.getRoom(), start, end);
+        return getPath(controller.getRoom(), start, end, maxSteps);
     }
 
     /**
@@ -371,6 +376,9 @@ public class MapController {
 
             /* ------ Update physics ------ */
             PhysicsController.traverseRoomIfNeeded(getRoom());
+
+            /* ------ Remove old entities ------ */
+            removeEntities();
 
             /* ------ Update player ------ */
             if(player == null){
@@ -396,8 +404,7 @@ public class MapController {
         /* ------ Update physics ------ */
         stepWorld();
 
-        /* ------ Remove old entities ------ */
-        removeEntities();
+
 
         /* ------- Updates projectiles ------*/
         updateBooks();
@@ -436,7 +443,7 @@ public class MapController {
     /* ------ Make all the zombies move toward the player if appropriate ------ */
     private void moveZombies() {
         for (Zombie z : gameModel.getZombies()) {
-            z.moveToPlayer(new PathAlgorithm());
+            ZombieController.move(z);
         }
     }
 

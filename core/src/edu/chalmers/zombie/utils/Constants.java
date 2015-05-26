@@ -27,7 +27,7 @@ public class Constants {
     public static final short COLLISION_OBSTACLE  = 16;
     public static final short COLLISION_WATER  = 32;
     public static final short COLLISION_DOOR  = 64;
-    public static final short COLLISION_SNEAK = -2;
+    public static final short COLLISION_SNEAK = 128;
 
     //Fysikhantering
     public static final float TIMESTEP = 1/60f;
@@ -36,7 +36,8 @@ public class Constants {
     public static final float PLAYER_FRICTION_DEFAULT = 30f;
     public static final float PLAYER_FRICTION_WATER = 80f;
     public static final float PLAYER_FRICTION_SNEAK = 120f;
-
+    public static final int MAX_PATH_STEP = 200;
+    public static final float PATH_UPDATE_MILLIS = 300f;
 
     //Matematik
     public static final float PI = 3.14159265358979323846f; //Oklart om vi behöver så mycket

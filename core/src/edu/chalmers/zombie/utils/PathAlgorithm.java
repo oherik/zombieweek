@@ -29,12 +29,12 @@ public class PathAlgorithm {
      *
      * @param startPos The starting position (normally the zombie's position)
      * @param endPos   The end position (normally the player position)
-     * @param maxSteps  The maximum number of steps, 0 for infinite steps
+     * @param maxCost  The maximum number of steps, 0 for infinite steps
      * @return  the shortest path as an iterator over points
      * @throws IndexOutOfBoundsException if the start or end position is negative
      * @throws  NullPointerException    if either of the points is null
      */
-    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] collisionTileGrid, int maxSteps, short collisionBit)
+    public static ArrayList<Point> getPath(Point startPos, Point endPos, short[][] collisionTileGrid, int maxCost, short collisionBit)
             throws NullPointerException, IndexOutOfBoundsException {
         if (collisionTileGrid == null)
             throw new NullPointerException("PathAlgorithm: the navigational mesh cannot be null");
@@ -44,14 +44,14 @@ public class PathAlgorithm {
             throw new IndexOutOfBoundsException("PathAlgorithm: the start position must be positive");
         if(endPos.x<0 || endPos.y<0)
             throw new IndexOutOfBoundsException("PathAlgorithm: the end position must be positive");
-        if(maxSteps<0)
+        if(maxCost<0)
             throw new IndexOutOfBoundsException("The number of steps must be 0 (=infinite) or greater");
         if(startPos.equals(endPos)){
             ArrayList<Point> singlePointArray = new ArrayList<Point>();
             singlePointArray.add(endPos);
             return singlePointArray;
         }
-        return calculatePath(startPos,endPos,collisionTileGrid,maxSteps, collisionBit);
+        return calculatePath(startPos,endPos,collisionTileGrid,maxCost, collisionBit);
     }
 
     /**
@@ -60,7 +60,7 @@ public class PathAlgorithm {
      * @return the shortest path or, if none found, null
      */
 
-    private static ArrayList<Point> calculatePath(Point startPos, Point endPos, short[][] collisionTileGrid, int maxSteps, short collisionBit) {
+    private static ArrayList<Point> calculatePath(Point startPos, Point endPos, short[][] collisionTileGrid, int maxCost, short collisionBit) {
         PriorityQueue<QueueElement> queue = new PriorityQueue<QueueElement>();
         QueueElement currentElement;
         int width = collisionTileGrid.length;
@@ -72,7 +72,7 @@ public class PathAlgorithm {
         while (!queue.isEmpty()) {
             currentElement = queue.poll();
             Point currentNode = currentElement.getNode();
-            if (currentElement.getPath() != null && (maxSteps == 0 || currentElement.getPath().size() < maxSteps)) //The size of the path array is how many steps it takes
+            if (currentElement.getPath() != null ) { //The size of the path array is how many steps it takes
                 if (currentNode.equals(endPos)) {
                     currentElement.getPath().add(currentNode);
                     return currentElement.getPath();
@@ -86,20 +86,24 @@ public class PathAlgorithm {
                                     && noCornersCut(closedNodes, currentNode, i, j, collisionTileGrid, collisionBit)) {
                                 int g;
                                 int h = 10 * (Math.abs(endPos.x - i) + Math.abs(endPos.y - j));     //Manhattan distance
-                                if (isDiagonal(currentNode, i, j))
-                                    g = currentElement.getGCost() + 14;  // 10 * sqrt(2) is approx. 14
-                                else
-                                    g = currentElement.getGCost() + 10;
-                                if (gCost[i][j] < g) {        //Since the g value is below 0 this works. Otherwise it would have to be == 0 || < 0
-                                    ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
-                                    currentPath.add(currentNode);
-                                    queue.add(new QueueElement(new Point(i, j), g, h, currentPath));
-                                    gCost[i][j] = -g;
+
+                                    if (isDiagonal(currentNode, i, j))
+                                        g = currentElement.getGCost() + 14;  // 10 * sqrt(2) is approx. 14
+                                    else
+                                        g = currentElement.getGCost() + 10;
+                                if(h+g<=maxCost) {
+                                    if (gCost[i][j] < g) {        //Since the g value is below 0 this works. Otherwise it would have to be == 0 || < 0
+                                        ArrayList<Point> currentPath = new ArrayList<Point>(currentElement.getPath());
+                                        currentPath.add(currentNode);
+                                        queue.add(new QueueElement(new Point(i, j), g, h, currentPath));
+                                        gCost[i][j] = -g;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
         }
         return null;    //No path found
     }//calculatePath
