@@ -151,7 +151,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      */
     public void setSpeed(int newSpeed) {
 
-        speed = newSpeed;
+        this.speed = newSpeed;
     }
 
     public int getSpeed() {
@@ -258,7 +258,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         Point zombiePosition = getZombiePosition();
         Point playerPosition = mapController.getPlayerPosition();
 
-        setSpeed(80);
+       // setSpeed(80);
         setDetectionRadius(10);
 
 

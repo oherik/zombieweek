@@ -31,6 +31,7 @@ public class BasicZombie extends Zombie {
         setDetectionRadius(10);
         setStartingHp(50);
         setSpeed(50);
+        setAngularSpeed(100);
     }
 
     @Override

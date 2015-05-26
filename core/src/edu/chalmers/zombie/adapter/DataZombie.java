@@ -34,6 +34,7 @@ public class DataZombie extends Zombie {
         setDetectionRadius(1);
         setStartingHp(90000);
         setSpeed(800);
+        setAngularSpeed(1000);
     }
 
     @Override

@@ -22,10 +22,6 @@ public class ZombieController {
         Point playerPosition = z.getThisMapController().getPlayerPosition();
         Point zombiePosition = z.getZombiePosition();
 
-        z.setSpeed(80);
-        z.setAngularSpeed(100);
-        z.setDetectionRadius(10);
-
         Player player = GameModel.getInstance().getPlayer();
         Point playerTile = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
         Point zombieTile = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
@@ -55,7 +51,6 @@ public class ZombieController {
                 }
                     Vector2 direction = new Vector2(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
                     direction.setLength(z.getSpeed());
-
                     //Rotate
 
                     float currentAngle = z.getBody().getAngle() % (Constants.PI * 2) - Constants.PI * 0.5f; //TODO fixa så impuls funkar
