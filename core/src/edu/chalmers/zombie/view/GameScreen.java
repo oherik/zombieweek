@@ -479,7 +479,7 @@ public class GameScreen implements Screen{
                 Player player = gameModel.getPlayer();
                 Point end = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
                 Point start = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
-                mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
+                //mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
             }
         }
     }
