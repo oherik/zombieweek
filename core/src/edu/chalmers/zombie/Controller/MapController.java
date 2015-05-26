@@ -288,7 +288,7 @@ public class MapController {
 
 
     public void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
-            ArrayList<Point> path = getPath(room, start, end, Constants.MAX_PATH_STEP);
+            ArrayList<Point> path = getPath(room, start, end, Constants.MAX_PATH_COST);
             System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +
                     ": printing collision detection tiles and path from " + start.x + ", " + start.y + " to " + end.x + ", " + end.y + ".");
         if(path != null) {

@@ -36,7 +36,7 @@ public class ZombieController {
 
             if (System.currentTimeMillis() - z.getTimeSinceLastPath() > Constants.PATH_UPDATE_MILLIS) {
                 //Update path
-                ArrayList<Point> pathToPlayer = MapController.getPath(zombieTile, playerTile, Constants.MAX_PATH_STEP);
+                ArrayList<Point> pathToPlayer = MapController.getPath(zombieTile, playerTile, Constants.MAX_PATH_COST);
                 z.setPath(pathToPlayer);
                 z.setTimeSinceLastPath(System.currentTimeMillis());
             }
