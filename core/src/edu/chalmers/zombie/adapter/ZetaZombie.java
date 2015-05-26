@@ -19,7 +19,7 @@ public class ZetaZombie extends Zombie {
 
     public ZetaZombie(Sprite sprite, World world, int x, int y) {
 
-        super(sprite, world, x, y);
+        super(null,null,null, world, x, y);
         setType(ZombieType.ZETA);
         this.world = world;
         this.sprite = sprite;

@@ -1,11 +1,12 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import edu.chalmers.zombie.adapter.Player;
-import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -84,8 +85,20 @@ public class ZombieController {
             // TODO: some exception management
         }
 
+    }
 
+    public static void spawnZombie(String zombieString, int x, int y){
+        Room room = GameModel.getInstance().getRoom();
+        Zombie zombie = null;
+        ZombieType zombieType = ZombieType.valueOf(zombieString);   //TODO går det att göra snyggare?
+        switch(zombieType){       //TODO gör som en enum eller nåt?
+            case DATA: zombie = new DataZombie(room.getWorld(),x,y);
+                break;
+            default: zombie = new BasicZombie(room.getWorld(),x, y);
+                break;
 
+        }
+        room.addZombie(zombie);
 
     }
 }

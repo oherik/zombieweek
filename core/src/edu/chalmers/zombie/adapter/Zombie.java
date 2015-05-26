@@ -43,29 +43,31 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     /**
      * Creates a new zombie
-     * @param sprite    Which sprite to use
+     * @param walkingTexture    Which texture to use when the zombie is walking
+     * @param stillTexture  Which texture to use when the zombie is standing still
+     * @param deadTexture  Which texture to use when the zombie is dead
      * @param world     In which world to create it
      * @param x     The zombie's x coordinate
      * @param y     The zombie's y coordinate
      */
-    public Zombie(Sprite sprite, World world, float x, float y){
+    public Zombie(Texture walkingTexture, Texture stillTexture, Texture deadTexture, World world, float x, float y){
+        super(walkingTexture, world, x, y);
 
-        super(sprite.getTexture(), world, x, y);
+        if(walkingTexture == null) {
+            walkingTexture = GameModel.getInstance().res.getTexture("zombie");
+            setSprite(new Sprite(stillTexture));
+        }
+        if(stillTexture == null){
+            stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
+        }
+        if(deadTexture == null)
+            deadTexture = GameModel.getInstance().res.getTexture("zombie-dead");
 
-
-        //Set still image frame, TODO: should get still frame from constructor
-        GameModel.getInstance().res.loadTexture("zombie-still","core/assets/Images/zombie-still.png"); //TODO: shouldnt be done here
-        Texture stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
-        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
+        TextureRegion[] stillFrame = TextureRegion.split(walkingTexture,32,32)[0];
         getAnimator().addStillFrame(stillFrame[0]);
 
-        //Set dead image frame
-        GameModel.getInstance().res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png"); //TODO: shouldnt be done here
-        Texture deadTexture = GameModel.getInstance().res.getTexture("zombie-dead");
         TextureRegion[] deadFrame = TextureRegion.split(deadTexture,32,32)[0];
         getAnimator().addStillFrame(deadFrame[0]);
-
-
 
 
         int width = Constants.TILE_SIZE;

@@ -48,7 +48,16 @@ public class GameModel {
         currentRoom = 1;   //TODO test
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
-        res.loadTexture("emilia","core/assets/Images/emilia.png");
+        res.loadTexture("emilia","core/assets/Images/emilia.png");   //Set still image frame, TODO: should get still frame from constructor
+        res.loadTexture("zombie-still","core/assets/Images/zombie-still.png"); //TODO: shouldnt be done here
+        res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png"); //TODO: shouldnt be done here
+        res.loadTexture("zombie", "core/assets/Images/zombie.png");
+        res.loadTexture("zombie-data-still","core/assets/Images/zombie-data-still.png"); //TODO: shouldnt be done here
+        res.loadTexture("zombie-data-dead","core/assets/Images/zombie-data-dead.png"); //TODO: shouldnt be done here
+        res.loadTexture("zombie-data", "core/assets/Images/zombie-data.png");
+
+
+
         res.loadSound("throw","core/assets/Audio/Sound_effects/throw_book.mp3");
         res.loadSound("menu_hover","core/assets/Audio/Sound_effects/menu_hover.mp3");
         res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");

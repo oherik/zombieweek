@@ -19,7 +19,7 @@ public class BossZombie extends Zombie {
 
     public BossZombie(Sprite sprite, World world, int x, int y) {
 
-        super(sprite, world, x, y);
+        super(null,null,null,world, x, y);
         setType(ZombieType.BOSS);
         this.world = world;
         this.sprite = sprite;

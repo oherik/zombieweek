@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
@@ -20,7 +21,9 @@ public class BasicZombie extends Zombie {
 
     public BasicZombie(/*Sprite sprite,*/ World world, int x, int y) {
 
-        super(new Sprite(new Texture("core/assets/Images/zombie.png")),world,x,y);
+        super(GameModel.getInstance().res.getTexture("zombie"),
+                GameModel.getInstance().res.getTexture("zombie-still"),
+                GameModel.getInstance().res.getTexture("zombie-dead"),world,x,y);
         setType(ZombieType.BASIC);
         this.world = world;
         //this.sprite = sprite;
