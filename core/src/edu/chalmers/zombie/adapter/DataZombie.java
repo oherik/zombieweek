@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
@@ -17,9 +18,15 @@ public class DataZombie extends Zombie {
     private World world;
     private Point position;
 
-    public DataZombie(Sprite sprite, World world, int x, int y) {
+    public DataZombie(World world, int x, int y) {
 
-        super(sprite, world, x, y);
+        super(GameModel.getInstance().res.getTexture("zombie-data"),
+                GameModel.getInstance().res.getTexture("zombie-data-still"),
+                GameModel.getInstance().res.getTexture("zombie-data-dead"),
+                world, x, y);
+
+
+
         setType(ZombieType.DATA);
         this.world = world;
         this.sprite = sprite;
@@ -37,7 +44,7 @@ public class DataZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new DataZombie(sprite, world, x, y);
+        return new DataZombie(world, x, y);
     }
 
     @Override

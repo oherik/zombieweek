@@ -24,7 +24,7 @@
   </tile>
   <tile id="3">
    <properties>
-    <property name="zombie_spawn" value="default"/>
+    <property name="zombie_spawn" value="BASIC"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_purple.png"/>
   </tile>
@@ -56,31 +56,31 @@
   </tile>
   <tile id="8">
    <properties>
-    <property name="zombie_spawn" value="boss"/>
+    <property name="zombie_spawn" value="BOSS"/>
    </properties>
    <image width="32" height="32" source="../Tiles/zombie_boss.png"/>
   </tile>
   <tile id="9">
    <properties>
-    <property name="zombie_spawn" value="d"/>
+    <property name="zombie_spawn" value="DATA"/>
    </properties>
    <image width="32" height="32" source="../Tiles/zombie_d.png"/>
   </tile>
   <tile id="10">
    <properties>
-    <property name="zombie_spawn" value="i"/>
+    <property name="zombie_spawn" value="ECON"/>
    </properties>
    <image width="32" height="32" source="../Tiles/zombie_i.png"/>
   </tile>
   <tile id="11">
    <properties>
-    <property name="zombie_spawn" value="it"/>
+    <property name="zombie_spawn" value="IT"/>
    </properties>
    <image width="32" height="32" source="../Tiles/zombie_it.png"/>
   </tile>
   <tile id="12">
    <properties>
-    <property name="zombie_spawn" value="z"/>
+    <property name="zombie_spawn" value="ZETA"/>
    </properties>
    <image width="32" height="32" source="../Tiles/zombie_z.png"/>
   </tile>
@@ -108,7 +108,7 @@
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztlN0KwCAIhWv/7//E62IXI8pmHstGB4SBpn45c25qyq72zma9v54csfxjWuJwSHNqsVzBlg9x1jmomnFMHLdmvqmcPjKkWnAgdxix5yVtYA6qF8137V0rVZtzvsRB+RCzTdVpzaGlWg7qDnPnjmBnRY+cvhDxI84D6UPI2p5L9r7Vfkhqa3FwfdJ49H/5Nw7t2UpiOflG50BK8n5Z0ogcN9VWBuA=
+   eJztlOsKgCAMhbU70fs/b/4oCFFr25mX8MAg8Ljt05wxXV31ai4ctfdXksOXvUJLFA5pTi2WzcXwwVc7R6qm7/F9Y+Q7ldN6gVQODuQbRrzzN01gjlQvmnPtWStUm7L/9h+EXMi7DdWRcKDWEOJypM4wtm9xsTJ6pPSF8Ld4H8g1hHJzaMx07rzjvg9JbS0O6prUj/4v/8ahfbcSLyVfTo6dkTunJPOrJrXIcQJmbQb2
   </data>
  </layer>
 </map>

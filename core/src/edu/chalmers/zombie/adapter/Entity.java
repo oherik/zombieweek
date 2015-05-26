@@ -225,6 +225,8 @@ public abstract class Entity {
      */
     public void setSprite(Sprite sprite){
         this.sprite = sprite;
+        updateRotation();
+        updatePosition();
     }
 
     /**

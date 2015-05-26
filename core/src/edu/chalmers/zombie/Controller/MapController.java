@@ -288,7 +288,7 @@ public class MapController {
 
 
     public void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
-            ArrayList<Point> path = getPath(room, start, end, Constants.MAX_PATH_STEP);
+            ArrayList<Point> path = getPath(room, start, end, Constants.MAX_PATH_COST);
             System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +
                     ": printing collision detection tiles and path from " + start.x + ", " + start.y + " to " + end.x + ", " + end.y + ".");
         if(path != null) {
@@ -370,6 +370,7 @@ public class MapController {
      * If the room has changed the map and renderer need to change as well
      */
     public void updateRoomIfNeeded() {
+        removeEntities();
         if (worldNeedsUpdate()) {
             World currentWorld = getWorld();
             Player player = GameModel.getInstance().getPlayer();

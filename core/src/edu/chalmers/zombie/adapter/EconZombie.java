@@ -19,7 +19,7 @@ public class EconZombie extends Zombie {
 
     public EconZombie(Sprite sprite, World world, int x, int y) {
 
-        super(sprite, world, x, y);
+        super(null,null,null, world, x, y);
         setType(ZombieType.ECON);
         this.world = world;
         this.sprite = sprite;

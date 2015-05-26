@@ -48,7 +48,20 @@ public class GameModel {
         currentRoom = 1;   //TODO test
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
-        res.loadTexture("emilia","core/assets/Images/emilia.png");
+        res.loadTexture("emilia","core/assets/Images/emilia.png");   //Set still image frame, TODO: should get still frame from constructor
+        res.loadTexture("zombie-still","core/assets/Images/zombie-still.png");
+        res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png");
+        res.loadTexture("zombie", "core/assets/Images/zombie.png");
+        res.loadTexture("zombie-data-still","core/assets/Images/zombie-data-still.png");
+        res.loadTexture("zombie-data-dead","core/assets/Images/zombie-data-dead.png");
+        res.loadTexture("zombie-data", "core/assets/Images/zombie-data.png");
+        res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
+        res.loadTexture("zombie-it-dead","core/assets/Images/zombie-it-dead.png");
+        res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
+
+
+
+
         res.loadSound("throw","core/assets/Audio/Sound_effects/throw_book.mp3");
         res.loadSound("menu_hover","core/assets/Audio/Sound_effects/menu_hover.mp3");
         res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");

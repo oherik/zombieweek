@@ -9,6 +9,7 @@ import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -168,8 +169,7 @@ public class PhysicsController {
                                 collisionObjects.add(toAdd);
                             }
                             if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {           //TODO skapa en spawnEntities-metod ist�llet. Och en huvudmetod som g�r igenom b�da metoderna
-                                Zombie zombie = new BasicZombie(world, col, row);           //TODO test
-                                room.addZombie(zombie);
+                                ZombieController.spawnZombie((String) currentCell.getTile().getProperties().get(zombieSpawn), col, row);
                             }
                             if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
                                 room.setPlayerSpawn(new Point(col, row));

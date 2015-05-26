@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
 //import sun.awt.motif.X11CNS11643;
 
@@ -20,8 +21,10 @@ public class ZombieTest extends Zombie {
     private ZombieType type;
 
     public ZombieTest(World world, float x, float y){
-        super(new Sprite(new Texture("core/assets/Images/zombie.png")),world,x,y);
-        setZombiePosition(new Point((int)x, (int)y));
+        super(GameModel.getInstance().res.getTexture("zombie"),
+                GameModel.getInstance().res.getTexture("zombie-still"),
+                GameModel.getInstance().res.getTexture("zombie-dead"),world,x,y);
+        setZombiePosition(new Point((int) x, (int) y));
     }
 
 

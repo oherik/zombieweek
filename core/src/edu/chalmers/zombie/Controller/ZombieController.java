@@ -1,11 +1,12 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import edu.chalmers.zombie.adapter.Player;
-import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class ZombieController {
 
             if (System.currentTimeMillis() - z.getTimeSinceLastPath() > Constants.PATH_UPDATE_MILLIS) {
                 //Update path
-                ArrayList<Point> pathToPlayer = MapController.getPath(zombieTile, playerTile, Constants.MAX_PATH_STEP);
+                ArrayList<Point> pathToPlayer = MapController.getPath(zombieTile, playerTile, Constants.MAX_PATH_COST);
                 z.setPath(pathToPlayer);
                 z.setTimeSinceLastPath(System.currentTimeMillis());
             }
@@ -59,7 +60,7 @@ public class ZombieController {
 
                     float currentAngle = z.getBody().getAngle() % (Constants.PI * 2) - Constants.PI * 0.5f; //TODO fixa så impuls funkar
                     float directionAngle = direction.angleRad();
-                    float rotation = directionAngle - currentAngle + z.getBody().getAngularVelocity() / 60.0f;      //TODO fixa;
+                    float rotation = directionAngle - currentAngle + z.getBody().getAngularVelocity() * Constants.TIMESTEP;      //TODO fixa;
 
                     //Keep it within Pi och -Pi
                     if (rotation < -Constants.PI)
@@ -84,8 +85,22 @@ public class ZombieController {
             // TODO: some exception management
         }
 
+    }
 
+    public static void spawnZombie(String zombieString, int x, int y){
+        Room room = GameModel.getInstance().getRoom();
+        Zombie zombie = null;
+        ZombieType zombieType = ZombieType.valueOf(zombieString);   //TODO går det att göra snyggare?
+        switch(zombieType){       //TODO gör som en enum eller nåt?
+            case DATA: zombie = new DataZombie(room.getWorld(),x,y);
+                break;
+            case IT: zombie = new ITZombie(room.getWorld(),x,y);
+                break;
+            default: zombie = new BasicZombie(room.getWorld(),x, y);
+                break;
 
+        }
+        room.addZombie(zombie);
 
     }
 }

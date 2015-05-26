@@ -246,6 +246,10 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().begin();
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
 
+             /* ------ Draw the zombies ------ */
+            for (Zombie z : gameModel.getZombies()) {
+                z.draw(mapRenderer.getBatch());
+            }
             /* ------ Draw the player ------ */
             player.draw(mapRenderer.getBatch());
 
@@ -272,10 +276,7 @@ public class GameScreen implements Screen{
                     b.draw(mapRenderer.getBatch());
             }
 
-            /* ------ Draw the zombies ------ */
-            for (Zombie z : gameModel.getZombies()) {
-                z.draw(mapRenderer.getBatch());
-            }
+
 
 
             /* ------ Finished drawing sprites ------ */
