@@ -94,6 +94,12 @@
  <imagelayer name="bottom">
   <image source="Test_world_2_bottom.png"/>
  </imagelayer>
+ <imagelayer name="middle">
+  <image source="Test_world_2_middle.png"/>
+ </imagelayer>
+ <imagelayer name="middle_dark">
+  <image source="Test_world_2_middle_dark.png"/>
+ </imagelayer>
  <imagelayer name="top">
   <image source="Test_world_2_top.png"/>
  </imagelayer>

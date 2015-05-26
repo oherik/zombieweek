@@ -228,7 +228,7 @@ public class GameScreen implements Screen{
         gameModel.setStepping(false);
 
         //TODO vad göra om spelaren är död?
-        
+
         if(!GameModel.getInstance().worldNeedsUpdate()) {
             /* ------ Update the camera position ------ */
                 camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
@@ -246,6 +246,27 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().begin();
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
 
+            /* ------ Draw the player ------ */
+            player.draw(mapRenderer.getBatch());
+
+           /* ------ Draw the aimer ------ */
+            player.getHand().drawAimer(mapRenderer.getBatch());
+            mapRenderer.getBatch().end();
+             /* ------Draw the middle layer ------ */
+            if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
+                int[] middleLayers = {2};
+                if (mapController.getMap().getLayers().get("middle_dark") != null) {
+                    mapRenderer.render(middleLayers);
+                }
+            }
+            else{
+                int[] middleLayers = {1};
+                if (mapController.getMap().getLayers().get("middle") != null) {
+                    mapRenderer.render(middleLayers);
+                }
+            }
+            mapRenderer.getBatch().begin();
+            mapRenderer.getBatch().setProjectionMatrix(camera.combined);
             /* ------ Draw books ------ */
             for (Book b: gameModel.getBooks()){
                     b.draw(mapRenderer.getBatch());
@@ -256,20 +277,11 @@ public class GameScreen implements Screen{
                 z.draw(mapRenderer.getBatch());
             }
 
-            /* ------ Draw the player ------ */
-            player.draw(mapRenderer.getBatch());
-
-           /* ------ Draw the aimer ------ */
-            player.getHand().drawAimer(mapRenderer.getBatch());
 
             /* ------ Finished drawing sprites ------ */
             mapRenderer.getBatch().end();
 
-            /* ------Draw the foreground layer ------ */
-            int[] foregroundLayers = {1};
-            if (mapController.getMap().getLayers().get("top") != null) {
-                mapRenderer.render(foregroundLayers);
-            }
+
 
             /* ------ Draw the box2d debug ------ */
             boxDebug.render(mapController.getWorld(), camera.combined); //TODO debug
@@ -287,9 +299,8 @@ public class GameScreen implements Screen{
 
 
 
-
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-            /*
+/*
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -312,10 +323,15 @@ public class GameScreen implements Screen{
                 player.draw(sb);
                 sb.end();
             }
-            */
-            //------------------------------------------------------------------------
+*/
+            //-----------------------------------------------------------------------
 
-
+            /*---------------- END TEST -------------------------*/
+        /* ------Draw the foreground layer ------ */
+            int[] foregroundLayers = {3};
+            if (mapController.getMap().getLayers().get("top") != null) {
+                mapRenderer.render(foregroundLayers);
+            }
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
