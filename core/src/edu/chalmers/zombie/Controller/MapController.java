@@ -370,6 +370,7 @@ public class MapController {
      * If the room has changed the map and renderer need to change as well
      */
     public void updateRoomIfNeeded() {
+        removeEntities();
         if (worldNeedsUpdate()) {
             World currentWorld = getWorld();
             Player player = GameModel.getInstance().getPlayer();

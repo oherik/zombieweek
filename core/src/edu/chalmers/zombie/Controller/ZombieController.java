@@ -59,7 +59,7 @@ public class ZombieController {
 
                     float currentAngle = z.getBody().getAngle() % (Constants.PI * 2) - Constants.PI * 0.5f; //TODO fixa så impuls funkar
                     float directionAngle = direction.angleRad();
-                    float rotation = directionAngle - currentAngle + z.getBody().getAngularVelocity() / 60.0f;      //TODO fixa;
+                    float rotation = directionAngle - currentAngle + z.getBody().getAngularVelocity() * Constants.TIMESTEP;      //TODO fixa;
 
                     //Keep it within Pi och -Pi
                     if (rotation < -Constants.PI)
