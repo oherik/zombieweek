@@ -49,12 +49,16 @@ public class GameModel {
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
         res.loadTexture("emilia","core/assets/Images/emilia.png");   //Set still image frame, TODO: should get still frame from constructor
-        res.loadTexture("zombie-still","core/assets/Images/zombie-still.png"); //TODO: shouldnt be done here
-        res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png"); //TODO: shouldnt be done here
+        res.loadTexture("zombie-still","core/assets/Images/zombie-still.png");
+        res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png");
         res.loadTexture("zombie", "core/assets/Images/zombie.png");
-        res.loadTexture("zombie-data-still","core/assets/Images/zombie-data-still.png"); //TODO: shouldnt be done here
-        res.loadTexture("zombie-data-dead","core/assets/Images/zombie-data-dead.png"); //TODO: shouldnt be done here
+        res.loadTexture("zombie-data-still","core/assets/Images/zombie-data-still.png");
+        res.loadTexture("zombie-data-dead","core/assets/Images/zombie-data-dead.png");
         res.loadTexture("zombie-data", "core/assets/Images/zombie-data.png");
+        res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
+        res.loadTexture("zombie-it-dead","core/assets/Images/zombie-it-dead.png");
+        res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
+
 
 
 

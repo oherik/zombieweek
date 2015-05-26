@@ -94,6 +94,8 @@ public class ZombieController {
         switch(zombieType){       //TODO gör som en enum eller nåt?
             case DATA: zombie = new DataZombie(room.getWorld(),x,y);
                 break;
+            case IT: zombie = new ITZombie(room.getWorld(),x,y);
+                break;
             default: zombie = new BasicZombie(room.getWorld(),x, y);
                 break;
 
