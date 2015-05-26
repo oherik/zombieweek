@@ -28,7 +28,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private float radius;
     private ZombieType type;
     private boolean isKnockedOut;
-    private boolean isAttacked;
+    private boolean isAggressive;
     private boolean isMoving;
     private Vector2 force;
     private Vector2 point;
@@ -115,24 +115,24 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //Set system time created
         timeSinceLastPath = System.currentTimeMillis();
 
-        isAttacked = false;
+        isAggressive = false;
 
 
     }
 
     /**
      * Set the zombie as attacked or not
-     * @param isAttacked    true if attacked, false if not
+     * @param isAggressive    true if attacked, false if not
      */
-    public void isAttacked(boolean isAttacked){
-        this.isAttacked = isAttacked;
+    public void isAggressive(boolean isAggressive){
+        this.isAggressive = isAggressive;
     }
 
     /**
      * @return true if the zombie is attacked, false otherwise
      */
-    public boolean isAttacked(){
-        return isAttacked;
+    public boolean isAggressive(){
+        return isAggressive;
     }
     /**
      * @return System time when the last path finding was performed
@@ -363,7 +363,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     @Override
     public boolean hasBeenAttacked() {
 
-        return isAttacked;
+        return isAggressive;
     }
 
     /**
