@@ -76,12 +76,44 @@ public class Player extends Entity implements CreatureInterface {
         bodyDef.linearDamping = dampening;
         bodyDef.angularDamping = dampening;
 
+
+        Vector2[] vectors = new Vector2[8];
+
+        vectors[0] = new Vector2(1f,0f);
+        vectors[1] = new Vector2(5f,0f);
+        vectors[2] = new Vector2(6f,1f);
+        vectors[3] = new Vector2(6f,2f);
+        vectors[4] = new Vector2(5f,3f);
+        vectors[5] = new Vector2(1f,3f);
+        vectors[6] = new Vector2(0f,2f);
+        vectors[7] = new Vector2(0f,1f);
+
+        for (Vector2 vector:vectors){
+
+            vector.scl(1f/6.5f);
+            vector.add(-0.45f,-0.3f);
+
+        }
+
+
+
         //Load shape
+        //CircleShape circleShape = new CircleShape();
+        //circleShape.setRadius(width/2/Constants.PIXELS_PER_METER);
+
+        //PolygonShape shape = new PolygonShape();
+        //shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
+
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
+        shape.set(vectors);
+
+
+
         //Load fixture def
         this.fixDef = new FixtureDef();
         fixDef.shape = shape;
+        //fixDef.shape = circleShape;
+
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = .8f;
