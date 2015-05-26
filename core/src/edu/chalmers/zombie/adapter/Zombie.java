@@ -55,7 +55,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         if(walkingTexture == null) {
             walkingTexture = GameModel.getInstance().res.getTexture("zombie");
-            setSprite(new Sprite(stillTexture));
+            setSprite(new Sprite(walkingTexture));
         }
         if(stillTexture == null){
             stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
@@ -63,7 +63,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         if(deadTexture == null)
             deadTexture = GameModel.getInstance().res.getTexture("zombie-dead");
 
-        TextureRegion[] stillFrame = TextureRegion.split(walkingTexture,32,32)[0];
+        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
         getAnimator().addStillFrame(stillFrame[0]);
 
         TextureRegion[] deadFrame = TextureRegion.split(deadTexture,32,32)[0];
