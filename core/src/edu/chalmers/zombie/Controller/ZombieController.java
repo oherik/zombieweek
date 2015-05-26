@@ -29,7 +29,7 @@ public class ZombieController {
         Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, z.getDetectionRadius());
         Circle pcircle = new Circle(playerPosition.x, playerPosition.y, z.getDetectionRadius());
 
-        if (zcircle.overlaps(pcircle)) {
+        if (zcircle.overlaps(pcircle) || z.isAttacked()) {
 
             if (System.currentTimeMillis() - z.getTimeSinceLastPath() > Constants.PATH_UPDATE_MILLIS) {
                 //Update path
@@ -72,6 +72,7 @@ public class ZombieController {
                     z.getBody().applyForceToCenter(direction.x, direction.y, true);
                     z.setIsMoving(true);
                 } else {
+                    z.isAttacked(false);    //Lose aggression
                     z.setIsMoving(false);
                 }
 

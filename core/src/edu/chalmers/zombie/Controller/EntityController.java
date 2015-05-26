@@ -149,6 +149,7 @@ public class EntityController {
      * @param b The book
      */
     public static void applyHit(Zombie z, Book b){
+        z.isAttacked(true);
         double damage = getDamage(b);
         //TODO f�rst kolla om zombien ska knockas ut
         knockOut(z);

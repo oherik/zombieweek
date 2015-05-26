@@ -115,7 +115,24 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         //Set system time created
         timeSinceLastPath = System.currentTimeMillis();
 
+        isAttacked = false;
 
+
+    }
+
+    /**
+     * Set the zombie as attacked or not
+     * @param isAttacked    true if attacked, false if not
+     */
+    public void isAttacked(boolean isAttacked){
+        this.isAttacked = isAttacked;
+    }
+
+    /**
+     * @return true if the zombie is attacked, false otherwise
+     */
+    public boolean isAttacked(){
+        return isAttacked;
     }
     /**
      * @return System time when the last path finding was performed
