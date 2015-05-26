@@ -79,12 +79,12 @@ public class ZombieController {
                     z.setIsMoving(false);
                 }
 
-        } 
+        }
         } else {
             // TODO: some exception management
         }
 
-    }
+    
 
 
     }
