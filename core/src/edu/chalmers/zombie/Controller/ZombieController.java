@@ -42,7 +42,7 @@ public class ZombieController {
             }
             ArrayList<Point> pathToPlayer = z.getPath();
             if (pathToPlayer != null) {
-                if (pathToPlayer.size() > 1) {
+                if (!pathToPlayer.isEmpty() && pathToPlayer.get(0).equals(zombieTile)) {
                     pathToPlayer.remove(0); //Ta ej med tilen zombien står på
                 }
                 Iterator<Point> iteratorToPlayer = pathToPlayer.iterator();
@@ -52,7 +52,6 @@ public class ZombieController {
                         z.setNextPathTile(temp);
                     }
                 }
-
                     Vector2 direction = new Vector2(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
                     direction.setLength(z.getSpeed());
 
