@@ -227,6 +227,8 @@ public class GameScreen implements Screen{
         currentWorld.step(Constants.TIMESTEP, 6, 2);
         gameModel.setStepping(false);
 
+        //TODO vad göra om spelaren är död?
+        
         if(!GameModel.getInstance().worldNeedsUpdate()) {
             /* ------ Update the camera position ------ */
                 camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
