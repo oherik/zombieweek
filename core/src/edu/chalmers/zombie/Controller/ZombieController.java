@@ -120,9 +120,8 @@ public class ZombieController {
     }
 
     public static void attack(Zombie zombie, Player player){
-
+        EntityController.knockBack(zombie, player, zombie.getDamage());
         zombie.setIsAggressive(true);
-
         if (player.getLives() > 0) {
 
             player.decLives(zombie.getDamage());
