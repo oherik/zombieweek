@@ -122,11 +122,13 @@ public class ZombieController {
     public static void attack(Zombie zombie, Player player){
         EntityController.knockBack(zombie, player, zombie.getDamage());
         zombie.setIsAggressive(true);
-        if (player.getLives() > 0) {
+        if (player.getLives() - zombie.getDamage() > 0) {
 
             player.decLives(zombie.getDamage());
             //TODO: make the screen flash bright red
         } else {
+
+            player.decLives(player.getLives());
             //TODO: Game Over
         }
 
