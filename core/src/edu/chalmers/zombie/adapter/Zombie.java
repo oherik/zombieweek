@@ -191,11 +191,12 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     }
 
     /**
-     * A method which decreases the zombie's hp (life measured in points).
+     * A method which decreases the zombie's hp (life measured in points) by the amount stated.
+     * @param decBy the amount hp will be decreased by. 
      */
-    public  void decHp() {
+    public  void decHp(int decBy) {
 
-        hp = hp--;
+        hp -= decBy;
     }
 
     public void setStartingHp(int hp) {
