@@ -27,6 +27,7 @@ public class ZetaZombie extends Zombie {
         setDetectionRadius(100);
         setStartingHp(250);
         setSpeed(30);
+        setAngularSpeed(30);
     }
 
     @Override

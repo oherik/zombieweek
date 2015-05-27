@@ -27,6 +27,7 @@ public class EconZombie extends Zombie {
         setDetectionRadius(10);
         setStartingHp(50);
         setSpeed(200);
+        setAngularSpeed(200);
         super.setAngularVelocity(10);
     }
 
