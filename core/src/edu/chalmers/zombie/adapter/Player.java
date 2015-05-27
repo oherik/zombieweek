@@ -401,11 +401,12 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     /**
-     * A method which decreases the player's number of lives.
+     * A method which decreases the player's number of lives by the amount stated.
+     * @param decBy the amount by which the player's lives will decrease. 
      */
-    public void decLives() {
+    public void decLives(int decBy) {
 
-        lives = lives--;
+        lives -= decBy;
     }
 
     /**

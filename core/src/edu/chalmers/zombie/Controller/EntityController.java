@@ -155,7 +155,8 @@ public class EntityController {
      * @param b The book
      */
     public static void applyHit(Zombie z, Book b){
-        z.isAggressive(true);
+
+        z.setIsAggressive(true);
         if(!b.isOnGround()) {
             int damage = b.getDamage();
             z.decHp(damage);

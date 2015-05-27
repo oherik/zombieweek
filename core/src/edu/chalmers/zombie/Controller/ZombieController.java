@@ -39,7 +39,7 @@ public class ZombieController {
             ArrayList<Point> pathToPlayer = z.getPath();
             if (pathToPlayer != null) {
                 if (!pathToPlayer.isEmpty() && pathToPlayer.get(0).equals(zombieTile)) {
-                    pathToPlayer.remove(0); //Ta ej med tilen zombien står på
+                    pathToPlayer.remove(0); //Ta ej med tilen zombien stï¿½r pï¿½
                 }
                 Iterator<Point> iteratorToPlayer = pathToPlayer.iterator();
                 if (iteratorToPlayer.hasNext()) {
@@ -52,7 +52,7 @@ public class ZombieController {
                     direction.setLength(z.getSpeed());
                     //Rotate
 
-                    float currentAngle = z.getBody().getAngle() % (Constants.PI * 2) - Constants.PI * 0.5f; //TODO fixa så impuls funkar
+                    float currentAngle = z.getBody().getAngle() % (Constants.PI * 2) - Constants.PI * 0.5f; //TODO fixa sï¿½ impuls funkar
                     float directionAngle = direction.angleRad();
                     float rotation = directionAngle - currentAngle + z.getBody().getAngularVelocity() * Constants.TIMESTEP;      //TODO fixa;
 
@@ -71,7 +71,7 @@ public class ZombieController {
                     z.getBody().applyForceToCenter(direction.x, direction.y, true);
                     z.setIsMoving(true);
                 } else {
-                    z.isAggressive(false);    //Lose aggression
+                    z.setIsAggressive(false);    //Lose aggression
                     z.setIsMoving(false);
                 }
 
@@ -85,11 +85,32 @@ public class ZombieController {
     public static void spawnZombie(String zombieString, int x, int y){
         Room room = GameModel.getInstance().getRoom();
         Zombie zombie = null;
-        ZombieType zombieType = ZombieType.valueOf(zombieString);   //TODO går det att göra snyggare?
-        switch(zombieType){       //TODO gör som en enum eller nåt?
+        ZombieType zombieType = ZombieType.valueOf(zombieString);   //TODO gï¿½r det att gï¿½ra snyggare?
+        switch(zombieType){       //TODO gï¿½r som en enum eller nï¿½t?
             case DATA: zombie = new DataZombie(room.getWorld(),x,y);
                 break;
             case IT: zombie = new ITZombie(room.getWorld(),x,y);
+                break;
+            case MACHINE:
+                zombie = new MachineZombie(room.getWorld(),x,y);
+                break;
+            case ZETA:
+                zombie = new ZetaZombie(room.getWorld(),x,y);
+                break;
+            case ECON:
+                zombie = new EconZombie(room.getWorld(),x,y);
+                break;
+            case ELECTRO:
+                zombie = new ElectroZombie(room.getWorld(),x,y);
+                break;
+            case BASIC:
+                zombie = new BasicZombie(room.getWorld(),x,y);
+                break;
+            case ARCH:
+                zombie = new ArchZombie(room.getWorld(),x,y);
+                break;
+            case BOSS:
+                zombie = new BossZombie(room.getWorld(),x,y);
                 break;
             default: zombie = new BasicZombie(room.getWorld(),x, y);
                 break;
@@ -99,8 +120,17 @@ public class ZombieController {
     }
 
     public static void attack(Zombie zombie, Player player){
-        zombie.isAggressive(true);
-        //TODO Puzzel fyll på här
+
+        zombie.setIsAggressive(true);
+
+        if (player.getLives() > 0) {
+
+            player.decLives(zombie.getDamage());
+            //TODO: make the screen flash bright red
+        } else {
+            //TODO: Game Over
+        }
+
     }
 
 

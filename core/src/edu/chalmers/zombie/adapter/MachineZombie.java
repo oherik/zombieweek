@@ -17,7 +17,7 @@ public class MachineZombie extends Zombie {
     private World world;
     private Point position;
 
-    public MachineZombie(Sprite sprite, World world, int x, int y) {
+    public MachineZombie(World world, int x, int y) {
 
         super(null,null,null, world, x, y);
         setType(ZombieType.MACHINE);
@@ -27,6 +27,8 @@ public class MachineZombie extends Zombie {
         setDetectionRadius(100);
         setStartingHp(50);
         setSpeed(30);
+        setAngularSpeed(30);
+        setDamage(80);
     }
 
     @Override
@@ -37,7 +39,7 @@ public class MachineZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new MachineZombie(sprite, world, x, y);
+        return new MachineZombie(world, x, y);
     }
 
     @Override

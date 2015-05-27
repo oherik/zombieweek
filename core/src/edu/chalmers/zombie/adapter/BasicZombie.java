@@ -32,6 +32,7 @@ public class BasicZombie extends Zombie {
         setStartingHp(50);
         setSpeed(50);
         setAngularSpeed(100);
+        setDamage(20);
     }
 
     @Override
