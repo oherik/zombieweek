@@ -62,7 +62,7 @@ public class Player extends Entity implements CreatureInterface {
         getAnimator().setOverlayFrame(overlayFrame);
 
 
-        legPower =  150; //Styr maxhastigheten
+        legPower =  75; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         width = Constants.PLAYER_SIZE;
@@ -108,7 +108,7 @@ public class Player extends Entity implements CreatureInterface {
         super.setBody(bodyDef, fixDef);
         super.scaleSprite(1f / Constants.TILE_SIZE);
         killCount = 0;
-        ammunition = 100;
+        ammunition = 5;
         lives = 100;
         force = new Vector2(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
@@ -259,7 +259,9 @@ public class Player extends Entity implements CreatureInterface {
         if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
 
                 //Keys were released at the same time (thread is sleeping/waiting)
-            updateMovement();
+           if(!GameModel.getInstance().isStepping()) {
+               updateMovement();
+           }
 
         } else {
 

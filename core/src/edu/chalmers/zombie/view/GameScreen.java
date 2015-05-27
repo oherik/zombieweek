@@ -64,7 +64,6 @@ public class GameScreen implements Screen{
     private BitmapFont bitmapFont;
     private SpriteBatch batchHUD;
     private PathAlgorithm pathFinding; //TODO debug
-
     private int steps;
 
     private Stage pauseStage;
