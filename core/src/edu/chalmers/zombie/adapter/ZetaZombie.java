@@ -28,6 +28,7 @@ public class ZetaZombie extends Zombie {
         setStartingHp(250);
         setSpeed(30);
         setAngularSpeed(30);
+        setDamage(100);
     }
 
     @Override

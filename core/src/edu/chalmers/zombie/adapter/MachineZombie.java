@@ -28,6 +28,7 @@ public class MachineZombie extends Zombie {
         setStartingHp(50);
         setSpeed(30);
         setAngularSpeed(30);
+        setDamage(80);
     }
 
     @Override

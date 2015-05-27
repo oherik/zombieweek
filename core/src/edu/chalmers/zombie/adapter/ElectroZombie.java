@@ -28,6 +28,7 @@ public class ElectroZombie extends Zombie {
         setStartingHp(50);
         setSpeed(50);
         setAngularSpeed(50);
+        setDamage(80);
     }
 
     @Override

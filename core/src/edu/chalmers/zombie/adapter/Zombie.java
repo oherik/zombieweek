@@ -415,7 +415,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     /**
      * A method to return the amount of damage a zombie attack will do.
-     * @return int damage, the damage in decreased lives done. 
+     * @return int damage, the damage in decreased lives done.
      */
     public int getDamage() {
 

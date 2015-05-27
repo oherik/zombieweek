@@ -28,6 +28,7 @@ public class BossZombie extends Zombie {
         setStartingHp(200);
         setSpeed(100);
         setAngularSpeed(100);
+        setDamage(100);
     }
 
     @Override

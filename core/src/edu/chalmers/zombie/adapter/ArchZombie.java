@@ -27,6 +27,7 @@ public class ArchZombie extends Zombie {
         setDetectionRadius(100);
         setStartingHp(500);
         setSpeed(800);
+        setDamage(200);
     }
 
     @Override

@@ -29,6 +29,7 @@ public class EconZombie extends Zombie {
         setSpeed(200);
         setAngularSpeed(200);
         super.setAngularVelocity(10);
+        setDamage(75);
     }
 
     @Override
