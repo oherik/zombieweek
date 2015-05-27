@@ -551,34 +551,12 @@ public class GameScreen implements Screen{
         shapeRenderer.dispose();
         sb.dispose();
     }
-    private Timer t = new Timer();
-    private Timer.Task task = new Timer.Task() {
-        @Override
-        public void run() {
-            System.out.println("timer running");
-            GameModel gameModel = GameModel.getInstance();
-            Player player = gameModel.getPlayer();
-            player.setIsHit(false);
-            drawing = false;
-        }
-    };
-    private boolean drawing = false;
     private Blood blood = new Blood();
     private SpriteBatch sb = new SpriteBatch();
     private void drawBlood(){
-        GameModel gameModel = GameModel.getInstance();
-        Player player = gameModel.getPlayer();
-        if (player.isHit() && drawing){
             sb.begin();
             blood.draw(sb);
             sb.end();
-        }
-        if (player.isHit() && !drawing){
-            System.out.println("timer starting");
-            t.scheduleTask(task, 1);
-            t.start();
-            drawing = true;
-        }
     }
 
 
