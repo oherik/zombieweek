@@ -135,6 +135,7 @@ public class EntityController {
      * @param book  The book
      */
     public static void hitGround(Book book){
+        book.setOnGround(true);
         //TODO g�ra boken mindre, l�gga till ljud etc
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER;
         setMaskBits(book, maskBits);
@@ -150,25 +151,16 @@ public class EntityController {
      */
     public static void applyHit(Zombie z, Book b){
         z.isAggressive(true);
-        double damage = getDamage(b);
-        z.setStartingHp(z.getHP() - (int) Math.round(damage));
-        if(z.getHP()<=0) {
-            //TODO f�rst kolla om zombien ska knockas ut
-            knockOut(z);
+        if(!b.isOnGround()) {
+            int damage = b.getDamage();
+            z.decHp(damage);
+            if (z.getHP() <= 0) {
+                knockOut(z);
+            }
             GameModel.getInstance().addEntityToRemove(b);
             b.markForRemoval();
             AudioController.playSound(GameModel.getInstance().res.getSound("zombie_hit"));
         }
-    }
-
-    /**
-     * Calculates the damage caused by the book
-     * @param b The book in question
-     * @return  The damage caused by the book
-     */
-    public static double getDamage(Book b){
-        return b.getSpeed()*5;
-        //*b.getMass();    //TODO ta med massan h�r och n�n konstant
     }
 
     /**
