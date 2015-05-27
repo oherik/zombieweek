@@ -15,10 +15,10 @@ public class EntityController {
 
     public static void knockBack(Entity attacker, Entity victim, int amount){
         float dx = victim.getX()-attacker.getX();
-        float dy = victim.getY()-victim.getY();
+        float dy = victim.getY()-attacker.getY();
         Vector push = new Vector(dx,dy);
         push.setLength(amount);
-        victim.applyForceToCenter(push);
+        victim.applyLinearImpulse(push);
     }
 
     /* ----------------  ZOMBIE -------------------*/
@@ -162,6 +162,7 @@ public class EntityController {
             if (z.getHP() <= 0) {
                 knockOut(z);
             }
+            knockBack(b,z,damage/10);
             hitGround(b);
            // GameModel.getInstance().addEntityToRemove(b);
             //b.markForRemoval();

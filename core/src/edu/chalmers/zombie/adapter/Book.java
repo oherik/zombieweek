@@ -64,8 +64,8 @@ public class Book extends Entity {
         //Set body
         super.setBody(bodyDef, fixDef);
         speed = 7;
-        omega= 20;
-        damage = 50;
+        omega= 20;  //TODO finns i entity?
+        damage = 40;
         onGround = false;
 
         setInMotion();
