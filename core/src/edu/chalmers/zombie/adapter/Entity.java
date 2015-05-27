@@ -59,6 +59,11 @@ public abstract class Entity {
         sprite.setY(y);
     }
 
+    public void applyForceToCenter(Vector force){
+        Vector2 vectorForce = new Vector2(force.getX(), force.getY());
+        getBody().applyForceToCenter(vectorForce, true);
+    }
+
 
     public void setAnimator(TextureRegion[] frames, float delay){
         animator.setFrames(frames, delay);

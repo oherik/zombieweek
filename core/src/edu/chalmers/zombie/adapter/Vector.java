@@ -35,4 +35,12 @@ public class Vector {
     public float len(){
         return vector.len();
     }
+
+    public float getX(){
+        return vector.x;
+    }
+
+    public float getY(){
+        return vector.y;
+    }
 }
