@@ -11,6 +11,8 @@ import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Animator;
 import edu.chalmers.zombie.utils.Constants;
 
+import java.awt.*;
+
 /**
  * A class which holds a reference to a body and a sprite, as well as the world in which the body resides.
  */
@@ -57,6 +59,12 @@ public abstract class Entity {
         sprite.setSize(32,32);
         sprite.setX(x);
         sprite.setY(y);
+    }
+
+    public void applyLinearImpulse(Vector force){
+        Vector2 vectorForce = new Vector2(force.getX(), force.getY());
+        Vector2 bodyPoint = getBody().getWorldCenter();
+        getBody().applyLinearImpulse(vectorForce, bodyPoint, true);
     }
 
 

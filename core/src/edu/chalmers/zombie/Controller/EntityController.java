@@ -1,9 +1,6 @@
 package edu.chalmers.zombie.controller;
 
-import edu.chalmers.zombie.adapter.Book;
-import edu.chalmers.zombie.adapter.Entity;
-import edu.chalmers.zombie.adapter.Player;
-import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.ResourceManager;
@@ -15,6 +12,14 @@ import java.awt.*;
  * Created by Erik on 2015-05-15.
  */
 public class EntityController {
+
+    public static void knockBack(Entity attacker, Entity victim, int amount){
+        float dx = victim.getX()-attacker.getX();
+        float dy = victim.getY()-attacker.getY();
+        Vector push = new Vector(dx,dy);
+        push.setLength(amount);
+        victim.applyLinearImpulse(push);
+    }
 
     /* ----------------  ZOMBIE -------------------*/
 
@@ -158,6 +163,7 @@ public class EntityController {
             if (z.getHP() <= 0) {
                 knockOut(z);
             }
+            knockBack(b,z,damage/10);
             hitGround(b);
            // GameModel.getInstance().addEntityToRemove(b);
             //b.markForRemoval();
