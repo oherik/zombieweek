@@ -157,8 +157,9 @@ public class EntityController {
             if (z.getHP() <= 0) {
                 knockOut(z);
             }
-            GameModel.getInstance().addEntityToRemove(b);
-            b.markForRemoval();
+            hitGround(b);
+           // GameModel.getInstance().addEntityToRemove(b);
+            //b.markForRemoval();
             AudioController.playSound(GameModel.getInstance().res.getSound("zombie_hit"));
         }
     }
