@@ -315,7 +315,6 @@ public class GameScreen implements Screen{
 
 
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-/*
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -338,7 +337,7 @@ public class GameScreen implements Screen{
                 player.draw(sb);
                 sb.end();
             }
-*/
+            drawBlood();
             //-----------------------------------------------------------------------
 
             /*---------------- END TEST -------------------------*/
@@ -481,7 +480,7 @@ public class GameScreen implements Screen{
             }
         });
 
-        quitGameButton.addListener(new ClickListener(){
+        quitGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
@@ -550,6 +549,36 @@ public class GameScreen implements Screen{
         currentWorld.dispose();
         batchHUD.dispose();
         shapeRenderer.dispose();
+        sb.dispose();
+    }
+    private Timer t = new Timer();
+    private Timer.Task task = new Timer.Task() {
+        @Override
+        public void run() {
+            System.out.println("timer running");
+            GameModel gameModel = GameModel.getInstance();
+            Player player = gameModel.getPlayer();
+            player.setIsHit(false);
+            drawing = false;
+        }
+    };
+    private boolean drawing = false;
+    private Blood blood = new Blood();
+    private SpriteBatch sb = new SpriteBatch();
+    private void drawBlood(){
+        GameModel gameModel = GameModel.getInstance();
+        Player player = gameModel.getPlayer();
+        if (player.isHit() && drawing){
+            sb.begin();
+            blood.draw(sb);
+            sb.end();
+        }
+        if (player.isHit() && !drawing){
+            System.out.println("timer starting");
+            t.scheduleTask(task, 1);
+            t.start();
+            drawing = true;
+        }
     }
 
 

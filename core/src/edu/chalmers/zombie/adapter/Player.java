@@ -496,7 +496,11 @@ public class Player extends Entity implements CreatureInterface {
         this.isHidden = isHidden;
     }
 
-    public void isHit(boolean b){
+    public void setIsHit(boolean b){
         isHit = b;
+    }
+
+    public boolean isHit(){
+        return isHit;
     }
 }
