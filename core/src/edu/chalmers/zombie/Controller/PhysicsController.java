@@ -47,7 +47,7 @@ public class PhysicsController {
         PolygonShape standardBoxShape = new PolygonShape();
         standardBoxShape.setAsBox(0.5f, 0.5f);   //The size is set as 2 * the values inside the parantheses
         PolygonShape doorShape = new PolygonShape();    //The door is thinner, so the player doesn't accidentally bump into them
-        doorShape.setAsBox(0.25f, 0.5f); //The size is set as 2 * the values inside the parantheses
+        doorShape.setAsBox(0.5f, 0.5f); //The size is set as 2 * the values inside the parantheses
 
         //Create a new ArrayList to store the objects
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
@@ -105,6 +105,15 @@ public class PhysicsController {
         fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
         fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+
+        //Player collision
+        fixDef = new FixtureDef();
+        fixDef.friction = 0f;
+        fixDef.restitution = .1f;
+        fixDef.shape = standardBoxShape;
+        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
+        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_PLAYER, bodyDef, fixDef));
 
 
         return collisionObjects;

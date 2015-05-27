@@ -45,7 +45,7 @@ public class GameModel {
      */
     private GameModel(){
         metaLayerName = "meta";
-        currentRoom = 1;   //TODO test
+        currentRoom = 0;   //TODO test
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
         res.loadTexture("emilia","core/assets/Images/emilia.png");   //Set still image frame, TODO: should get still frame from constructor

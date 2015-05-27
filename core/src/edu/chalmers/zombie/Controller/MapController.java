@@ -49,7 +49,7 @@ public class MapController {
      */
 
     public void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
-        gameModel.res.loadTiledMap("room0","core/assets/Map/Test_world_2_previous.tmx");
+        gameModel.res.loadTiledMap("room0","core/assets/Map/Level_1_room_1.tmx");
         gameModel.res.loadTiledMap("room1","core/assets/Map/Test_world_3.tmx");
         gameModel.res.loadTiledMap("room2","core/assets/Map/Test_world_2_next.tmx");
 
@@ -131,7 +131,6 @@ public class MapController {
         if (roomIndex < 0 || roomIndex > maxSize){
         throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
         }
-        gameModel.setWorldNeedsUpdate(true);
         gameModel.getPlayer().setSneakTilesTouching(0);
         gameModel.getPlayer().setWaterTilesTouching(0);
         gameModel.getPlayer().setHidden(false);
@@ -155,7 +154,7 @@ public class MapController {
         else
             setPlayerBufferPosition(getRoom().getPlayerSpawn());
 
-
+        gameModel.setWorldNeedsUpdate(true);
     }
 
     /**
