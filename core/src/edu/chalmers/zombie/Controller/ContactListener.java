@@ -151,8 +151,15 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         Player p = gameModel.getPlayer();
                         EntityController.pickUp(p, b);
                         break;
+                    case Constants.COLLISION_ZOMBIE:
+                        player.isHit(false);
+                        break;
                 }
-
+            case (Constants.COLLISION_ZOMBIE):
+                player = gameModel.getPlayer();
+                if (contact.getFixtureA().getFilterData().categoryBits == Constants.COLLISION_PLAYER){
+                    player.isHit(false);
+                }
         }
      }
 
