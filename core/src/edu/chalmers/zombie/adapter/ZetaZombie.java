@@ -17,7 +17,7 @@ public class ZetaZombie extends Zombie {
     private World world;
     private Point position;
 
-    public ZetaZombie(Sprite sprite, World world, int x, int y) {
+    public ZetaZombie(World world, int x, int y) {
 
         super(null,null,null, world, x, y);
         setType(ZombieType.ZETA);
@@ -38,7 +38,7 @@ public class ZetaZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new ZetaZombie(sprite, world, x, y);
+        return new ZetaZombie(world, x, y);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class ElectroZombie extends Zombie {
     private World world;
     private Point position;
 
-    public ElectroZombie(Sprite sprite, World world, int x, int y) {
+    public ElectroZombie(World world, int x, int y) {
 
         super(null,null,null, world, x, y);
         setType(ZombieType.ELECTRO);
@@ -38,7 +38,7 @@ public class ElectroZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new ElectroZombie(sprite, world, x, y);
+        return new ElectroZombie(world, x, y);
     }
 
     @Override

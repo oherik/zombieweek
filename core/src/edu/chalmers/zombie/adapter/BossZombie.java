@@ -17,7 +17,7 @@ public class BossZombie extends Zombie {
     private World world;
     private Point position;
 
-    public BossZombie(Sprite sprite, World world, int x, int y) {
+    public BossZombie(World world, int x, int y) {
 
         super(null,null,null,world, x, y);
         setType(ZombieType.BOSS);
@@ -38,7 +38,7 @@ public class BossZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new BossZombie(sprite, world, x, y);
+        return new BossZombie(world, x, y);
     }
 
     @Override

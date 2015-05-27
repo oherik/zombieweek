@@ -91,6 +91,27 @@ public class ZombieController {
                 break;
             case IT: zombie = new ITZombie(room.getWorld(),x,y);
                 break;
+            case MACHINE:
+                zombie = new MachineZombie(room.getWorld(),x,y);
+                break;
+            case ZETA:
+                zombie = new ZetaZombie(room.getWorld(),x,y);
+                break;
+            case ECON:
+                zombie = new EconZombie(room.getWorld(),x,y);
+                break;
+            case ELECTRO:
+                zombie = new ElectroZombie(room.getWorld(),x,y);
+                break;
+            case BASIC:
+                zombie = new BasicZombie(room.getWorld(),x,y);
+                break;
+            case ARCH:
+                zombie = new ArchZombie(room.getWorld(),x,y);
+                break;
+            case BOSS:
+                zombie = new BossZombie(room.getWorld(),x,y);
+                break;
             default: zombie = new BasicZombie(room.getWorld(),x, y);
                 break;
 
