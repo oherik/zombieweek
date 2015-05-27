@@ -31,6 +31,7 @@ public class ITZombie extends Zombie {
         setStartingHp(100);
         setSpeed(30);
         setAngularSpeed(50);
+        setDamage(65);
     }
 
     @Override

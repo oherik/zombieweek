@@ -40,6 +40,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private long timeSinceLastPath;
     private int angularSpeed;
     private ArrayList<Point> path;
+    private int damage;
 
     /**
      * Creates a new zombie
@@ -124,7 +125,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * Set the zombie as attacked or not
      * @param isAggressive    true if attacked, false if not
      */
-    public void isAggressive(boolean isAggressive){
+    public void setIsAggressive(boolean isAggressive){
         this.isAggressive = isAggressive;
     }
 
@@ -403,5 +404,21 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         this.nextPathTile = nextPathTile;
     }
 
+    /**
+     * A method to set how much damage a zombie attack will do.
+     * @param damage the amount of damage in decreased lives done.
+     */
+    public void setDamage(int damage) {
 
+        this.damage = damage;
+    }
+
+    /**
+     * A method to return the amount of damage a zombie attack will do.
+     * @return int damage, the damage in decreased lives done.
+     */
+    public int getDamage() {
+
+        return damage;
+    }
 }

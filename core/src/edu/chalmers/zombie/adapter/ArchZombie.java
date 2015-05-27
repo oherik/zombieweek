@@ -17,7 +17,7 @@ public class ArchZombie extends Zombie {
     private World world;
     private Point position;
 
-    public ArchZombie(Sprite sprite, World world, int x, int y) {
+    public ArchZombie(World world, int x, int y) {
 
         super(null,null,null, world, x, y);
         setType(ZombieType.ARCH);
@@ -27,6 +27,7 @@ public class ArchZombie extends Zombie {
         setDetectionRadius(100);
         setStartingHp(500);
         setSpeed(800);
+        setDamage(200);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class ArchZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new ArchZombie(sprite, world, x, y);
+        return new ArchZombie(world, x, y);
     }
 
     @Override

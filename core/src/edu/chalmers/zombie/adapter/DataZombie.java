@@ -35,6 +35,7 @@ public class DataZombie extends Zombie {
         setStartingHp(90000);
         setSpeed(800);
         setAngularSpeed(1000);
+        setDamage(1000);
     }
 
     @Override

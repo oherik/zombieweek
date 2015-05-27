@@ -17,7 +17,7 @@ public class EconZombie extends Zombie {
     private World world;
     private Point position;
 
-    public EconZombie(Sprite sprite, World world, int x, int y) {
+    public EconZombie(World world, int x, int y) {
 
         super(null,null,null, world, x, y);
         setType(ZombieType.ECON);
@@ -27,7 +27,9 @@ public class EconZombie extends Zombie {
         setDetectionRadius(10);
         setStartingHp(50);
         setSpeed(200);
+        setAngularSpeed(200);
         super.setAngularVelocity(10);
+        setDamage(75);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class EconZombie extends Zombie {
     @Override
     public Zombie spawn(World world, int x, int y) {
 
-        return new EconZombie(sprite, world, x, y);
+        return new EconZombie(world, x, y);
     }
 
     @Override
