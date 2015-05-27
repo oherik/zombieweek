@@ -8,5 +8,6 @@ package edu.chalmers.zombie.utils;
 public enum GameState {
     GAME_RUNNING,
     GAME_PAUSED,
-    GAME_GAMEOVER
+    GAME_GAMEOVER,
+    GAME_NEXTLEVEL
 }

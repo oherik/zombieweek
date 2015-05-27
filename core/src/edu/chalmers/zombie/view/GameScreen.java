@@ -25,15 +25,13 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import com.badlogic.gdx.utils.ShortArray;
+import com.badlogic.gdx.utils.*;
 
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.StringBuilder;
 import edu.chalmers.zombie.adapter.Renderer;
 
 import edu.chalmers.zombie.adapter.Entity;
@@ -48,6 +46,7 @@ import edu.chalmers.zombie.utils.MenuBuilder;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
+import java.awt.Label;
 import java.util.ArrayList;
 
 /**
@@ -67,6 +66,8 @@ public class GameScreen implements Screen{
     private int steps;
 
     private Stage pauseStage;
+    private Stage gameOverStage;
+    private Stage nextLevelStage;
 
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -113,6 +114,14 @@ public class GameScreen implements Screen{
         /* ------- Create pause menu --------*/
         pauseStage = new Stage();
         setUpPauseMenu();
+
+         /* ------- Create game over menu --------*/
+        gameOverStage = new Stage();
+        setUpGameOver();
+
+         /* ------- Create next level menu --------*/
+        nextLevelStage = new Stage();
+        setUpNextLevel();
 
          /* ------- Create sound and settings pause menu --------*/
         soundAndSettingStage = new Stage();
@@ -197,6 +206,12 @@ public class GameScreen implements Screen{
                 break;
             case GAME_PAUSED:
                 updatePaused();
+                break;
+            case GAME_GAMEOVER:
+                updateGameOver();
+                break;
+            case GAME_NEXTLEVEL:
+                updateNextLevel();
                 break;
         }
 
@@ -375,6 +390,19 @@ public class GameScreen implements Screen{
         pauseStage.draw();
     }
 
+    private void updateGameOver(){
+        /* ------ Render the background color ------ */
+        Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        gameOverStage.act();
+        gameOverStage.draw();
+    }
+
+    private void updateNextLevel(){
+        nextLevelStage.act();
+        nextLevelStage.draw();
+    }
+
     /**
      * Sets up sound and settings icon button
      */
@@ -459,6 +487,37 @@ public class GameScreen implements Screen{
                 Gdx.app.exit();
             }
         });
+
+    }
+
+    private void setUpGameOver(){
+
+        Skin skin = (new MenuBuilder()).createMenuSkin();
+
+        Table table = new Table();
+        com.badlogic.gdx.utils.StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Game Over");
+
+        com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
+        BitmapFont font = new BitmapFont(); //sets font to 15pt Arial, if we want custom font -> via constructor
+        font.scale(3);
+        labelStyle.font = font;
+
+        com.badlogic.gdx.scenes.scene2d.ui.Label label = new com.badlogic.gdx.scenes.scene2d.ui.Label(stringBuilder,labelStyle);
+        table.add(label).padBottom(15).row();
+
+        TextButton startOverButton = new TextButton("Start over", skin);
+        table.add(startOverButton).size(250,50).padBottom(15).row();
+
+        TextButton quitGameButton = new TextButton("Quit game", skin);
+        table.add(quitGameButton).size(250,50).padBottom(15).row();
+
+        table.setFillParent(true);
+        gameOverStage.addActor(table);
+
+    }
+
+    private void setUpNextLevel(){
 
     }
 

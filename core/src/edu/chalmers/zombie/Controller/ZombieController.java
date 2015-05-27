@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
@@ -129,6 +130,7 @@ public class ZombieController {
         } else {
 
             player.decLives(player.getLives());
+            GameModel.getInstance().setGameState(GameState.GAME_GAMEOVER);
             //TODO: Game Over
         }
 
