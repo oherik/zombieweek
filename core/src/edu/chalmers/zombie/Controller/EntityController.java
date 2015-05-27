@@ -149,7 +149,7 @@ public class EntityController {
      * @param b The book
      */
     public static void applyHit(Zombie z, Book b){
-        z.isAggressive(true);
+        z.setIsAggressive(true);
         double damage = getDamage(b);
         z.setStartingHp(z.getHP() - (int) Math.round(damage));
         if(z.getHP()<=0) {

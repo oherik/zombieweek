@@ -124,7 +124,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * Set the zombie as attacked or not
      * @param isAggressive    true if attacked, false if not
      */
-    public void isAggressive(boolean isAggressive){
+    public void setIsAggressive(boolean isAggressive){
         this.isAggressive = isAggressive;
     }
 
