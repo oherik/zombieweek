@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="21" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="mesh" tilewidth="32" tileheight="32">
+  <tile id="0">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="water" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_blue.png"/>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="door" value="1"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_green.png"/>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="sneak" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_orange.png"/>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="collision_player" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_purple.png"/>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="collision_all" value="true"/>
+    <property name="collision_zombie" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_red.png"/>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="collision_zombie" value="true"/>
+    <property name="door" value="0"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="player_spawn" value="true"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_teal.png"/>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="player_return" value=""/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/mesh_pink.png"/>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="zombie_spawn" value="BOSS"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/zombie_boss.png"/>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="zombie_spawn" value="DATA"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/zombie_d.png"/>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="zombie_spawn" value="ECON"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/zombie_i.png"/>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="zombie_spawn" value="IT"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/zombie_it.png"/>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="zombie_spawn" value="ZETA"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/zombie_z.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="14" name="map" tilewidth="1600" tileheight="800">
+  <tile id="0">
+   <image width="1600" height="800" source="Test_world_2_bottom.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="15" name="sd" tilewidth="1" tileheight="1"/>
+ <imagelayer name="bottom">
+  <image source="level_1_room_1_bottom.png"/>
+ </imagelayer>
+ <imagelayer name="middle">
+  <image source="level_1_room_1_middle.png"/>
+ </imagelayer>
+ <imagelayer name="middle_dark">
+  <image source="level_1_room_1_middle_dark.png"/>
+ </imagelayer>
+ <imagelayer name="top">
+  <image source="level_1_room_1_top.png"/>
+ </imagelayer>
+ <layer name="meta" width="32" height="21">
+  <properties>
+   <property name="level" value="2"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFgwmwEsBMODAhfawk2E8M4CBSHanmwtQxQzGxgAUJDwb70d1Cbvjj8g+pgNrxPxLtJ5TGRu0ftR8dsA+w/cSYS446dD2E6h1S7KcVHgWDDwAAC/ICBg==
+  </data>
+ </layer>
+</map>

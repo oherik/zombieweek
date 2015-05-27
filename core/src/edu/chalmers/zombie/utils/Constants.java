@@ -18,6 +18,7 @@ public class Constants {
     public static final String COLLISION_PROPERTY_ZOMBIE = "collision_zombie"; //TODO för resten med?
     public static final String COLLISION_PROPERTY_WATER = "water";
     public static final String COLLISION_PROPERTY_SNEAK = "sneak";
+    public static final String COLLISION_PROPERTY_PLAYER = "collision_player";
 
     //Kollisionshantering
     public static final short COLLISION_PLAYER= 2;
