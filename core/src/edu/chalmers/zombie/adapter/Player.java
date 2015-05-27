@@ -259,7 +259,9 @@ public class Player extends Entity implements CreatureInterface {
         if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
 
                 //Keys were released at the same time (thread is sleeping/waiting)
-            updateMovement();
+           if(!GameModel.getInstance().isStepping()) {
+               updateMovement();
+           }
 
         } else {
 

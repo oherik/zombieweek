@@ -11,6 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Stores the game data. The model implements the singleton pattern
  * Created by Tobias on 15-04-02.
@@ -31,14 +32,13 @@ public class GameModel {
     private  boolean worldNeedsUpdate; //If a map change has been called
     private Point playerBufferPosition; //Can't alter the player position directly in the world step
     public static ResourceManager res;
-    private boolean stepping = false;
+    private AtomicBoolean stepping;
     private GameState gameState; //the state of the game
     private int highestCompletedLevel;
     private boolean flashlightEnabled = false;
     private int highestCompletedRoom;
     private boolean soundOn;
     private Renderer renderer;
-
 
     /**
      * Initializes the game model
@@ -62,13 +62,15 @@ public class GameModel {
 
 
 
-        res.loadSound("throw","core/assets/Audio/Sound_effects/throw_book.mp3");
-        res.loadSound("menu_hover","core/assets/Audio/Sound_effects/menu_hover.mp3");
+        res.loadSound("throw", "core/assets/Audio/Sound_effects/throw_book.mp3");
+        res.loadSound("menu_hover", "core/assets/Audio/Sound_effects/menu_hover.mp3");
         res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");
         res.loadSound("pick_up_book","core/assets/Audio/Sound_effects/pick_up_book.mp3");
         res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
 
+
         renderer = new Renderer();
+        stepping=new AtomicBoolean(false);
 
         rooms = new ArrayList<Room>();
         entitiesToRemove = new HashSet<Entity>();
@@ -80,6 +82,7 @@ public class GameModel {
 
         soundOn = true;
        }
+
 
     /**
      * @return The game's renderer
@@ -261,10 +264,10 @@ public class GameModel {
     }
     //These two methods are keeping track of world.step().
     public boolean isStepping(){
-        return stepping;
+        return stepping.get();
     }
     public void setStepping(boolean s){
-        this.stepping = s;
+        this.stepping.set(s);
     }
 
     public GameState getGameState(){return gameState;}
