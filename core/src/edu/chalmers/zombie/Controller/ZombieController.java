@@ -120,8 +120,17 @@ public class ZombieController {
     }
 
     public static void attack(Zombie zombie, Player player){
+
         zombie.setIsAggressive(true);
-        //TODO Puzzel fyll p� h�r
+
+        if (player.getLives() > 0) {
+
+            player.decLives(zombie.getDamage());
+            //TODO: make the screen flash bright red
+        } else {
+            //TODO: Game Over
+        }
+
     }
 
 
