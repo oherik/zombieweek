@@ -151,19 +151,20 @@ public class Player extends Entity implements CreatureInterface {
      * @param direction Direction to move in
      */
     public void move(Direction direction) {
-        
+
+        speed = legPower;
         switch (direction){
             case NORTH:
-                force.y = legPower;
+                force.y = speed;
                 break;
             case SOUTH:
-                force.y = -legPower;
+                force.y = -speed;
                 break;
             case WEST:
-                force.x = -legPower;
+                force.x = -speed;
                 break;
             case EAST:
-                force.x = legPower;
+                force.x = speed;
                 break;
             default:
                 break;
