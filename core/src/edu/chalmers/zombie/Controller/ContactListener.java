@@ -144,6 +144,11 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                     case Constants.COLLISION_WATER:
                        EntityController.decreaseWaterTilesTouching(player);
                         break;
+                    case Constants.COLLISION_PROJECTILE:
+                        Book b = (Book) contact.getFixtureA().getBody().getUserData();
+                        Player p = gameModel.getPlayer();
+                        EntityController.pickUp(p, b);
+                        break;
                 }
 
         }
