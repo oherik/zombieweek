@@ -45,6 +45,16 @@ public class Flashlight {
         numberOfRays = 100;
         initializeRays();
     }
+    public Flashlight(@NotNull World world, float width, int numberOfRays, float length)throws NullPointerException{
+        if (world == null){
+            throw new NullPointerException("The world is null");
+        }
+        this.world = world;
+        this.width = width;
+        this.length = length;
+        this.numberOfRays = numberOfRays;
+        initializeRays();
+    }
     public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
         clearAll();
         calculateLength();

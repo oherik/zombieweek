@@ -46,6 +46,8 @@ public class Player extends Entity implements CreatureInterface {
     //The hand is throwing the book and aiming.
     private Hand hand = new Hand(this);
 
+    private boolean isHit = false;
+
     public Player(Texture texture, World world, float x, float y) {
         super(texture, world, x, y);
 
@@ -492,5 +494,9 @@ public class Player extends Entity implements CreatureInterface {
 
     public void setHidden(boolean isHidden) {
         this.isHidden = isHidden;
+    }
+
+    public void isHit(boolean b){
+        isHit = b;
     }
 }

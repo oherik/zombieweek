@@ -95,6 +95,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         Player player = gameModel.getPlayer();
                         Zombie zombie = (Zombie)contact.getFixtureA().getBody().getUserData();
                         ZombieController.attack(zombie, player);
+                        player.isHit(true);
                 }
 
             case (Constants.COLLISION_PLAYER):
@@ -109,6 +110,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                     case Constants.COLLISION_ZOMBIE:
                         Zombie zombie = (Zombie)contact.getFixtureA().getBody().getUserData();
                         ZombieController.attack(zombie, player);
+                        player.isHit(true);
                         break;
                 }
         }
