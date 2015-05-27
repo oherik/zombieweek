@@ -78,6 +78,8 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.increaseWaterTilesTouching(player);
                         break;
                 }
+                break;
+
             case (Constants.COLLISION_SNEAK):
                 switch(contact.getFixtureA().getFilterData().categoryBits){
                     case Constants.COLLISION_PLAYER:
@@ -85,6 +87,16 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.increaseSneakTilesTouching(player);
                         break;
                 }
+                break;
+
+            case (Constants.COLLISION_ZOMBIE):
+                switch(contact.getFixtureA().getFilterData().categoryBits) {
+                    case Constants.COLLISION_PLAYER:
+                        Player player = gameModel.getPlayer();
+                        Zombie zombie = (Zombie)contact.getFixtureA().getBody().getUserData();
+                        ZombieController.attack(zombie, player);
+                }
+
             case (Constants.COLLISION_PLAYER):
                 Player player = gameModel.getPlayer();
                 switch(contact.getFixtureA().getFilterData().categoryBits){
@@ -93,6 +105,10 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         break;
                     case Constants.COLLISION_WATER:
                         EntityController.increaseWaterTilesTouching(player);
+                        break;
+                    case Constants.COLLISION_ZOMBIE:
+                        Zombie zombie = (Zombie)contact.getFixtureA().getBody().getUserData();
+                        ZombieController.attack(zombie, player);
                         break;
                 }
         }
