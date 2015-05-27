@@ -62,7 +62,7 @@ public class Player extends Entity implements CreatureInterface {
         getAnimator().setOverlayFrame(overlayFrame);
 
 
-        legPower =  150; //Styr maxhastigheten
+        legPower =  75; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         width = Constants.PLAYER_SIZE;
@@ -151,20 +151,19 @@ public class Player extends Entity implements CreatureInterface {
      * @param direction Direction to move in
      */
     public void move(Direction direction) {
-
-        speed = legPower;
+        
         switch (direction){
             case NORTH:
-                force.y = speed;
+                force.y = legPower;
                 break;
             case SOUTH:
-                force.y = -speed;
+                force.y = -legPower;
                 break;
             case WEST:
-                force.x = -speed;
+                force.x = -legPower;
                 break;
             case EAST:
-                force.x = speed;
+                force.x = legPower;
                 break;
             default:
                 break;
