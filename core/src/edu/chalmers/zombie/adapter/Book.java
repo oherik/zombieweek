@@ -14,10 +14,11 @@ import edu.chalmers.zombie.utils.Direction;
 public class Book extends Entity {
     private Vector2 force;
     private float direction;
-    int speed, omega;
-    Vector2 initialVelocity;
-    float width, height;
+    private int speed, omega, damage;
+    private Vector2 initialVelocity;
+    private float width, height;
     private long timeCreated;
+    private boolean onGround;
 
 
     /**
@@ -64,6 +65,8 @@ public class Book extends Entity {
         super.setBody(bodyDef, fixDef);
         speed = 7;
         omega= 20;
+        damage = 50;
+        onGround = false;
 
         setInMotion();
 
@@ -77,9 +80,30 @@ public class Book extends Entity {
 
         //Set system time created
         timeCreated = System.currentTimeMillis();
+
+
+    }
+    public boolean isOnGround(){
+        return this.onGround;
     }
 
+    public void setOnGround(boolean onGround){
+        this.onGround = onGround;
+    }
 
+    /**
+     * @return The damage the book makes
+     */
+    public int getDamage(){
+        return damage;
+    }
+
+    /**
+     * Set the book's damage
+     */
+        public void setDamage(int damage){
+            this.damage = damage;
+        }
 
     @Override
     public Vector2 getVelocity() {
