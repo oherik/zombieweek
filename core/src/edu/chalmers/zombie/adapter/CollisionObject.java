@@ -9,19 +9,15 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  */
 public class CollisionObject implements Cloneable {
     private String name, property;
-    private BodyDef bodyDef;
-    private FixtureDef fixtureDef;
+    private ZWBody body;
 
     /**
      * Creates a new collision object
      * @param name  The name of the object, which is stored as a custom property for the tile in Tiled
-     * @param bodyDef   The body definition for the fixture that will be created
-     * @param fixtureDef The fixture definition for the fixture that will be created
      */
-    public CollisionObject(String name, BodyDef bodyDef, FixtureDef fixtureDef){
+    public CollisionObject(String name, ZWBody body){
         this.name = name;
-        this.bodyDef = bodyDef;
-        this.fixtureDef = fixtureDef;
+        this.body = body;
     }
     /**
      * @return The name of the collision object
@@ -48,16 +44,11 @@ public class CollisionObject implements Cloneable {
     /**
      * @return The body definition
      */
-    public BodyDef getBodyDef(){
-        return this.bodyDef;
+    public ZWBody getBody(){
+        return this.body;
     }
 
-    /**
-     * @return The fixture definition
-     */
-    public FixtureDef getFixtureDef(){
-        return this.fixtureDef;
-    }
+
 
     /**
      * Clones the object. It's a shallow clone since when the fixture/body is created it will clone the body and fixture

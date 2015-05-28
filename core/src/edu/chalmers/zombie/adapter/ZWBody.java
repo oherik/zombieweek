@@ -1,10 +1,8 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.*;
+import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Created by Erik on 2015-05-28.
@@ -14,10 +12,60 @@ public class ZWBody {
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
     private Fixture fixture;
+    private PolygonShape shape;
+
+    public ZWBody(){
+        fixtureDef = new FixtureDef();
+        bodyDef = new BodyDef();
+    }
 
     public ZWBody(Body box2Body){
         this.body = box2Body;
         this.fixture = box2Body.getFixtureList().get(0);
+        fixtureDef = new FixtureDef();
+        bodyDef = new BodyDef();
+    }
+
+    public void setFixtureDef(float friction, float restitution, float boxWidth, float boxHeight, short categoryBits, short maskBits){
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(boxWidth*0.5f, boxHeight*0.5f);
+        fixtureDef = new FixtureDef();
+        fixtureDef.friction = friction;
+        fixtureDef.restitution = restitution;
+        fixtureDef.shape = boxShape;
+        fixtureDef.filter.maskBits = maskBits;
+        fixtureDef.filter.categoryBits = categoryBits;
+    }
+
+    public void createBodyDef(boolean dynamic, float x, float y, float linearDampening, float angularDampening){
+        this.bodyDef = new BodyDef();
+        if(dynamic) {
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+        }
+        else {
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+        }
+        bodyDef.position.set(x,y);
+        bodyDef.linearDamping = linearDampening;
+        bodyDef.angularDamping = angularDampening;
+    }
+
+
+
+    public void setFixtureDef(float friction, float restitution,Vector[] polygonVertices, short categoryBits, short maskBits){
+        Vector2[] vector2s = new Vector2[polygonVertices.length];
+        for(int i = 0; i< polygonVertices.length; i++){
+            vector2s[i] = new Vector2(polygonVertices[i].getLibVector());
+        }
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.set(vector2s);
+
+        fixtureDef = new FixtureDef();
+        fixtureDef.friction = friction;
+        fixtureDef.restitution = restitution;
+        fixtureDef.shape = polygonShape;
+        fixtureDef.filter.maskBits = maskBits;
+        fixtureDef.filter.categoryBits = categoryBits;
     }
 
     public Body getBody(){
