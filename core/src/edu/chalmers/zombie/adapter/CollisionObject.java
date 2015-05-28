@@ -49,7 +49,6 @@ public class CollisionObject implements Cloneable {
     }
 
 
-
     /**
      * Clones the object. It's a shallow clone since when the fixture/body is created it will clone the body and fixture
      * defintion and not use the same references.

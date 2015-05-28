@@ -70,7 +70,6 @@ public class GameModel {
         res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
 
 
-        renderer = new Renderer();
         stepping=new AtomicBoolean(false);
 
         rooms = new ArrayList<Room>();
@@ -84,7 +83,9 @@ public class GameModel {
         soundOn = true;
        }
 
-
+    public void setRenderer(Renderer renderer){
+        this.renderer = renderer;
+    }
     /**
      * @return The game's renderer
      */

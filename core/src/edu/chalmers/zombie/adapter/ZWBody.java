@@ -26,7 +26,7 @@ public class ZWBody {
         bodyDef = new BodyDef();
     }
 
-    public void setFixtureDef(float friction, float restitution, float boxWidth, float boxHeight, short categoryBits, short maskBits){
+    public void setFixtureDef(float friction, float restitution, float boxWidth, float boxHeight, short categoryBits, short maskBits, boolean isSensor){
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(boxWidth*0.5f, boxHeight*0.5f);
         fixtureDef = new FixtureDef();
@@ -35,6 +35,7 @@ public class ZWBody {
         fixtureDef.shape = boxShape;
         fixtureDef.filter.maskBits = maskBits;
         fixtureDef.filter.categoryBits = categoryBits;
+        fixtureDef.isSensor = isSensor;
     }
 
     public void createBodyDef(boolean dynamic, float x, float y, float linearDampening, float angularDampening){
@@ -50,9 +51,14 @@ public class ZWBody {
         bodyDef.angularDamping = angularDampening;
     }
 
+    public void setBodyDefPosition(float x, float y){
+        if(  this.bodyDef == null)
+            this.bodyDef = new BodyDef();
+        bodyDef.position.set(x,y);
+    }
 
 
-    public void setFixtureDef(float friction, float restitution,Vector[] polygonVertices, short categoryBits, short maskBits){
+    public void setFixtureDef(float friction, float restitution,Vector[] polygonVertices, short categoryBits, short maskBits, boolean isSensor){
         Vector2[] vector2s = new Vector2[polygonVertices.length];
         for(int i = 0; i< polygonVertices.length; i++){
             vector2s[i] = new Vector2(polygonVertices[i].getLibVector());
@@ -66,6 +72,7 @@ public class ZWBody {
         fixtureDef.shape = polygonShape;
         fixtureDef.filter.maskBits = maskBits;
         fixtureDef.filter.categoryBits = categoryBits;
+        fixtureDef.isSensor = isSensor;
     }
 
     public Body getBody(){

@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -372,6 +373,7 @@ public class MapController {
         removeEntities();
         if (worldNeedsUpdate()) {
             World currentWorld = getWorld();
+
             Player player = GameModel.getInstance().getPlayer();
 
             /* ------ Update physics ------ */
@@ -385,11 +387,14 @@ public class MapController {
                player = EntityController.createNewPlayer();
             }
             if(player.getBody() == null){
+                System.out.println(getPlayerBufferPosition());
                 player.createDefaultBody(currentWorld, getPlayerBufferPosition());
             }
 
             /* ------ Update screen ------ */
-            gameModel.getRenderer().setMapRenderer(new OrthogonalTiledMapRenderer(getMap(), 1f/(float)Constants.TILE_SIZE));
+            if(gameModel.getRenderer() == null)
+                gameModel.setRenderer(new Renderer(getRoom(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+            gameModel.getRenderer().updateRoom(getRoom(),  Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
             /* ------ Save game ------ */
             SaveLoadController saveLoadController = new SaveLoadController();
