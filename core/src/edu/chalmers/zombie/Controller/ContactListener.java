@@ -52,25 +52,29 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
         gameModel.clearEntitiesToRemove();
         switch(contact.getFixtureB().getFilterData().categoryBits) {
             case Constants.COLLISION_PROJECTILE://Check if the fixture is a projectile, e.g. a book
-                Book b = (Book) contact.getFixtureB().getBody().getUserData();                                  //Retrieve the book
-                switch(contact.getFixtureA().getFilterData().categoryBits){
-                    case Constants.COLLISION_PLAYER:
-                        Player p = gameModel.getPlayer();
-                        EntityController.pickUp(p, b);
-                        break;
-                    case Constants.COLLISION_ZOMBIE:
-                        Zombie z = (Zombie) contact.getFixtureA().getBody().getUserData();
-                        EntityController.applyHit(z, b);
-                        break;
-                    case Constants.COLLISION_OBSTACLE:
-                        EntityController.hitGround(b);
-                        break;
-                    case Constants.COLLISION_WATER:
-                        //TODO plums
-                        EntityController.remove(b);
-                        break;
+                if(contact.getFixtureB().getBody().getUserData() instanceof Book){
+                    Book b = (Book) contact.getFixtureB().getBody().getUserData();
+                    //Retrieve the book
+                    switch(contact.getFixtureA().getFilterData().categoryBits){
+                        case Constants.COLLISION_PLAYER:
+                            Player p = gameModel.getPlayer();
+                            EntityController.pickUp(p, b);
+                            break;
+                        case Constants.COLLISION_ZOMBIE:
+                            Zombie z = (Zombie) contact.getFixtureA().getBody().getUserData();
+                            EntityController.applyHit(z, b);
+                            break;
+                        case Constants.COLLISION_OBSTACLE:
+                            EntityController.hitGround(b);
+                            break;
+                        case Constants.COLLISION_WATER:
+                            //TODO plums
+                            EntityController.remove(b);
+                            break;
+                    }
+
                 }
-              break;
+                                                            break;
             case (Constants.COLLISION_WATER):
                 switch(contact.getFixtureA().getFilterData().categoryBits){
                     case Constants.COLLISION_PLAYER:
@@ -150,7 +154,6 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.pickUp(p, b);
                         break;
                 }
-
         }
      }
 

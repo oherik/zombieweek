@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -152,7 +153,7 @@ public class Book extends Entity {
     //TODO move to EntityController
     public void setInMotion(){
         force.setLength(speed);
-        force.setAngleRad(direction + Constants.PI*1/2); //TODO Rätt vinkel?
+        force.setAngleRad(direction + Constants.PI*1/2);
         force.add(initialVelocity); // Add the player velocity
         setBodyVelocity(force);
         setAngularVelocity(omega);

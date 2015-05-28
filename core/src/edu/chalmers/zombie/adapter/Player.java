@@ -24,6 +24,7 @@ public class Player extends Entity implements CreatureInterface {
     private int killCount;
     private int lives;
     private int ammunition;
+    private int grenadeAmmo = 5;
     private boolean isAttacked;
     private boolean isHidden;
     private Body playerBody;
@@ -45,6 +46,9 @@ public class Player extends Entity implements CreatureInterface {
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
     private Hand hand = new Hand(this);
+
+    private boolean isHit = false;
+
 
     public Player(Texture texture, World world, float x, float y) {
         super(texture, world, x, y);
@@ -102,7 +106,7 @@ public class Player extends Entity implements CreatureInterface {
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_PLAYER_OBSTACLE;
 
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -473,7 +477,9 @@ public class Player extends Entity implements CreatureInterface {
         hand.throwBook();
         getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
-
+    public void throwGrenade(){
+        hand.throwGrenade();
+    }
     public int getWaterTilesTouching(){
         return waterTilesTouching;
     }
@@ -492,5 +498,13 @@ public class Player extends Entity implements CreatureInterface {
 
     public void setHidden(boolean isHidden) {
         this.isHidden = isHidden;
+    }
+
+    public void setIsHit(boolean b){
+        isHit = b;
+    }
+
+    public boolean isHit(){
+        return isHit;
     }
 }

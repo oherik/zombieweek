@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
@@ -122,11 +123,15 @@ public class ZombieController {
     public static void attack(Zombie zombie, Player player){
         EntityController.knockBack(zombie, player, zombie.getDamage());
         zombie.setIsAggressive(true);
-        if (player.getLives() > 0) {
+        if (player.getLives() - zombie.getDamage() > 0) {
 
             player.decLives(zombie.getDamage());
+            player.setIsHit(true);
             //TODO: make the screen flash bright red
         } else {
+
+            player.decLives(player.getLives());
+            GameModel.getInstance().setGameState(GameState.GAME_GAMEOVER);
             //TODO: Game Over
         }
 

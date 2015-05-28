@@ -25,22 +25,16 @@ import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import com.badlogic.gdx.utils.ShortArray;
+import com.badlogic.gdx.utils.*;
 
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import edu.chalmers.zombie.adapter.Renderer;
+import com.badlogic.gdx.utils.StringBuilder;
+import edu.chalmers.zombie.adapter.*;
 
-import edu.chalmers.zombie.adapter.Entity;
-import edu.chalmers.zombie.adapter.Player;
-import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.*;
-import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
@@ -48,6 +42,7 @@ import edu.chalmers.zombie.utils.MenuBuilder;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
+import java.awt.Label;
 import java.util.ArrayList;
 
 /**
@@ -67,6 +62,8 @@ public class GameScreen implements Screen{
     private int steps;
 
     private Stage pauseStage;
+    private Stage gameOverStage;
+    private Stage nextLevelStage;
 
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -76,7 +73,7 @@ public class GameScreen implements Screen{
 
     private Flashlight flashlight;
     private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
-
+    private ShapeRenderer grenadeShapeRenderer = new ShapeRenderer();
     /**
      * Creates a game screen with the default tile size
      */
@@ -113,6 +110,14 @@ public class GameScreen implements Screen{
         /* ------- Create pause menu --------*/
         pauseStage = new Stage();
         setUpPauseMenu();
+
+         /* ------- Create game over menu --------*/
+        gameOverStage = new Stage();
+        setUpGameOver();
+
+         /* ------- Create next level menu --------*/
+        nextLevelStage = new Stage();
+        setUpNextLevel();
 
          /* ------- Create sound and settings pause menu --------*/
         soundAndSettingStage = new Stage();
@@ -198,6 +203,12 @@ public class GameScreen implements Screen{
             case GAME_PAUSED:
                 updatePaused();
                 break;
+            case GAME_GAMEOVER:
+                updateGameOver();
+                break;
+            case GAME_NEXTLEVEL:
+                updateNextLevel();
+                break;
         }
 
 
@@ -255,6 +266,10 @@ public class GameScreen implements Screen{
            /* ------ Draw the aimer ------ */
             player.getHand().drawAimer(mapRenderer.getBatch());
             mapRenderer.getBatch().end();
+            grenadeShapeRenderer.setAutoShapeType(true);
+            grenadeShapeRenderer.begin();
+            player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
+            grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
             if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
@@ -272,7 +287,10 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
             /* ------ Draw books ------ */
             for (Book b: gameModel.getBooks()){
-                    b.draw(mapRenderer.getBatch());
+                b.draw(mapRenderer.getBatch());
+            }
+            for (Grenade g: gameModel.getGrenades()){
+                g.draw(mapRenderer.getBatch());
             }
 
 
@@ -300,7 +318,7 @@ public class GameScreen implements Screen{
 
 
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-/*
+            /*
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -323,11 +341,12 @@ public class GameScreen implements Screen{
                 player.draw(sb);
                 sb.end();
             }
-*/
+
             //-----------------------------------------------------------------------
 
             /*---------------- END TEST -------------------------*/
         /* ------Draw the foreground layer ------ */
+            drawBlood();
             int[] foregroundLayers = {3};
             if (mapController.getMap().getLayers().get("top") != null) {
                 mapRenderer.render(foregroundLayers);
@@ -373,6 +392,19 @@ public class GameScreen implements Screen{
     private void updatePaused(){
         pauseStage.act();
         pauseStage.draw();
+    }
+
+    private void updateGameOver(){
+        /* ------ Render the background color ------ */
+        Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        gameOverStage.act();
+        gameOverStage.draw();
+    }
+
+    private void updateNextLevel(){
+        nextLevelStage.act();
+        nextLevelStage.draw();
     }
 
     /**
@@ -453,12 +485,43 @@ public class GameScreen implements Screen{
             }
         });
 
-        quitGameButton.addListener(new ClickListener(){
+        quitGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
+
+    }
+
+    private void setUpGameOver(){
+
+        Skin skin = (new MenuBuilder()).createMenuSkin();
+
+        Table table = new Table();
+        com.badlogic.gdx.utils.StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Game Over");
+
+        com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
+        BitmapFont font = new BitmapFont(); //sets font to 15pt Arial, if we want custom font -> via constructor
+        font.scale(3);
+        labelStyle.font = font;
+
+        com.badlogic.gdx.scenes.scene2d.ui.Label label = new com.badlogic.gdx.scenes.scene2d.ui.Label(stringBuilder,labelStyle);
+        table.add(label).padBottom(15).row();
+
+        TextButton startOverButton = new TextButton("Start over", skin);
+        table.add(startOverButton).size(250,50).padBottom(15).row();
+
+        TextButton quitGameButton = new TextButton("Quit game", skin);
+        table.add(quitGameButton).size(250,50).padBottom(15).row();
+
+        table.setFillParent(true);
+        gameOverStage.addActor(table);
+
+    }
+
+    private void setUpNextLevel(){
 
     }
 
@@ -491,6 +554,14 @@ public class GameScreen implements Screen{
         currentWorld.dispose();
         batchHUD.dispose();
         shapeRenderer.dispose();
+        sb.dispose();
+    }
+    private Blood blood = new Blood();
+    private SpriteBatch sb = new SpriteBatch();
+    private void drawBlood(){
+            sb.begin();
+            blood.draw(sb);
+            sb.end();
     }
 
 
