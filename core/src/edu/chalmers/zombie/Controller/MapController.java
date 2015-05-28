@@ -41,6 +41,18 @@ public class MapController {
     public World getWorld(){return gameModel.getRoom().getWorld();}
 
     /**
+     * @param roomIndex the room index that will be accessed
+     * @return The room specified by the index
+     * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
+     */
+    public Room getRoom(int roomIndex){
+        int maxSize = gameModel.getRooms().size() -1;
+        if(roomIndex<0 ||roomIndex > maxSize)
+            throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
+        return gameModel.getRoom(roomIndex);
+    }
+
+    /**
      * @return the current room from the model
      */
     public Room getRoom(){return gameModel.getRoom();}
@@ -57,18 +69,6 @@ public class MapController {
         gameModel.addRoom(new Room(gameModel.res.getTiledMap("room0"))); //0
         gameModel.addRoom(new Room(gameModel.res.getTiledMap("room1"))); //1
         gameModel.addRoom(new Room(gameModel.res.getTiledMap("room2"))); //2
-    }
-
-    /**
-     * @param roomIndex the room index that will be accessed
-     * @return The room specified by the index
-     * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
-     */
-    public Room getRoom(int roomIndex){
-        int maxSize = gameModel.getRooms().size() -1;
-        if(roomIndex<0 ||roomIndex > maxSize)
-            throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
-        return gameModel.getRoom(roomIndex);
     }
 
     /**
