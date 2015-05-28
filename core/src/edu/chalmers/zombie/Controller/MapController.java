@@ -347,7 +347,7 @@ public class MapController {
             throw new IndexOutOfBoundsException("getPath: end point out of bounds");
         if(maxSteps<1)
             throw new IndexOutOfBoundsException("getPath: max steps must be >0");
-        return PathAlgorithm.getPath(start, end, room.getCollisionTileGrid(), maxSteps, Constants.COLLISION_ZOMBIE);
+        return PathAlgorithm.getPath(start, end, room.getCollisionTileGrid(), maxSteps, Constants.COLLISION_ACTOR_OBSTACLE);
     }
 
     /**
