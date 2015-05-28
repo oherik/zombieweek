@@ -50,6 +50,7 @@ public class Renderer {
 
     public void renderBox2DDebug(Room room){
         debugRenderer.render(room.getWorld(), camera.combined);
+        camera.update();
     }
 
     public void drawEntity(Entity entity){

@@ -56,6 +56,10 @@ public class Room {
 
     }
 
+    public void stepWorld(float timeStep, int velocityIterations, int positionIterations){
+        world.step(timeStep,velocityIterations,positionIterations);
+    }
+
 
     public void createBody(ZWBody body, Object userData){
         Body b2body = world.createBody(body.getBodyDef());

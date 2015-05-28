@@ -257,15 +257,14 @@ public class GameScreen implements Screen{
              /* ------Draw the middle layer ------ */
             if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
-                if (mapController.getMap().getLayers().get("middle_dark") != null) {
                     mapRenderer.render(middleLayers);
-                }
+
             }
             else{
                 int[] middleLayers = {1};
-                if (mapController.getMap().getLayers().get("middle") != null) {
+
                     mapRenderer.render(middleLayers);
-                }
+
             }
             mapRenderer.getBatch().begin();
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
@@ -284,9 +283,6 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().end();
 
 
-
-            /* ------ Draw the box2d debug ------ */
-            boxDebug.render(mapController.getWorld(), camera.combined); //TODO debug
 
             /* ------ Render HUD ------ */
             String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
@@ -332,9 +328,14 @@ public class GameScreen implements Screen{
         /* ------Draw the foreground layer ------ */
             drawBlood();
             int[] foregroundLayers = {3};
-            if (mapController.getMap().getLayers().get("top") != null) {
+
                 mapRenderer.render(foregroundLayers);
-            }
+
+            /* ------ Draw the box2d debug ------ */
+            //gameModel.getRenderer().renderBox2DDebug(gameModel.getRoom()); //TODO debug
+
+            boxDebug.render(gameModel.getRoom().getWorld(),camera.combined);
+
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
 
@@ -345,8 +346,7 @@ public class GameScreen implements Screen{
             }
         /*-----------------SLUTTESTAT---------------------*/
 
-            //rita box2d debug
-        boxDebug.render(mapController.getWorld(), camera.combined);
+
 
         //render HUD
         playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
