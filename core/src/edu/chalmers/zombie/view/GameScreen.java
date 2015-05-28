@@ -61,15 +61,11 @@ public class GameScreen implements Screen{
     private PathAlgorithm pathFinding; //TODO debug
     private int steps;
 
-    private Stage pauseStage;
-    private Stage gameOverStage;
-    private Stage nextLevelStage;
+
 
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-    private Stage soundAndSettingStage;
-    private ImageButton soundButton;
 
     private Flashlight flashlight;
     private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
@@ -107,26 +103,12 @@ public class GameScreen implements Screen{
         /* ------- Set game as running --------*/
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
 
-        /* ------- Create pause menu --------*/
-        pauseStage = new Stage();
-        setUpPauseMenu();
-
-         /* ------- Create game over menu --------*/
-        gameOverStage = new Stage();
-        setUpGameOver();
-
-         /* ------- Create next level menu --------*/
-        nextLevelStage = new Stage();
-        setUpNextLevel();
-
-         /* ------- Create sound and settings pause menu --------*/
-        soundAndSettingStage = new Stage();
-        setUpSoundAndSettingsMenu();
+       MenuController.initializeMenus(); //TODO: should be done in factory
 
          /* ------- Set input --------*/
-        InputProcessor inputProcessorTwo = pauseStage;
+        InputProcessor inputProcessorTwo = GameModel.getInstance().getScreenModel().getPauseStage();
         InputProcessor inputProcessorOne = new InputController();
-        InputProcessor inputProcessorThree = soundAndSettingStage;
+        InputProcessor inputProcessorThree = GameModel.getInstance().getScreenModel().getSoundAndSettingStage();
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputProcessorTwo);
         inputMultiplexer.addProcessor(inputProcessorThree);
@@ -135,6 +117,8 @@ public class GameScreen implements Screen{
 
         //TODO debug
         mapController.printCollisionTileGrid();
+
+
 
 
     }
@@ -380,8 +364,8 @@ public class GameScreen implements Screen{
               // updateZombiePaths();
             }
         /** Render settings and sound buttons **/
-        soundAndSettingStage.act();
-        soundAndSettingStage.draw();
+        GameModel.getInstance().getScreenModel().getSoundAndSettingStage().act();
+        GameModel.getInstance().getScreenModel().getSoundAndSettingStage().draw();
 
     }
 
@@ -390,140 +374,23 @@ public class GameScreen implements Screen{
      * Render game when game is paused
      */
     private void updatePaused(){
-        pauseStage.act();
-        pauseStage.draw();
+        GameModel.getInstance().getScreenModel().getPauseStage().act();
+        GameModel.getInstance().getScreenModel().getPauseStage().draw();
     }
 
     private void updateGameOver(){
         /* ------ Render the background color ------ */
         Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        gameOverStage.act();
-        gameOverStage.draw();
+        GameModel.getInstance().getScreenModel().getGameOverStage().act();
+        GameModel.getInstance().getScreenModel().getGameOverStage().draw();
     }
 
     private void updateNextLevel(){
-        nextLevelStage.act();
-        nextLevelStage.draw();
+        GameModel.getInstance().getScreenModel().getNextLevelStage().act();
+        GameModel.getInstance().getScreenModel().getNextLevelStage().draw();
     }
 
-    /**
-     * Sets up sound and settings icon button
-     */
-    private void setUpSoundAndSettingsMenu(){
-
-        ImageButton.ImageButtonStyle settingsButtonStyle = new ImageButton.ImageButtonStyle();
-        ImageButton.ImageButtonStyle soundButtonStyle = new ImageButton.ImageButtonStyle();
-
-        GameModel.getInstance().res.loadTexture("audio-off","core/assets/Images/audioOff.png");
-        GameModel.getInstance().res.loadTexture("audio-on","core/assets/Images/audioOn.png");
-        GameModel.getInstance().res.loadTexture("settings","core/assets/Images/settings.png");
-
-        settingsButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("settings")));
-        soundButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("audio-on")));
-
-        ImageButton settingsButton = new ImageButton(settingsButtonStyle);
-        soundButton = new ImageButton(soundButtonStyle);
-
-        settingsButton.setSize(40, 40);
-        soundButton.setSize(40, 40);
-
-        settingsButton.setPosition(Gdx.graphics.getWidth() - 50, Gdx.graphics.getHeight() - 50);
-        soundButton.setPosition(Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 50);
-
-        soundAndSettingStage.addActor(settingsButton);
-        soundAndSettingStage.addActor(soundButton);
-
-        soundButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                AudioController audioController = new AudioController();
-                audioController.toggleSound();
-                updateSoundButton();
-            }
-        });
-    }
-
-    /**
-     * Checks whether sound is on or not and adjust image for audio on/off icon thereafter
-     */
-    private void updateSoundButton(){
-        boolean soundOn = GameModel.getInstance().isSoundOn();
-        ImageButton.ImageButtonStyle soundButtonStyle = soundButton.getStyle();
-        Texture newTexture;
-        if (soundOn){
-            newTexture = GameModel.getInstance().res.getTexture("audio-on");
-        } else {
-            newTexture = GameModel.getInstance().res.getTexture("audio-off");
-        }
-        soundButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(newTexture));
-    }
-
-    /**
-     * Sets up the pause menu
-     */
-    private void setUpPauseMenu(){
-
-        MenuBuilder menuBuilder = new MenuBuilder();
-        Skin skin = menuBuilder.createMenuSkin();
-
-        Table table = new Table();
-
-        TextButton mainMenuButton = new TextButton("Main Menu", skin);
-        TextButton quitGameButton = new TextButton("Quit game", skin);
-
-        table.add(mainMenuButton).size(250,50).padBottom(15).row();
-        table.add(quitGameButton).size(250,50).padBottom(15).row();
-
-        table.setFillParent(true);
-        pauseStage.addActor(table);
-
-        mainMenuButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen());
-            }
-        });
-
-        quitGameButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
-
-    }
-
-    private void setUpGameOver(){
-
-        Skin skin = (new MenuBuilder()).createMenuSkin();
-
-        Table table = new Table();
-        com.badlogic.gdx.utils.StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Game Over");
-
-        com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle();
-        BitmapFont font = new BitmapFont(); //sets font to 15pt Arial, if we want custom font -> via constructor
-        font.scale(3);
-        labelStyle.font = font;
-
-        com.badlogic.gdx.scenes.scene2d.ui.Label label = new com.badlogic.gdx.scenes.scene2d.ui.Label(stringBuilder,labelStyle);
-        table.add(label).padBottom(15).row();
-
-        TextButton startOverButton = new TextButton("Start over", skin);
-        table.add(startOverButton).size(250,50).padBottom(15).row();
-
-        TextButton quitGameButton = new TextButton("Quit game", skin);
-        table.add(quitGameButton).size(250,50).padBottom(15).row();
-
-        table.setFillParent(true);
-        gameOverStage.addActor(table);
-
-    }
-
-    private void setUpNextLevel(){
-
-    }
 
     public void show(){
 
