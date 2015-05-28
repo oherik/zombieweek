@@ -152,7 +152,7 @@ public class Book extends Entity {
     //TODO move to EntityController
     public void setInMotion(){
         force.setLength(speed);
-        force.setAngleRad(direction + Constants.PI*1/2); //TODO Rätt vinkel?
+        force.setAngleRad(direction + Constants.PI*1/2);
         force.add(initialVelocity); // Add the player velocity
         setBodyVelocity(force);
         setAngularVelocity(omega);

@@ -24,6 +24,7 @@ public class Player extends Entity implements CreatureInterface {
     private int killCount;
     private int lives;
     private int ammunition;
+    private int grenadeAmmo = 5;
     private boolean isAttacked;
     private boolean isHidden;
     private Body playerBody;
@@ -47,6 +48,7 @@ public class Player extends Entity implements CreatureInterface {
     private Hand hand = new Hand(this);
 
     private boolean isHit = false;
+
 
     public Player(Texture texture, World world, float x, float y) {
         super(texture, world, x, y);
@@ -475,7 +477,9 @@ public class Player extends Entity implements CreatureInterface {
         hand.throwBook();
         getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
-
+    public void throwGrenade(){
+        hand.throwGrenade();
+    }
     public int getWaterTilesTouching(){
         return waterTilesTouching;
     }

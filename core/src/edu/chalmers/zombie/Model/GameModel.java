@@ -26,6 +26,7 @@ public class GameModel {
     private int currentLevel;
     private int currentRoom;
     private ArrayList<Book> books = new ArrayList<Book>();
+    private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
     private Set entitiesToRemove;
     private ArrayList<CollisionObject> collisionObjects;
     private String metaLayerName;
@@ -49,11 +50,11 @@ public class GameModel {
         res = new ResourceManager();
         res.loadTexture("player","core/assets/player_professional_final_version.png");
         res.loadTexture("emilia","core/assets/Images/emilia.png");   //Set still image frame, TODO: should get still frame from constructor
-        res.loadTexture("zombie-still","core/assets/Images/zombie-still.png");
-        res.loadTexture("zombie-dead","core/assets/Images/zombie-dead.png");
+        res.loadTexture("zombie-still", "core/assets/Images/zombie-still.png");
+        res.loadTexture("zombie-dead", "core/assets/Images/zombie-dead.png");
         res.loadTexture("zombie", "core/assets/Images/zombie.png");
-        res.loadTexture("zombie-data-still","core/assets/Images/zombie-data-still.png");
-        res.loadTexture("zombie-data-dead","core/assets/Images/zombie-data-dead.png");
+        res.loadTexture("zombie-data-still", "core/assets/Images/zombie-data-still.png");
+        res.loadTexture("zombie-data-dead", "core/assets/Images/zombie-data-dead.png");
         res.loadTexture("zombie-data", "core/assets/Images/zombie-data.png");
         res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
         res.loadTexture("zombie-it-dead","core/assets/Images/zombie-it-dead.png");
@@ -208,8 +209,16 @@ public class GameModel {
         return books;
     }
 
+    public ArrayList<Grenade> getGrenades() {
+        return grenades;
+    }
+
     public void addBook(Book book){
         books.add(book);
+    }
+
+    public void addGrenade(Grenade grenade){
+        grenades.add(grenade);
     }
 
     public void addEntitiesToRemove(Set<Entity> entitySet){this.entitiesToRemove = entitySet; }
@@ -292,4 +301,6 @@ public class GameModel {
     public boolean isSoundOn(){return soundOn;}
 
     public void setSoundOn(boolean soundOn){this.soundOn=soundOn;}
+
+
 }

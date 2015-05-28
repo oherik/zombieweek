@@ -22,7 +22,6 @@ public class Blood {
         task = new Timer.Task() {
             @Override
             public void run() {
-                System.out.println("timer running");
                 GameModel gameModel = GameModel.getInstance();
                 Player player = gameModel.getPlayer();
                 player.setIsHit(false);

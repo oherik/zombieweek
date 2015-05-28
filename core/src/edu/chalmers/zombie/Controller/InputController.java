@@ -245,7 +245,7 @@ public class InputController implements InputProcessor{
     public boolean mouseMoved(int screenX, int screenY) {
         switch (gameModel.getGameState()) {
             case GAME_RUNNING:
-                getPlayer().getHand().setMouseDirection(screenX, screenY);
+                getPlayer().getHand().setMousePosition(screenX, screenY);
                 break;
         }
 
