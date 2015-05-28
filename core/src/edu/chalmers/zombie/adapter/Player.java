@@ -414,11 +414,12 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     /**
-     * A method which increases the player's number of lives.
+     * A method which increases the player's number of lives by the amount stated.
+     * @param incBy the amount by which the player's lives is to be increased.
      */
-    public void incLives() {
+    public void incLives(int incBy) {
 
-        lives = lives++;
+        lives += incBy;
     }
 
 
