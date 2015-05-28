@@ -1,18 +1,16 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
  * This controller class handles the various instantiations of physics objects for any given world.
+ * Created by Erik
+ * Modified by Erik
  */
 public class PhysicsController {
 
@@ -36,16 +34,6 @@ public class PhysicsController {
      * @return A list of the collision objects
      */
     private static ArrayList<CollisionObject> createCollisionObjects(){
-        //Create and define body
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody; //The collision objects shouldn't move
-
-        //Define shapes
-        PolygonShape standardBoxShape = new PolygonShape();
-        standardBoxShape.setAsBox(0.5f, 0.5f);   //The size is set as 2 * the values inside the parantheses
-        PolygonShape doorShape = new PolygonShape();    //The door is thinner, so the player doesn't accidentally bump into them
-        doorShape.setAsBox(0.5f, 0.5f); //The size is set as 2 * the values inside the parantheses
-
         //Create a new ArrayList to store the objects
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
 
@@ -128,31 +116,26 @@ public class PhysicsController {
 
     private static void traverseRoomIfNeeded(ArrayList<CollisionObject> collisionObjects, Room room) {
         if(!room.hasBeenTraversed()) { //if the room already has these initialized there's no point in continuing
-            World world = room.getWorld();
-            TiledMapTileLayer metaLayer = room.getMetaLayer();
+            Room currentRoom = GameModel.getInstance().getRoom();
 
             String zombieSpawn = "zombie_spawn"; //TODO test tills vi f�r flera sorters zombies
             String playerSpawn = "player_spawn"; //TODO test tills ovan �r fixat
             String playerReturn = "player_return"; //TODO test tills ovan �r fixat
 
-            if (metaLayer != null) {
-                metaLayer.setVisible(false);
-                for (int row = 0; row < metaLayer.getHeight(); row++) {       //TODO on�digt att g� igenom allt?
-                    for (int col = 0; col < metaLayer.getWidth(); col++) {
-                        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
-                        if (currentCell != null && currentCell.getTile() != null) {        //There's a meta data tile on that position
+                for (int row = 0; row < room.getTiledHeight(); row++) {       //TODO on�digt att g� igenom allt?
+                    for (int col = 0; col < room.getTiledWidth(); col++) {
+                        if (room.hasMetaData(col, row)) {        //There's a meta data tile on that position
                             CollisionObject toAdd = null;
                             CollisionObject toRemove = null;
                             for (CollisionObject obj : collisionObjects) {
-                                if (currentCell.getTile().getProperties().get(obj.getName()) != null) {
+                                if (room.hasProperty(col, row, obj.getName())){
                                     obj.getBody().setBodyDefPosition((col + 0.5f), (row + 0.5f));
                                     if(obj.getName().equals(Constants.COLLISION_PROPERTY_DOOR)){
                                         toAdd = obj.clone();
                                         toRemove = obj;
-                                        obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_DOOR));
+                                        obj.setProperty((String) room.getProperty(col, row, Constants.COLLISION_PROPERTY_DOOR));
                                     }
-                                    Fixture fixture = world.createBody(obj.getBody().getBodyDef()).createFixture(obj.getBody().getFixtureDef());
-                                    fixture.setUserData(obj);
+                                    room.createFixture(obj.getBody(), obj);
                                 }
                             }
                             if(toRemove != null) {
@@ -161,35 +144,35 @@ public class PhysicsController {
                             if(toAdd != null) {
                                 collisionObjects.add(toAdd);
                             }
-                            if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {           //TODO skapa en spawnEntities-metod ist�llet. Och en huvudmetod som g�r igenom b�da metoderna
-                                ZombieController.spawnZombie((String) currentCell.getTile().getProperties().get(zombieSpawn), col, row);
+                            if (room.hasProperty(col, row, zombieSpawn)) {           //TODO skapa en spawnEntities-metod ist�llet. Och en huvudmetod som g�r igenom b�da metoderna
+                                ZombieController.spawnZombie((String) room.getProperty(col, row, zombieSpawn), col, row);
                             }
-                            if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
+                            if (room.hasProperty(col, row, playerSpawn)) {
                                 room.setPlayerSpawn(new Point(col, row));
                             }
-                            if (currentCell.getTile().getProperties().get(playerReturn) != null) {
+                            if (room.hasProperty(col, row, playerReturn)) {
                                 room.setPlayerReturn(new Point(col, row));
                             }
                         }
 
 
                         /* ------ Create book obstacles -----*/
-                        if (currentCell != null && currentCell.getTile() != null){
-                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL)!= null) {
-                                room.addCollision(col, row, Constants.COLLISION_OBSTACLE);
+                        if (room.hasProperty(row,col,Constants.COLLISION_PROPERTY_ALL)){
+                                room.addCollision(row, col, Constants.COLLISION_OBSTACLE);
                             }
-                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) != null ||
-                                    currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_PLAYER) != null){
-                                room.addCollision(col, row, Constants.COLLISION_ACTOR_OBSTACLE);
+                            if(room.hasProperty(row,col,Constants.COLLISION_PROPERTY_ZOMBIE) ||
+                                    room.hasProperty(row,col,Constants.COLLISION_PROPERTY_PLAYER)){
+                                room.addCollision(row, col, Constants.COLLISION_ACTOR_OBSTACLE);
                             }
 
                         }
                     }
                 }
-            }
-            room.setHasBeenTraversed(true);
-        }
+        room.setHasBeenTraversed(true);
+
     }
+
+
 
     /**
      * Runs traverseRoomIfNeeded using the default values stored in the game model. If none are stored new ones are created.
