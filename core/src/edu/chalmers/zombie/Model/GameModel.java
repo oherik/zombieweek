@@ -88,7 +88,7 @@ public class GameModel {
         screenModel = new ScreenModel();
        }
 
-
+  
     /**
      * @return The game's renderer
      */

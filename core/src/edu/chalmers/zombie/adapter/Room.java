@@ -53,6 +53,19 @@ public class Room {
 
     }
 
+    public void createBody(ZWBody body){
+        Body b2body = world.createBody(body.getBodyDef());
+        b2body.createFixture(body.getFixtureDef());
+        body.setBody(b2body);
+    }
+
+    public void destroyBody(ZWBody body){
+            this.world.destroyBody(body.getBody());
+            body.setBody(null);
+            body = null;
+    }
+
+
     /**
      * Add collision to a tile tile
      * @param x The x coordinate

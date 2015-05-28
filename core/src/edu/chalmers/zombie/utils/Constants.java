@@ -13,7 +13,7 @@ public class Constants {
     public static final String META_LAYER = "meta";
     public static final String TOP_LAYER = "top";
     public static final String BOTTOM_LAYER = "bottom";
-    public static final String DOOR_PROPERTY = "door"; //TODO för resten med?
+    public static final String COLLISION_PROPERTY_DOOR = "door"; //TODO för resten med?
     public static final String COLLISION_PROPERTY_ALL = "collision_all"; //TODO för resten med?
     public static final String COLLISION_PROPERTY_ZOMBIE = "collision_zombie"; //TODO för resten med?
     public static final String COLLISION_PROPERTY_WATER = "water";

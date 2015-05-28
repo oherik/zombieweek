@@ -2,10 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.*;
-import edu.chalmers.zombie.adapter.BasicZombie;
-import edu.chalmers.zombie.adapter.CollisionObject;
-import edu.chalmers.zombie.adapter.Room;
-import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
@@ -53,67 +50,54 @@ public class PhysicsController {
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
 
         //Water, sensor
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.friction = 0;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_WATER;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        fixDef.isSensor = true;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
+        short categoryBits = Constants.COLLISION_WATER;
+        short maskBits= Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody waterSensorBody = new ZWBody();
+        waterSensorBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, true);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, waterSensorBody));
 
         //Water, collision
-        fixDef = new FixtureDef();
-        fixDef.friction = 0;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_WATER;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
+        categoryBits= Constants.COLLISION_WATER;
+        maskBits= Constants.COLLISION_ZOMBIE;
+        ZWBody waterCollisionBody = new ZWBody();
+        waterCollisionBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, waterCollisionBody));
 
         //Collision for all
-        fixDef = new FixtureDef();  //Reset the fixture definition, this has to be done for each new object
-        fixDef.friction = 0.2f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_ALL, bodyDef, fixDef));
+        categoryBits= Constants.COLLISION_OBSTACLE;
+        maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody allCollisionBody = new ZWBody();
+        allCollisionBody.setFixtureDef(0, 0.2f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_ALL, allCollisionBody));
 
         //Door
-        fixDef = new FixtureDef();;
-        fixDef.shape = doorShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_DOOR;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        collisionObjects.add(new CollisionObject(Constants.DOOR_PROPERTY, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_DOOR;
+        maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody doorBody = new ZWBody();
+        doorBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_DOOR, doorBody));
 
         //Sneak, sensor
-        fixDef = new FixtureDef();
-        fixDef.friction = 0f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
-        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
-        fixDef.isSensor = true;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_SNEAK;
+        maskBits = Constants.COLLISION_PLAYER;
+        ZWBody sneakSensorBody = new ZWBody();
+        sneakSensorBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, true);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK,sneakSensorBody));
 
         //Sneak, collision
-        fixDef = new FixtureDef();
-        fixDef.friction = 0f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_SNEAK;
+        maskBits = Constants.COLLISION_ZOMBIE;
+        ZWBody sneakCollisionBody = new ZWBody();
+        sneakCollisionBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK,sneakCollisionBody));
+
 
         //Player collision
-        fixDef = new FixtureDef();
-        fixDef.friction = 0f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_ACTOR_OBSTACLE;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_PLAYER, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_ACTOR_OBSTACLE;
+        maskBits = Constants.COLLISION_ENTITY;
+        ZWBody playerCollisionBody = new ZWBody();
+        playerCollisionBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_PLAYER, playerCollisionBody));
 
 
         return collisionObjects;
@@ -161,13 +145,13 @@ public class PhysicsController {
                             CollisionObject toRemove = null;
                             for (CollisionObject obj : collisionObjects) {
                                 if (currentCell.getTile().getProperties().get(obj.getName()) != null) {
-                                    obj.getBodyDef().position.set((col + 0.5f), (row + 0.5f));
-                                    if(obj.getName().equals(Constants.DOOR_PROPERTY)){
+                                    obj.getBody().setBodyDefPosition((col + 0.5f), (row + 0.5f));
+                                    if(obj.getName().equals(Constants.COLLISION_PROPERTY_DOOR)){
                                         toAdd = obj.clone();
                                         toRemove = obj;
-                                        obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.DOOR_PROPERTY));
+                                        obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_DOOR));
                                     }
-                                    Fixture fixture = world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
+                                    Fixture fixture = world.createBody(obj.getBody().getBodyDef()).createFixture(obj.getBody().getFixtureDef());
                                     fixture.setUserData(obj);
                                 }
                             }
