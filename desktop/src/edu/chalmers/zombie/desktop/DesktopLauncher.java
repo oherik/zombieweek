@@ -19,7 +19,7 @@ public class DesktopLauncher {
     //        else
                 new LwjglApplication(new ZombieWeek(), config);
     //    }catch(java.io.IOException e){
-   //         System.err.println("Invalid Format!");
+   //          System.err.println("Invalid Format!");
    //     }
 
 
