@@ -310,7 +310,7 @@ public class GameScreen implements Screen{
                 psb.setProjectionMatrix(camera.combined);
                 psb.begin();
                 if (flashlight==null){
-                    flashlight = new Flashlight(currentWorld);
+                    flashlight = new Flashlight(currentWorld,Constants.PI*0.25f,100,10);
                 }
                 flashlight.draw(psb,sb);
                 psb.end();
