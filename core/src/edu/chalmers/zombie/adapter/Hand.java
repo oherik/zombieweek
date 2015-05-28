@@ -21,7 +21,7 @@ public class Hand {
     private Sprite aimer = new Sprite(new Texture("core/assets/aimer.png"));
     private Player player;
     private boolean mouseAiming = false;
-    private boolean throwingGrenade = true;
+    private boolean throwingGrenade = false;
     private int mouseX;
     private int mouseY;
 
@@ -32,15 +32,14 @@ public class Hand {
     public void throwBook(){
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
-        Grenade grenade = new Grenade(mouseX, mouseY, player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
-        gameModel.addGrenade(grenade);
-
+        Book book = new Book(direction, player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
+        gameModel.addBook(book);
     }
     public void throwGrenade(){
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
-        Book book = new Book(direction, player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
-        gameModel.addBook(book);
+        Grenade grenade = new Grenade(mouseX, mouseY, player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
+        gameModel.addGrenade(grenade);
     }
     public void startAimingRight() {
         if (!mouseAiming) {

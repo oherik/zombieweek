@@ -287,7 +287,7 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
             /* ------ Draw books ------ */
             for (Book b: gameModel.getBooks()){
-                    b.draw(mapRenderer.getBatch());
+                b.draw(mapRenderer.getBatch());
             }
             for (Grenade g: gameModel.getGrenades()){
                 g.draw(mapRenderer.getBatch());
