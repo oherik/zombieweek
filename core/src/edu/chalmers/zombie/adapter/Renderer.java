@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
@@ -15,8 +14,8 @@ public class Renderer {
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
 
-    public Renderer(Map map, float width, float height){
-        mapRenderer = new OrthogonalTiledMapRenderer(map.getMap());
+    public Renderer(Room room, float width, float height){
+        mapRenderer = new OrthogonalTiledMapRenderer(room.getMap());
         camera = new OrthographicCamera(width,height);
         debugRenderer = new Box2DDebugRenderer();
     }
