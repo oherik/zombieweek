@@ -1,12 +1,12 @@
 package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+//import com.badlogic.gdx.maps.tiled.TiledMap;
+//mport com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
+//import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+//import com.badlogic.gdx.math.Vector2;
+//import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -30,15 +30,7 @@ public class MapController {
         this.gameModel = GameModel.getInstance();
     }
 
-     /**
-     * @return the current map from the model
-     */
-    public TiledMap getMap(){return gameModel.getRoom().getMap();}
 
-    /**
-     * @return the current world from the model
-     */
-    public World getWorld(){return gameModel.getRoom().getWorld();}
 
     /**
      * @param roomIndex the room index that will be accessed
@@ -62,59 +54,15 @@ public class MapController {
      */
 
     public void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
-        gameModel.res.loadTiledMap("room0","core/assets/Map/Level_1_room_1.tmx");
-        gameModel.res.loadTiledMap("room1","core/assets/Map/Test_world_3.tmx");
-        gameModel.res.loadTiledMap("room2","core/assets/Map/Test_world_2_next.tmx");
+        gameModel.res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
+        gameModel.res.loadTiledMap("room1", "core/assets/Map/Test_world_3.tmx");
+        gameModel.res.loadTiledMap("room2", "core/assets/Map/Test_world_2_next.tmx");
 
         gameModel.addRoom(new Room(gameModel.res.getTiledMap("room0"))); //0
         gameModel.addRoom(new Room(gameModel.res.getTiledMap("room1"))); //1
         gameModel.addRoom(new Room(gameModel.res.getTiledMap("room2"))); //2
     }
 
-    /**
-     * @param roomIndex the room index which bottom layer will be accessed
-     * @return The bottom layer specified by the index
-     */
-    public TiledMapImageLayer  getMapBottomLayer(int roomIndex){
-        return getRoom(roomIndex).getBottomLayer();
-    }
-
-    /**
-     * @param roomIndex the room index which top layer will be accessed
-     * @return The top layer specified by the index
-     */
-    public TiledMapImageLayer  getMapTopLayer(int roomIndex){
-        return getRoom(roomIndex).getTopLayer();
-    }
-
-    /**
-     * @param roomIndex the room index which meta layer will be accessed
-     * @return The meta layer specified by the index
-     */
-    public TiledMapTileLayer getMapMetaLayer(int roomIndex){
-        return getRoom(roomIndex).getMetaLayer();
-    }
-
-    /**
-     * @return The current bottom layer
-     */
-    public TiledMapImageLayer getMapBottomLayer(){
-        return getMapBottomLayer(gameModel.getCurrentRoomIndex());
-    }
-
-    /**
-     * @return The current top layer
-     */
-    public TiledMapImageLayer getMapTopLayer(){
-        return getMapTopLayer(gameModel.getCurrentRoomIndex());
-    }
-
-    /**
-     * @return The current meta layer
-     */
-    public TiledMapTileLayer getMapMetaLayer(){
-        return getMapMetaLayer(gameModel.getCurrentRoomIndex());
-    }
 
     /**
      * Loads the new room in the game model, creates bodies if needed and sets that the renderer needs to update the
@@ -211,57 +159,26 @@ public class MapController {
      * @param angle the angle to check, in radians (0 is east, pi is west)
      * @return  true if the path is obstructed, false otherwise
      */
-    public static boolean pathObstructed(Vector2 position, Room room, float distance, float angle){
+    public static boolean pathObstructed(Vector position, Room room, float distance, float angle){
     /* Input checks */
         if(position == null ||room== null)
             throw new NullPointerException("The input mustn't be null");
-        if(position.x < 0 || position.y < 0)
+        if(position.getX() < 0 || position.getY() < 0)
             throw new IndexOutOfBoundsException("The position must be positive");   //TODO kanske inte behövs i och med att det checkas i relevant metod
-        if(position.x > room.getTiledWidth() || position.y >room.getTiledHeight())
+        if(position.getX() > room.getTiledWidth() || position.getY() >room.getTiledHeight())
             throw new IndexOutOfBoundsException("The position must be within meta layer bounds");//TODO kanske inte behövs i och med att det checkas i relevant metod
         if(distance < 0)
             throw new IndexOutOfBoundsException("The distance must be positive");
-        Vector2 endPosition = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
+        Vector endPosition = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
         /* Extract and convert the positions to map coordinates */
-        int x_origin = Math.round(position.x - position.x % 1 - 0.5f);
-        int y_origin = Math.round(position.y - position.y % 1 - 0.5f);
-        int x_end = Math.round(endPosition.x - endPosition.x % 1 - 0.5f);
-        int y_end = Math.round(endPosition.y - endPosition.y % 1 - 0.5f);
+        int x_origin = Math.round(position.getX() - position.getX() % 1 - 0.5f);
+        int y_origin = Math.round(position.getY() - position.getY() % 1 - 0.5f);
+        int x_end = Math.round(endPosition.getX() - endPosition.getX() % 1 - 0.5f);
+        int y_end = Math.round(endPosition.getY() - endPosition.getY() % 1 - 0.5f);
 
         return TileRayTracing.pathObstructed(new Point(x_origin, y_origin), new Point(x_end, y_end), room.getCollisionTileGrid(), Constants.COLLISION_OBSTACLE);
     }
 
-    /**
-     * Checks if there's a wall tile at the given position
-     * @param position  the position to check at
-     * @param metaLayer the map's meta layer
-     * @return true if there's a wall there, false otherwise
-     * @throws NullPointerException if the position or meta layer are empty
-     */
-    public static boolean wallAt(Point position, TiledMapTileLayer metaLayer){
-        if(position == null  ||metaLayer == null)
-            throw new NullPointerException("The input mustn't be null");
-
-        int x = Math.round(position.x - position.x%1);
-        int y = Math.round(position.y - position.y%1);
-
-        return wallAt(x, y, metaLayer);
-    }
-
-    /**
-     * Checks if there is a collision_all tile at a given position
-     * @param x The x coordinate
-     * @param y The  coordinate
-     * @param metaLayer The map's meta layer
-     * @return  true if there's a collision tile at that position, false otherwise
-     */
-    public static boolean wallAt(int x, int y, TiledMapTileLayer metaLayer){
-        if(metaLayer == null)
-            throw new NullPointerException("The meta layer mustn't be null");
-        if(x<0 ||y < 0 || x > metaLayer.getWidth()-1 ||y > metaLayer.getHeight()-1 )
-            throw new IndexOutOfBoundsException("The input coordinates must be withing the meta layer bounds");
-        return (metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y) != null && metaLayer.getCell(x,y).getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL) != null);
-    }
 
     /**
      * @return The current room's zombie navigation mesh
@@ -285,6 +202,7 @@ public class MapController {
             System.out.println("");
         }
     }
+
 
 
     public void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
@@ -372,7 +290,7 @@ public class MapController {
     public void updateRoomIfNeeded() {
         removeEntities();
         if (worldNeedsUpdate()) {
-            World currentWorld = getWorld();
+           Room currentRoom = getRoom();
 
             Player player = GameModel.getInstance().getPlayer();
 
@@ -388,13 +306,13 @@ public class MapController {
             }
             if(player.getBody() == null){
                 System.out.println(getPlayerBufferPosition());
-                player.createDefaultBody(currentWorld, getPlayerBufferPosition());
+                player.createDefaultBody(currentRoom.getWorld(), getPlayerBufferPosition());
             }
 
             /* ------ Update screen ------ */
             if(gameModel.getRenderer() == null)
-                gameModel.setRenderer(new Renderer(getRoom(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-            gameModel.getRenderer().updateRoom(getRoom(),  Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                gameModel.setRenderer(new Renderer(getRoom(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));  //TODO ej här!
+            gameModel.getRenderer().updateRoom(getRoom(),  Gdx.graphics.getWidth(), Gdx.graphics.getHeight());          //TODO ej här!
 
             /* ------ Save game ------ */
             SaveLoadController saveLoadController = new SaveLoadController();
@@ -431,7 +349,7 @@ public class MapController {
 
         /* ------ Step the world, i.e. update the game physics. The model gets a variable set to tell it that the world is stepping and no physic operations should be performed ------ */
         gameModel.setStepping(true);
-        getWorld().step(Constants.TIMESTEP, 6, 2);    //TODO är det floaten ovan som ska vara här?
+        getRoom().stepWorld(Constants.TIMESTEP, 6, 2);    //TODO är det floaten ovan som ska vara här?
         gameModel.setStepping(false);
     }
 

@@ -51,4 +51,9 @@ public class Vector {
     public Vector2 getLibVector(){
         return vector;
     }
+
+    public Vector add(float x, float y){
+        vector.add(x,y);
+        return this;
+    }
 }
