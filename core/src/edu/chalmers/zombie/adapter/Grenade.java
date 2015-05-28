@@ -40,10 +40,8 @@ public class Grenade extends Entity{
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
         force = new Vector2(1,1);
-
         this.targetX = targetX;
         this.targetY = targetY;
-
         Sprite grenadeSprite = new Sprite(grenadeTexture);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -56,7 +54,7 @@ public class Grenade extends Entity{
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = 0f;
-       // fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
+        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
         super.setBody(bodyDef, fixDef);
         super.setSprite(grenadeSprite);
@@ -100,12 +98,10 @@ public class Grenade extends Entity{
             stop();
         }
     }
-
     private void stop(){
         force.setLength(0);
         setBodyVelocity(force);
     }
-
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
@@ -135,8 +131,6 @@ public class Grenade extends Entity{
                 f.getBody().setAngularVelocity(2000f);
             }
         }
-
-
     }
     private boolean checkIfInsideRadius(Fixture fixture, Vector2 ray){
         Vector2 fixturePosition = fixture.getBody().getPosition();
@@ -149,7 +143,9 @@ public class Grenade extends Entity{
         RayCastCallback callback = new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-                foundFixtures.add(fixture);
+                if (fixture.getFilterData().categoryBits == Constants.COLLISION_ZOMBIE){
+                    foundFixtures.add(fixture);
+                }
                 return 1;
             }
         };
