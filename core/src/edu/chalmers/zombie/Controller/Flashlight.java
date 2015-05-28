@@ -60,6 +60,7 @@ public class Flashlight {
         fetchPlayerPosition();
         calculateEndPoints();
         calculateCollisionPoints();
+       // lengthenRays();
         calculateMaxYIndex();
         calculateCorners();
         PolygonRegion darkness = createDarkRegion();
@@ -81,6 +82,7 @@ public class Flashlight {
             length = height;
         }
     }
+
     private void fetchDirection(){
         GameModel gameModel = GameModel.getInstance();
         direction = gameModel.getPlayer().getHand().getDirection() + Constants.PI/2;
@@ -99,9 +101,24 @@ public class Flashlight {
             rays[i].setAngleRad(direction - width / 2 + i * width / numberOfRays);
             Vector2 end = new Vector2(rays[i]);
             end.add(playerPosition);
-            endPoints.add(end);
+            endPoints.add(lengthenRay(playerPosition,end,0.4f));
             int x = 0;
         }
+    }
+
+    private void lengthenRays(){
+        for(Vector2 v : rays) {
+            v.set(lengthenRay(playerPosition, v, 0.4f));
+        }
+    }
+
+    private Vector2 lengthenRay(Vector2 origin, Vector2 end,float dist){
+        float dy = origin.y-end.y;
+        float dx = origin.x-end.x;
+        float dl= (float)(Math.sqrt(dy*dy+dx*dx));
+        float y = end.y - dy*dist/dl;
+        float x = end.x - dx*dist/dl;
+        return new Vector2(x,y);
     }
     private void calculateCollisionPoints(){
         for (Vector2 ray : rays) {
@@ -111,9 +128,9 @@ public class Flashlight {
             if (foundFixture) {
                 Vector2 temp = new Vector2(ray);
                 temp.add(playerPosition);
-                int tempIndex = endPoints.indexOf(temp);
-                endPoints.remove(temp);
-                endPoints.add(tempIndex, new Vector2(collisionPoint));
+                int tempIndex = endPoints.indexOf(lengthenRay(playerPosition,temp,0.4f));
+                endPoints.remove(lengthenRay(playerPosition,temp,0.4f));
+                endPoints.add(tempIndex, lengthenRay(playerPosition,collisionPoint,0.4f));
             }
 
         }
@@ -206,7 +223,7 @@ public class Flashlight {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
                 if (fixture.getFilterData().categoryBits ==
-                        Constants.COLLISION_OBSTACLE){
+                        Constants.COLLISION_OBSTACLE || fixture.getFilterData().categoryBits == Constants.COLLISION_ZOMBIE){
                     if (fraction < currentFraction) {
                         currentFraction = fraction;
                         collisionPoint.set(point);
