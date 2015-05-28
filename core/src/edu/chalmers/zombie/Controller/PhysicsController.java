@@ -157,12 +157,12 @@ public class PhysicsController {
 
 
                         /* ------ Create book obstacles -----*/
-                        if (room.hasProperty(row,col,Constants.COLLISION_PROPERTY_ALL)){
-                                room.addCollision(row, col, Constants.COLLISION_OBSTACLE);
+                        if (room.hasProperty(col,row,Constants.COLLISION_PROPERTY_ALL)){
+                                room.addCollision(col, row, Constants.COLLISION_OBSTACLE);
                             }
-                            if(room.hasProperty(row,col,Constants.COLLISION_PROPERTY_ZOMBIE) ||
-                                    room.hasProperty(row,col,Constants.COLLISION_PROPERTY_PLAYER)){
-                                room.addCollision(row, col, Constants.COLLISION_ACTOR_OBSTACLE);
+                            if(room.hasProperty(col,row,Constants.COLLISION_PROPERTY_ZOMBIE) ||
+                                    room.hasProperty(col,row,Constants.COLLISION_PROPERTY_PLAYER)){
+                                room.addCollision(col, row, Constants.COLLISION_ACTOR_OBSTACLE);
                             }
 
                         }

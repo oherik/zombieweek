@@ -295,7 +295,7 @@ public class Player extends Entity implements CreatureInterface {
     public void stopX() {
         force.x = 0;
         if (force.y == 0) { this.speed = 0;}
-        checkSimultaneousRelease();
+      //  checkSimultaneousRelease();
     }
 
     /**
@@ -304,7 +304,7 @@ public class Player extends Entity implements CreatureInterface {
     public void stopY(){
         force.y = 0;
         if (force.x == 0) { this.speed = 0;}
-        checkSimultaneousRelease();
+     //   checkSimultaneousRelease();
     }
 
     @Override
@@ -414,11 +414,12 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     /**
-     * A method which increases the player's number of lives.
+     * A method which increases the player's number of lives by the amount stated.
+     * @param incBy the amount by which the player's lives is to be increased.
      */
-    public void incLives() {
+    public void incLives(int incBy) {
 
-        lives = lives++;
+        lives += incBy;
     }
 
 

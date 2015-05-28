@@ -3,6 +3,7 @@ package edu.chalmers.zombie.controller;
 /**
  * Created by daniel on 5/19/2015.
  */
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Created by neda on 2015-05-19.
+ * Modified by Neda
  */
 public class Potion extends Entity {
 
@@ -18,6 +19,7 @@ public class Potion extends Entity {
     private World world;
     private boolean hasBeenRemoved;
     private Vector2 velocity;
+    private PotionType type;
 
     public Potion(Sprite sprite, World world, int x, int y) {
 
@@ -34,6 +36,7 @@ public class Potion extends Entity {
         velocity = new Vector2(0,0);
         this.sprite = sprite;
         this.world = world;
+        type = potionType;
         position = new Point(x, y);
 
         switch (potionType) {
@@ -100,5 +103,13 @@ public class Potion extends Entity {
         PotionType pt = types.get(i);
 
         new Potion(pt, sprite, world, position.x, position.y);
+    }
+
+    /**
+     * A method which returns the type of potion in question.
+     * @return PotionType type (enum).
+     */
+    public PotionType getType() {
+        return type;
     }
 }

@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;    //TODO debug
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
@@ -40,6 +41,7 @@ public class GameModel {
     private int highestCompletedRoom;
     private boolean soundOn;
     private Renderer renderer;
+    private ScreenModel screenModel;
 
     /**
      * Initializes the game model
@@ -70,6 +72,7 @@ public class GameModel {
         res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
 
 
+
         stepping=new AtomicBoolean(false);
 
         rooms = new ArrayList<Room>();
@@ -81,11 +84,11 @@ public class GameModel {
        // addTestZombie();                                //TODO debug
 
         soundOn = true;
+
+        screenModel = new ScreenModel();
        }
 
-    public void setRenderer(Renderer renderer){
-        this.renderer = renderer;
-    }
+  
     /**
      * @return The game's renderer
      */
@@ -98,7 +101,11 @@ public class GameModel {
     private void addTestLevel(){
         rooms.add(new Room("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
     }
-*/
+
+    public void se*/
+
+    public void setRenderer(Renderer renderer){this.renderer=renderer;}
+
     /**
      * Only for debug
      */
@@ -302,6 +309,11 @@ public class GameModel {
     public boolean isSoundOn(){return soundOn;}
 
     public void setSoundOn(boolean soundOn){this.soundOn=soundOn;}
+
+    public ScreenModel getScreenModel(){return this.screenModel;}
+
+    public void setScreenModel(ScreenModel screenModel){this.screenModel = screenModel;}
+
 
 
 }
