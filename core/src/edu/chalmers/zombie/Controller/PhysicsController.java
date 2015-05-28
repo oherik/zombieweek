@@ -111,8 +111,8 @@ public class PhysicsController {
         fixDef.friction = 0f;
         fixDef.restitution = .1f;
         fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
-        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
+        fixDef.filter.categoryBits = Constants.COLLISION_ACTOR_OBSTACLE;
+        fixDef.filter.maskBits = Constants.COLLISION_ENTITY;
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_PLAYER, bodyDef, fixDef));
 
 
@@ -194,8 +194,9 @@ public class PhysicsController {
                             if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL)!= null) {
                                 room.addCollision(col, row, Constants.COLLISION_OBSTACLE);
                             }
-                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) != null){
-                                room.addCollision(col, row, Constants.COLLISION_ZOMBIE);
+                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) != null ||
+                                    currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_PLAYER) != null){
+                                room.addCollision(col, row, Constants.COLLISION_ACTOR_OBSTACLE);
                             }
 
                         }
