@@ -1,0 +1,43 @@
+Meeting Agenda
+
+  Date: 2015-05-28
+
+  Facilitator: Daniel Johansson
+
+  Participants: Neda Farhand, Tobias Hallberg, Daniel Johansson, Erik …hrn
+
+1. Objectives (5 min). Resolve any issues preventing the team to
+  continue.
+
+- There is a bug that makes the player spawn under the table in the second world.
+
+
+2. Reports (15 min) from previous meeting
+
+- Erik has made it so the zombies move towards the player using the A* algorithm. 
+He made it so the zombies can be placed in tiled and so that they can rotate. 
+
+- Tobias changed the body of the player so it has the same shape as the player. He also wrote on the SDD and the RAD. He also started on a game over view.
+
+- Neda has made attack work. She also fixed many small things such that the zombie gets attacked when the book hits it first. She has also worked on the use cases. 
+
+- Daniel worked on the flashlight. He also added a grenade class. He also added a red screen when the player gets hit by the zombies.
+
+3. Discussion items (35 min)
+
+- We need to refactor more, to make it more like MVC. 
+- The documentation needs to be updated.
+- The book should have feedback before it disappears.
+- It would be nice to add grenades and potions to the game.
+- A timer would help make the game more unique.
+- The HUD needs an update.
+- Every person should update the classes they have worked on.
+
+4. Outcomes and assignments (5 min)
+
+- Everyone will work on the classes they have worked on. 
+- Everyone will swap the variables from the frameworks to the wrapper classes.
+- Everyone will work on making the program more MVC like.
+5. Wrap up
+- If there is more time we will work on unassigned things.
+- This is the last meeting.
