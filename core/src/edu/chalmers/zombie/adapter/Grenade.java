@@ -7,13 +7,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import javafx.scene.Camera;
+
+import java.util.ArrayList;
 
 /**
  * Created by daniel on 5/28/2015.
@@ -29,8 +28,12 @@ public class Grenade extends Entity{
     private float speed = 7;
     private float direction;
     private OrthographicCamera camera = new OrthographicCamera();
+    private float explosionRadius;
+    private ArrayList<Fixture> foundFixtures = new ArrayList<Fixture>();
+    private World world;
     public Grenade(int targetX, int targetY, float x, float y, World world){
         super(world);
+        world = world;
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
         originalPlayerPosition = new Vector2(player.getX(), player.getY());
@@ -53,7 +56,7 @@ public class Grenade extends Entity{
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = 0f;
-        //fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
+        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
         super.setBody(bodyDef, fixDef);
         super.setSprite(grenadeSprite);
@@ -110,6 +113,29 @@ public class Grenade extends Entity{
     }
 
     public void explode(){
+        RayCastCallback callback = createCallback();
+        Vector2 grenadePosition = new Vector2(getX(), getY());
+        Vector2[] rays = new Vector2[100];
+        for(int i = 0; i < 100; i++){
+            rays[i] = new Vector2(1,1);
+            rays[i].setLength(explosionRadius);
+            rays[i].setAngleRad(Constants.PI*2*i/100);
+            rays[i].add(getX(), getY());
+        }
+        for(Vector2 ray:rays){
+            world.rayCast(callback, grenadePosition, ray);
+        }
 
+    }
+
+    private RayCastCallback createCallback(){
+        RayCastCallback callback = new RayCastCallback() {
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                foundFixtures.add(fixture);
+                return 1;
+            }
+        };
+        return callback;
     }
 }
