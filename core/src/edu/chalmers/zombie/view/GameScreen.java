@@ -32,13 +32,9 @@ import com.badlogic.gdx.utils.*;
 
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.StringBuilder;
-import edu.chalmers.zombie.adapter.Renderer;
+import edu.chalmers.zombie.adapter.*;
 
-import edu.chalmers.zombie.adapter.Entity;
-import edu.chalmers.zombie.adapter.Player;
-import edu.chalmers.zombie.adapter.Zombie;
 import edu.chalmers.zombie.controller.*;
-import edu.chalmers.zombie.adapter.Book;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
@@ -77,7 +73,7 @@ public class GameScreen implements Screen{
 
     private Flashlight flashlight;
     private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
-
+    private ShapeRenderer grenadeShapeRenderer = new ShapeRenderer();
     /**
      * Creates a game screen with the default tile size
      */
@@ -270,6 +266,10 @@ public class GameScreen implements Screen{
            /* ------ Draw the aimer ------ */
             player.getHand().drawAimer(mapRenderer.getBatch());
             mapRenderer.getBatch().end();
+            grenadeShapeRenderer.setAutoShapeType(true);
+            grenadeShapeRenderer.begin();
+            player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
+            grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
             if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
@@ -287,7 +287,10 @@ public class GameScreen implements Screen{
             mapRenderer.getBatch().setProjectionMatrix(camera.combined);
             /* ------ Draw books ------ */
             for (Book b: gameModel.getBooks()){
-                    b.draw(mapRenderer.getBatch());
+                b.draw(mapRenderer.getBatch());
+            }
+            for (Grenade g: gameModel.getGrenades()){
+                g.draw(mapRenderer.getBatch());
             }
 
 
@@ -315,7 +318,7 @@ public class GameScreen implements Screen{
 
 
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-/*
+            /*
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -338,11 +341,12 @@ public class GameScreen implements Screen{
                 player.draw(sb);
                 sb.end();
             }
-*/
+
             //-----------------------------------------------------------------------
 
             /*---------------- END TEST -------------------------*/
         /* ------Draw the foreground layer ------ */
+            drawBlood();
             int[] foregroundLayers = {3};
             if (mapController.getMap().getLayers().get("top") != null) {
                 mapRenderer.render(foregroundLayers);
@@ -481,7 +485,7 @@ public class GameScreen implements Screen{
             }
         });
 
-        quitGameButton.addListener(new ClickListener(){
+        quitGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
@@ -550,6 +554,14 @@ public class GameScreen implements Screen{
         currentWorld.dispose();
         batchHUD.dispose();
         shapeRenderer.dispose();
+        sb.dispose();
+    }
+    private Blood blood = new Blood();
+    private SpriteBatch sb = new SpriteBatch();
+    private void drawBlood(){
+            sb.begin();
+            blood.draw(sb);
+            sb.end();
     }
 
 

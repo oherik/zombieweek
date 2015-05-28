@@ -97,6 +97,9 @@ public class InputController implements InputProcessor{
             case Input.Keys.F:
                 gameModel.toggleFlashlight();
                 break;
+            case Input.Keys.G:
+                gameModel.getPlayer().getHand().toggleGrenadeThrowing();
+                break;
             case Input.Keys.ESCAPE:
                 switch (gameModel.getGameState()) {
                     case GAME_RUNNING:
@@ -174,10 +177,14 @@ public class InputController implements InputProcessor{
         float distance = 1f;
         float angle = player.getHand().getDirection()+Constants.PI*0.5f;
 
-
         if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getRoom(),distance,angle) ) {
             player.decreaseAmmunition();
-            throwBook();
+            if (player.getHand().isThrowingGrenade()){
+                player.getHand().throwGrenade();
+            } else{
+                throwBook();
+            }
+
         }
     }
 
@@ -245,7 +252,7 @@ public class InputController implements InputProcessor{
     public boolean mouseMoved(int screenX, int screenY) {
         switch (gameModel.getGameState()) {
             case GAME_RUNNING:
-                getPlayer().getHand().setMouseDirection(screenX, screenY);
+                getPlayer().getHand().setMousePosition(screenX, screenY);
                 break;
         }
 

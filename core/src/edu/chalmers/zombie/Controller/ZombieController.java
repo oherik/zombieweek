@@ -126,6 +126,7 @@ public class ZombieController {
         if (player.getLives() - zombie.getDamage() > 0) {
 
             player.decLives(zombie.getDamage());
+            player.setIsHit(true);
             //TODO: make the screen flash bright red
         } else {
 

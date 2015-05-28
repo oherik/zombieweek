@@ -6,13 +6,11 @@ package edu.chalmers.zombie.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ShortArray;
 import com.sun.istack.internal.NotNull;
-import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import java.util.ArrayList;
@@ -45,6 +43,16 @@ public class Flashlight {
         numberOfRays = 100;
         initializeRays();
     }
+    public Flashlight(@NotNull World world, float width, int numberOfRays, float length)throws NullPointerException{
+        if (world == null){
+            throw new NullPointerException("The world is null");
+        }
+        this.world = world;
+        this.width = width;
+        this.length = length;
+        this.numberOfRays = numberOfRays;
+        initializeRays();
+    }
     public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
         clearAll();
         calculateLength();
@@ -72,8 +80,6 @@ public class Flashlight {
         } else{
             length = height;
         }
-
-        System.out.println(length);
     }
     private void fetchDirection(){
         GameModel gameModel = GameModel.getInstance();
@@ -140,14 +146,15 @@ public class Flashlight {
     private void calculateCorners(){
         float windowWidth = Gdx.graphics.getWidth();
         float windowHeight = Gdx.graphics.getHeight();
-        corners[0] = playerPosition.x - windowWidth/64;
-        corners[1] = windowHeight/32 + playerPosition.y - windowHeight/64;       //Top left
-        corners[2] = playerPosition.x - windowWidth/64;
-        corners[3] = playerPosition.y - windowHeight/64;                          //Bottom left
-        corners[4] = windowWidth/32+playerPosition.x - windowWidth/64;
-        corners[5] = playerPosition.y - windowHeight/64;           //Bottom right
-        corners[6] = windowWidth/32 +playerPosition.x - windowWidth/64;
-        corners[7] = windowHeight/32 + playerPosition.y - windowHeight / 64; //Top right
+        int tileSize = Constants.TILE_SIZE;
+        corners[0] = playerPosition.x - windowWidth/(tileSize*2);
+        corners[1] = windowHeight/tileSize + playerPosition.y - windowHeight/(tileSize*2);       //Top left
+        corners[2] = playerPosition.x - windowWidth/(tileSize*2);
+        corners[3] = playerPosition.y - windowHeight/(tileSize*2);                          //Bottom left
+        corners[4] = windowWidth/tileSize+playerPosition.x - windowWidth/(tileSize*2);
+        corners[5] = playerPosition.y - windowHeight/(tileSize*2);           //Bottom right
+        corners[6] = windowWidth/tileSize +playerPosition.x - windowWidth/(tileSize*2);
+        corners[7] = windowHeight/tileSize + playerPosition.y - windowHeight / (tileSize*2); //Top right
 
     }
     private float[] createArrayOfVertices(){
