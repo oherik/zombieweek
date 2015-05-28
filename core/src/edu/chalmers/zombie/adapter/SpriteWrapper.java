@@ -21,4 +21,7 @@ public class SpriteWrapper {
     public void draw(Batch batch){
         sprite.draw(batch);
     }
+    public void setAlpha(float alpha){
+        sprite.setAlpha(alpha);
+    }
 }
