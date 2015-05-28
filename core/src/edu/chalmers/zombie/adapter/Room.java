@@ -5,12 +5,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.ContactListener;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * The general model for storing a specific level. The level contains a tiled map, which is the graphical representation
@@ -41,6 +43,7 @@ public class Room {
         metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(Constants.META_LAYER);
         topLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.TOP_LAYER);
         bottomLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.BOTTOM_LAYER);
+        metaLayer.setVisible(false);
 
         //Create the world
         world = new World(new Vector2(0, 0), true);
@@ -53,10 +56,17 @@ public class Room {
 
     }
 
-    public void createBody(ZWBody body){
+
+    public void createBody(ZWBody body, Object userData){
         Body b2body = world.createBody(body.getBodyDef());
         b2body.createFixture(body.getFixtureDef());
         body.setBody(b2body);
+        b2body.setUserData(userData);
+    }
+
+    public void createFixture(ZWBody body, Object userData){
+        Fixture fixture = world.createBody(body.getBodyDef()).createFixture(body.getFixtureDef());
+        fixture.setUserData(userData);
     }
 
     public void destroyBody(ZWBody body){
@@ -226,6 +236,24 @@ public class Room {
      */
     public int getTiledWidth(){
         return tiledMap.getProperties().get("width", Integer.class);
+    }
+
+    public boolean hasMetaData(int col, int row){
+        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
+        return (currentCell != null && currentCell.getTile() != null);
+    }
+
+    public boolean hasProperty(int col, int row, String property){
+        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
+        return (hasMetaData(col, row) && currentCell.getTile().getProperties().get(property) != null);
+    }
+
+    public Object getProperty(int col, int row, String propertyName){
+        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
+        if(hasProperty(col, row,propertyName))
+            return currentCell.getTile().getProperties().get(propertyName);
+        else
+            return null;
     }
 
     /**
