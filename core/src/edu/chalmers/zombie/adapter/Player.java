@@ -295,7 +295,7 @@ public class Player extends Entity implements CreatureInterface {
     public void stopX() {
         force.x = 0;
         if (force.y == 0) { this.speed = 0;}
-        checkSimultaneousRelease();
+      //  checkSimultaneousRelease();
     }
 
     /**
@@ -304,7 +304,7 @@ public class Player extends Entity implements CreatureInterface {
     public void stopY(){
         force.y = 0;
         if (force.x == 0) { this.speed = 0;}
-        checkSimultaneousRelease();
+     //   checkSimultaneousRelease();
     }
 
     @Override
