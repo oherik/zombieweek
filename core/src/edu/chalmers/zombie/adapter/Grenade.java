@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Timer;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import javafx.scene.Camera;
@@ -31,6 +32,7 @@ public class Grenade extends Entity{
     private float explosionRadius = 3;
     private ArrayList<Fixture> foundFixtures = new ArrayList<Fixture>();
     private World world;
+    private Timer timer;
     public Grenade(int targetX, int targetY, float x, float y, World world){
         super(world);
         this.world = world;
@@ -63,192 +65,7 @@ public class Grenade extends Entity{
         calculateDirection();
         setInMotion();
         unproject();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
+        initializeTimer();
     }
     private void calculateDirection(){
         float deltaX = Gdx.graphics.getWidth() / 2 - targetX;
@@ -313,7 +130,7 @@ public class Grenade extends Entity{
                 }
             }
             for (Fixture f: fixturesInRadius){
-                f.getBody().setAngularVelocity(2000f);
+                f.getBody().setAngularVelocity(20000f);
             }
         }
     }
@@ -335,5 +152,20 @@ public class Grenade extends Entity{
             }
         };
         return callback;
+    }
+    private void initializeTimer(){
+        timer = new Timer();
+        Timer.Task task = createTask();
+        timer.scheduleTask(task, 3);
+        timer.start();
+    }
+    private Timer.Task createTask(){
+        Timer.Task task = new Timer.Task() {
+            @Override
+            public void run() {
+                explode();
+            }
+        };
+        return task;
     }
 }
