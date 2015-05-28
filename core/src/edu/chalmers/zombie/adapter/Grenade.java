@@ -28,12 +28,12 @@ public class Grenade extends Entity{
     private float speed = 7;
     private float direction;
     private OrthographicCamera camera = new OrthographicCamera();
-    private float explosionRadius;
+    private float explosionRadius = 3;
     private ArrayList<Fixture> foundFixtures = new ArrayList<Fixture>();
     private World world;
     public Grenade(int targetX, int targetY, float x, float y, World world){
         super(world);
-        world = world;
+        this.world = world;
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
         originalPlayerPosition = new Vector2(player.getX(), player.getY());
@@ -56,7 +56,7 @@ public class Grenade extends Entity{
         fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
         fixDef.restitution = 0;
         fixDef.friction = 0f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
+       // fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
         fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
         super.setBody(bodyDef, fixDef);
         super.setSprite(grenadeSprite);
@@ -111,23 +111,40 @@ public class Grenade extends Entity{
         super.draw(batch);
         stopIfNeeded();
     }
-
+    private Vector2[] rays;
     public void explode(){
         RayCastCallback callback = createCallback();
         Vector2 grenadePosition = new Vector2(getX(), getY());
-        Vector2[] rays = new Vector2[100];
+        rays = new Vector2[100];
         for(int i = 0; i < 100; i++){
             rays[i] = new Vector2(1,1);
             rays[i].setLength(explosionRadius);
             rays[i].setAngleRad(Constants.PI*2*i/100);
             rays[i].add(getX(), getY());
         }
+        ArrayList<Fixture> fixturesInRadius = new ArrayList<Fixture>();
         for(Vector2 ray:rays){
+            foundFixtures.clear();
             world.rayCast(callback, grenadePosition, ray);
+            for (Fixture f: foundFixtures){
+                if (checkIfInsideRadius(f, ray)){
+                    fixturesInRadius.add(f);
+                }
+            }
+            for (Fixture f: fixturesInRadius){
+                f.getBody().setAngularVelocity(2000f);
+            }
         }
 
-    }
 
+    }
+    private boolean checkIfInsideRadius(Fixture fixture, Vector2 ray){
+        Vector2 fixturePosition = fixture.getBody().getPosition();
+        return (((getX() < fixturePosition.x && fixturePosition.x < ray.x) ||
+                (ray.x < fixturePosition.x && fixturePosition.x < getX())) &&
+                ((getY() < fixturePosition.y && fixturePosition.y < ray.y) ||
+                        (ray.y < fixturePosition.y && fixturePosition.y < getY())));
+    }
     private RayCastCallback createCallback(){
         RayCastCallback callback = new RayCastCallback() {
             @Override

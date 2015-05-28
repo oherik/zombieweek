@@ -291,6 +291,7 @@ public class GameScreen implements Screen{
             }
             for (Grenade g: gameModel.getGrenades()){
                 g.draw(mapRenderer.getBatch());
+                g.explode();
             }
 
 
