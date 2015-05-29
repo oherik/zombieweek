@@ -16,6 +16,12 @@ public class ZWPixmap {
         pixmap.fill();
     }
 
+    public ZWPixmap(Pixmap pixmap){
+        this.pixmap = pixmap;
+    }
+
     public Pixmap getPixmap(){return this.pixmap;}
+
+    public void dispose(){this.pixmap.dispose();}
 
 }
