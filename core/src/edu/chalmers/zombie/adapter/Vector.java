@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.math.Vector2;
 
 /** An adapter class for libGDX's Vector2
+ * Modified by Neda
  */
 public class Vector {
     private Vector2 vector;
@@ -72,5 +73,15 @@ public class Vector {
     public Vector add(Vector vector){
         this.vector.add(vector.getLibVector());
         return this;
+    }
+
+    public void setY(float y1) {
+
+        vector.y = y1;
+    }
+
+    public void setX(float x1) {
+
+        vector.x = x1;
     }
 }
