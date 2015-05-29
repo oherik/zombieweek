@@ -84,13 +84,25 @@
    </properties>
    <image width="32" height="32" source="../Tiles/zombie_z.png"/>
   </tile>
+  <tile id="13">
+   <properties>
+    <property name="potion" value="HEALTH"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/healthpotion.png"/>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="potion" value="SPEED"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/speedpotion.png"/>
+  </tile>
  </tileset>
- <tileset firstgid="14" name="map" tilewidth="1600" tileheight="800">
+ <tileset firstgid="16" name="map" tilewidth="1600" tileheight="800">
   <tile id="0">
    <image width="1600" height="800" source="Test_world_2_bottom.png"/>
   </tile>
  </tileset>
- <tileset firstgid="15" name="sd" tilewidth="1" tileheight="1"/>
+ <tileset firstgid="17" name="sd" tilewidth="1" tileheight="1"/>
  <imagelayer name="bottom">
   <image source="level_1_room_1_bottom.png"/>
  </imagelayer>
@@ -108,7 +120,7 @@
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFgwmwEsBMODAhfawk2E8M4CBSHanmwtQxQzGxgAUJDwb70d1Cbvjj8g+pgNrxP2r/qP0DZT++fD7Y7GcfYPtJMZcUdeh6CNU7pNhPKzwKBh8AADZTAdY=
+   eJxjYBgFgwmwEsBMODAhfawk2E8M4CBSHanmwtQxQzGxgAUJDwb70d1Cbvij+4efBDfhM5dSdaP2jxz7+QbYfnSAL58PNvvZB9h+UswlRR26HkL1Din20wqPgsEHANmLAfM=
   </data>
  </layer>
 </map>

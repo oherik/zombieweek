@@ -48,4 +48,9 @@ public class PlayerController {
                 break;
         }
     }
+
+    public static void drinkSpeedPotion(Player p){
+
+
+    }
 }

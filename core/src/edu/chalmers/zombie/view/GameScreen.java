@@ -244,6 +244,11 @@ public class GameScreen implements Screen{
             for (Zombie z : gameModel.getZombies()) {
                 z.draw(mapRenderer.getBatch());
             }
+
+            /* ------- Draw the potions --------*/
+            for (Potion p : gameModel.getRoom().getPotions()) {
+                p.draw(mapRenderer.getBatch());
+            }
             /* ------ Draw the player ------ */
             player.draw(mapRenderer.getBatch());
 
@@ -298,7 +303,7 @@ public class GameScreen implements Screen{
 
 
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-
+/*
             if (gameModel.isFlashlightEnabled()){
                 PolygonSpriteBatch psb = new PolygonSpriteBatch();
                 SpriteBatch sb = new SpriteBatch();
@@ -321,7 +326,7 @@ public class GameScreen implements Screen{
                 player.draw(sb);
                 sb.end();
             }
-
+*/
             //-----------------------------------------------------------------------
 
             /*---------------- END TEST -------------------------*/
@@ -342,7 +347,7 @@ public class GameScreen implements Screen{
             //Skapa path finding        //TODO debug
 
             if (steps % 60 == 0) {   //uppdaterar varje sekund
-                updateZombiePaths();
+               // updateZombiePaths();
             }
         /*-----------------SLUTTESTAT---------------------*/
 

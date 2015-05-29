@@ -62,8 +62,8 @@ public class GameModel {
         res.loadTexture("zombie-it-dead","core/assets/Images/zombie-it-dead.png");
         res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
 
-
-
+        res.loadTexture("potion-health", "core/assets/Images/healthpotion.png");
+        res.loadTexture("potion-speed", "core/assets/Images/speedpotion.png");
 
         res.loadSound("throw", "core/assets/Audio/Sound_effects/throw_book.mp3");
         res.loadSound("menu_hover", "core/assets/Audio/Sound_effects/menu_hover.mp3");

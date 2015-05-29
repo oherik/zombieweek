@@ -23,7 +23,7 @@ import java.util.Objects;
 public class Room {
     private World world;
     private TiledMap tiledMap;
-    private ArrayList zombies;
+    private ArrayList zombies, potions;
     private boolean hasBeenTraversed;
     Point playerSpawn, playerReturn;
     TiledMapTileLayer metaLayer;
@@ -51,6 +51,7 @@ public class Room {
         hasBeenTraversed = false;
 
         zombies = new ArrayList<Zombie>();
+        potions = new ArrayList<Potion>();
 
         collisionTileGrid = new short[metaLayer.getWidth()][metaLayer.getHeight()];
 
@@ -136,6 +137,12 @@ public class Room {
     }
 
     /**
+     * @return The level's potions
+     */
+    public ArrayList<Potion> getPotions(){
+        return this.potions;
+    }
+    /**
      * Adds a zombie
      *
      * @param z A zombie
@@ -145,6 +152,11 @@ public class Room {
     }
 
     /**
+     * Adds a potion to the room
+     * @param p A potion
+     */
+    public void addPotion(Potion p) {potions.add(p);}
+    /**
      * Removes a zombie
      *
      * @param z A zombie to remove
@@ -152,6 +164,15 @@ public class Room {
     public void removeZombie(Zombie z) {
         z.dispose();
         zombies.remove(z);
+    }
+
+    /**
+     * Removes a potion
+     * @param p The potion to remove
+     */
+    public void removePotion(Potion p){
+        p.dispose();
+        potions.remove(p);
     }
 
     /**
