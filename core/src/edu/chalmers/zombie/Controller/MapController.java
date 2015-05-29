@@ -22,7 +22,7 @@ public class MapController {
      * @return The room specified by the index
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
-    public Room getRoom(int roomIndex){
+    public static Room getRoom(int roomIndex){
         GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getRooms().size() -1;
         if(roomIndex<0 ||roomIndex > maxSize)
@@ -33,7 +33,7 @@ public class MapController {
     /**
      * @return the current room from the model
      */
-    public Room getRoom(){
+    public static Room getRoom(){
         GameModel gameModel = GameModel.getInstance();
         return gameModel.getRoom();}
 
@@ -41,7 +41,7 @@ public class MapController {
      * Creates the different rooms and stores them in the model
      */
 
-    public void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
+    public static void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
         GameModel gameModel = GameModel.getInstance();
         gameModel.res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
         gameModel.res.loadTiledMap("room1", "core/assets/Map/Test_world_3.tmx");
@@ -64,7 +64,7 @@ public class MapController {
      * @param roomIndex the room to load
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
-    public void loadRoom(int roomIndex) {
+    public static void loadRoom(int roomIndex) {
         GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getRooms().size() - 1;
         if (roomIndex < 0 || roomIndex > maxSize){
@@ -101,7 +101,7 @@ public class MapController {
     /**
      * @return true if the world needs to be updated, false if not
      */
-    public boolean worldNeedsUpdate(){
+    public static boolean worldNeedsUpdate(){
         GameModel gameModel = GameModel.getInstance();
         return gameModel.worldNeedsUpdate();
     }
@@ -110,7 +110,7 @@ public class MapController {
      * If the world needs to update the next step, this variable is set in the model
      * @param bool true if the world needs to be updated, false if not
      */
-    public void setWorldNeedsUpdate(boolean bool){
+    public static void setWorldNeedsUpdate(boolean bool){
         GameModel gameModel = GameModel.getInstance();
         gameModel.setWorldNeedsUpdate(bool);
     }
@@ -118,7 +118,7 @@ public class MapController {
     /**
      * @return The player's current (rounded) position as a point
      */
-    public Point getPlayerPosition(){
+    public static Point getPlayerPosition(){
         GameModel gameModel = GameModel.getInstance();
         return new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
     }
@@ -127,7 +127,7 @@ public class MapController {
      * Updates the player's position
      * @param point Where the player will be placed
      */
-    public void updatePlayerPosition(Point point){
+    public static void updatePlayerPosition(Point point){
         GameModel gameModel = GameModel.getInstance();
                gameModel.getPlayer().setPosition(point);
     }
@@ -136,7 +136,7 @@ public class MapController {
      * Sets where the player should be when the world step is done
      * @param point Where the player will be placed after the step
      */
-    public void setPlayerBufferPosition(Point point){
+    public static void setPlayerBufferPosition(Point point){
         GameModel gameModel = GameModel.getInstance();
         gameModel.setPlayerBufferPosition(point);
     }
@@ -144,7 +144,7 @@ public class MapController {
     /**
      * @return where the player will be placed after the step
      */
-    public Point getPlayerBufferPosition(){
+    public static Point getPlayerBufferPosition(){
         GameModel gameModel = GameModel.getInstance();
         return gameModel.getPlayerBufferPosition();
     }
@@ -187,7 +187,7 @@ public class MapController {
     }
 
 
-    public void printCollisionTileGrid(){       //TODO debugmetod
+    public static void printCollisionTileGrid(){       //TODO debugmetod
         GameModel gameModel = GameModel.getInstance();
         System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +": printing collision detection tiles.");
         System.out.println("Width: " + getRoom().getCollisionTileGrid().length    + " Height: " + getRoom().getCollisionTileGrid()[0].length);
@@ -204,7 +204,7 @@ public class MapController {
 
 
 
-    public void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
+    public static void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
         GameModel gameModel = GameModel.getInstance();
             ArrayList<Point> path = getPath(room, start, end, Constants.MAX_PATH_COST);
             System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +
@@ -346,7 +346,7 @@ public class MapController {
     /**
      * Updates the physical world
      */
-    private void stepWorld(){
+    private static  void stepWorld(){
         GameModel gameModel = GameModel.getInstance();
 
         /* ------ Step the world, i.e. update the game physics. The model gets a variable set to tell it that the world is stepping and no physic operations should be performed ------ */
@@ -358,7 +358,7 @@ public class MapController {
     /**
      * Removes the entity bodies from the world if necessary
      */
-    private void removeEntities(){
+    private static void removeEntities(){
         GameModel gameModel = GameModel.getInstance();
         for(Map.Entry<Room, ArrayList<Entity>> e: gameModel.getEntitiesToRemove().entrySet()){
             for(Entity entity : e.getValue()) {
@@ -369,7 +369,7 @@ public class MapController {
     }
 
     /* ------ Make all the zombies move toward the player if appropriate ------ */
-    private void moveZombies() {
+    private static void moveZombies() {
         GameModel gameModel = GameModel.getInstance();
         for (Zombie z : gameModel.getZombies()) {
             ZombieController.move(z);
@@ -379,7 +379,7 @@ public class MapController {
     /**
      * Updates projectiles
      */
-    private void updateBooks(){
+    private static void updateBooks(){
         GameModel gameModel = GameModel.getInstance();
         ArrayList<Book> books = gameModel.getBooks();
         for (int i = 0; i < books.size(); i++) {
