@@ -147,12 +147,16 @@ public class PhysicsController {
                             if (room.hasProperty(col, row, zombieSpawn)) {           //TODO skapa en spawnEntities-metod ist�llet. Och en huvudmetod som g�r igenom b�da metoderna
                                 ZombieController.spawnZombie((String) room.getProperty(col, row, zombieSpawn), col, row);
                             }
-                            if (room.hasProperty(col, row, playerSpawn)) {
+                            else if (room.hasProperty(col, row, playerSpawn)) {
                                 room.setPlayerSpawn(new Point(col, row));
                             }
-                            if (room.hasProperty(col, row, playerReturn)) {
+                            else if (room.hasProperty(col, row, playerReturn)) {
                                 room.setPlayerReturn(new Point(col, row));
                             }
+                            else if (room.hasProperty(col, row, Constants.POTION_PROPERTY)) {
+                                EntityController.spawnPotion((String)room.getProperty(col, row, Constants.POTION_PROPERTY), room, col, row);
+                            }
+
                         }
 
 

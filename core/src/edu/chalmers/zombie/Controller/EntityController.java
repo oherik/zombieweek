@@ -1,8 +1,10 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.PotionType;
 import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.awt.*;
@@ -244,4 +246,26 @@ public class EntityController {
                     "\nInternal error message: " + e.getMessage());
         }
     }
+
+
+    public static void spawnPotion(String typeName, Room room, int x, int y){
+        spawnPotion(PotionType.valueOf(typeName), room, x, y);
+    }
+
+    public static void spawnPotion(PotionType type, Room room, int x, int y){
+        switch(type){
+            case HEALTH:
+                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-health")), room.getWorld(), x, y));
+                break;
+            case SPEED:
+                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-speed")), room.getWorld(), x, y));
+                break;
+            default:
+                //TODO randomize?
+                break;
+        }
+
+
+    }
+
 }

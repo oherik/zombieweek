@@ -106,7 +106,7 @@ public class Player extends Entity implements CreatureInterface {
         fixDef.restitution = 0;
         fixDef.friction = .8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+        fixDef.filter.maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
 
         //Set body
         super.setBody(bodyDef, fixDef);
@@ -149,7 +149,16 @@ public class Player extends Entity implements CreatureInterface {
         getBody().applyForce(force, getBody().getLocalCenter(), true);
     }
 
+    public void setLegPower(int  legPower){
+        this.legPower = legPower;
+        speed = legPower;
+        updateSpeed();
 
+    }
+
+    public int getLegPower(){
+        return legPower;
+    }
     /**
      * Moves player
      * @param direction Direction to move in
