@@ -22,6 +22,12 @@ public class Constants {
     public static final String POTION_PROPERTY = "potion";
     public static final String BOOK_PROPERTY = "book";
 
+    public static final String ZOMBIE_SPAWN = "zombie_spawn";
+    public static final String BOOK_SPAWN = "book";
+    public static final String PLAYER_SPAWN = "player_spawn";
+    public static final String PLAYER_RETURN = "player_return";
+
+
     //Kollisionshantering
     public static final short COLLISION_PLAYER= 2;
     public static final short COLLISION_ZOMBIE = 4;

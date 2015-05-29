@@ -1,14 +1,8 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Room;
-import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.PotionType;
-import edu.chalmers.zombie.utils.ResourceManager;
-
-import java.awt.*;
 
 /**
  * Handles the calculations that has to do with the zombies, the player, books, etc

@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
@@ -89,7 +90,7 @@ public class MapController {
         }
         gameModel.setCurrentRoomIndex(roomIndex);
         gameModel.clearBookList();
-        PhysicsController.traverseRoomIfNeeded(getRoom());
+        SpawnController.traverseRoomIfNeeded(getRoom());
         if(oldRoomIndex>roomIndex){
             if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getRoom().getPlayerSpawn());
@@ -291,7 +292,7 @@ public class MapController {
             Player player = GameModel.getInstance().getPlayer();
 
             /* ------ Update physics ------ */
-            PhysicsController.traverseRoomIfNeeded(getRoom());
+            SpawnController.traverseRoomIfNeeded(getRoom());
 
             /* ------ Remove old entities ------ */
            // removeEntities();

@@ -9,16 +9,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
+import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
-import javafx.scene.Camera;
 
 import java.util.ArrayList;
 
 /**
  * Created by daniel on 5/28/2015.
  */
-public class Grenade extends Entity{
+public class Grenade extends Entity {
     private float targetX;
     private float targetY;
     private Vector2 originalPlayerPosition;
