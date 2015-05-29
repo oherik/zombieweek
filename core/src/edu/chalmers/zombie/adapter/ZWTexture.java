@@ -10,7 +10,9 @@ public class ZWTexture {
     public ZWTexture(String filePath){
         texture = new Texture(filePath);
     }
+    public ZWTexture(ZWPixmap zwPixmap){texture = new Texture(zwPixmap.getPixmap());}
     public Texture getTexture(){
         return texture;
     }
+
 }

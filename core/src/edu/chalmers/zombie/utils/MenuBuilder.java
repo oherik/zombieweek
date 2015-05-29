@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
+import edu.chalmers.zombie.adapter.ZWClickAction;
+import edu.chalmers.zombie.adapter.ZWImageButton;
 import edu.chalmers.zombie.controller.AudioController;
 import edu.chalmers.zombie.controller.MenuController;
 import edu.chalmers.zombie.model.GameModel;
@@ -38,6 +40,7 @@ public class MenuBuilder {
         BitmapFont font = new BitmapFont(); //sets font to 15pt Arial, if we want custom font -> via constructor
         skin.add("default", font);
 
+        //TODO: new ZWPixmap((int)(Gdx.graphics.getWidth()/4),(int)(Gdx.graphics.getHeight()/10));
         //Creating a button texture
         Pixmap pixmap = new Pixmap((int)(Gdx.graphics.getWidth()/4),(int)(Gdx.graphics.getHeight()/10), Pixmap.Format.RGB888);
         pixmap.setColor(Color.WHITE); //button color
@@ -46,6 +49,7 @@ public class MenuBuilder {
         //Adding background to button
         skin.add("background",new Texture(pixmap));
 
+        //TODO: ZWSkin.createButtons();
         //Create buttons
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
@@ -73,6 +77,9 @@ public class MenuBuilder {
         GameModel.getInstance().res.loadTexture("audio-on","core/assets/Images/audioOn.png");
         GameModel.getInstance().res.loadTexture("settings","core/assets/Images/settings.png");
 
+        //ZWImageButton.setImageUp(Texture);
+
+        //TODO: ZWImageButton.setImageUp(ZWTexture);
         settingsButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("settings")));
         soundButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(GameModel.getInstance().res.getTexture("audio-on")));
 
@@ -103,6 +110,7 @@ public class MenuBuilder {
         return soundAndSettingStage;
     }
 
+
     /**
      * Sets up the pause menu
      */
@@ -123,6 +131,7 @@ public class MenuBuilder {
 
         table.setFillParent(true);
         pauseStage.addActor(table);
+
 
         mainMenuButton.addListener(new ClickListener() {
             @Override
