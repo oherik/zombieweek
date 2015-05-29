@@ -53,6 +53,19 @@ public class ZWBody {
         bodyDef.linearDamping = linearDampening;
         bodyDef.angularDamping = angularDampening;
     }
+    public void createBodyDef(boolean dynamic, float x, float y, float linearDampening, float angularDampening, boolean bullet){
+        this.bodyDef = new BodyDef();
+        if(dynamic) {
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+        }
+        else {
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+        }
+        bodyDef.position.set(x,y);
+        bodyDef.linearDamping = linearDampening;
+        bodyDef.angularDamping = angularDampening;
+        bodyDef.bullet = bullet;
+    }
 
     public void setBodyDefPosition(float x, float y){
         if(  this.bodyDef == null)
@@ -162,4 +175,23 @@ public class ZWBody {
         this.body.setTransform(vector.getLibVector(),rotation);
     }
 
+    public void setAngularDamping(float angularDamping) {
+
+        body.setAngularDamping(angularDamping);
+    }
+
+    public float getAngularVelocity() {
+
+        return body.getAngularVelocity();
+    }
+
+    public void applyAngularImpulse(int impulse, boolean wake) {
+
+        body.applyAngularImpulse(impulse, wake);
+    }
+
+    public void applyForceToCenter(float x, float y, boolean wake) {
+
+        body.applyForceToCenter(x, y, wake);
+    }
 }

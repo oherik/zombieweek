@@ -1,22 +1,12 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.ZombieType;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -25,23 +15,16 @@ import java.util.ArrayList;
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 
-    private int speed;
+    private int speed, angularSpeed, damage, hp;
     private float radius;
     private ZombieType type;
-    private boolean isKnockedOut;
-    private boolean isAggressive;
-    private boolean isMoving;
-    private Vector2 force;
-    private Vector2 point;
-    //private Sprite sprite;
-    private Point position;
+    private boolean isKnockedOut, isMoving, isAggressive;
+    private Vector force, point;
+    private Point position, nextPathTile;
     private MapController mapController;
-    private int hp;
-    private Point nextPathTile;
     private long timeSinceLastPath;
-    private int angularSpeed;
     private ArrayList<Point> path;
-    private int damage;
+
 
     /**
      * Creates a new zombie
@@ -52,12 +35,12 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * @param x     The zombie's x coordinate
      * @param y     The zombie's y coordinate
      */
-    public Zombie(Texture walkingTexture, ZWTexture stillTexture, Texture deadTexture, World world, float x, float y){
+    public Zombie(ZWTexture walkingTexture, ZWTexture stillTexture, ZWTexture deadTexture, ZWWorld world, float x, float y){
         super(walkingTexture, world, x, y);
 
         if(walkingTexture == null) {
             walkingTexture = GameModel.getInstance().res.getTexture("zombie");
-            setSprite(new Sprite(walkingTexture));
+            setSprite(new ZWSprite(walkingTexture));
         }
         if(stillTexture == null){
             stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
@@ -72,37 +55,24 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         getAnimator().addStillFrame(deadFrame[0]);
 
 
-        int width = Constants.TILE_SIZE;
-        int height = Constants.TILE_SIZE;
-        //Load body def
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x+0.5f,y+0.5f);
-        bodyDef.linearDamping = 20f;
-        bodyDef.angularDamping = 20f;
+        short categoryBits = Constants.COLLISION_ZOMBIE;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER |
+                Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
 
-        //Load shape
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
-
-        //Load fixture def
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = 0;
-        fixDef.friction = .8f;
-        fixDef.filter.categoryBits = Constants.COLLISION_ZOMBIE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER | Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+        ZWBody body = new ZWBody();
+        body.createBodyDef(true, x+0.5f, y+0.5f, 20f, 20f);
+        body.setFixtureDef(0.8f, 0, 1, 1, categoryBits, maskBits, false);
 
         //Set vectors
-        force = new Vector2(0,0);
-        point = new Vector2(0,0);
+        force = new Vector(0,0);
+        point = new Vector(0,0);
 
+        //Set position
         position = new Point((int)x,(int)y);
         
         //Set body
-        super.setBody(bodyDef, fixDef);
-        super.getBody().setUserData(this);
+        super.setBody(body);
+                super.getBody().setUserData(this);
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
@@ -118,8 +88,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         timeSinceLastPath = System.currentTimeMillis();
 
         isAggressive = false;
-
-
     }
 
     /**
@@ -220,8 +188,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         this.type = type;
     }
 
-    //public abstract Vector2 getVelocity();
-
     public abstract void attack();
 
     public void setZombiePosition(Point pos) {
@@ -240,17 +206,12 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      */
     public void setForceY(int speed) {
 
-        force.y = speed;
+        force.setY(speed);
     }
 
     public void setForceX(int speed) {
 
-        force.x = speed;
-    }
-
-    public void remove(Zombie zombie) {
-
-        //TODO: remove zombie
+        force.setX(speed);
     }
 
     public void setDetectionRadius(float radius) {
@@ -263,92 +224,14 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return radius;
     }
 
-    public Vector2 getForce() {
+    public Vector getForce() {
 
         return force;
     }
 
-    public Vector2 getPoint() {
+    public Vector getPoint() {
 
         return point;
-    }
-
-    //@Override
-    public void moveToPlayer(PathAlgorithm path) {
-
-
-        //point = new Vector2(playerPosition.x, playerPosition.y);
-
-        Point zombiePosition = getZombiePosition();
-        Point playerPosition = mapController.getPlayerPosition();
-
-       // setSpeed(80);
-        setDetectionRadius(10);
-
-
-/*
-        for (int i = 0; i < (MapController.getPath(zombiePosition, playerPosition).size() - 1); i++) {
-
-        Vector2 direction = new Vector2(playerPosition.x - zombiePosition.x, playerPosition.y - zombiePosition.y);
-
-
-        ArrayList<Point> pathToPlayer = MapController.getPath(zombiePosition, playerPosition);
-
-        if(pathToPlayer!=null && super.getBody() != null) {
-
-            zombiePosition = new Point(Math.round(super.getX()), Math.round(super.getY()));
-        }
-
-            if (playerPosition.x == zombiePosition.x && playerPosition.y == zombiePosition.y) {
-
-                // TODO: attack
-            } else if (playerPosition.y > zombiePosition.y && playerPosition.x == zombiePosition.x) {
-
-                setForceY(speed);
-                setForceX(0);
-            } else if (playerPosition.x > zombiePosition.x && playerPosition.y == zombiePosition.y) {
-
-                setForceY(0);
-                setForceX(speed);
-            } else if (playerPosition.x < zombiePosition.x && playerPosition.y == zombiePosition.y) {
-
-                setForceY(0);
-                setForceX(-speed);
-            } else if (zombiePosition.y < playerPosition.y && playerPosition.x == zombiePosition.x) {
-
-                setForceY(-speed);
-                setForceX(0);
-            } else if (playerPosition.y > zombiePosition.y && playerPosition.x > zombiePosition.x) {
-
-                setForceY(speed);
-                setForceX(speed);
-            } else if (playerPosition.y < zombiePosition.y && playerPosition.x > zombiePosition.x) {
-
-                setForceY(-speed);
-                setForceX(speed);
-            } else if (playerPosition.y > zombiePosition.y && playerPosition.x < zombiePosition.x) {
-
-                setForceY(speed);
-                setForceX(-speed);
-            } else if (playerPosition.y < zombiePosition.y && playerPosition.x < zombiePosition.x) {
-
-                setForceY(-speed);
-                setForceX(-speed);
-            } else {
-                // TODO: some exception management
-            }
-
-            Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, radius);
-            Circle pcircle = new Circle(playerPosition.x, playerPosition.y, radius);
-
-            if (super.getBody() != null) {
-
-                if (zcircle.overlaps(pcircle)) {
-
-                    super.getBody().applyForce(force, point, !isKnockedOut);
-                    isMoving = true;
-                }
-            }*/
     }
 
     /**
@@ -357,7 +240,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     @Override
     public void knockOut() {
         isKnockedOut = true;
-        getAnimator().setCurrentStillFrame(1);
     }
 
     public boolean isKnockedOut(){
@@ -387,8 +269,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         return mapController;
     }
-
-    public abstract Zombie spawn(World world, int x, int y);
 
     /**
      * @return  The next tile the zombie should traverse to. Add 0.5 to x and y for the center of the tile

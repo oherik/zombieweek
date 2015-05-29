@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.math.Vector2;
 
 /** An adapter class for libGDX's Vector2
+ * Modified by Neda
  */
 public class Vector {
     private Vector2 vector;
@@ -76,7 +77,8 @@ public class Vector {
         return this;
     }
 
-    public void scl(float scale){
+    public void scl(float scale) {
         this.vector.scl(scale);
     }
+
 }
