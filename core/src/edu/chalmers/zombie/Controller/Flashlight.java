@@ -3,7 +3,6 @@ package edu.chalmers.zombie.controller;
 /**
  * Created by daniel on 5/19/2015.
  */
-import com.badlogic.gdx.physics.box2d.*;
 import com.sun.istack.internal.NotNull;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
@@ -11,7 +10,7 @@ import edu.chalmers.zombie.utils.Constants;
 import java.util.ArrayList;
 
 public class Flashlight {
-    private World world;
+    private ZWWorld world;
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
     private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
     private Vector playerPosition = new Vector();
@@ -20,7 +19,7 @@ public class Flashlight {
     private boolean foundFixture;
     private ArrayList<Float> collisionPoints = new ArrayList<Float>();
     private float direction;
-    private RayCastCallback callback = createCallback();
+    private ZWRayCastCallback callback = createCallback();
     private float width;
     private int numberOfRays;
     private float length;
@@ -30,7 +29,7 @@ public class Flashlight {
     private float[] corners = new float[8];
     private float lengthFraction;
 
-    public Flashlight(@NotNull World world) throws NullPointerException{
+    public Flashlight(@NotNull ZWWorld world) throws NullPointerException{
         if (world == null){
             throw new NullPointerException("The world is null");
         }
@@ -40,7 +39,7 @@ public class Flashlight {
         lengthFraction = 0.75f;
         initializeRays();
     }
-    public Flashlight(@NotNull World world, float width, int numberOfRays, float length, float lengthFraction)throws NullPointerException, IllegalArgumentException{
+    public Flashlight(@NotNull ZWWorld world, float width, int numberOfRays, float length, float lengthFraction)throws NullPointerException, IllegalArgumentException{
         if (world == null){
             throw new NullPointerException("The world is null");
         }
@@ -55,7 +54,7 @@ public class Flashlight {
         initializeRays();
     }
     public void draw(ZWBatch batch){
-        world = GameModel.getInstance().getRoom().getWorld().getWorld();
+        world = GameModel.getInstance().getRoom().getWorld();
         clearAll();
         calculateLength();
         fetchDirection();
@@ -116,11 +115,11 @@ public class Flashlight {
     }
 
     private Vector lengthenRay(Vector origin, Vector end,float dist){
-        float dy = origin.y-end.y;
-        float dx = origin.x-end.x;
+        float dy = origin.getY()-end.getY();
+        float dx = origin.getX()-end.getX();
         float dl= (float)(Math.sqrt(dy*dy+dx*dx));
-        float y = end.y - dy*dist/dl;
-        float x = end.x - dx*dist/dl;
+        float y = end.getY() - dy*dist/dl;
+        float x = end.getX() - dx*dist/dl;
         return new Vector(x,y);
     }
     private void calculateCollisionPoints(){
@@ -156,7 +155,7 @@ public class Flashlight {
         float maxY = 0;
         maxYIndex = -1;
         for(int i = 0; i<endPoints.size(); i++){
-            float currentY = endPoints.get(i).y;
+            float currentY = endPoints.get(i).getY();
             if(currentY>maxY){
                 maxY = currentY;
                 maxYIndex = i;
@@ -167,26 +166,26 @@ public class Flashlight {
         float windowWidth = ZWGameEngine.getWindowWidth();
         float windowHeight = ZWGameEngine.getWindowHeight();
         int tileSize = Constants.TILE_SIZE;
-        corners[0] = playerPosition.x - windowWidth/(tileSize*2);
-        corners[1] = windowHeight/tileSize + playerPosition.y - windowHeight/(tileSize*2);       //Top left
-        corners[2] = playerPosition.x - windowWidth/(tileSize*2);
-        corners[3] = playerPosition.y - windowHeight/(tileSize*2);                          //Bottom left
-        corners[4] = windowWidth/tileSize+playerPosition.x - windowWidth/(tileSize*2);
-        corners[5] = playerPosition.y - windowHeight/(tileSize*2);           //Bottom right
-        corners[6] = windowWidth/tileSize +playerPosition.x - windowWidth/(tileSize*2);
-        corners[7] = windowHeight/tileSize + playerPosition.y - windowHeight / (tileSize*2); //Top right
+        corners[0] = playerPosition.getX() - windowWidth/(tileSize*2);
+        corners[1] = windowHeight/tileSize + playerPosition.getY() - windowHeight/(tileSize*2);       //Top left
+        corners[2] = playerPosition.getX() - windowWidth/(tileSize*2);
+        corners[3] = playerPosition.getY() - windowHeight/(tileSize*2);                          //Bottom left
+        corners[4] = windowWidth/tileSize+playerPosition.getX() - windowWidth/(tileSize*2);
+        corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
+        corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
+        corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
 
     }
     private float[] createArrayOfVertices(){
         collisionPoints.add(corners[0]);
         collisionPoints.add(corners[1]);
         for(int i = maxYIndex; i >= 0; i--) {
-            collisionPoints.add(endPoints.get(i).x);
-            collisionPoints.add(endPoints.get(i).y);
+            collisionPoints.add(endPoints.get(i).getX());
+            collisionPoints.add(endPoints.get(i).getY());
         }
         for(int i =endPoints.size()-1; i >= maxYIndex; i--) {
-            collisionPoints.add(endPoints.get(i).x);
-            collisionPoints.add(endPoints.get(i).y);
+            collisionPoints.add(endPoints.get(i).getX());
+            collisionPoints.add(endPoints.get(i).getY());
         }
 
         for(float fl: corners)
@@ -219,17 +218,17 @@ public class Flashlight {
         light.setAlpha(0.2f);
         return light;
     }
-    private RayCastCallback createCallback(){
-        RayCastCallback returnCallback = new RayCastCallback() {
+    private ZWRayCastCallback createCallback(){
+        ZWRayCastCallback returnCallback = new ZWRayCastCallback() {
             @Override
-            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-                if (fixture.getFilterData().categoryBits ==
-                        Constants.COLLISION_OBSTACLE || fixture.getFilterData().categoryBits == Constants.COLLISION_ZOMBIE){
+            public float reportRayFixture(ZWFixture fixture, Vector point, Vector normal, float fraction) {
+                if (fixture.getCategoryBits()== Constants.COLLISION_OBSTACLE ||
+                        fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
                     if (fraction < currentFraction) {
                         currentFraction = fraction;
                         collisionPoint.set(point);
                     }
-                    foundFixture =  true;
+                    foundFixture = true;
                 }
                 return 1;
             }
