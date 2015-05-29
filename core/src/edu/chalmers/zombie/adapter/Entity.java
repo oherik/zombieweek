@@ -1,20 +1,11 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Animator;
 import edu.chalmers.zombie.utils.Constants;
 
-import java.awt.*;
-
 /**
  * A class which holds a reference to a body and a sprite, as well as the world in which the body resides.
+ * Modified by Neda
  */
 public abstract class Entity {
 
@@ -30,7 +21,7 @@ public abstract class Entity {
      * Creates an entity without a sprite
      * @param world The world in which to create it
      */
-    public Entity(World world){
+    public Entity(ZWWorld world){
         this.world = world;
     }
 
@@ -41,7 +32,7 @@ public abstract class Entity {
      * @param x         The sprite's x coordinate
      * @param y         The sprite's y coordinate
      */
-    public Entity(Sprite sprite, World world, float x, float y){
+    public Entity(ZWSprite sprite, ZWWorld world, float x, float y){
         this(world);
         this.sprite = sprite;
         sprite.setX(x);
@@ -49,7 +40,7 @@ public abstract class Entity {
     }
 
     public Entity(ZWTexture texture, ZWWorld world, float x, float y){
-        this(ZWWorld);
+        this(world);
         animator = new Animator();
         isAnimated = true;
 
@@ -62,8 +53,8 @@ public abstract class Entity {
     }
 
     public void applyLinearImpulse(Vector force){
-        Vector2 vectorForce = new Vector2(force.getX(), force.getY());
-        Vector2 bodyPoint = getBody().getWorldCenter();
+        Vector vectorForce = new Vector(force.getX(), force.getY());
+        Vector bodyPoint = getBody().getWorldCenter();
         getBody().applyLinearImpulse(vectorForce, bodyPoint, true);
     }
 
@@ -77,10 +68,10 @@ public abstract class Entity {
      * @param bodyDef   The body's body definition
      * @param fixDef    The body's fixture definition
      */
-    public void setBody(BodyDef bodyDef, FixtureDef fixDef ){
+    /*public void setBody(BodyDef bodyDef, FixtureDef fixDef ){
         this.body = world.createBody(bodyDef);
         this.body.createFixture(fixDef);
-    }
+    }*/
 
     /**
      * Scales the sprite
@@ -94,7 +85,7 @@ public abstract class Entity {
     /**
      * @return The entity's body
      */
-    public Body getBody() {
+    public ZWBody getBody() {
         return body;
     }
 
@@ -102,7 +93,7 @@ public abstract class Entity {
      * Makes the body move linearly
      * @param velocity  The body's new velocity
      */
-    protected void setBodyVelocity(Vector2 velocity){
+    protected void setBodyVelocity(Vector velocity){
         this.body.setLinearVelocity(velocity);
     }
 
@@ -210,7 +201,7 @@ public abstract class Entity {
         return sprite.getWidth();
     }
 
-    public abstract Vector2 getVelocity(); //TODO empty
+    public abstract Vector getVelocity(); //TODO empty
 
     /**
      * Sets the entity's body
