@@ -1,6 +1,11 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
+import edu.chalmers.zombie.adapter.Vector;
+import edu.chalmers.zombie.adapter.ZWBody;
+import edu.chalmers.zombie.adapter.ZWSprite;
+import edu.chalmers.zombie.adapter.ZWWorld;
 import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -36,8 +41,6 @@ public class Book extends Entity {
      */
     public Book(float d, float x, float y, ZWWorld world, Vector initialVelocity) {
         super(world);
-        height = Constants.TILE_SIZE/2f;
-        width = Constants.TILE_SIZE/3f;
 
         //Set variables
         this.direction=d;
@@ -47,27 +50,14 @@ public class Book extends Entity {
         //Update position to be in front of player
         Vector position = getUpdatedPosition(x,y);
 
-        //Load body def
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position.x+0.5f,position.y+0.5f);
-        bodyDef.bullet = true;
-
-        //Load shape
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
-
-        //Load fixture def
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = 0;
-        fixDef.friction = 8f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE | Constants.COLLISION_DOOR;
+        ZWBody body = new ZWBody();
+        body.createBodyDef(true,x+0.5f,y+0.5f,0,0,true);
+        short categoryBits = Constants.COLLISION_PROJECTILE;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE | Constants.COLLISION_DOOR;
+        body.setFixtureDef(8f,0,1/3f,1/2f,categoryBits,maskBits,false);
 
         //Set body
-        super.setBody(bodyDef, fixDef);
+        super.setBody(body);
         speed = 7;
         omega= 20;  //TODO finns i entity?
         damage = 40;
@@ -76,7 +66,7 @@ public class Book extends Entity {
         setInMotion();
 
         //Load sprite
-        Sprite sprite = new Sprite(new Texture("core/assets/bookSprite.png"));
+        ZWSprite sprite = new ZWSprite(GameModel.getInstance().res.getTexture("book"));
         sprite.setSize(width, height);
         super.setSprite(sprite);
         super.scaleSprite(1f / Constants.TILE_SIZE);
@@ -111,7 +101,7 @@ public class Book extends Entity {
         }
 
     @Override
-    public Vector2 getVelocity() {
+    public Vector getVelocity() {
         return getBody().getLinearVelocity();
     }
 
@@ -126,7 +116,7 @@ public class Book extends Entity {
     }
 
     @Override
-    protected void setBodyVelocity(Vector2 velocity){
+    protected void setBodyVelocity(Vector velocity){
         super.setBodyVelocity(velocity);
     }
     @Override
@@ -140,11 +130,11 @@ public class Book extends Entity {
      * @return The new position for the book
      */
     //TODO move to EntityController
-    public Vector2 getUpdatedPosition(float x, float y){
+    public Vector getUpdatedPosition(float x, float y){
         float distance = 0f;
-        Vector2 position = new Vector2(x,y);
-        position.y = (float)(y + distance*Math.sin(direction + Constants.PI/2));
-        position.x = (float)(x + distance*Math.cos(direction + Constants.PI/2));
+        Vector position = new Vector(x,y);
+        position.setY((float)(y + distance*Math.sin(direction + Constants.PI/2)));
+        position.setX((float)(x + distance*Math.cos(direction + Constants.PI/2)));
 
         return position;
 

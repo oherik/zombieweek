@@ -43,6 +43,11 @@ public class GameModel {
         worldNeedsUpdate = true;
         soundOn = true;
         screenModel = new ScreenModel();
+        initializePlayerTextures();
+        initializePotionTextures();
+        initializeZombieTextures();
+        initializeProjectileTextures();
+        initializeSounds();
        }
 
     private void initializeZombieTextures(){
@@ -65,6 +70,10 @@ public class GameModel {
     private void initializePotionTextures(){
         res.loadTexture("potion-health", "core/assets/Images/healthpotion.png");
         res.loadTexture("potion-speed", "core/assets/Images/speedpotion.png");
+    }
+
+    private void initializeProjectileTextures(){
+        res.loadTexture("book", "core/assets/bookSprite.png");
     }
 
     private void initializeSounds(){

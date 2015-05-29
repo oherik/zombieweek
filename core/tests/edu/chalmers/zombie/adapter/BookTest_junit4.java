@@ -1,9 +1,6 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.utils.Direction;
+import edu.chalmers.zombie.model.Book;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
