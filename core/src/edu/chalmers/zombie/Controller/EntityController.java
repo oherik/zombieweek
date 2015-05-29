@@ -3,6 +3,7 @@ package edu.chalmers.zombie.controller;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PotionType;
 import edu.chalmers.zombie.utils.ResourceManager;

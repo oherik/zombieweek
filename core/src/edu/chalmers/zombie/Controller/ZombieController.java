@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ZombieType;

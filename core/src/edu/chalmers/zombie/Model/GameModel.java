@@ -1,7 +1,5 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;    //TODO debug
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
