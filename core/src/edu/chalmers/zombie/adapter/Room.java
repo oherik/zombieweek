@@ -1,8 +1,8 @@
 package edu.chalmers.zombie.adapter;
 
 import edu.chalmers.zombie.controller.ContactController;
+import edu.chalmers.zombie.controller.controller_adapters.ZWContactListener;
 import edu.chalmers.zombie.utils.Constants;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -18,8 +18,6 @@ public class Room {
     private ArrayList zombies, potions;
     private boolean hasBeenTraversed;
     Point playerSpawn, playerReturn;
-    //TiledMapTileLayer metaLayer;
-    //TiledMapImageLayer topLayer, bottomLayer;
     private short[][] collisionTileGrid;
 
     /**
@@ -39,7 +37,7 @@ public class Room {
 
         //Create the world
         world = new ZWWorld();
-        world.setContactListener(new ContactController());
+        world.setContactListener(new ZWContactListener());
         hasBeenTraversed = false;
 
         zombies = new ArrayList<Zombie>();
