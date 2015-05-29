@@ -50,6 +50,11 @@ public class Renderer {
 
     }
 
+    public ZWBatch getBatch(){
+        return new ZWBatch(mapRenderer.getBatch());
+    }
+
+
     public void renderBox2DDebug(Room room){
         debugRenderer.render(room.getWorld().getWorld(), camera.combined);
         camera.update();
