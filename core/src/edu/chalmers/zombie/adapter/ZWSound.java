@@ -12,6 +12,10 @@ public class ZWSound {
         sound = ZWGameEngine.newSound(path);
     }
 
+    public void play(){
+        sound.play();
+    }
+
     public void dispose(){
         sound.dispose();
     }

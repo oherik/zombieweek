@@ -1,6 +1,6 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.audio.Sound;
+import edu.chalmers.zombie.adapter.ZWSound;
 import edu.chalmers.zombie.model.GameModel;
 
 /**
@@ -15,7 +15,7 @@ public class AudioController {
      * Play sound
      * @param sound The sound that should be played
      */
-    public static void playSound(Sound sound){
+    public static void playSound(ZWSound sound){
         GameModel gameModel = GameModel.getInstance();
         if (gameModel.isSoundOn()){
             sound.play();
