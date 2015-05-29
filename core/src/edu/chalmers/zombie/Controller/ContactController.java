@@ -1,6 +1,5 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -8,7 +7,7 @@ import edu.chalmers.zombie.utils.Constants;
 /** A custom contact listener. It registers the different contacts and forward the commands to the other controllers.
  * Created by Erik on 2015-04-18.
  */
-public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener {
+public class ContactController {
     private GameModel gameModel;
     private MapController mapController;
     private EntityController entityController;
@@ -16,16 +15,14 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
     /**
      * Instantiates the contact listener.
      */
-    public ContactListener (){
+    public ContactController(){
         this.gameModel = GameModel.getInstance();
         this.mapController = new MapController();
         this.entityController = new EntityController();
     }
 
     /**
-     * This method decides what to do when two objects start colliding. Even though its name is ContactListener, not
-     * ContactController, it is in all regards a controller class and has thus been placed in the Controller package
-     * instead of in Utils
+     * This method decides what to do when two objects start colliding.
      *
      * There are several different contacts we are interested in. The first is if a book has struck a zombie. The second is
      * if the player collides with a book, which then, if appropriate, should be picked up. The third is if the player has
@@ -45,23 +42,23 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
      * be the same thing, but it's handled differently in Box2d. If the player has indeeed made contact with a door the
      * appropriate level is loaded via the map controller.
      *
-     * @param contact   The contact object between two objects
+     * @param fixtureA The first fixture
+     * @param fixtureB  The second fixture
      */
 
-    public void beginContact (Contact contact) {
+    public void beginContact (ZWFixture fixtureA, ZWFixture fixtureB) {
         gameModel.clearEntitiesToRemove();
-        switch(contact.getFixtureB().getFilterData().categoryBits) {
+        switch(fixtureB.getCategoryBits()) {
             case Constants.COLLISION_PROJECTILE://Check if the fixture is a projectile, e.g. a book
-                if(contact.getFixtureB().getBody().getUserData() instanceof Book){
-                    Book b = (Book) contact.getFixtureB().getBody().getUserData();
+                    Book b = (Book) fixtureB.getBodyUserData();
                     //Retrieve the book
-                    switch(contact.getFixtureA().getFilterData().categoryBits){
+                    switch(fixtureA.getCategoryBits()){
                         case Constants.COLLISION_PLAYER:
                             Player p = gameModel.getPlayer();
                             EntityController.pickUp(p, b);
                             break;
                         case Constants.COLLISION_ZOMBIE:
-                            Zombie z = (Zombie) contact.getFixtureA().getBody().getUserData();
+                            Zombie z = (Zombie) fixtureA.getBodyUserData();
                             EntityController.applyHit(z, b);
                             break;
                         case Constants.COLLISION_OBSTACLE:
@@ -73,10 +70,10 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                             break;
                     }
 
-                }
+
                                                             break;
             case (Constants.COLLISION_WATER):
-                switch(contact.getFixtureA().getFilterData().categoryBits){
+                switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
                         EntityController.increaseWaterTilesTouching(player);
@@ -85,7 +82,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 break;
 
             case (Constants.COLLISION_SNEAK):
-                switch(contact.getFixtureA().getFilterData().categoryBits){
+                switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
                         EntityController.increaseSneakTilesTouching(player);
@@ -94,22 +91,22 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 break;
 
             case (Constants.COLLISION_ZOMBIE):
-                switch(contact.getFixtureA().getFilterData().categoryBits) {
+                switch(fixtureA.getCategoryBits()) {
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
-                        Zombie zombie = (Zombie)contact.getFixtureA().getBody().getUserData();
+                        Zombie zombie = (Zombie)fixtureA.getBodyUserData();
                         ZombieController.attack(zombie, player);
                         break;
                     case Constants.COLLISION_PROJECTILE:
-                        Book book = (Book) contact.getFixtureB().getBody().getUserData();
-                        Zombie z = (Zombie) contact.getFixtureA().getBody().getUserData();
+                        Book book = (Book) fixtureB.getBodyUserData();
+                        Zombie z = (Zombie) fixtureA.getBodyUserData();
                         EntityController.applyHit(z, book);
 
                 }
 
             case (Constants.COLLISION_PLAYER):
                 Player player = gameModel.getPlayer();
-                switch(contact.getFixtureA().getFilterData().categoryBits){
+                switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_SNEAK:
                         EntityController.increaseSneakTilesTouching(player);
                         break;
@@ -117,18 +114,18 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                         EntityController.increaseWaterTilesTouching(player);
                         break;
                     case Constants.COLLISION_ZOMBIE:
-                        Zombie zombie = (Zombie)contact.getFixtureA().getBody().getUserData();
+                        Zombie zombie = (Zombie) fixtureA.getBodyUserData();
                         ZombieController.attack(zombie, player);
                         break;
                     case Constants.COLLISION_POTION:
-                        Potion potion =  (Potion) contact.getFixtureA().getBody().getUserData();
+                        Potion potion =  (Potion) fixtureA.getBodyUserData();
                         PlayerController.pickUpPotion(player,potion);
                         break;
                 }
                 break;
             case (Constants.COLLISION_POTION):
-                Potion potion =  (Potion) contact.getFixtureB().getBody().getUserData();
-                switch(contact.getFixtureA().getFilterData().categoryBits) {
+                Potion potion =  (Potion) fixtureB.getBodyUserData();
+                switch(fixtureA.getCategoryBits()) {
                     case Constants.COLLISION_PLAYER:
                         PlayerController.pickUpPotion(gameModel.getPlayer(), potion);
                         break;
@@ -138,19 +135,20 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 
     /**
      * Called when two objects stop colliding.
-     * @param contact The contact object between two objects
+     * @param fixtureA The first fixture
+     * @param fixtureB  The second fixture
      */
-    public void endContact (Contact contact){
-        switch(contact.getFixtureB().getFilterData().categoryBits) {
+    public void endContact (ZWFixture fixtureA, ZWFixture fixtureB){
+        switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_WATER):
-                switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
+                switch (fixtureA.getCategoryBits()) {        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
                         EntityController.decreaseWaterTilesTouching(player);
                         break;
                 }
             case (Constants.COLLISION_SNEAK):
-                switch (contact.getFixtureA().getFilterData().categoryBits) {        //Not made as an if-statement if more collision alternatives are to be added
+                switch (fixtureA.getCategoryBits()) {        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
                         EntityController.decreaseSneakTilesTouching(player);
@@ -159,7 +157,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
 
             case (Constants.COLLISION_PLAYER):
                 Player player = gameModel.getPlayer();
-                switch(contact.getFixtureA().getFilterData().categoryBits){
+                switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_SNEAK:
                         EntityController.decreaseSneakTilesTouching(player);
                         break;
@@ -167,7 +165,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                        EntityController.decreaseWaterTilesTouching(player);
                         break;
                     case Constants.COLLISION_PROJECTILE:
-                        Book b = (Book) contact.getFixtureA().getBody().getUserData();
+                        Book b = (Book) fixtureA.getBodyUserData();
                         Player p = gameModel.getPlayer();
                         EntityController.pickUp(p, b);
                         break;
@@ -176,15 +174,16 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
      }
 
     /**
-     * Not used in the current version
-     * @param contact The contact object between two objects
+     * Called just before two fixtures collide
+     * @param fixtureA The first fixture
+     * @param fixtureB  The second fixture
      */
-    public  void preSolve(Contact contact, Manifold manifold){
-        switch(contact.getFixtureB().getFilterData().categoryBits) {
+    public  void preSolve(ZWFixture fixtureA, ZWFixture fixtureB){
+        switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_PLAYER):
-                switch (contact.getFixtureA().getFilterData().categoryBits){        //Not made as an if-statement if more collision alternatives are to be added
+                switch (fixtureA.getCategoryBits()){        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_DOOR:
-                             CollisionObject door = (CollisionObject) contact.getFixtureA().getUserData();
+                             CollisionObject door = (CollisionObject) fixtureA.getUserData();
                             int levelToLoad = Integer.parseInt(door.getProperty());
                           mapController.loadRoom(levelToLoad);
                         break;
@@ -192,9 +191,9 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 }
                 break;
             case (Constants.COLLISION_DOOR):
-                switch(contact.getFixtureA().getFilterData().categoryBits){
+                switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_PLAYER:
-                            CollisionObject door = (CollisionObject) contact.getFixtureB().getUserData();
+                            CollisionObject door = (CollisionObject) fixtureB.getUserData();
                           int levelToLoad = Integer.parseInt(door.getProperty());
                          mapController.loadRoom(levelToLoad);
                         break;
@@ -202,13 +201,7 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
                 break;
         }
     }
-    /**
-     * Not used in the current version
-     * @param contact The contact object between two objects
-     */
-    public  void postSolve(Contact contact,ContactImpulse impulse){
 
-    }
 
 
 
