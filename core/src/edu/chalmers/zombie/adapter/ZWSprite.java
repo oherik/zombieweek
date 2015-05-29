@@ -59,4 +59,6 @@ public class ZWSprite {
 
         sprite.setRegion(x, y, width, height);
     }
+
+    public void setRegion(ZWTextureRegion textureRegion){sprite.setRegion(textureRegion.getTextureRegion());}
 }
