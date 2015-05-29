@@ -67,11 +67,11 @@ public class EntityController {
         Point position = mapController.getPlayerBufferPosition();
         Player player;
         try {
-            player = new Player(res.getTexture("emilia"), gameModel.getRoom().getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"), gameModel.getRoom().getWorld().getWorld(), position.x, position.y);
         }catch (NullPointerException e){
             System.err.println("No buffered position found. Placing player at room spawn.");
             position = GameModel.getInstance().getRoom().getPlayerSpawn();
-            player = new Player(res.getTexture("emilia"),gameModel.getRoom().getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"),gameModel.getRoom().getWorld().getWorld(), position.x, position.y);
         }
         setPlayer(player); //TODO test);
         return player;
@@ -262,10 +262,10 @@ public class EntityController {
     public static void spawnPotion(PotionType type, Room room, int x, int y){
         switch(type){
             case HEALTH:
-                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-health")), room.getWorld(), x, y));
+                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-health")), room.getWorld().getWorld(), x, y));
                 break;
             case SPEED:
-                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-speed")), room.getWorld(), x, y));
+                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-speed")), room.getWorld().getWorld(), x, y));
                 break;
             default:
                 //TODO randomize?

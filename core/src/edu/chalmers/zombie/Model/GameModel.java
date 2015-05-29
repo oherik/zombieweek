@@ -116,7 +116,7 @@ public class GameModel {
      * Only for debug
      */
     private void addTestPlayer(){
-        player = new Player(res.getTexture("player"), rooms.get(0).getWorld(),0,0);
+        player = new Player(res.getTexture("player"), rooms.get(0).getWorld().getWorld(),0,0);
 
     }
 
@@ -124,7 +124,7 @@ public class GameModel {
      * Only for debug
      */
     private void addTestZombie(){
-        zombie = new ZombieTest(rooms.get(0).getWorld(),2,2);
+        zombie = new ZombieTest(rooms.get(0).getWorld().getWorld(),2,2);
         getRoom().addZombie(zombie);
     }
 

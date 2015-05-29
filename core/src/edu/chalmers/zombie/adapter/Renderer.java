@@ -16,7 +16,7 @@ public class Renderer {
     private Box2DDebugRenderer debugRenderer;
 
     public Renderer(Room room, float width, float height){
-        mapRenderer = new OrthogonalTiledMapRenderer(room.getMap(), 1f / (float) Constants.TILE_SIZE);
+        mapRenderer = new OrthogonalTiledMapRenderer(room.getMap().getTiledMap(), 1f / (float) Constants.TILE_SIZE);
         camera = new OrthographicCamera(width,height);
         debugRenderer = new Box2DDebugRenderer();
     }
@@ -44,12 +44,12 @@ public class Renderer {
     }
 
     public void updateRoom(Room room, float width, float height){
-        mapRenderer = new OrthogonalTiledMapRenderer(room.getMap(),1f / (float) Constants.TILE_SIZE);
+        mapRenderer = new OrthogonalTiledMapRenderer(room.getMap().getTiledMap(),1f / (float) Constants.TILE_SIZE);
 
     }
 
     public void renderBox2DDebug(Room room){
-        debugRenderer.render(room.getWorld(), camera.combined);
+        debugRenderer.render(room.getWorld().getWorld(), camera.combined);
         camera.update();
     }
 

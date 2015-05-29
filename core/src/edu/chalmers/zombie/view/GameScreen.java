@@ -207,7 +207,7 @@ public class GameScreen implements Screen{
         GameModel gameModel = GameModel.getInstance();
         mapController.updateRoomIfNeeded();
         setMapRenderer(gameModel.getRenderer().getMapRenderer());
-        setDisplayedWorld(gameModel.getRoom().getWorld());
+        setDisplayedWorld(gameModel.getRoom().getWorld().getWorld());
         Player player = gameModel.getPlayer();
 
         /* ------ Render the background color ------ */
@@ -339,7 +339,7 @@ public class GameScreen implements Screen{
             /* ------ Draw the box2d debug ------ */
             //gameModel.getRenderer().renderBox2DDebug(gameModel.getRoom()); //TODO debug
 
-            boxDebug.render(gameModel.getRoom().getWorld(),camera.combined);
+            boxDebug.render(gameModel.getRoom().getWorld().getWorld(),camera.combined);
 
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/

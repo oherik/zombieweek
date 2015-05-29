@@ -59,7 +59,7 @@ public class Flashlight {
         initializeRays();
     }
     public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
-        world = GameModel.getInstance().getRoom().getWorld();
+        world = GameModel.getInstance().getRoom().getWorld().getWorld();
         clearAll();
         calculateLength();
         fetchDirection();
