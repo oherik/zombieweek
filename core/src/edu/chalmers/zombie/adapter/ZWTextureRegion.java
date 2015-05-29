@@ -23,10 +23,5 @@ public class ZWTextureRegion {
     }
 
     public ZWTextureRegion(ZWTexture zwTexture){this.textureRegion.setTexture(zwTexture.getTexture());}
-    
-
-
-
-
 
 }

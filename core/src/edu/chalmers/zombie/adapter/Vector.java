@@ -71,6 +71,6 @@ public class Vector {
 
     public Vector add(Vector vector){
         this.vector.add(vector.getLibVector());
-
+        return this;
     }
 }
