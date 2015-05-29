@@ -20,7 +20,7 @@ public class ZWTexture {
         this.texture.getTextureData().prepare();
     }
 
-    public ZWPixmap consumePixmap(){
+    public ZWPixmap consumeZWPixmap(){
         return  (new ZWPixmap(this.texture.getTextureData().consumePixmap()));
     }
 
