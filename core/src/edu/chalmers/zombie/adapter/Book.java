@@ -1,9 +1,5 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
@@ -12,37 +8,21 @@ import edu.chalmers.zombie.utils.Constants;
  * Created by daniel on 4/21/2015.
  */
 public class Book extends Entity {
-    private Vector2 force;
+    private Vector force;
     private float direction;
     private int speed, omega, damage;
-    private Vector2 initialVelocity;
+    private Vector initialVelocity;
     private float width, height;
     private long timeCreated;
     private boolean onGround;
 
     public Book(float x, float y, Room room){
-        this(0,x,y,room.getWorld().getWorld(),new Vector2(0,0));
+        this(0,x,y,room.getWorld(),new Vector(0,0));
         speed = 0;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x+0.5f,y+0.5f);
-        bodyDef.bullet = true;
-
-        //Load shape
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
-
-        //Load fixture def
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = 0;
-        fixDef.friction = 8f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_PLAYER | Constants.COLLISION_DOOR | Constants.COLLISION_ACTOR_OBSTACLE;
-
-        //Set body
-        super.setBody(bodyDef, fixDef);
+        ZWBody body = new ZWBody();
+        body.createBodyDef(true, x+0.5f, y+0.5f, 0, 0, true);
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_PLAYER | Constants.COLLISION_DOOR | Constants.COLLISION_ACTOR_OBSTACLE;
+        body.setFixtureDef(8f, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), Constants.COLLISION_PROJECTILE, maskBits, false);
         getBody().setUserData(this);
     }
 
@@ -54,7 +34,7 @@ public class Book extends Entity {
      * @param world In which world to create the physical representation of the book
      * @param initialVelocity  The speed which to add to the throwing speed
      */
-    public Book(float d, float x, float y, World world, Vector2 initialVelocity) {
+    public Book(float d, float x, float y, ZWWorld world, Vector initialVelocity) {
         super(world);
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
@@ -62,10 +42,10 @@ public class Book extends Entity {
         //Set variables
         this.direction=d;
         this.initialVelocity = initialVelocity;
-        force = new Vector2(1,1); //if 0,0 setLength wont work
+        force = new Vector(1,1); //if 0,0 setLength wont work
 
         //Update position to be in front of player
-        Vector2 position = getUpdatedPosition(x,y);
+        Vector position = getUpdatedPosition(x,y);
 
         //Load body def
         BodyDef bodyDef = new BodyDef();
