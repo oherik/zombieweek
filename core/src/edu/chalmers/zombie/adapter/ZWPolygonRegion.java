@@ -10,8 +10,8 @@ public class ZWPolygonRegion {
 
     private PolygonRegion polygonRegion;
 
-    public ZWPolygonRegion(TextureRegion textureRegion, float[] vertices, short[] triangles){
-        polygonRegion = new PolygonRegion(textureRegion, vertices, triangles);
+    public ZWPolygonRegion(ZWTextureRegion textureRegion, float[] vertices, short[] triangles){
+        polygonRegion = new PolygonRegion(textureRegion.getTextureRegion(), vertices, triangles);
     }
     public PolygonRegion getPolygonRegion(){
         return polygonRegion;

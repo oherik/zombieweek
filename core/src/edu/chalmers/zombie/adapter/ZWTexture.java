@@ -11,8 +11,18 @@ public class ZWTexture {
         texture = new Texture(filePath);
     }
     public ZWTexture(ZWPixmap zwPixmap){texture = new Texture(zwPixmap.getPixmap());}
+    public ZWTexture(Texture texture){this.texture = texture;}
     public Texture getTexture(){
         return texture;
     }
+
+    public void prepare(){
+        this.texture.getTextureData().prepare();
+    }
+
+    public ZWPixmap consumeZWPixmap(){
+        return  (new ZWPixmap(this.texture.getTextureData().consumePixmap()));
+    }
+
 
 }

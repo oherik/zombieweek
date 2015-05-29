@@ -13,19 +13,18 @@ public class ZWBatch {
         spriteBatch = new SpriteBatch();
         polygonSpriteBatch = new PolygonSpriteBatch();
     }
-    public void spriteBatchBegin(){
+    public void begin(){
         spriteBatch.begin();
-    }
-    public void spriteBatchEnd(){
-        spriteBatch.end();
-    }
-    public void polygonSpriteBatchBegin(){
         polygonSpriteBatch.begin();
     }
-    public void polygonSpriteBatchEnd(){
+    public void end(){
+        spriteBatch.end();
         polygonSpriteBatch.end();
     }
     public void drawPolygonRegion(ZWPolygonRegion ZWPolygonRegion, float x, float y){
         polygonSpriteBatch.draw(ZWPolygonRegion.getPolygonRegion(), x, y);
+    }
+    public SpriteBatch getSpriteBatch(){
+        return spriteBatch;
     }
 }
