@@ -1,41 +1,32 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.awt.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Stores the game data. The model implements the singleton pattern
  * Created by Tobias on 15-04-02.
+ * Modified by Erik
  */
 public class GameModel {
 
     private static GameModel instance = new GameModel();
+    public static ResourceManager res;
     private Player player;
-    private Zombie zombie;
+    private int currentLevel, currentRoom, highestCompletedLevel, highestCompletedRoom;
     private ArrayList<Room> rooms;
     private ArrayList<Level> levels;
-    private int currentLevel;
-    private int currentRoom;
     private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
-    private Map entitiesToRemove;
     private ArrayList<CollisionObject> collisionObjects;
-    private String metaLayerName;
-    private  boolean worldNeedsUpdate; //If a map change has been called
+    private boolean worldNeedsUpdate, stepping, flashlightEnabled = false, soundOn;
+    private Map entitiesToRemove;
     private Point playerBufferPosition; //Can't alter the player position directly in the world step
-    public static ResourceManager res;
-    private AtomicBoolean stepping;
     private GameState gameState; //the state of the game
-    private int highestCompletedLevel;
-    private boolean flashlightEnabled = false;
-    private int highestCompletedRoom;
-    private boolean soundOn;
     private Renderer renderer;
     private ScreenModel screenModel;
 
@@ -43,11 +34,17 @@ public class GameModel {
      * Initializes the game model
      */
     private GameModel(){
-        metaLayerName = "meta";
         currentRoom = 0;   //TODO test
         res = new ResourceManager();
-        res.loadTexture("player","core/assets/player_professional_final_version.png");
-        res.loadTexture("emilia","core/assets/Images/emilia.png");   //Set still image frame, TODO: should get still frame from constructor
+        stepping=false;
+        rooms = new ArrayList<Room>();
+        entitiesToRemove = new HashMap<Room, ArrayList<Entity>>();
+        worldNeedsUpdate = true;
+        soundOn = true;
+        screenModel = new ScreenModel();
+       }
+
+    private void initializeZombieTextures(){
         res.loadTexture("zombie-still", "core/assets/Images/zombie-still.png");
         res.loadTexture("zombie-dead", "core/assets/Images/zombie-dead.png");
         res.loadTexture("zombie", "core/assets/Images/zombie.png");
@@ -57,32 +54,32 @@ public class GameModel {
         res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
         res.loadTexture("zombie-it-dead", "core/assets/Images/zombie-it-dead.png");
         res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
+    }
 
+    private void initializePlayerTextures(){
+        res.loadTexture("player","core/assets/player_professional_final_version.png");
+        res.loadTexture("emilia","core/assets/Images/emilia.png");
+    }
+
+    private void initializePotionTextures(){
         res.loadTexture("potion-health", "core/assets/Images/healthpotion.png");
         res.loadTexture("potion-speed", "core/assets/Images/speedpotion.png");
+    }
 
+    private void initializeSounds(){
         res.loadSound("throw", "core/assets/Audio/Sound_effects/throw_book.mp3");
         res.loadSound("menu_hover", "core/assets/Audio/Sound_effects/menu_hover.mp3");
         res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");
         res.loadSound("pick_up_book","core/assets/Audio/Sound_effects/pick_up_book.mp3");
         res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
+    }
 
-
-
-        stepping=new AtomicBoolean(false);
-
-        rooms = new ArrayList<Room>();
-        entitiesToRemove = new HashMap<Room, ArrayList<Entity>>();
-        worldNeedsUpdate = true;
-        //addTestLevel();                                 //TODO debug
-        //addTestLevel_2();                                 //TODO debug
-        //addTestPlayer();                                //TODO debug
-       // addTestZombie();                                //TODO debug
-
-        soundOn = true;
-
-        screenModel = new ScreenModel();
-       }
+    /**
+     * @return  The current instance of the game model
+     */
+    public static GameModel getInstance( ) {
+        return instance;
+    }
 
   
     /**
@@ -91,49 +88,12 @@ public class GameModel {
     public Renderer getRenderer(){
         return this.renderer;
     }
-    /**
-     * Only for debug
-     *//*
-    private void addTestLevel(){
-        rooms.add(new Room("core/assets/Map/Test_v2.tmx", "core/assets/Map/testmap.png", "core/assets/Map/testmap_top.png"));
-    }
 
-    public void se*/
+    /**
+     * Sets the game's renderer
+     */
 
     public void setRenderer(Renderer renderer){this.renderer=renderer;}
-
-    /**
-     * Only for debug
-     */
-    /*
-    private void addTestLevel_2(){
-        rooms.add(new Room("core/assets/Map/Test_world_2.tmx", "core/assets/Map/Test_world_2_bottom.png", "core/assets/Map/Test_world_2_top.png"));
-    }
-    */
-    /**
-     * Only for debug
-     */
-    private void addTestPlayer(){
-        player = new Player(res.getTexture("player"), rooms.get(0).getWorld().getWorld(),0,0);
-
-    }
-
-    /**
-     * Only for debug
-     */
-    private void addTestZombie(){
-        zombie = new ZombieTest(rooms.get(0).getWorld().getWorld(),2,2);
-        getRoom().addZombie(zombie);
-    }
-
-
-
-    /**
-     * @return  The current instance of the game model
-     */
-    public static GameModel getInstance( ) {
-        return instance;
-    }
 
     /**
      * @return  The player
@@ -150,9 +110,6 @@ public class GameModel {
         this.player = player;
     }
 
-    public Zombie getZombie(){
-        return zombie;
-    }
     /**
      * Adds a room
      */
@@ -166,8 +123,6 @@ public class GameModel {
     private void setRooms(ArrayList<Room> rooms){
         this.rooms = rooms;
     }
-
-
 
     /**
      * @return  The current room
@@ -225,7 +180,7 @@ public class GameModel {
         grenades.add(grenade);
     }
 
-    //public void addEntitiesToRemove(Set<Entity> entitySet){this.entitiesToRemove = entitySet; }
+    public void addEntitiesToRemove(Map<Room, ArrayList<Entity>> entitySet){this.entitiesToRemove = entitySet; }
 
     public void addEntityToRemove(Room room, Entity entity){
         if(entitiesToRemove.get(room) == null){
@@ -259,9 +214,6 @@ public class GameModel {
         this.collisionObjects.add(obj);
     }
 
-    public String getMetaLayerName(){
-        return this.metaLayerName;
-    }
 
     public ArrayList<Room> getRooms(){
         return rooms;
@@ -282,12 +234,13 @@ public class GameModel {
     public Point getPlayerBufferPosition(){
         return this.playerBufferPosition;
     }
-    //These two methods are keeping track of world.step().
+
     public boolean isStepping(){
-        return stepping.get();
+        return stepping;
     }
+
     public void setStepping(boolean s){
-        this.stepping.set(s);
+        this.stepping = s;
     }
 
     public GameState getGameState(){return gameState;}

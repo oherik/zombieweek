@@ -32,6 +32,8 @@ public class Vector {
     public void set(float x, float y){
         vector.set(x, y);
     }
+    public void setX(float x){vector.x=x;}
+    public void setY(float y){vector.y=y;}
 
     public void set(Vector vector){
         this.vector.set(vector.getLibVector());
@@ -75,13 +77,8 @@ public class Vector {
         return this;
     }
 
-    public void setY(float y1) {
-
-        vector.y = y1;
+    public void scl(float scale) {
+        this.vector.scl(scale);
     }
 
-    public void setX(float x1) {
-
-        vector.x = x1;
-    }
 }

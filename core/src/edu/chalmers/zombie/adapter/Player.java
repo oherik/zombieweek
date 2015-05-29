@@ -1,9 +1,5 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
@@ -18,7 +14,7 @@ import java.awt.*;
 
 /**
  * Created by neda on 2015-03-31.
- * Modified by Tobias
+ * Modified by Tobias and Erik
  */
 public class Player extends Entity implements CreatureInterface {
 
@@ -28,18 +24,17 @@ public class Player extends Entity implements CreatureInterface {
     private int grenadeAmmo = 5;
     private boolean isAttacked;
     private boolean isHidden;
-    private Body playerBody;
     private int width;
     private int height;
-    private Vector2 force;
+    private Vector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
     //Holds the players speed.
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private FixtureDef fixDef;
-    private BodyDef bodyDef;
+    //private FixtureDef fixDef;
+    //private BodyDef bodyDef;
     private PotionType potion;
     private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
     private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
@@ -51,19 +46,19 @@ public class Player extends Entity implements CreatureInterface {
     private boolean isHit = false;
 
 
-    public Player(Texture texture, World world, float x, float y) {
+    public Player(ZWTexture texture, ZWWorld world, float x, float y) {
         super(texture, world, x, y);
 
         //Set still image frame
         GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
-        Texture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
-        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
+        ZWTexture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,32,32);
         getAnimator().addStillFrame(stillFrame[0]);
 
         //Set overlay image (Hand)
         GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
-        Texture overlayTexture = GameModel.getInstance().res.getTexture("emilia-hand");
-        TextureRegion overlayFrame = new TextureRegion(overlayTexture);
+        ZWTexture overlayTexture = GameModel.getInstance().res.getTexture("emilia-hand");
+        ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
 
 
@@ -73,49 +68,41 @@ public class Player extends Entity implements CreatureInterface {
         width = Constants.PLAYER_SIZE;
         height = Constants.PLAYER_SIZE;
 
+        ZWBody body = new ZWBody();
 
-        //Load body def
-        this.bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x+0.5f,y+0.5f);
-        bodyDef.linearDamping = dampening;
-        bodyDef.angularDamping = dampening;
+        body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
 
+        Vector[] vectors = new Vector[8];
 
-        Vector2[] vectors = new Vector2[8];
+        vectors[0] = new Vector(2f,-1.5f);
+        vectors[1] = new Vector(3f,-0.5f);
+        vectors[2] = new Vector(3f,0.5f);
+        vectors[3] = new Vector(2f,1.5f);
+        vectors[4] = new Vector(-2f,1.5f);
+        vectors[5] = new Vector(-3f,0.5f);
+        vectors[6] = new Vector(-3f,-0.5f);
+        vectors[7] = new Vector(-2f,-1.5f);
 
-        vectors[0] = new Vector2(2f,-1.5f);
-        vectors[1] = new Vector2(3f,-0.5f);
-        vectors[2] = new Vector2(3f,0.5f);
-        vectors[3] = new Vector2(2f,1.5f);
-        vectors[4] = new Vector2(-2f,1.5f);
-        vectors[5] = new Vector2(-3f,0.5f);
-        vectors[6] = new Vector2(-3f,-0.5f);
-        vectors[7] = new Vector2(-2f,-1.5f);
-
-        for (Vector2 vector:vectors){
+        for (Vector vector:vectors){
             vector.scl(1f/6.5f);
         }
 
-        PolygonShape shape = new PolygonShape();
-        shape.set(vectors);
 
-        //Load fixture def
-        this.fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = 0;
-        fixDef.friction = .8f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PLAYER;
-        fixDef.filter.maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+        short categoryBits = Constants.COLLISION_PLAYER;
+        short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
+                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+
+
+        body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
+
 
         //Set body
-        super.setBody(bodyDef, fixDef);
+        super.setBody(body);
         super.scaleSprite(1f / Constants.TILE_SIZE);
         killCount = 0;
         ammunition = 5;
         lives = 100;
-        force = new Vector2(0,0);
+        force = new Vector(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
 
 
@@ -169,16 +156,16 @@ public class Player extends Entity implements CreatureInterface {
         speed = legPower;
         switch (direction){
             case NORTH:
-                force.y = speed;
+                force.setY(speed);
                 break;
             case SOUTH:
-                force.y = -speed;
+                force.setY(-speed);
                 break;
             case WEST:
-                force.x = -speed;
+                force.setX(-speed);
                 break;
             case EAST:
-                force.x = speed;
+                force.setX(speed);
                 break;
             default:
                 break;
@@ -193,7 +180,7 @@ public class Player extends Entity implements CreatureInterface {
      */
     private void updateRotation(){
         GameModel gameModel = GameModel.getInstance();
-        Body body = getBody();
+        ZWBody body = getBody();
         float rotation =  direction.getRotation();
         //Checks if world.step() is running. If it is running it tries again and again until step isn't running.
         //This is the reason why sometimes the game lags and a StackOverflowError happens.
@@ -237,26 +224,26 @@ public class Player extends Entity implements CreatureInterface {
      */
     private void updateDirecton(){
 
-        if(force.y > 0){
-            if (force.x > 0){
+        if(force.getY() > 0){
+            if (force.getX() > 0){
                 direction = Direction.NORTH_EAST;
-            } else if (force.x < 0){
+            } else if (force.getX() < 0){
                 direction = Direction.NORTH_WEST;
             } else {
                 direction = Direction.NORTH;
             }
-        } else if (force.y < 0){
-            if (force.x > 0){
+        } else if (force.getY() < 0){
+            if (force.getX() > 0){
                 direction = Direction.SOUTH_EAST;
-            } else if (force.x < 0){
+            } else if (force.getX() < 0){
                 direction = Direction.SOUTH_WEST;
             } else {
                 direction = Direction.SOUTH;
             }
         } else {
-            if (force.x > 0){
+            if (force.getX() > 0){
                 direction = Direction.EAST;
-            } else if (force.x < 0){
+            } else if (force.getX() < 0){
                 direction = Direction.WEST;
             }
         }
@@ -303,8 +290,8 @@ public class Player extends Entity implements CreatureInterface {
      * Sets speed in x-axis to zero
      */
     public void stopX() {
-        force.x = 0;
-        if (force.y == 0) { this.speed = 0;}
+        force.setX(0);
+        if (force.getY() == 0) { this.speed = 0;}
       //  checkSimultaneousRelease();
     }
 
@@ -312,13 +299,13 @@ public class Player extends Entity implements CreatureInterface {
      * Sets speed in y-axis to zero
      */
     public void stopY(){
-        force.y = 0;
-        if (force.x == 0) { this.speed = 0;}
+        force.setY(0);
+        if (force.getX() == 0) { this.speed = 0;}
      //   checkSimultaneousRelease();
     }
 
     @Override
-    protected void setBodyVelocity(Vector2 velocity){
+    protected void setBodyVelocity(Vector velocity){
         super.setBodyVelocity(velocity);
     }
 
@@ -368,13 +355,13 @@ public class Player extends Entity implements CreatureInterface {
     }*/
 
     @Override
-    public void setBody(Body body) {
+    public void setBody(ZWBody body) {
 
        super.setBody(body);
     }
 
     @Override
-    public Body getBody() {
+    public ZWBody getBody() {
 
         return super.getBody();
     }
@@ -433,7 +420,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
 
-    public Vector2 getVelocity(){
+    public Vector getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
