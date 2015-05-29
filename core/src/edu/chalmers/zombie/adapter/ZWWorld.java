@@ -36,7 +36,7 @@ public class ZWWorld {
     }
 
     public ZWBody createBody(ZWBody body){
-        return new ZWBody(world.createBody(body.getBodyDef()));
+        return new ZWBody(world.createBody(body.getBodyDef()), body);
     }
 
     public void destroyBody(ZWBody body){

@@ -209,7 +209,9 @@ public abstract class Entity {
      * @param body  The new body
      */
     public void setBody(ZWBody body) {
-        this.body=body;
+        this.body=world.createBody(body);
+        System.out.println(this.body.getBody());
+        this.body.createFixture(); //TODO göras internt?
     }
 
     /**

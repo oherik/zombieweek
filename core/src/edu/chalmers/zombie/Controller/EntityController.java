@@ -34,7 +34,7 @@ public class EntityController {
      * @param angularDampening  How high the angular, or rotational, friciton should be
      */
     public static void setFriction(Entity entity, float linearDampening, float angularDampening) {
-        if (entity.getBody() != null) {
+        if (entity.getBody().getBody() != null) {
             entity.getBody().setLinearDamping(linearDampening);
             entity.getBody().setAngularDamping(angularDampening);
         }

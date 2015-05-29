@@ -23,6 +23,14 @@ public class ZWBody {
         bodyDef = new BodyDef();
     }
 
+    public ZWBody(Body box2Body, ZWBody body){
+        this.body = box2Body;
+        if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
+            this.fixture = box2Body.getFixtureList().get(0);
+        fixtureDef = body.getFixtureDef();
+        bodyDef = body.getBodyDef();
+    }
+
     public boolean bodyIsInRoom(Room room){
         World bodyWorld = body.getWorld();
         World roomWorld = room.getWorld().getWorld();
@@ -31,7 +39,8 @@ public class ZWBody {
 
     public ZWBody(Body box2Body){
         this.body = box2Body;
-        this.fixture = box2Body.getFixtureList().get(0);
+        if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
+             this.fixture = box2Body.getFixtureList().get(0);
         fixtureDef = new FixtureDef();
         bodyDef = new BodyDef();
     }
@@ -149,6 +158,11 @@ public class ZWBody {
     public ZWFixture createFixture(FixtureDef fixtureDef){
         return new ZWFixture(body.createFixture(fixtureDef));
     }
+
+    public ZWFixture createFixture(){
+        return new ZWFixture(body.createFixture(fixtureDef));
+    }
+
 
     public void setBody(ZWBody body){
         this.body = body.getBody();
