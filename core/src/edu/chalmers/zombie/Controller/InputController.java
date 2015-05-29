@@ -36,13 +36,7 @@ public class InputController implements InputProcessor{
         return gameModel.getPlayer();
     }
 
-    /**
-     * Temporary method to get player
-     * @return zombie
-     */
-    public Zombie getZombie(){
-        return gameModel.getZombie();
-    }
+
 
     /**
      * Decides what to do when the player presses a key.

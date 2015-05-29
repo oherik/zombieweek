@@ -114,11 +114,11 @@ public class PlayerController {
         Point position = mapController.getPlayerBufferPosition();
         Player player;
         try {
-            player = new Player(res.getTexture("emilia"), gameModel.getRoom().getWorld().getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"), gameModel.getRoom().getWorld(), position.x, position.y);
         }catch (NullPointerException e){
             System.err.println("No buffered position found. Placing player at room spawn.");
             position = GameModel.getInstance().getRoom().getPlayerSpawn();
-            player = new Player(res.getTexture("emilia"),gameModel.getRoom().getWorld().getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"),gameModel.getRoom().getWorld(), position.x, position.y);
         }
         setPlayer(player); //TODO test);
         return player;
