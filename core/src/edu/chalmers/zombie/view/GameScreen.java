@@ -13,7 +13,10 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
 import java.awt.*;
 
 /**
+ * The applications game screen
+ *
  * Created by Tobias on 15-04-02.
+ * Modified by Erik and Daniel
  */
 public class GameScreen extends ZWScreen{
     private ZWWorld currentWorld;
@@ -23,8 +26,8 @@ public class GameScreen extends ZWScreen{
     //private MapController mapController;
     private float tileSize;
     //HUD variables
- //   private BitmapFont bitmapFont;
- //   private SpriteBatch batchHUD;
+    private ZWBitmapFont bitmapFont;
+    private ZWSpriteBatch batchHUD;
     private PathAlgorithm pathFinding; //TODO debug
     private int steps;
 
@@ -64,8 +67,8 @@ public class GameScreen extends ZWScreen{
       //  boxDebug = new Box2DDebugRenderer();
 
        /* ------- Create HUD--------*/
-        //batchHUD = new SpriteBatch();
-        //bitmapFont = new BitmapFont();
+        batchHUD = new ZWSpriteBatch();
+        bitmapFont = new ZWBitmapFont();
 
         /* ------- Set game as running --------*/
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
@@ -261,12 +264,12 @@ public class GameScreen extends ZWScreen{
             String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
             String playerHealth = "Health: " + player.getLives();
             String playerAmmo = "Ammo: " + player.getAmmunition();
-           // batchHUD.begin();
-       //     bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-      //      bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
-    //        bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
-     //       bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
-   //         batchHUD.end();
+            batchHUD.begin();
+            bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+            bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
+            bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
+            bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
+            batchHUD.end();
 
 
 
