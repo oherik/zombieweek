@@ -156,4 +156,8 @@ public class ZWBody {
         body.applyLinearImpulse(impulse.getLibVector(), point.getLibVector(), bool);
     }
 
+    public void setAngularDamping(float angularDamping) {
+
+        body.setAngularDamping(angularDamping);
+    }
 }
