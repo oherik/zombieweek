@@ -2,7 +2,6 @@ package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.controller.ContactController;
 import edu.chalmers.zombie.controller.controller_adapters.ZWContactListener;
 
 /** Wrapper class for Box2d World
@@ -16,7 +15,7 @@ public class ZWWorld {
      * @param gravity The world's gravity
      * @param doSleep   If the bodies should sleep to increase performanve
      */
-    public ZWWorld(Vector gravity, boolean doSleep){
+    public ZWWorld(ZWVector gravity, boolean doSleep){
         world = new World(gravity.getLibVector(), doSleep);
     }
 
@@ -47,7 +46,7 @@ public class ZWWorld {
         return world;
     }
 
-    public void rayCast(ZWRayCastCallback callback, Vector point1, Vector point2){
+    public void rayCast(ZWRayCastCallback callback, ZWVector point1, ZWVector point2){
         world.rayCast(callback, point1.getLibVector(), point2.getLibVector());
     }
 }

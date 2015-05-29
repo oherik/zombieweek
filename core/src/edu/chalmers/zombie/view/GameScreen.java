@@ -3,10 +3,7 @@ package edu.chalmers.zombie.view;
 import edu.chalmers.zombie.adapter.*;
 
 import edu.chalmers.zombie.controller.*;
-import edu.chalmers.zombie.model.Book;
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Player;
-import edu.chalmers.zombie.model.Zombie;
+import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;

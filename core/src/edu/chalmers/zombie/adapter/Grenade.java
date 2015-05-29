@@ -14,11 +14,11 @@ import java.util.ArrayList;
 public class Grenade extends Entity {
     private float targetX;
     private float targetY;
-    private Vector originalPlayerPosition;
+    private ZWVector originalPlayerPosition;
     private float width;
     private float height;
     private ZWTexture grenadeTexture = new ZWTexture("core/assets/grenadeBook.png");
-    private Vector force;
+    private ZWVector force;
     private float speed = 7;
     private float direction;
     private float explosionRadius = 3;
@@ -30,10 +30,10 @@ public class Grenade extends Entity {
         this.world = world;
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
-        originalPlayerPosition = new Vector(player.getX(), player.getY());
+        originalPlayerPosition = new ZWVector(player.getX(), player.getY());
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
-        force = new Vector(1,1);
+        force = new ZWVector(1,1);
         this.targetX = targetX;
         this.targetY = targetY;
         ZWSprite grenadeSprite = new ZWSprite(grenadeTexture);
@@ -71,10 +71,10 @@ public class Grenade extends Entity {
         this.targetY = originalPlayerPosition.getY() - unprojectedY*height/2;
     }
     @Override
-    protected void setBodyVelocity(Vector velocity){
+    protected void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
-    public Vector getVelocity(){
+    public ZWVector getVelocity(){
         return getBody().getLinearVelocity();
     }
 
@@ -93,19 +93,19 @@ public class Grenade extends Entity {
         super.draw(batch);
         stopIfNeeded();
     }
-    private Vector[] rays;
+    private ZWVector[] rays;
     public void explode(){
         ZWRayCastCallback callback = createCallback();
-        Vector grenadePosition = new Vector(getX(), getY());
-        rays = new Vector[100];
+        ZWVector grenadePosition = new ZWVector(getX(), getY());
+        rays = new ZWVector[100];
         for(int i = 0; i < 100; i++){
-            rays[i] = new Vector(1,1);
+            rays[i] = new ZWVector(1,1);
             rays[i].setLength(explosionRadius);
             rays[i].setAngleRad(Constants.PI*2*i/100);
             rays[i].add(getX(), getY());
         }
         ArrayList<ZWFixture> fixturesInRadius = new ArrayList<ZWFixture>();
-        for(Vector ray:rays){
+        for(ZWVector ray:rays){
             foundFixtures.clear();
             world.rayCast(callback, grenadePosition, ray);
             for (ZWFixture f: foundFixtures){
@@ -118,8 +118,8 @@ public class Grenade extends Entity {
             }
         }
     }
-    private boolean checkIfInsideRadius(ZWFixture fixture, Vector ray){
-        Vector fixturePosition = fixture.getPosition();
+    private boolean checkIfInsideRadius(ZWFixture fixture, ZWVector ray){
+        ZWVector fixturePosition = fixture.getPosition();
         return (((getX() < fixturePosition.getX() && fixturePosition.getX() < ray.getX()) ||
                 (ray.getX() < fixturePosition.getX() && fixturePosition.getX() < getX())) &&
                 ((getY() < fixturePosition.getY() && fixturePosition.getY() < ray.getY()) ||
@@ -128,7 +128,7 @@ public class Grenade extends Entity {
     private ZWRayCastCallback createCallback(){
         ZWRayCastCallback callback = new ZWRayCastCallback() {
             @Override
-            public float reportRayFixture(ZWFixture fixture, Vector point, Vector normal, float fraction) {
+            public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
                 if (fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
                     foundFixtures.add(fixture);
                 }

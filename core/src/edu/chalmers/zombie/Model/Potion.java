@@ -1,6 +1,9 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
-import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.adapter.ZWVector;
+import edu.chalmers.zombie.adapter.ZWBody;
+import edu.chalmers.zombie.adapter.ZWSprite;
+import edu.chalmers.zombie.adapter.ZWWorld;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PotionType;
 
@@ -17,7 +20,7 @@ public class Potion extends Entity {
     private Point position;
     private ZWWorld world;
     private boolean hasBeenRemoved;
-    private Vector velocity;
+    private ZWVector velocity;
     private PotionType type;
 
     public Potion(ZWSprite sprite, ZWWorld world, int x, int y) {
@@ -32,7 +35,7 @@ public class Potion extends Entity {
     public Potion(PotionType potionType, ZWSprite sprite, ZWWorld world, int x, int y) {
 
         super(sprite, world, x, y);
-        velocity = new Vector(0,0);
+        velocity = new ZWVector(0,0);
         this.sprite = sprite;
         this.world = world;
         type = potionType;
@@ -70,7 +73,7 @@ public class Potion extends Entity {
     }
 
     @Override
-    public Vector getVelocity() {
+    public ZWVector getVelocity() {
 
         return velocity;
     }

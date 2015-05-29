@@ -48,7 +48,7 @@ public class ZombieController {
                         z.setNextPathTile(temp);
                     }
                 }
-                    Vector direction = new Vector(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
+                    ZWVector direction = new ZWVector(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
                     direction.setLength(z.getSpeed());
                     //Rotate
 
