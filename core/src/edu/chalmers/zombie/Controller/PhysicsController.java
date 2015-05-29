@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.model.CollisionObject;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
