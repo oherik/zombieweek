@@ -298,7 +298,7 @@ public class MapController {
 
             /* ------ Update player ------ */
             if(player == null){
-               player = EntityController.createNewPlayer();
+               player = PlayerController.createNewPlayer();
             }
             if(player.getBody() == null||player.getBody().getWorld()!=getRoom().getWorld().getWorld()){
                 System.out.println(getPlayerBufferPosition());
@@ -378,7 +378,7 @@ public class MapController {
             long airTime = 500;
             long lifeTime = 5000; //life time for book in millisec
             if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
-                EntityController.hitGround(b);
+                ProjectileController.hitGround(b);
             if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
               //  gameModel.addEntityToRemove(getRoom(),b);
                 //b.markForRemoval(); //TODO ha med?
