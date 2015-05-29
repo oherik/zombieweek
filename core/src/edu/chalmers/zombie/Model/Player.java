@@ -45,14 +45,15 @@ public class Player extends Entity implements CreatureInterface {
         super(texture, world, x, y);
 
         //Set still image frame
-        GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
+        //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
         ZWTexture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
         ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,32,32);
         getAnimator().addStillFrame(stillFrame[0]);
 
         //Set overlay image (Hand)
-        GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
+        //GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
         ZWTexture overlayTexture = GameModel.getInstance().res.getTexture("emilia-hand");
+        System.out.println(overlayTexture.getTexture());
         ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
 

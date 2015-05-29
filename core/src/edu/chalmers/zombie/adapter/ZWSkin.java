@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -26,6 +27,7 @@ public class ZWSkin {
         textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
         textButtonStyle.checked = skin.newDrawable("background", Color.GRAY);
         textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
+        skin.add("default", new BitmapFont());
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
     }
