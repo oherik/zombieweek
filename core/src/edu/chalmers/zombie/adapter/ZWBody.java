@@ -2,6 +2,7 @@ package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
@@ -20,6 +21,12 @@ public class ZWBody {
     public ZWBody(){
         fixtureDef = new FixtureDef();
         bodyDef = new BodyDef();
+    }
+
+    public boolean bodyIsInRoom(Room room){
+        World bodyWorld = body.getWorld();
+        World roomWorld = room.getWorld().getWorld();
+        return (bodyWorld == roomWorld);
     }
 
     public ZWBody(Body box2Body){

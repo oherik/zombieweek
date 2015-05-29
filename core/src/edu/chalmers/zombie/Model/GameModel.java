@@ -4,6 +4,7 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
+import edu.chalmers.zombie.view.Renderer;
 
 import java.awt.*;
 import java.util.*;

@@ -8,6 +8,7 @@ import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.TileRayTracing;
+import edu.chalmers.zombie.view.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -288,7 +289,7 @@ public class MapController {
     /**
      * If the room has changed the map and renderer need to change as well
      */
-    public void updateRoomIfNeeded() {
+    public static void updateRoomIfNeeded() {
         GameModel gameModel = GameModel.getInstance();
         removeEntities();
         if (worldNeedsUpdate()) {
@@ -306,9 +307,9 @@ public class MapController {
             if(player == null){
                player = PlayerController.createNewPlayer();
             }
-            if(player.getBody() == null||player.getBody().getWorld()!=getRoom().getWorld().getWorld()){
+            if(player.getBody() == null||!player.getBody().bodyIsInRoom(getRoom())){
                 System.out.println(getPlayerBufferPosition());
-                player.createDefaultBody(currentRoom.getWorld().getWorld(), getPlayerBufferPosition());
+                player.createDefaultBody(currentRoom.getWorld(), getPlayerBufferPosition());
             }
 
             /* ------ Update screen ------ */
@@ -397,5 +398,14 @@ public class MapController {
                 books.remove(i); //Förenklad forsats skulle göra detta svårt
         }
     }
+
+    public static void resizeRenderer(int width, int height){
+        GameModel.getInstance().getRenderer().resizeCamera(width,height);
+    }
+
+    public static void setCameraPosition(float x, float y){
+        GameModel.getInstance().getRenderer().setCameraPosition(x, y);
+    }
+
 
 }

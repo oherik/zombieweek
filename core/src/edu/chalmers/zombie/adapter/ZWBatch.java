@@ -22,6 +22,7 @@ public class ZWBatch {
         polygonSpriteBatch.begin();
     }
     public void end(){
+        batch.end();
         spriteBatch.end();
         polygonSpriteBatch.end();
     }
@@ -30,5 +31,9 @@ public class ZWBatch {
     }
     public SpriteBatch getSpriteBatch(){
         return spriteBatch;
+    }
+
+    public Batch getBatch(){
+        return batch;
     }
 }

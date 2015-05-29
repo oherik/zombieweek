@@ -15,27 +15,27 @@ import java.awt.*;
  * Created by Tobias on 15-04-02.
  */
 public class GameScreen extends ZWScreen{
-    private World currentWorld;
-    private OrthographicCamera camera;
-    private OrthogonalTiledMapRenderer mapRenderer;
-    private Box2DDebugRenderer boxDebug;
-    private MapController mapController;
+    private ZWWorld currentWorld;
+   // private OrthographicCamera camera;
+  //  private OrthogonalTiledMapRenderer mapRenderer;
+  //  private Box2DDebugRenderer boxDebug;
+    //private MapController mapController;
     private float tileSize;
     //HUD variables
-    private BitmapFont bitmapFont;
-    private SpriteBatch batchHUD;
+ //   private BitmapFont bitmapFont;
+ //   private SpriteBatch batchHUD;
     private PathAlgorithm pathFinding; //TODO debug
     private int steps;
 
 
 
 
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+  //  private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 
     private Flashlight flashlight;
-    private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
-    private ShapeRenderer grenadeShapeRenderer = new ShapeRenderer();
+  //  private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
+  //  private ShapeRenderer grenadeShapeRenderer = new ShapeRenderer();
     /**
      * Creates a game screen with the default tile size
      */
@@ -49,22 +49,22 @@ public class GameScreen extends ZWScreen{
      */
     public GameScreen(float tileSize){
         this.tileSize = tileSize;
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(width, height);
-        mapController = new MapController();
+        float width = ZWGameEngine.getWindowWidth();
+        float height = ZWGameEngine.getWindowHeight();
+        //camera = new OrthographicCamera(width, height);
+       // mapController = new MapController();
 
             /* ------ Initialize room  ------ */
-        mapController.initializeRooms();
-        mapController.setWorldNeedsUpdate(true);
-        mapController.updateRoomIfNeeded();
+        MapController.initializeRooms();
+        MapController.setWorldNeedsUpdate(true);
+        MapController.updateRoomIfNeeded();
 
          /* ------- Create box 2d renderer --------*/
-        boxDebug = new Box2DDebugRenderer();
+      //  boxDebug = new Box2DDebugRenderer();
 
        /* ------- Create HUD--------*/
-        batchHUD = new SpriteBatch();
-        bitmapFont = new BitmapFont();
+        //batchHUD = new SpriteBatch();
+        //bitmapFont = new BitmapFont();
 
         /* ------- Set game as running --------*/
         GameModel.getInstance().setGameState(GameState.GAME_RUNNING);
@@ -80,7 +80,7 @@ public class GameScreen extends ZWScreen{
         ZWGameEngine.setInputProcessor(inputMultiplexer);
 
         //TODO debug
-        mapController.printCollisionTileGrid();
+        MapController.printCollisionTileGrid();
 
 
 
@@ -92,30 +92,34 @@ public class GameScreen extends ZWScreen{
     /**
      * @return The screen's renderer
      */
-    public OrthogonalTiledMapRenderer getMapRenderer(){
+   /* public OrthogonalTiledMapRenderer getMapRenderer(){
        return this.mapRenderer;
    }
+   */
 
     /**
      * Sets the screens renderer
      * @param renderer  A renderer based on a tile map
-     */
+     *//*
     public void setMapRenderer(OrthogonalTiledMapRenderer renderer){
         this.mapRenderer = renderer;
     }
+    */
 
     /**
      * @return  The screen's currently displayed world
      */
+    /*
     public World getDisplayedWorld(){
         return currentWorld;
     }
+    */
 
     /**
      * Sets the screens currently displayed world
      * @param displayedWorld    The world to be displayed
      */
-    public void setDisplayedWorld(World displayedWorld){
+    public void setDisplayedWorld(ZWWorld displayedWorld){
         this.currentWorld = displayedWorld;
     }
 
@@ -125,7 +129,7 @@ public class GameScreen extends ZWScreen{
      * @param height    The height in pixels
      */
     public void resize(int width, int height){
-        camera.setToOrtho(false, width / tileSize, height / tileSize);
+        MapController.resizeRenderer(width,height);
     }
 
    /* ------ Not currently used function ------ */
@@ -169,87 +173,86 @@ public class GameScreen extends ZWScreen{
      */
     private void updateRunning(float f){
         GameModel gameModel = GameModel.getInstance();
-        mapController.updateRoomIfNeeded();
-        setMapRenderer(gameModel.getRenderer().getMapRenderer());
-        setDisplayedWorld(gameModel.getRoom().getWorld().getWorld());
+        MapController.updateRoomIfNeeded();
+        //setMapRenderer(gameModel.getRenderer().getMapRenderer());
+        Renderer renderer = gameModel.getRenderer();
+        setDisplayedWorld(gameModel.getRoom().getWorld());
         Player player = gameModel.getPlayer();
 
         /* ------ Render the background color ------ */
-        ZWGameEngine.clearColor(0,0,0,1);
+        ZWGameEngine.clearColor(0, 0, 0, 1);
         ZWGameEngine.clearBufferBit();
 
 
         //Uppdatera fysik
         //Tells GameModel when step is happening
-        gameModel.setStepping(true);
-        currentWorld.step(Constants.TIMESTEP, 6, 2);
-        gameModel.setStepping(false);
+        //gameModel.setStepping(true);
+        //currentWorld.step(Constants.TIMESTEP, 6, 2);
+        //gameModel.setStepping(false);
 
         //TODO vad göra om spelaren är död?
 
         if(!GameModel.getInstance().worldNeedsUpdate()) {
             /* ------ Update the camera position ------ */
-                camera.position.set(player.getX(), player.getY(), 0); //player is tileSize/2 from origin //TODO kosntig mätning men får inte rätt position annars
-                camera.update();
+            MapController.setCameraPosition(player.getX(), player.getY());
             /* ------ Draw the background map layer ------ */
             int[] backgroundLayers = {0};
-            mapRenderer.render(backgroundLayers);
-            mapRenderer.setView(camera);
+            renderer.renderMapLayer(backgroundLayers);
+            renderer.setCameraView();
 
-
-            //mapRenderer.render();
+                 //mapRenderer.render();
             steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
-            mapRenderer.getBatch().begin();
-            mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+            ZWBatch batch = renderer.getBatch();
+            batch.begin();
+            renderer.setCombinedCameraBatch();
 
              /* ------ Draw the zombies ------ */
             for (Zombie z : gameModel.getZombies()) {
-                z.draw(mapRenderer.getBatch());
+                z.draw(batch);
             }
 
             /* ------- Draw the potions --------*/
             for (Potion p : gameModel.getRoom().getPotions()) {
-                p.draw(mapRenderer.getBatch());
+                p.draw(batch);
             }
             /* ------ Draw the player ------ */
-            player.draw(mapRenderer.getBatch());
+            player.draw(batch);
 
            /* ------ Draw the aimer ------ */
-            player.getHand().drawAimer(mapRenderer.getBatch());
-            mapRenderer.getBatch().end();
-            grenadeShapeRenderer.setAutoShapeType(true);
-            grenadeShapeRenderer.begin();
-            player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
-            grenadeShapeRenderer.end();
+            player.getHand().drawAimer(batch);
+            batch.end();
+
+
+           // grenadeShapeRenderer.setAutoShapeType(true);
+           // grenadeShapeRenderer.begin();
+        //    player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
+        //    grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
             if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
-                    mapRenderer.render(middleLayers);
+                    renderer.renderMapLayer(middleLayers);
 
             }
             else{
                 int[] middleLayers = {1};
-
-                    mapRenderer.render(middleLayers);
+                renderer.renderMapLayer(middleLayers);
 
             }
-            mapRenderer.getBatch().begin();
-            mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+            batch = renderer.getBatch();
+            batch.begin();
+            renderer.setCombinedCameraBatch();
             /* ------ Draw books ------ */
             for (Book b: gameModel.getBooks()){
-                b.draw(mapRenderer.getBatch());
+                b.draw(batch);
             }
             for (Grenade g: gameModel.getGrenades()){
-                g.draw(mapRenderer.getBatch());
+                g.draw(batch);
             }
 
-
-
-
             /* ------ Finished drawing sprites ------ */
-            mapRenderer.getBatch().end();
+          batch.end();
 
 
 
@@ -257,12 +260,12 @@ public class GameScreen extends ZWScreen{
             String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
             String playerHealth = "Health: " + player.getLives();
             String playerAmmo = "Ammo: " + player.getAmmunition();
-            batchHUD.begin();
-            bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-            bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
-            bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
-            bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
-            batchHUD.end();
+           // batchHUD.begin();
+       //     bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+      //      bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
+    //        bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
+     //       bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
+   //         batchHUD.end();
 
 
 
@@ -298,12 +301,13 @@ public class GameScreen extends ZWScreen{
             drawBlood();
             int[] foregroundLayers = {3};
 
-                mapRenderer.render(foregroundLayers);
+                renderer.renderMapLayer(foregroundLayers);
 
             /* ------ Draw the box2d debug ------ */
             //gameModel.getRenderer().renderBox2DDebug(gameModel.getRoom()); //TODO debug
 
-            boxDebug.render(gameModel.getRoom().getWorld().getWorld(),camera.combined);
+            renderer.renderBox2DDebug(gameModel.getRoom());
+            //boxDebug.render(gameModel.getRoom().getWorld().getWorld(),camera.combined);
 
             /*---------------- END TEST -------------------------*/
          /*--------------------------TESTA PATH FINDING------------------------------------*/
@@ -340,7 +344,7 @@ public class GameScreen extends ZWScreen{
 
     private void updateGameOver(){
         /* ------ Render the background color ------ */
-        ZWGameEngine.clearColor(0,0,0,1);
+        ZWGameEngine.clearColor(0, 0, 0, 1);
         ZWGameEngine.clearBufferBit();
         GameModel.getInstance().getScreenModel().getGameOverStage().act();
         GameModel.getInstance().getScreenModel().getGameOverStage().draw();
@@ -378,17 +382,17 @@ public class GameScreen extends ZWScreen{
      */
     public void dispose(){
         GameModel.getInstance().getPlayer().dispose();
-        currentWorld.dispose();
-        batchHUD.dispose();
-        shapeRenderer.dispose();
-        sb.dispose();
+       // currentWorld.dispose();
+     //   batchHUD.dispose();
+    //    shapeRenderer.dispose();
+    //    sb.dispose();
     }
     private Blood blood = new Blood();
-    private SpriteBatch sb = new SpriteBatch();
+ //   private SpriteBatch sb = new SpriteBatch();
     private void drawBlood(){
-            sb.begin();
-            blood.draw(sb);
-            sb.end();
+ //           sb.begin();
+ //           blood.draw(sb);
+ //           sb.end();
     }
 
 

@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.view.Renderer;
 
 import java.util.ArrayList;
 
