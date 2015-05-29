@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -57,7 +58,7 @@ public class Renderer {
     public void drawEntity(Entity entity){
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        entity.draw(mapRenderer.getBatch());
+        entity.draw(new ZWBatch(mapRenderer.getBatch()));
         mapRenderer.getBatch().end();
     }
 

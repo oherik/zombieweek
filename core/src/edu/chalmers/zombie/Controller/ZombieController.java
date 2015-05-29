@@ -138,5 +138,15 @@ public class ZombieController {
 
     }
 
+    /**
+     * A zombie gets knocked out
+     * @param z The zombie
+     */
+    public static void knockOut(Zombie z){
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),z);
+        z.knockOut();                                                                   //TODO Zombie b�r f� en hit() eller n�t ist�llet
+        AudioController.playSound(GameModel.getInstance().res.getSound("zombie_sleeping"));
+    }
+
 
 }
