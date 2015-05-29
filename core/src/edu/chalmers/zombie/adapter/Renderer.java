@@ -2,6 +2,7 @@ package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.Room;
@@ -16,6 +17,10 @@ public class Renderer {
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
+
+    public Renderer(){
+        camera = new OrthographicCamera();
+    }
 
     public Renderer(Room room, float width, float height){
         mapRenderer = new OrthogonalTiledMapRenderer(room.getMap().getTiledMap(), 1f / (float) Constants.TILE_SIZE);
@@ -66,6 +71,11 @@ public class Renderer {
         entity.draw(new ZWBatch(mapRenderer.getBatch()));
         mapRenderer.getBatch().end();
     }
-
+    public float unprojectX(float x){
+        return camera.unproject(new Vector3(x, 0, 0)).x;
+    }
+    public float unprojextY(float y){
+        return camera.unproject(new Vector3(0, y, 0)).y;
+    }
 }
 

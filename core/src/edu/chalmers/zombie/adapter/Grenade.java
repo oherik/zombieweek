@@ -1,14 +1,5 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Timer;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -21,44 +12,34 @@ import java.util.ArrayList;
 public class Grenade extends Entity {
     private float targetX;
     private float targetY;
-    private Vector2 originalPlayerPosition;
+    private Vector originalPlayerPosition;
     private float width;
     private float height;
-    private Texture grenadeTexture = new Texture("core/assets/grenadeBook.png");
-    private Vector2 force;
+    private ZWTexture grenadeTexture = new ZWTexture("core/assets/grenadeBook.png");
+    private Vector force;
     private float speed = 7;
     private float direction;
-    private OrthographicCamera camera = new OrthographicCamera();
     private float explosionRadius = 3;
-    private ArrayList<Fixture> foundFixtures = new ArrayList<Fixture>();
-    private World world;
-    private Timer timer;
-    public Grenade(int targetX, int targetY, float x, float y, World world){
+    private ArrayList<ZWFixture> foundFixtures = new ArrayList<ZWFixture>();
+    private ZWWorld world;
+    private ZWTimer timer;
+    public Grenade(int targetX, int targetY, float x, float y, ZWWorld world){
         super(world);
         this.world = world;
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
-        originalPlayerPosition = new Vector2(player.getX(), player.getY());
+        originalPlayerPosition = new Vector(player.getX(), player.getY());
         height = Constants.TILE_SIZE/2f;
         width = Constants.TILE_SIZE/3f;
-        force = new Vector2(1,1);
+        force = new Vector(1,1);
         this.targetX = targetX;
         this.targetY = targetY;
-        Sprite grenadeSprite = new Sprite(grenadeTexture);
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x+0.5f, y+0.5f);
-        bodyDef.bullet = true;
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = shape;
-        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
-        fixDef.restitution = 0;
-        fixDef.friction = 0f;
-        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
-        super.setBody(bodyDef, fixDef);
+        ZWSprite grenadeSprite = new ZWSprite(grenadeTexture);
+        ZWBody body = new ZWBody();
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
+        body.createBodyDef(true, x, y, 0, 0, true);
+        body.setFixtureDef(0, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), Constants.COLLISION_PROJECTILE, maskBits, false);
+        super.setBody(body);
         super.setSprite(grenadeSprite);
         super.scaleSprite(1f / Constants.TILE_SIZE);
         getBody().setUserData(this);
@@ -68,8 +49,8 @@ public class Grenade extends Entity {
         initializeTimer();
     }
     private void calculateDirection(){
-        float deltaX = Gdx.graphics.getWidth() / 2 - targetX;
-        float deltaY = Gdx.graphics.getHeight() / 2 - targetY;
+        float deltaX = ZWGameEngine.getWindowWidth() / 2 - targetX;
+        float deltaY = ZWGameEngine.getWindowHeight() / 2 - targetY;
         direction = (float) Math.atan2((double) deltaY, (double) deltaX) + Constants.PI / 2;
     }
     private void setInMotion(){
@@ -79,18 +60,19 @@ public class Grenade extends Entity {
         setAngularVelocity(0);
     }
     private void unproject(){
-        this.targetX = camera.unproject(new Vector3(targetX,0,0)).x;
-        this.targetY = camera.unproject(new Vector3(0,targetY,0)).y;
-        float width = Gdx.graphics.getWidth()/Constants.TILE_SIZE;
-        float height = Gdx.graphics.getHeight()/Constants.TILE_SIZE;
-        this.targetX = originalPlayerPosition.x + this.targetX*width/2;
-        this.targetY = originalPlayerPosition.y - this.targetY*height/2;
+        Renderer renderer = new Renderer();
+        float unprojectedX = renderer.unprojectX(targetX);
+        float unprojectedY = renderer.unprojextY(targetY);
+        float width = ZWGameEngine.getWindowWidth()/Constants.TILE_SIZE;
+        float height = ZWGameEngine.getWindowHeight()/Constants.TILE_SIZE;
+        this.targetX = originalPlayerPosition.getX() + unprojectedX*width/2;
+        this.targetY = originalPlayerPosition.getY() - unprojectedY*height/2;
     }
     @Override
-    protected void setBodyVelocity(Vector2 velocity){
+    protected void setBodyVelocity(Vector velocity){
         super.setBodyVelocity(velocity);
     }
-    public Vector2 getVelocity(){
+    public Vector getVelocity(){
         return getBody().getLinearVelocity();
     }
 
@@ -105,47 +87,47 @@ public class Grenade extends Entity {
         setBodyVelocity(force);
     }
     @Override
-    public void draw(Batch batch) {
+    public void draw(ZWBatch batch) {
         super.draw(batch);
         stopIfNeeded();
     }
-    private Vector2[] rays;
+    private Vector[] rays;
     public void explode(){
-        RayCastCallback callback = createCallback();
-        Vector2 grenadePosition = new Vector2(getX(), getY());
-        rays = new Vector2[100];
+        ZWRayCastCallback callback = createCallback();
+        Vector grenadePosition = new Vector(getX(), getY());
+        rays = new Vector[100];
         for(int i = 0; i < 100; i++){
-            rays[i] = new Vector2(1,1);
+            rays[i] = new Vector(1,1);
             rays[i].setLength(explosionRadius);
             rays[i].setAngleRad(Constants.PI*2*i/100);
             rays[i].add(getX(), getY());
         }
-        ArrayList<Fixture> fixturesInRadius = new ArrayList<Fixture>();
-        for(Vector2 ray:rays){
+        ArrayList<ZWFixture> fixturesInRadius = new ArrayList<ZWFixture>();
+        for(Vector ray:rays){
             foundFixtures.clear();
             world.rayCast(callback, grenadePosition, ray);
-            for (Fixture f: foundFixtures){
+            for (ZWFixture f: foundFixtures){
                 if (checkIfInsideRadius(f, ray)){
                     fixturesInRadius.add(f);
                 }
             }
-            for (Fixture f: fixturesInRadius){
+            for (ZWFixture f: fixturesInRadius){
 
             }
         }
     }
-    private boolean checkIfInsideRadius(Fixture fixture, Vector2 ray){
-        Vector2 fixturePosition = fixture.getBody().getPosition();
-        return (((getX() < fixturePosition.x && fixturePosition.x < ray.x) ||
-                (ray.x < fixturePosition.x && fixturePosition.x < getX())) &&
-                ((getY() < fixturePosition.y && fixturePosition.y < ray.y) ||
-                        (ray.y < fixturePosition.y && fixturePosition.y < getY())));
+    private boolean checkIfInsideRadius(ZWFixture fixture, Vector ray){
+        Vector fixturePosition = fixture.getPosition();
+        return (((getX() < fixturePosition.getX() && fixturePosition.getX() < ray.getX()) ||
+                (ray.getX() < fixturePosition.getX() && fixturePosition.getX() < getX())) &&
+                ((getY() < fixturePosition.getY() && fixturePosition.getY() < ray.getY()) ||
+                        (ray.getY() < fixturePosition.getY() && fixturePosition.getY() < getY())));
     }
-    private RayCastCallback createCallback(){
-        RayCastCallback callback = new RayCastCallback() {
+    private ZWRayCastCallback createCallback(){
+        ZWRayCastCallback callback = new ZWRayCastCallback() {
             @Override
-            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-                if (fixture.getFilterData().categoryBits == Constants.COLLISION_ZOMBIE){
+            public float reportRayFixture(ZWFixture fixture, Vector point, Vector normal, float fraction) {
+                if (fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
                     foundFixtures.add(fixture);
                 }
                 return 1;
@@ -154,13 +136,13 @@ public class Grenade extends Entity {
         return callback;
     }
     private void initializeTimer(){
-        timer = new Timer();
-        Timer.Task task = createTask();
+        timer = new ZWTimer();
+        ZWTask task = createTask();
         timer.scheduleTask(task, 3);
         timer.start();
     }
-    private Timer.Task createTask(){
-        Timer.Task task = new Timer.Task() {
+    private ZWTask createTask(){
+        ZWTask task = new ZWTask() {
             @Override
             public void run() {
                 explode();

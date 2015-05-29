@@ -53,4 +53,7 @@ public class ZWFixture {
     public short getMaskBits(){
         return fixture.getFilterData().maskBits;
     }
+    public Vector getPosition(){
+        return new Vector(getBody().getPosition());
+    }
 }
