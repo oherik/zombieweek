@@ -1,6 +1,9 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
-import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.adapter.Vector;
+import edu.chalmers.zombie.adapter.ZWBody;
+import edu.chalmers.zombie.adapter.ZWSprite;
+import edu.chalmers.zombie.adapter.ZWWorld;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PotionType;
 

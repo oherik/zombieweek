@@ -1,6 +1,6 @@
 package edu.chalmers.zombie.controller;
 
-import edu.chalmers.zombie.adapter.Potion;
+import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.adapter.ZWSprite;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Room;
