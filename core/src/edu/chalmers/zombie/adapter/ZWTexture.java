@@ -16,5 +16,13 @@ public class ZWTexture {
         return texture;
     }
 
+    public void prepare(){
+        this.texture.getTextureData().prepare();
+    }
+
+    public ZWPixmap consumePixmap(){
+        return  (new ZWPixmap(this.texture.getTextureData().consumePixmap()));
+    }
+
 
 }
