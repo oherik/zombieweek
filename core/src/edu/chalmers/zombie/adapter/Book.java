@@ -60,7 +60,7 @@ public class Book extends Entity {
         fixDef.restitution = 0;
         fixDef.friction = 8f;
         fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
-        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE | Constants.COLLISION_DOOR;
 
         //Set body
         super.setBody(bodyDef, fixDef);
