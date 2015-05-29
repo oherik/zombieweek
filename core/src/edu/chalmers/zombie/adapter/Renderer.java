@@ -58,7 +58,7 @@ public class Renderer {
     public void drawEntity(Entity entity){
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        entity.draw(mapRenderer.getBatch());
+        entity.draw(new ZWBatch(mapRenderer.getBatch()));
         mapRenderer.getBatch().end();
     }
 
