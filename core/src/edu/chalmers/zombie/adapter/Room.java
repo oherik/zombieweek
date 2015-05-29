@@ -1,18 +1,10 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.controller.ContactListener;
+import edu.chalmers.zombie.controller.ContactController;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * The general model for storing a specific level. The level contains a tiled map, which is the graphical representation
@@ -47,7 +39,7 @@ public class Room {
 
         //Create the world
         world = new ZWWorld();
-        world.setContactListener(new ContactListener());
+        world.setContactListener(new ContactController());
         hasBeenTraversed = false;
 
         zombies = new ArrayList<Zombie>();
