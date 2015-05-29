@@ -1,18 +1,11 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.Gdx;
-//import com.badlogic.gdx.maps.tiled.TiledMap;
-//mport com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
-//import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-//import com.badlogic.gdx.math.Vector2;
-//import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.TileRayTracing;
-import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -89,7 +82,7 @@ public class MapController {
         EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
         int oldRoomIndex = gameModel.getCurrentRoomIndex();
 
-        GameModel.getInstance().addEntityToRemove(getRoom(),GameModel.getInstance().getPlayer());
+        GameModel.getInstance().addEntityToRemove(getRoom(), GameModel.getInstance().getPlayer());
         for(Book book : gameModel.getBooks()){
             book.markForRemoval();
             gameModel.addEntityToRemove(getRoom(),book);
@@ -314,8 +307,8 @@ public class MapController {
 
             /* ------ Update screen ------ */
             if(gameModel.getRenderer() == null)
-                gameModel.setRenderer(new Renderer(getRoom(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));  //TODO ej här!
-            gameModel.getRenderer().updateRoom(getRoom(),  Gdx.graphics.getWidth(), Gdx.graphics.getHeight());          //TODO ej här!
+                gameModel.setRenderer(new Renderer(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight()));  //TODO ej här!
+            gameModel.getRenderer().updateRoom(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());          //TODO ej här!
 
             /* ------ Save game ------ */
             SaveLoadController saveLoadController = new SaveLoadController();

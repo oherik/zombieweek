@@ -15,6 +15,7 @@ public class ZWSprite {
     public ZWSprite(Sprite sprite){
         this.sprite = sprite;
     }
+
     public Sprite getSprite(){
         return sprite;
     }
@@ -23,5 +24,39 @@ public class ZWSprite {
     }
     public void setAlpha(float alpha){
         sprite.setAlpha(alpha);
+    }
+
+    public void setX(float x) {
+
+        sprite.setX(x);
+    }
+    public void setY(float y) {
+
+        sprite.setY(y);
+    }
+
+    public void setSize(float width, float height) {
+
+        sprite.setSize(width, height);
+    }
+
+    public float getWidth() {
+
+        return sprite.getWidth();
+    }
+
+    public float getHeight() {
+
+        return sprite.getHeight();
+    }
+
+    public void setRegion(float u, float v, float u2, float v2) {
+
+        sprite.setRegion(u, v, u2, v2);
+    }
+
+    public void setRegion(int x, int y, int width, int height) {
+
+        sprite.setRegion(x, y, width, height);
     }
 }

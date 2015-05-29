@@ -1,13 +1,11 @@
 package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import edu.chalmers.zombie.adapter.Entity;
+import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.Direction;
 
 /**
  * Created by daniel on 4/21/2015.
