@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
@@ -24,5 +25,13 @@ public class ZWShapeRenderer {
     }
     public void line(float x1, float y1, float x2, float y2){
         shapeRenderer.line(x1, y1, x2, y2);
+    }
+    public enum Color{
+        GREEN
+    }
+    public void setColor(Color color){
+        if (color == Color.GREEN){
+            shapeRenderer.setColor(com.badlogic.gdx.graphics.Color.GREEN);
+        }
     }
 }
