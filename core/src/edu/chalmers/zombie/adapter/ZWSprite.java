@@ -69,5 +69,5 @@ public class ZWSprite {
     public void setRotation(float degrees){
         sprite.setRotation(degrees);
     }
-    
+
 }
