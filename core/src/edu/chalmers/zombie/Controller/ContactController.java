@@ -8,18 +8,6 @@ import edu.chalmers.zombie.utils.Constants;
  * Created by Erik on 2015-04-18.
  */
 public class ContactController {
-    private GameModel gameModel;
-    private MapController mapController;
-    private EntityController entityController;
-
-    /**
-     * Instantiates the contact listener.
-     */
-    public ContactController(){
-        this.gameModel = GameModel.getInstance();
-        this.mapController = new MapController();
-        this.entityController = new EntityController();
-    }
 
     /**
      * This method decides what to do when two objects start colliding.
@@ -47,6 +35,7 @@ public class ContactController {
      */
 
     public void beginContact (ZWFixture fixtureA, ZWFixture fixtureB) {
+        GameModel gameModel = GameModel.getInstance();
         gameModel.clearEntitiesToRemove();
         switch(fixtureB.getCategoryBits()) {
             case Constants.COLLISION_PROJECTILE://Check if the fixture is a projectile, e.g. a book
@@ -139,6 +128,7 @@ public class ContactController {
      * @param fixtureB  The second fixture
      */
     public void endContact (ZWFixture fixtureA, ZWFixture fixtureB){
+        GameModel gameModel = GameModel.getInstance();
         switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_WATER):
                 switch (fixtureA.getCategoryBits()) {        //Not made as an if-statement if more collision alternatives are to be added
@@ -179,13 +169,14 @@ public class ContactController {
      * @param fixtureB  The second fixture
      */
     public  void preSolve(ZWFixture fixtureA, ZWFixture fixtureB){
+        GameModel gameModel = GameModel.getInstance();
         switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_PLAYER):
                 switch (fixtureA.getCategoryBits()){        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_DOOR:
                              CollisionObject door = (CollisionObject) fixtureA.getUserData();
                             int levelToLoad = Integer.parseInt(door.getProperty());
-                          mapController.loadRoom(levelToLoad);
+                          MapController.loadRoom(levelToLoad);
                         break;
 
                 }
@@ -195,7 +186,7 @@ public class ContactController {
                     case Constants.COLLISION_PLAYER:
                             CollisionObject door = (CollisionObject) fixtureB.getUserData();
                           int levelToLoad = Integer.parseInt(door.getProperty());
-                         mapController.loadRoom(levelToLoad);
+                         MapController.loadRoom(levelToLoad);
                         break;
                 }
                 break;
