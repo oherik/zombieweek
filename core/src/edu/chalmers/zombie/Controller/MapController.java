@@ -16,16 +16,6 @@ import java.util.Map;
  * This controller class makes all the different calculations regarding the maps, rooms, worlds and objects in them.
  */
 public class MapController {
-    GameModel gameModel;
-
-    /**
-     * Constructor
-     */
-    public MapController(){
-        this.gameModel = GameModel.getInstance();
-    }
-
-
 
     /**
      * @param roomIndex the room index that will be accessed
@@ -33,6 +23,7 @@ public class MapController {
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
     public Room getRoom(int roomIndex){
+        GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getRooms().size() -1;
         if(roomIndex<0 ||roomIndex > maxSize)
             throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
@@ -42,13 +33,16 @@ public class MapController {
     /**
      * @return the current room from the model
      */
-    public Room getRoom(){return gameModel.getRoom();}
+    public Room getRoom(){
+        GameModel gameModel = GameModel.getInstance();
+        return gameModel.getRoom();}
 
     /**
      * Creates the different rooms and stores them in the model
      */
 
     public void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
+        GameModel gameModel = GameModel.getInstance();
         gameModel.res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
         gameModel.res.loadTiledMap("room1", "core/assets/Map/Test_world_3.tmx");
         gameModel.res.loadTiledMap("room2", "core/assets/Map/Test_world_2_next.tmx");
@@ -71,6 +65,7 @@ public class MapController {
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
     public void loadRoom(int roomIndex) {
+        GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getRooms().size() - 1;
         if (roomIndex < 0 || roomIndex > maxSize){
         throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
@@ -107,6 +102,7 @@ public class MapController {
      * @return true if the world needs to be updated, false if not
      */
     public boolean worldNeedsUpdate(){
+        GameModel gameModel = GameModel.getInstance();
         return gameModel.worldNeedsUpdate();
     }
 
@@ -115,6 +111,7 @@ public class MapController {
      * @param bool true if the world needs to be updated, false if not
      */
     public void setWorldNeedsUpdate(boolean bool){
+        GameModel gameModel = GameModel.getInstance();
         gameModel.setWorldNeedsUpdate(bool);
     }
 
@@ -122,6 +119,7 @@ public class MapController {
      * @return The player's current (rounded) position as a point
      */
     public Point getPlayerPosition(){
+        GameModel gameModel = GameModel.getInstance();
         return new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
     }
 
@@ -130,6 +128,7 @@ public class MapController {
      * @param point Where the player will be placed
      */
     public void updatePlayerPosition(Point point){
+        GameModel gameModel = GameModel.getInstance();
                gameModel.getPlayer().setPosition(point);
     }
 
@@ -138,6 +137,7 @@ public class MapController {
      * @param point Where the player will be placed after the step
      */
     public void setPlayerBufferPosition(Point point){
+        GameModel gameModel = GameModel.getInstance();
         gameModel.setPlayerBufferPosition(point);
     }
 
@@ -145,6 +145,7 @@ public class MapController {
      * @return where the player will be placed after the step
      */
     public Point getPlayerBufferPosition(){
+        GameModel gameModel = GameModel.getInstance();
         return gameModel.getPlayerBufferPosition();
     }
 
@@ -187,6 +188,7 @@ public class MapController {
 
 
     public void printCollisionTileGrid(){       //TODO debugmetod
+        GameModel gameModel = GameModel.getInstance();
         System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +": printing collision detection tiles.");
         System.out.println("Width: " + getRoom().getCollisionTileGrid().length    + " Height: " + getRoom().getCollisionTileGrid()[0].length);
         for(int y = getRoom().getCollisionTileGrid()[0].length-1; y >= 0; y--){
@@ -203,6 +205,7 @@ public class MapController {
 
 
     public void printPath(Room room, Point start, Point end) throws NullPointerException, IndexOutOfBoundsException{  //TODO debugmetod
+        GameModel gameModel = GameModel.getInstance();
             ArrayList<Point> path = getPath(room, start, end, Constants.MAX_PATH_COST);
             System.out.println("\nRoom nr " + (gameModel.getCurrentRoomIndex()+1) +
                     ": printing collision detection tiles and path from " + start.x + ", " + start.y + " to " + end.x + ", " + end.y + ".");
@@ -285,6 +288,7 @@ public class MapController {
      * If the room has changed the map and renderer need to change as well
      */
     public void updateRoomIfNeeded() {
+        GameModel gameModel = GameModel.getInstance();
         removeEntities();
         if (worldNeedsUpdate()) {
            Room currentRoom = getRoom();
@@ -299,7 +303,7 @@ public class MapController {
 
             /* ------ Update player ------ */
             if(player == null){
-               player = EntityController.createNewPlayer();
+               player = PlayerController.createNewPlayer();
             }
             if(player.getBody() == null||player.getBody().getWorld()!=getRoom().getWorld().getWorld()){
                 System.out.println(getPlayerBufferPosition());
@@ -343,6 +347,7 @@ public class MapController {
      * Updates the physical world
      */
     private void stepWorld(){
+        GameModel gameModel = GameModel.getInstance();
 
         /* ------ Step the world, i.e. update the game physics. The model gets a variable set to tell it that the world is stepping and no physic operations should be performed ------ */
         gameModel.setStepping(true);
@@ -354,6 +359,7 @@ public class MapController {
      * Removes the entity bodies from the world if necessary
      */
     private void removeEntities(){
+        GameModel gameModel = GameModel.getInstance();
         for(Map.Entry<Room, ArrayList<Entity>> e: gameModel.getEntitiesToRemove().entrySet()){
             for(Entity entity : e.getValue()) {
                 gameModel.getRoom().destroyBody(entity);
@@ -364,6 +370,7 @@ public class MapController {
 
     /* ------ Make all the zombies move toward the player if appropriate ------ */
     private void moveZombies() {
+        GameModel gameModel = GameModel.getInstance();
         for (Zombie z : gameModel.getZombies()) {
             ZombieController.move(z);
         }
@@ -373,13 +380,14 @@ public class MapController {
      * Updates projectiles
      */
     private void updateBooks(){
+        GameModel gameModel = GameModel.getInstance();
         ArrayList<Book> books = gameModel.getBooks();
         for (int i = 0; i < books.size(); i++) {
             Book b = books.get(i);
             long airTime = 500;
             long lifeTime = 5000; //life time for book in millisec
             if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
-                EntityController.hitGround(b);
+                ProjectileController.hitGround(b);
             if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
               //  gameModel.addEntityToRemove(getRoom(),b);
                 //b.markForRemoval(); //TODO ha med?
