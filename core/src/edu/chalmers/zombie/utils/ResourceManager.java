@@ -1,10 +1,7 @@
 package edu.chalmers.zombie.utils;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import edu.chalmers.zombie.adapter.ZWSound;
+import edu.chalmers.zombie.adapter.ZWTexture;
 import edu.chalmers.zombie.adapter.ZWTiledMap;
 
 import java.util.HashMap;
@@ -17,18 +14,18 @@ import java.util.HashMap;
 public class ResourceManager {
 
     //Sprites?
-    private HashMap<String, Texture> textureMap;
+    private HashMap<String, ZWTexture> textureMap;
     private HashMap<String, ZWTiledMap> tiledmapMap;
-    private HashMap<String, Sound> soundMap;
+    private HashMap<String, ZWSound> soundMap;
 
 
     /**
      * Initializes the hashmaps
      */
     public ResourceManager(){
-        textureMap = new HashMap<String, Texture>();
+        textureMap = new HashMap<String, ZWTexture>();
         tiledmapMap = new HashMap<String, ZWTiledMap>();
-        soundMap = new HashMap<String, Sound>();
+        soundMap = new HashMap<String, ZWSound>();
     }
 
     /**
@@ -42,7 +39,7 @@ public class ResourceManager {
             throw new NullPointerException("Sound: no path recieved");
         }
 
-        Sound sound = Gdx.audio.newSound(Gdx.files.internal(path));
+        ZWSound sound = new ZWSound(path);
 
         if (sound == null) {
             throw new NullPointerException("Sound: incorrect path name");
@@ -56,14 +53,14 @@ public class ResourceManager {
      * @param key The sound
      * @return sound
      */
-    public Sound getSound(String key){ return soundMap.get(key);}
+    public ZWSound getSound(String key){ return soundMap.get(key);}
 
     /**
      * Dispose sound
      * @param key The sound
      */
     public void disposeSound(String key){
-        Sound sound = soundMap.get(key);
+        ZWSound sound = soundMap.get(key);
         if (sound!=null){sound.dispose();}
     }
 
@@ -116,7 +113,7 @@ public class ResourceManager {
         }
 
         //Texture texture = new Texture(Gdx.files.internal(path));
-        Texture texture = new Texture(path);
+        ZWTexture texture = new ZWTexture(path);
 
         if (texture == null) {
             throw new NullPointerException("Texture: incorrect path name");
@@ -130,7 +127,7 @@ public class ResourceManager {
      * @param key The texture key
      * @return texture
      */
-    public Texture getTexture(String key){
+    public ZWTexture getTexture(String key){
         return textureMap.get(key);
     }
 
@@ -139,7 +136,7 @@ public class ResourceManager {
      * @param key The texture key
      */
     public void disposeTexture(String key){
-        Texture texture = textureMap.get(key);
+        ZWTexture texture = textureMap.get(key);
         if (texture!=null){texture.dispose();}
     }
 
