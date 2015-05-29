@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 
 

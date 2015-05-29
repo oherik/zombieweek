@@ -1,25 +1,14 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.adapter.Vector;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.adapter.Player;
-import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;
-import edu.chalmers.zombie.utils.PathAlgorithm;
-
-import java.awt.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * controller to handle all inputs

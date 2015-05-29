@@ -1,5 +1,6 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
@@ -48,10 +49,10 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         if(deadTexture == null)
             deadTexture = GameModel.getInstance().res.getTexture("zombie-dead");
 
-        TextureRegion[] stillFrame = TextureRegion.split(stillTexture,32,32)[0];
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,32,32);
         getAnimator().addStillFrame(stillFrame[0]);
 
-        TextureRegion[] deadFrame = TextureRegion.split(deadTexture,32,32)[0];
+        ZWTextureRegion[] deadFrame = ZWTextureRegion.split(deadTexture,32,32);
         getAnimator().addStillFrame(deadFrame[0]);
 
 
@@ -187,8 +188,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         this.type = type;
     }
-
-    public abstract void attack();
 
     public void setZombiePosition(Point pos) {
 

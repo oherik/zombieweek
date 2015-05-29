@@ -1,10 +1,7 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Room;
+import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ZombieType;
@@ -19,6 +16,7 @@ import java.util.Iterator;
 public class ZombieController {
 
     public static void move(Zombie z) {
+
         if (z.getBody() != null) {
         Point playerPosition = z.getThisMapController().getPlayerPosition();
         Point zombiePosition = z.getZombiePosition();
@@ -27,8 +25,8 @@ public class ZombieController {
         Point playerTile = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
         Point zombieTile = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
 
-        Circle zcircle = new Circle(zombiePosition.x, zombiePosition.y, z.getDetectionRadius());
-        Circle pcircle = new Circle(playerPosition.x, playerPosition.y, z.getDetectionRadius());
+        ZWCircle zcircle = new ZWCircle(zombiePosition.x, zombiePosition.y, z.getDetectionRadius());
+        ZWCircle pcircle = new ZWCircle(playerPosition.x, playerPosition.y, z.getDetectionRadius());
 
         if (zcircle.overlaps(pcircle) || z.isAggressive()) {
 
@@ -50,7 +48,7 @@ public class ZombieController {
                         z.setNextPathTile(temp);
                     }
                 }
-                    Vector2 direction = new Vector2(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
+                    Vector direction = new Vector(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
                     direction.setLength(z.getSpeed());
                     //Rotate
 
@@ -70,7 +68,7 @@ public class ZombieController {
                         z.getBody().applyAngularImpulse(impulse, true);
                     }
 
-                    z.getBody().applyForceToCenter(direction.x, direction.y, true);
+                    z.getBody().applyForceToCenter(direction.getX(), direction.getY(), true);
                     z.setIsMoving(true);
                 } else {
                     z.setIsAggressive(false);    //Lose aggression
