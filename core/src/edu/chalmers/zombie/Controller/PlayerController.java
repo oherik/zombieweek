@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.controller;
 
+import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.model.Room;
@@ -24,12 +25,89 @@ public class PlayerController {
 
     /**
      * A method which moves player in given direction.
-     * @param player the player to be moved.
      * @param direction the direction a player will move in.
      */
-    public static void move(Player player, Direction direction) {
+    public static void move(Direction direction) {
+        Player player = getPlayer();
+        int speed = player.getLegPower();
+        switch (direction){
+            case NORTH:
+                player.setForceY(speed);
+                break;
+            case SOUTH:
+                player.setForceY(-speed);
+                break;
+            case WEST:
+                player.setForceX(-speed);
+                break;
+            case EAST:
+                player.setForceX(speed);
+                break;
+            default:
+                break;
+        }
 
-        //TODO: fill in move.
+        updateMovement();
+    }
+
+    /**
+     * Updates velocity, direction and rotation of body
+     */
+    private static void updateMovement(){
+
+        // setBodyVelocity(force);
+        updateSpeed();
+        updateDirecton();
+        EntityController.updateRotation(getPlayer());
+
+        moveIfNeeded();
+    }
+
+    /**
+     * Moves player if needed.
+     */
+    public static void moveIfNeeded(){
+        ZWVector force = getPlayer().getForce();
+        getPlayer().getBody().applyForce(force, getPlayer().getBody().getLocalCenter());
+    }
+
+    /**
+     * Updates player speed
+     */
+    private static void updateSpeed(){getPlayer().setForceLength(getPlayer().getSpeed());} //TODO: needed?
+
+    /**
+     * Sets Direction from variable force
+     */
+    private static void updateDirecton(){
+        Player player = getPlayer();
+        ZWVector force = player.getForce();
+        Direction direction = player.getDirection();
+        if(force.getY() > 0){
+            if (force.getX() > 0){
+                direction = Direction.NORTH_EAST;
+            } else if (force.getX() < 0){
+                direction = Direction.NORTH_WEST;
+            } else {
+                direction = Direction.NORTH;
+            }
+        } else if (force.getY() < 0){
+            if (force.getX() > 0){
+                direction = Direction.SOUTH_EAST;
+            } else if (force.getX() < 0){
+                direction = Direction.SOUTH_WEST;
+            } else {
+                direction = Direction.SOUTH;
+            }
+        } else {
+            if (force.getX() > 0){
+                direction = Direction.EAST;
+            } else if (force.getX() < 0){
+                direction = Direction.WEST;
+            }
+        }
+        player.setDirection(direction);
+
     }
 
     /**

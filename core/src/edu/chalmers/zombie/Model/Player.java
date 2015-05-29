@@ -171,6 +171,12 @@ public class Player extends Entity implements CreatureInterface {
 
     }
 
+    public void setForceY(float speed){force.setY(speed);}
+
+    public void setForceX(float speed){force.setX(speed);}
+
+
+
     /**
      * Updates Body rotation
      */
@@ -215,6 +221,10 @@ public class Player extends Entity implements CreatureInterface {
      */
     private void updateSpeed(){force.setLength(speed);}
 
+    public float getSpeed(){return this.speed;}
+
+    public void setForceLength(float speed){force.setLength(speed);}
+
     /**
      * Sets Direction from variable force
      */
@@ -245,6 +255,10 @@ public class Player extends Entity implements CreatureInterface {
         }
 
     }
+
+    public ZWVector getForce(){return this.force;}
+
+    public void setDirection(Direction direction){this.direction = direction;}
 
 
 
