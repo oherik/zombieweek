@@ -18,12 +18,29 @@ public class ZWTextureRegion {
     public ZWTexture consumePixmap(){
         return  new ZWTexture(new ZWPixmap(this.textureRegion.getTexture().getTextureData().consumePixmap()));
     }
-    public TextureRegion getTextureRegion(){
-        return textureRegion;
-    }
+
+
+
+    public ZWTextureRegion(TextureRegion textureRegion){this.textureRegion=textureRegion;}
 
     public ZWTextureRegion(ZWTexture zwTexture){this.textureRegion.setTexture(zwTexture.getTexture());}
-    
+
+
+    public static ZWTextureRegion[] split(ZWTexture texture,int tileWidth, int tileHeight){
+
+        TextureRegion textureRegion1[] = TextureRegion.split(texture.getTexture(),tileWidth,tileHeight)[0];
+
+        ZWTextureRegion[] textureRegions = new ZWTextureRegion[textureRegion1.length];
+
+        int i = 0;
+        for (TextureRegion textureRegion2 : textureRegion1){
+            textureRegions[i] = new ZWTextureRegion(textureRegion2);
+            i++;
+        }
+
+        return textureRegions;
+    }
+    public TextureRegion getTextureRegion(){return this.textureRegion;}
 
 
 

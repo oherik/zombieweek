@@ -48,14 +48,14 @@ public abstract class Entity {
         sprite.setY(y);
     }
 
-    public Entity(Texture texture, World world, float x, float y){
-        this(world);
+    public Entity(ZWTexture texture, ZWWorld world, float x, float y){
+        this(ZWWorld);
         animator = new Animator();
         isAnimated = true;
 
-        TextureRegion[] textureRegions = TextureRegion.split(texture,32,32)[0];
+        ZWTextureRegion[] textureRegions = ZWTextureRegion.split(texture,32,32);
         setAnimator(textureRegions, 1 / 12f);
-        sprite = new Sprite(getAnimator().getFrame()); //gets the first frame to start with
+        sprite = new ZWSprite(getAnimator().getFrame()); //gets the first frame to start with
         sprite.setSize(32,32);
         sprite.setX(x);
         sprite.setY(y);
@@ -68,7 +68,7 @@ public abstract class Entity {
     }
 
 
-    public void setAnimator(TextureRegion[] frames, float delay){
+    public void setAnimator(ZWTextureRegion[] frames, float delay){
         animator.setFrames(frames, delay);
     }
 
@@ -118,7 +118,7 @@ public abstract class Entity {
      * Draws the sprite
      * @param batch The sprite batch in which to draw it
      */
-    public void draw(Batch batch) {
+    public void draw(ZWBatch batch) {
 
         if (body != null) {
             updateRotation();
@@ -132,7 +132,7 @@ public abstract class Entity {
                 animator.update(deltaTime);
 
                 if (getBodySpeed() < 0.2f) { //not moving
-                    TextureRegion stillFrame = animator.getStillFrame();
+                    ZWTextureRegion stillFrame = animator.getStillFrame();
                     if (stillFrame != null) {
                         sprite.setRegion(stillFrame);
                     } else {
@@ -144,7 +144,7 @@ public abstract class Entity {
                 }
             }
             else{
-                TextureRegion stillFrame = animator.getStillFrame();
+                ZWTextureRegion stillFrame = animator.getStillFrame();
                 if (stillFrame != null) {
                     sprite.setRegion(stillFrame);
                 } else {

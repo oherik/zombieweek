@@ -14,6 +14,7 @@ public class ZWSprite {
     public ZWSprite(Sprite sprite){
         this.sprite = sprite;
     }
+    public ZWSprite(ZWTextureRegion textureRegion){this.sprite = new Sprite(textureRegion.getTextureRegion());}
 
     public Sprite getSprite(){
         return sprite;
@@ -69,5 +70,7 @@ public class ZWSprite {
     public void setRotation(float degrees){
         sprite.setRotation(degrees);
     }
+
+    public void setRegion(ZWTextureRegion textureRegion){sprite.setRegion(textureRegion.getTextureRegion());}
 
 }
