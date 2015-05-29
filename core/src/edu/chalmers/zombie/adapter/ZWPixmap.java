@@ -24,4 +24,8 @@ public class ZWPixmap {
 
     public void dispose(){this.pixmap.dispose();}
 
+    public void drawZWPixmap(ZWPixmap pixmap1, int x, int y){
+        this.pixmap.drawPixmap(pixmap1.getPixmap(),x,y);
+    }
+
 }
