@@ -12,7 +12,6 @@ public class ZWTextureRegion {
     public ZWTextureRegion(){
         this.textureRegion = new TextureRegion();
     }
-    public ZWTextureRegion(ZWTexture texture) { this.textureRegion = new TextureRegion(texture.getTexture());}
 
     public ZWTexture getZWTexture(){return new ZWTexture(this.textureRegion.getTexture());}
 
@@ -22,6 +21,12 @@ public class ZWTextureRegion {
     public TextureRegion getTextureRegion(){
         return textureRegion;
     }
+
+    public ZWTextureRegion(ZWTexture zwTexture){this.textureRegion.setTexture(zwTexture.getTexture());}
+    
+
+
+
 
 
 }

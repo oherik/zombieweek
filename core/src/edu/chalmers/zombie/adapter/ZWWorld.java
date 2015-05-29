@@ -2,7 +2,8 @@ package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.controller.ContactListener;
+import edu.chalmers.zombie.controller.ContactController;
+import edu.chalmers.zombie.controller.controller_adapters.ZWContactListener;
 
 /** Wrapper class for Box2d World
  * Created by Erik on 2015-05-29.
@@ -26,7 +27,7 @@ public class ZWWorld {
         world = new World(new Vector2(0,0), true);
     }
 
-    public void setContactListener(ContactListener contactListener){
+    public void setContactListener(ZWContactListener contactListener){
         world.setContactListener(contactListener);
     }
 
