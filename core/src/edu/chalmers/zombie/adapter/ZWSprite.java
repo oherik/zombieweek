@@ -58,4 +58,16 @@ public class ZWSprite {
 
         sprite.setRegion(x, y, width, height);
     }
+
+    public void dispose(){
+        sprite.getTexture().dispose();
+    }
+
+    public void setOrigin(float x, float y){
+        sprite.setOrigin(x, y);
+}
+    public void setRotation(float degrees){
+        sprite.setRotation(degrees);
+    }
+    
 }
