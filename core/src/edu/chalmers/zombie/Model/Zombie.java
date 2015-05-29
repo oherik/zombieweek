@@ -3,9 +3,6 @@ package edu.chalmers.zombie.model;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SpawnController;
-import edu.chalmers.zombie.model.CreatureInterface;
-import edu.chalmers.zombie.model.Entity;
-import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
@@ -20,7 +17,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private float radius;
     private ZombieType type;
     private boolean isKnockedOut, isMoving, isAggressive;
-    private Vector force, point;
+    private ZWVector force, point;
     private Point position, nextPathTile;
     private MapController mapController;
     private long timeSinceLastPath;
@@ -64,8 +61,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         body.createBodyDef(true, x+0.5f, y+0.5f, 20f, 20f);
         body.setFixtureDef(0.8f, 0, 1, 1, categoryBits, maskBits, false);
         //Set vectors
-        force = new Vector(0,0);
-        point = new Vector(0,0);
+        force = new ZWVector(0,0);
+        point = new ZWVector(0,0);
 
         //Set position
         position = new Point((int)x,(int)y);
@@ -222,12 +219,12 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return radius;
     }
 
-    public Vector getForce() {
+    public ZWVector getForce() {
 
         return force;
     }
 
-    public Vector getPoint() {
+    public ZWVector getPoint() {
 
         return point;
     }

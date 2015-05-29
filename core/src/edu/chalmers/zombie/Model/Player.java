@@ -21,7 +21,7 @@ public class Player extends Entity implements CreatureInterface {
     private boolean isHidden;
     private int width;
     private int height;
-    private Vector force;
+    private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
     //Holds the players speed.
@@ -68,18 +68,18 @@ public class Player extends Entity implements CreatureInterface {
 
         body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
 
-        Vector[] vectors = new Vector[8];
+        ZWVector[] vectors = new ZWVector[8];
 
-        vectors[0] = new Vector(2f,-1.5f);
-        vectors[1] = new Vector(3f,-0.5f);
-        vectors[2] = new Vector(3f,0.5f);
-        vectors[3] = new Vector(2f,1.5f);
-        vectors[4] = new Vector(-2f,1.5f);
-        vectors[5] = new Vector(-3f,0.5f);
-        vectors[6] = new Vector(-3f,-0.5f);
-        vectors[7] = new Vector(-2f,-1.5f);
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
 
-        for (Vector vector:vectors){
+        for (ZWVector vector:vectors){
             vector.scl(1f/6.5f);
         }
 
@@ -98,7 +98,7 @@ public class Player extends Entity implements CreatureInterface {
         killCount = 0;
         ammunition = 5;
         lives = 100;
-        force = new Vector(0,0);
+        force = new ZWVector(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
 
 
@@ -301,7 +301,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     @Override
-    protected void setBodyVelocity(Vector velocity){
+    protected void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
 
@@ -416,7 +416,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
 
-    public Vector getVelocity(){
+    public ZWVector getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
@@ -433,16 +433,16 @@ public class Player extends Entity implements CreatureInterface {
         ZWBody body = new ZWBody();
         body.createBodyDef(true,(float)point.x+0.5f,(float)point.y+0.5f,dampening,dampening);
 
-        Vector[] vectors = new Vector[8];
-        vectors[0] = new Vector(2f,-1.5f);
-        vectors[1] = new Vector(3f,-0.5f);
-        vectors[2] = new Vector(3f,0.5f);
-        vectors[3] = new Vector(2f,1.5f);
-        vectors[4] = new Vector(-2f,1.5f);
-        vectors[5] = new Vector(-3f,0.5f);
-        vectors[6] = new Vector(-3f,-0.5f);
-        vectors[7] = new Vector(-2f,-1.5f);
-        for (Vector vector:vectors){
+        ZWVector[] vectors = new ZWVector[8];
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
+        for (ZWVector vector:vectors){
             vector.scl(1f/6.5f);
         }
 
@@ -474,16 +474,16 @@ public class Player extends Entity implements CreatureInterface {
         ZWBody body = new ZWBody();
         body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
 
-        Vector[] vectors = new Vector[8];
-        vectors[0] = new Vector(2f,-1.5f);
-        vectors[1] = new Vector(3f,-0.5f);
-        vectors[2] = new Vector(3f,0.5f);
-        vectors[3] = new Vector(2f,1.5f);
-        vectors[4] = new Vector(-2f,1.5f);
-        vectors[5] = new Vector(-3f,0.5f);
-        vectors[6] = new Vector(-3f,-0.5f);
-        vectors[7] = new Vector(-2f,-1.5f);
-        for (Vector vector:vectors){
+        ZWVector[] vectors = new ZWVector[8];
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
+        for (ZWVector vector:vectors){
             vector.scl(1f/6.5f);
         }
 

@@ -2,7 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import edu.chalmers.zombie.adapter.Vector;
+import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.utils.Constants;
@@ -160,7 +160,7 @@ public class InputController implements InputProcessor{
         float distance = 1f;
         float angle = player.getHand().getDirection()+Constants.PI*0.5f;
 
-        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(new Vector(getPlayer().getBody().getPosition()), mapController.getRoom(),distance,angle) ) {
+        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(new ZWVector(getPlayer().getBody().getPosition()), mapController.getRoom(),distance,angle) ) {
             player.decreaseAmmunition();
             if (player.getHand().isThrowingGrenade()){
                 player.getHand().throwGrenade();

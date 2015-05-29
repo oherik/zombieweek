@@ -1,7 +1,7 @@
 package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.model.Player;
-import edu.chalmers.zombie.adapter.Potion;
+import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -134,8 +134,8 @@ public class PlayerController {
         }
         player.setSneakTilesTouching(player.getSneakTilesTouching() + 1);
         //TODO add more sneak stuff
-        player.setHidden(true); //TODO Nödvändigt? Zombien kommer ändå inte kunna hitta till spelaren
-        EntityController.setFriction(player, Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);  //TODO onödigt att göra varje gång?
+        player.setHidden(true); //TODO Nï¿½dvï¿½ndigt? Zombien kommer ï¿½ndï¿½ inte kunna hitta till spelaren
+        EntityController.setFriction(player, Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);  //TODO onï¿½digt att gï¿½ra varje gï¿½ng?
     }
 
     /**

@@ -3,7 +3,6 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.Room;
-import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -90,7 +89,7 @@ public class ZWBody {
     }
 
 
-    public void setFixtureDef(float friction, float restitution,Vector[] polygonVertices, short categoryBits, short maskBits, boolean isSensor){
+    public void setFixtureDef(float friction, float restitution,ZWVector[] polygonVertices, short categoryBits, short maskBits, boolean isSensor){
         Vector2[] vector2s = new Vector2[polygonVertices.length];
         for(int i = 0; i< polygonVertices.length; i++){
             vector2s[i] = new Vector2(polygonVertices[i].getLibVector());
@@ -119,8 +118,8 @@ public class ZWBody {
         return bodyDef;
     }
 
-    public Vector getLinearVelocity(){
-        return new Vector(body.getLinearVelocity());
+    public ZWVector getLinearVelocity(){
+        return new ZWVector(body.getLinearVelocity());
     }
 
     public float getLinearSpeed(){
@@ -131,7 +130,7 @@ public class ZWBody {
      //   this.body = body;
     //}
 
-    public void setLinearVelocity(Vector velocity){
+    public void setLinearVelocity(ZWVector velocity){
         body.setLinearVelocity(velocity.getLibVector());
     }
 
@@ -139,8 +138,8 @@ public class ZWBody {
         body.setAngularVelocity(omega);
     }
 
-    public Vector getPosition(){
-        return new Vector(body.getPosition());
+    public ZWVector getPosition(){
+        return new ZWVector(body.getPosition());
     }
 
     public float getAngle(){
@@ -180,23 +179,25 @@ public class ZWBody {
         return fixtures;
     }
 
-    public Vector getWorldCenter() {
+    public ZWVector getWorldCenter() {
 
-        return new Vector(body.getWorldCenter());
+        return new ZWVector(body.getWorldCenter());
     }
 
-    public void applyLinearImpulse(Vector impulse, Vector point, boolean bool) {
+
+    public void applyLinearImpulse(ZWVector impulse, ZWVector point, boolean bool) {
+
         body.applyLinearImpulse(impulse.getLibVector(), point.getLibVector(), bool);
     }
 
     public void setFixedRotation(boolean bool){this.body.setFixedRotation(bool);}
 
-    public void setTransform(Vector vector, float rotation){
+    public void setTransform(ZWVector vector, float rotation){
         this.body.setTransform(vector.getLibVector(),rotation);
     }
 
     public void setTransform(float x, float y, float rotation){
-        setTransform(new Vector(x,y),rotation);
+        setTransform(new ZWVector(x,y),rotation);
     }
 
     public void setAngularDamping(float angularDamping) {
@@ -219,12 +220,12 @@ public class ZWBody {
         body.applyForceToCenter(x, y, wake);
     }
 
-    public void applyForce(Vector force, Vector position){
+    public void applyForce(ZWVector force, ZWVector position){
         body.applyForce(force.getLibVector(), position.getLibVector(), true);
     }
 
-    public Vector getLocalCenter(){
-        return new Vector(body.getLocalCenter());
+    public ZWVector getLocalCenter(){
+        return new ZWVector(body.getLocalCenter());
     }
 
     public float getMass(){

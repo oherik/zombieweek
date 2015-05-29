@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.controller;
+package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.math.Circle;
 

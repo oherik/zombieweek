@@ -1,9 +1,9 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.adapter.ZWVector;
+import edu.chalmers.zombie.adapter.ZWBody;
+import edu.chalmers.zombie.adapter.ZWSprite;
+import edu.chalmers.zombie.adapter.ZWWorld;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PotionType;
 
@@ -16,14 +16,14 @@ import java.util.ArrayList;
  */
 public class Potion extends Entity {
 
-    private Sprite sprite;
+    private ZWSprite sprite;
     private Point position;
-    private World world;
+    private ZWWorld world;
     private boolean hasBeenRemoved;
-    private Vector2 velocity;
+    private ZWVector velocity;
     private PotionType type;
 
-    public Potion(Sprite sprite, World world, int x, int y) {
+    public Potion(ZWSprite sprite, ZWWorld world, int x, int y) {
 
         super(sprite, world, x, y);
         this.world = world;
@@ -32,10 +32,10 @@ public class Potion extends Entity {
         randomizePotion();
     }
 
-    public Potion(PotionType potionType, Sprite sprite, World world, int x, int y) {
+    public Potion(PotionType potionType, ZWSprite sprite, ZWWorld world, int x, int y) {
 
         super(sprite, world, x, y);
-        velocity = new Vector2(0,0);
+        velocity = new ZWVector(0,0);
         this.sprite = sprite;
         this.world = world;
         type = potionType;
@@ -46,7 +46,7 @@ public class Potion extends Entity {
         short maskBits = Constants.COLLISION_PLAYER;
         potionBody.createBodyDef(true, x, y, 0, 0);
         potionBody.setFixtureDef(0, 0, 0.5f, 0.5f, categoryBits, maskBits, true);
-        super.setBody(potionBody.getBodyDef(),potionBody.getFixtureDef());
+        super.setBody(potionBody);
         super.scaleSprite(0.5f / Constants.TILE_SIZE);
         super.getBody().setUserData(this);
 
@@ -73,12 +73,12 @@ public class Potion extends Entity {
     }
 
     @Override
-    public Vector2 getVelocity() {
+    public ZWVector getVelocity() {
 
         return velocity;
     }
 
-    public Potion spawn(PotionType type, World world, int x, int y) {
+    public Potion spawn(PotionType type, ZWWorld world, int x, int y) {
 
         return new Potion(type, sprite, world, x, y);
     }
