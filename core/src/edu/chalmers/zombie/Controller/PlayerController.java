@@ -2,6 +2,9 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Potion;
+import edu.chalmers.zombie.adapter.Room;
+import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PotionType;
 
@@ -32,13 +35,13 @@ public class PlayerController {
     public static void pickUpPotion(Player player, Potion potion) {
 
         PotionType type = potion.getType();
-
+        Room room = GameModel.getInstance().getRoom();
         switch (type) {
             case HEALTH:
-                player.incLives(50);
+                drinkHealthPotion(player);
                 break;
             case SPEED:
-                //TODO: make twice as fast for approx. 10 sec.
+                drinkSpeedPotion(player);
                 break;
             case SUPER_STRENGTH:
                 //TODO: make twice as strong (eg. super effective attacks) for approx. 10 sec.
@@ -46,6 +49,17 @@ public class PlayerController {
             case IMMUNITY:
                 //TODO: make invulnerable for approx. 15 sec.
                 break;
+
+        }
+        room.removePotion(potion);
+        GameModel.getInstance().addEntityToRemove(potion);
+    }
+    public static void drinkHealthPotion(Player p){
+        if(p.getLives()+ Constants.POTION_HEALTH_AMOUNT>100) {
+            p.incLives(100 - p.getLives());
+        }
+        else {
+            p.incLives(Constants.POTION_HEALTH_AMOUNT);
         }
     }
 

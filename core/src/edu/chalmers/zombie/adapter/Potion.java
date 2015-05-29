@@ -44,10 +44,11 @@ public class Potion extends Entity {
         ZWBody potionBody = new ZWBody();
         short categoryBits = Constants.COLLISION_POTION;
         short maskBits = Constants.COLLISION_PLAYER;
-        potionBody.createBodyDef(true,x,y,0,0);
-        potionBody.setFixtureDef(0,0,0.5f,0.5f,categoryBits,maskBits,true);
+        potionBody.createBodyDef(true, x, y, 0, 0);
+        potionBody.setFixtureDef(0, 0, 0.5f, 0.5f, categoryBits, maskBits, true);
         super.setBody(potionBody.getBodyDef(),potionBody.getFixtureDef());
         super.scaleSprite(0.5f / Constants.TILE_SIZE);
+        super.getBody().setUserData(this);
 
         switch (potionType) {
             case HEALTH:
