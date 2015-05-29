@@ -1,34 +1,36 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.adapter.Vector;
+import edu.chalmers.zombie.adapter.ZWWorld;
 import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 
 /**
- * Created by neda on 2015-05-20.
+ * Created by neda on 2015-05-19.
  */
-public class BossZombie extends Zombie {
+public class MachineZombie extends Zombie {
 
     private Sprite sprite;
     private ZWWorld world;
     private Point position;
 
-    public BossZombie(ZWWorld world, int x, int y) {
+    public MachineZombie(ZWWorld world, int x, int y) {
 
-        super(null,null,null,world, x, y);
-        setType(ZombieType.BOSS);
+        super(null,null,null, world, x, y);
+        setType(ZombieType.MACHINE);
         this.world = world;
         this.sprite = sprite;
         position = new Point(x, y);
-        setDetectionRadius(10);
-        setStartingHp(200);
-        setSpeed(100);
-        setAngularSpeed(100);
-        setDamage(100);
+        setDetectionRadius(100);
+        setStartingHp(50);
+        setSpeed(30);
+        setAngularSpeed(30);
+        setDamage(80);
     }
 
     @Override

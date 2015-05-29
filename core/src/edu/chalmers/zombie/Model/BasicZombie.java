@@ -1,7 +1,9 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.adapter.Vector;
+import edu.chalmers.zombie.adapter.ZWWorld;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.ZombieType;
