@@ -3,23 +3,21 @@ package edu.chalmers.zombie.controller;
 /**
  * Created by daniel on 5/19/2015.
  */
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ShortArray;
 import com.sun.istack.internal.NotNull;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import java.util.ArrayList;
 
 public class Flashlight {
     private World world;
-    private Texture darkTexture = new Texture("core/assets/darkness.png");
-    private Texture lightTexture = new Texture("core/assets/light.png");
+    private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
+    private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
     private Vector2 playerPosition = new Vector2();
     Vector2 collisionPoint = new Vector2();
     private float currentFraction = 1337;
@@ -34,6 +32,7 @@ public class Flashlight {
     private ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
     private int maxYIndex;
     private float[] corners = new float[8];
+    private float lengthFraction;
 
     public Flashlight(@NotNull World world) throws NullPointerException{
         if (world == null){
@@ -42,9 +41,10 @@ public class Flashlight {
         this.world = world;
         width = Constants.PI/4;
         numberOfRays = 100;
+        lengthFraction = 0.75f;
         initializeRays();
     }
-    public Flashlight(@NotNull World world, float width, int numberOfRays, float length)throws NullPointerException{
+    public Flashlight(@NotNull World world, float width, int numberOfRays, float length, float lengthFraction)throws NullPointerException, IllegalArgumentException{
         if (world == null){
             throw new NullPointerException("The world is null");
         }
@@ -52,6 +52,10 @@ public class Flashlight {
         this.width = width;
         this.length = length;
         this.numberOfRays = numberOfRays;
+        if (lengthFraction < 0.05f || 0.95f > lengthFraction){
+            throw new IllegalArgumentException("The lengthFraction has to be between 0.05 and 0.95");
+        }
+        this.lengthFraction = lengthFraction;
         initializeRays();
     }
     public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
@@ -74,10 +78,11 @@ public class Flashlight {
         endPoints.clear();
     }
     private void calculateLength(){
-        float windowHeight = Gdx.graphics.getHeight();
-        float windowWidth = Gdx.graphics.getWidth();
-        float height =  (windowHeight/32 - windowHeight/64) - (windowHeight/32 - windowHeight/64)/4;
-        float width = (windowWidth/32 - windowWidth/64) - (windowWidth/32 - windowWidth/64)/4;
+        float tileSize = Constants.TILE_SIZE;
+        float windowHeight = ZWGameEngine.getWindowHeight();
+        float windowWidth = ZWGameEngine.getWindowWidth();
+        float height =  (windowHeight/tileSize - windowHeight/tileSize/2)*lengthFraction;
+        float width = (windowWidth/tileSize - windowWidth/tileSize/2)*lengthFraction;
         if (height > width){
             length = width;
         } else{
@@ -163,8 +168,8 @@ public class Flashlight {
         }
     }
     private void calculateCorners(){
-        float windowWidth = Gdx.graphics.getWidth();
-        float windowHeight = Gdx.graphics.getHeight();
+        float windowWidth = ZWGameEngine.getWindowWidth();
+        float windowHeight = ZWGameEngine.getWindowHeight();
         int tileSize = Constants.TILE_SIZE;
         corners[0] = playerPosition.x - windowWidth/(tileSize*2);
         corners[1] = windowHeight/tileSize + playerPosition.y - windowHeight/(tileSize*2);       //Top left
