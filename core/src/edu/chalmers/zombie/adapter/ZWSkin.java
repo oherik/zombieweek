@@ -18,6 +18,8 @@ public class ZWSkin {
         skin.add(key,texture.getTexture());
     }
 
+    public void add(String key, ZWBitmapFont font){this.skin.add(key,font);}
+
     public void createButtons(){
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("background", Color.GRAY);

@@ -1,37 +1,22 @@
 package edu.chalmers.zombie.view;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.utils.MenuBuilder;
 import edu.chalmers.zombie.controller.SaveLoadController;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.utils.Constants;
 
 /**
  * The main menu screen of the game
  *
  * Created by Tobias on 15-05-10.
  */
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends ZWScreen {
 
-    private Stage mainStage;
-    private Stage levelStage;
-    private Stage settingsStage;
-    private Skin skin;
+    private ZWStage mainStage;
+    private ZWStage levelStage;
+    private ZWStage settingsStage;
+    private ZWSkin skin;
     private enum MenuState{MAIN_MENU, LEVEL_MENU, SETTINGS_MENU}
     private MenuState menuState;
 
@@ -43,9 +28,9 @@ public class MainMenuScreen implements Screen {
         //Look of buttons
         skin = menuBuilder.createMenuSkin();
 
-        mainStage = new Stage();
-        levelStage = new Stage();
-        settingsStage = new Stage();
+        mainStage = new ZWStage();
+        levelStage = new ZWStage();
+        settingsStage = new ZWStage();
 
         //Sets up the different stages for the menus
         setUpMainStage();
@@ -54,13 +39,13 @@ public class MainMenuScreen implements Screen {
 
         System.out.println("--- MAIN MENU ---");
         menuState = MenuState.MAIN_MENU;
-        Gdx.input.setInputProcessor(mainStage);
+        ZWGameEngine.setInputProcessor(mainStage);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1); //white background
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ZWGameEngine.clearColor(1,1,1,1);
+        ZWGameEngine.clearBufferBit();
 
         switch (menuState){
             case MAIN_MENU:
@@ -87,41 +72,39 @@ public class MainMenuScreen implements Screen {
      */
     private void setUpMainStage(){
 
-        Table table = new Table();
+        ZWTable table = new ZWTable();
 
-        TextButton newGameButton = new TextButton("New game", skin);
-        final TextButton levelButton = new TextButton("Choose level", skin);
-        TextButton exitGameButton = new TextButton("Exit game", skin);
+        ZWTextButton newGameButton = new ZWTextButton("New game", skin);
+        final ZWTextButton levelButton = new ZWTextButton("Choose level", skin);
+        ZWTextButton exitGameButton = new ZWTextButton("Exit game", skin);
 
-        table.add(newGameButton).size(250,50).padBottom(15).row();
-        table.add(levelButton).size(250,50).padBottom(15).row();
-        table.add(exitGameButton).size(250,50).padBottom(15).row();
+        table.add(newGameButton,250,50,15);
+        table.add(levelButton,250,50,15);
+        table.add(exitGameButton, 250, 50, 15);
 
         table.setFillParent(true);
         mainStage.addActor(table);
 
-
-        newGameButton.addListener(new ClickListener(){
+        newGameButton.addListener(new ZWClickAction(){
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                MapController mapController = new MapController();
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+        public void clicked(){
+               ZWGameEngine.setScreen(new GameScreen());
             }
         });
 
-        levelButton.addListener(new ClickListener(){
+        levelButton.addListener(new ZWClickAction(){
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(){
                 menuState = MenuState.LEVEL_MENU;
-                Gdx.input.setInputProcessor(levelStage); //level menu is input processor
+                ZWGameEngine.setInputProcessor(levelStage);
                 levelButton.toggle();
             }
         });
 
-        exitGameButton.addListener(new ClickListener(){
+        exitGameButton.addListener(new ZWClickAction(){
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+            public void clicked(){
+                ZWGameEngine.exit();
             }
         });
 
@@ -131,7 +114,7 @@ public class MainMenuScreen implements Screen {
      * Sets up the stage for the level menu
      */
     private void setUpLevelStage(){
-        Table table = new Table();
+        ZWTable table = new ZWTable();
         table.setFillParent(true);
         levelStage.addActor(table);
 
@@ -140,40 +123,43 @@ public class MainMenuScreen implements Screen {
         for (int i = 0;i <= levelsCompleted;i++){
             String buttonName = "Room " + (i+1);
             final int level = i;
-            TextButton levelButton = new TextButton(buttonName, skin);
-            table.add(levelButton).size(250,50).padBottom(15).row();
+            ZWTextButton levelButton = new ZWTextButton(buttonName, skin);
+            table.add(levelButton,250,50,15);
 
-            levelButton.addListener(new ClickListener(){
+
+            levelButton.addListener(new ZWClickAction(){
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
+                public void clicked(){
                     MapController mapController = new MapController();
-                    World world = mapController.getRoom(level).getWorld();
-                    ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                    ZWWorld world = mapController.getRoom(level).getWorld();
+                    ZWGameEngine.setScreen(new GameScreen());
                 }
             });
+
+
         }
 
 
         /*--- Back button ---*/
-        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
 
-        imageButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("core/assets/arrowLeft_grey.png")));
-        imageButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(new Texture("core/assets/arrowLeft.png")));
-        imageButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(new Texture("core/assets/arrowLeft_lightgrey.png")));
+        ZWImageButton backIconButton = new ZWImageButton();
+        backIconButton.setImageUp(new ZWTexture("core/assets/arrowLeft_grey.png"));
+        backIconButton.setImageDown(new ZWTexture("core/assets/arrowLeft.png"));
+        backIconButton.setImageOver(new ZWTexture("core/assets/arrowLeft_lightgrey.png"));
 
-        ImageButton backIconButton = new ImageButton(imageButtonStyle);
         backIconButton.setSize(30,30);
-        backIconButton.setPosition(10, Gdx.graphics.getHeight()-40);
+        backIconButton.setPosition(10, ZWGameEngine.getWindowHeight()-40);
 
         levelStage.addActor(backIconButton);
 
-        backIconButton.addListener(new ClickListener(){
+        backIconButton.addListener(new ZWClickAction(){
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(){
                 menuState = MenuState.MAIN_MENU;
-                Gdx.input.setInputProcessor(mainStage);
+                ZWGameEngine.setInputProcessor(mainStage);
             }
         });
+
 
     }
 
@@ -181,7 +167,7 @@ public class MainMenuScreen implements Screen {
      * Sets up the stage for the settings menu
      */
     private void setUpSettingsStage(){
-        Table table = new Table();
+        ZWTable table = new ZWTable();
 
         //TODO: Add settings stuff, eg switches for controls/sound etc
 

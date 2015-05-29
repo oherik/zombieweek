@@ -149,12 +149,12 @@ public class SpawnController {
                             else if (room.hasProperty(col, row, Constants.PLAYER_RETURN)) {
                                 room.setPlayerReturn(new Point(col, row));
                             }
-                            else if (room.hasProperty(col, row, Constants.POTION_PROPERTY)) {
-                                PotionController.spawnPotion((String) room.getProperty(col, row, Constants.POTION_PROPERTY), room, col, row);
+                            else if (room.hasProperty(col, row, Constants.POTION_SPAWN)) {
+                                PotionController.spawnPotion((String) room.getProperty(col, row, Constants.POTION_SPAWN), room, col, row);
                             }
 
-                            else if (room.hasProperty(col, row, Constants.BOOK_PROPERTY)) {
-                                int amount = Integer.parseInt((String)room.getProperty(col, row, Constants.BOOK_PROPERTY));
+                            else if (room.hasProperty(col, row, Constants.BOOK_SPAWN)) {
+                                int amount = Integer.parseInt((String)room.getProperty(col, row, Constants.BOOK_SPAWN));
                                 for(int i = 0 ; i<amount; i++){
                                     ProjectileController.spawnStillBook(room, col, row);
                                 }

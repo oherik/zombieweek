@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -9,11 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class ZWBatch {
     private SpriteBatch spriteBatch;
     private PolygonSpriteBatch polygonSpriteBatch;
-    public ZWBatch(){
+    private Batch batch;
+    public ZWBatch(Batch batch){
         spriteBatch = new SpriteBatch();
         polygonSpriteBatch = new PolygonSpriteBatch();
+        this.batch = batch;
     }
     public void begin(){
+        batch.begin();
         spriteBatch.begin();
         polygonSpriteBatch.begin();
     }

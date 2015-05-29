@@ -14,6 +14,10 @@ public class ZWTable {
         table.add(zwTextButton.getButton()).size(x,y).padBottom(padBottom).row();
     }
 
+    public void add(ZWLabel label, float padBottom){
+        table.add(label.getLabel()).padBottom(padBottom).row();
+    }
+
     public Table getTable(){return this.table;}
 
     public void setFillParent(boolean bool){this.table.setFillParent(bool);}
