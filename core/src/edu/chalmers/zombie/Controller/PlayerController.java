@@ -8,6 +8,9 @@ import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PotionType;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by neda on 2015-05-28.
  * Modified by Neda
@@ -64,7 +67,21 @@ public class PlayerController {
     }
 
     public static void drinkSpeedPotion(Player p){
+        int originalSpeed = p.getLegPower();
+        int newSpeed = Math.round(originalSpeed * Constants.POTION_SPEED_SCALE);
+        int deltaSpeed = newSpeed-originalSpeed;
+        p.setLegPower(newSpeed);
+        Timer timer = new Timer();
+        timer.schedule(new setSpeed(p.getLegPower() - deltaSpeed), Constants.POTION_SPEED_TIME_MILLIS);//Ej originalSpeed ifall spelaren plockat upp en till
 
-
+    }
+    static class setSpeed extends TimerTask {
+        private int speed;
+        public setSpeed(int speed){
+            this.speed = speed;
+        }
+        public void run() {
+            GameModel.getInstance().getPlayer().setLegPower(speed);
+        }
     }
 }

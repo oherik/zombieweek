@@ -149,7 +149,16 @@ public class Player extends Entity implements CreatureInterface {
         getBody().applyForce(force, getBody().getLocalCenter(), true);
     }
 
+    public void setLegPower(int  legPower){
+        this.legPower = legPower;
+        speed = legPower;
+        updateSpeed();
 
+    }
+
+    public int getLegPower(){
+        return legPower;
+    }
     /**
      * Moves player
      * @param direction Direction to move in
