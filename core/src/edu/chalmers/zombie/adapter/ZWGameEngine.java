@@ -1,9 +1,6 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 
@@ -34,6 +31,8 @@ public class ZWGameEngine {
     public static void setInputProcessor(InputProcessor processor){
         Gdx.input.setInputProcessor(processor);
     }
+    public static void setInputProcessor(ZWInputMultiplexer inputMultiplexer){Gdx.input.setInputProcessor(inputMultiplexer.getInputMultiplexer());}
+
     public static void setInputProcessor(ZWStage stage){Gdx.input.setInputProcessor(stage.getStage());}
     public static void clearColor(float red, float green, float blue, float alpha){
         Gdx.gl.glClearColor(red, green, blue, alpha);
