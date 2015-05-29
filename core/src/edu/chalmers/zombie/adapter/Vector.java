@@ -11,6 +11,10 @@ public class Vector {
         vector = new Vector2();
     }
 
+    public Vector(Vector2 libVector){
+        vector = libVector;
+    }
+
     public Vector(float x, float y){
 
         vector = new Vector2(x,y);
@@ -42,5 +46,14 @@ public class Vector {
 
     public float getY(){
         return vector.y;
+    }
+
+    public Vector2 getLibVector(){
+        return vector;
+    }
+
+    public Vector add(float x, float y){
+        vector.add(x,y);
+        return this;
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import edu.chalmers.zombie.adapter.Vector;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.adapter.Player;
 import edu.chalmers.zombie.adapter.Zombie;
@@ -177,7 +178,7 @@ public class InputController implements InputProcessor{
         float distance = 1f;
         float angle = player.getHand().getDirection()+Constants.PI*0.5f;
 
-        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(player.getBody().getPosition(), mapController.getRoom(),distance,angle) ) {
+        if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(new Vector(getPlayer().getBody().getPosition()), mapController.getRoom(),distance,angle) ) {
             player.decreaseAmmunition();
             if (player.getHand().isThrowingGrenade()){
                 player.getHand().throwGrenade();

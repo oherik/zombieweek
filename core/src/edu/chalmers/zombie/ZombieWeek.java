@@ -9,7 +9,6 @@ import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
 
 public class ZombieWeek extends Game {
-    private World currentWorld;
     private InputController inputController;
     private MapController mapController;
 
@@ -17,7 +16,6 @@ public class ZombieWeek extends Game {
 	public void create () {
         mapController = new MapController();
         mapController.initializeRooms();
-        currentWorld = mapController.getWorld();
         //setScreen(new MainMenuScreen()); //Main menu screen
         setScreen(new GameScreen()); //Game screen
 	}

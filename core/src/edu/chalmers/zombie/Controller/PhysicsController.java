@@ -1,21 +1,16 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.physics.box2d.*;
-import edu.chalmers.zombie.adapter.BasicZombie;
-import edu.chalmers.zombie.adapter.CollisionObject;
-import edu.chalmers.zombie.adapter.Room;
-import edu.chalmers.zombie.adapter.Zombie;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.testing.ZombieTest;
 import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
  * This controller class handles the various instantiations of physics objects for any given world.
+ * Created by Erik
+ * Modified by Erik
  */
 public class PhysicsController {
 
@@ -39,81 +34,58 @@ public class PhysicsController {
      * @return A list of the collision objects
      */
     private static ArrayList<CollisionObject> createCollisionObjects(){
-        //Create and define body
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody; //The collision objects shouldn't move
-
-        //Define shapes
-        PolygonShape standardBoxShape = new PolygonShape();
-        standardBoxShape.setAsBox(0.5f, 0.5f);   //The size is set as 2 * the values inside the parantheses
-        PolygonShape doorShape = new PolygonShape();    //The door is thinner, so the player doesn't accidentally bump into them
-        doorShape.setAsBox(0.5f, 0.5f); //The size is set as 2 * the values inside the parantheses
-
         //Create a new ArrayList to store the objects
         ArrayList<CollisionObject> collisionObjects = new ArrayList<CollisionObject>();
 
         //Water, sensor
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.friction = 0;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_WATER;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        fixDef.isSensor = true;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
+        short categoryBits = Constants.COLLISION_WATER;
+        short maskBits= Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody waterSensorBody = new ZWBody();
+        waterSensorBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, true);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, waterSensorBody));
 
         //Water, collision
-        fixDef = new FixtureDef();
-        fixDef.friction = 0;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_WATER;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, bodyDef, fixDef));
+        categoryBits= Constants.COLLISION_WATER;
+        maskBits= Constants.COLLISION_ZOMBIE;
+        ZWBody waterCollisionBody = new ZWBody();
+        waterCollisionBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_WATER, waterCollisionBody));
 
         //Collision for all
-        fixDef = new FixtureDef();  //Reset the fixture definition, this has to be done for each new object
-        fixDef.friction = 0.2f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_OBSTACLE;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_ALL, bodyDef, fixDef));
+        categoryBits= Constants.COLLISION_OBSTACLE;
+        maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody allCollisionBody = new ZWBody();
+        allCollisionBody.setFixtureDef(0, 0.2f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_ALL, allCollisionBody));
 
         //Door
-        fixDef = new FixtureDef();;
-        fixDef.shape = doorShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_DOOR;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
-        collisionObjects.add(new CollisionObject(Constants.DOOR_PROPERTY, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_DOOR;
+        maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody doorBody = new ZWBody();
+        doorBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_DOOR, doorBody));
 
         //Sneak, sensor
-        fixDef = new FixtureDef();
-        fixDef.friction = 0f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
-        fixDef.filter.maskBits = Constants.COLLISION_PLAYER;
-        fixDef.isSensor = true;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_SNEAK;
+        maskBits = Constants.COLLISION_PLAYER;
+        ZWBody sneakSensorBody = new ZWBody();
+        sneakSensorBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, true);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK,sneakSensorBody));
 
         //Sneak, collision
-        fixDef = new FixtureDef();
-        fixDef.friction = 0f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_SNEAK;
-        fixDef.filter.maskBits = Constants.COLLISION_ZOMBIE;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_SNEAK;
+        maskBits = Constants.COLLISION_ZOMBIE;
+        ZWBody sneakCollisionBody = new ZWBody();
+        sneakCollisionBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_SNEAK,sneakCollisionBody));
+
 
         //Player collision
-        fixDef = new FixtureDef();
-        fixDef.friction = 0f;
-        fixDef.restitution = .1f;
-        fixDef.shape = standardBoxShape;
-        fixDef.filter.categoryBits = Constants.COLLISION_ACTOR_OBSTACLE;
-        fixDef.filter.maskBits = Constants.COLLISION_ENTITY;
-        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_PLAYER, bodyDef, fixDef));
+        categoryBits = Constants.COLLISION_ACTOR_OBSTACLE;
+        maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody playerCollisionBody = new ZWBody();
+        playerCollisionBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_PLAYER, playerCollisionBody));
 
 
         return collisionObjects;
@@ -144,31 +116,26 @@ public class PhysicsController {
 
     private static void traverseRoomIfNeeded(ArrayList<CollisionObject> collisionObjects, Room room) {
         if(!room.hasBeenTraversed()) { //if the room already has these initialized there's no point in continuing
-            World world = room.getWorld();
-            TiledMapTileLayer metaLayer = room.getMetaLayer();
+            Room currentRoom = GameModel.getInstance().getRoom();
 
             String zombieSpawn = "zombie_spawn"; //TODO test tills vi f�r flera sorters zombies
             String playerSpawn = "player_spawn"; //TODO test tills ovan �r fixat
             String playerReturn = "player_return"; //TODO test tills ovan �r fixat
 
-            if (metaLayer != null) {
-                metaLayer.setVisible(false);
-                for (int row = 0; row < metaLayer.getHeight(); row++) {       //TODO on�digt att g� igenom allt?
-                    for (int col = 0; col < metaLayer.getWidth(); col++) {
-                        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
-                        if (currentCell != null && currentCell.getTile() != null) {        //There's a meta data tile on that position
+                for (int row = 0; row < room.getTiledHeight(); row++) {       //TODO on�digt att g� igenom allt?
+                    for (int col = 0; col < room.getTiledWidth(); col++) {
+                        if (room.hasMetaData(col, row)) {        //There's a meta data tile on that position
                             CollisionObject toAdd = null;
                             CollisionObject toRemove = null;
                             for (CollisionObject obj : collisionObjects) {
-                                if (currentCell.getTile().getProperties().get(obj.getName()) != null) {
-                                    obj.getBodyDef().position.set((col + 0.5f), (row + 0.5f));
-                                    if(obj.getName().equals(Constants.DOOR_PROPERTY)){
+                                if (room.hasProperty(col, row, obj.getName())){
+                                    obj.getBody().setBodyDefPosition((col + 0.5f), (row + 0.5f));
+                                    if(obj.getName().equals(Constants.COLLISION_PROPERTY_DOOR)){
                                         toAdd = obj.clone();
                                         toRemove = obj;
-                                        obj.setProperty((String) currentCell.getTile().getProperties().get(Constants.DOOR_PROPERTY));
+                                        obj.setProperty((String) room.getProperty(col, row, Constants.COLLISION_PROPERTY_DOOR));
                                     }
-                                    Fixture fixture = world.createBody(obj.getBodyDef()).createFixture(obj.getFixtureDef());
-                                    fixture.setUserData(obj);
+                                    room.createFixture(obj.getBody(), obj);
                                 }
                             }
                             if(toRemove != null) {
@@ -177,35 +144,46 @@ public class PhysicsController {
                             if(toAdd != null) {
                                 collisionObjects.add(toAdd);
                             }
-                            if (currentCell.getTile().getProperties().get(zombieSpawn) != null) {           //TODO skapa en spawnEntities-metod ist�llet. Och en huvudmetod som g�r igenom b�da metoderna
-                                ZombieController.spawnZombie((String) currentCell.getTile().getProperties().get(zombieSpawn), col, row);
+                            if (room.hasProperty(col, row, zombieSpawn)) {           //TODO skapa en spawnEntities-metod ist�llet. Och en huvudmetod som g�r igenom b�da metoderna
+                                ZombieController.spawnZombie((String) room.getProperty(col, row, zombieSpawn), col, row);
                             }
-                            if (currentCell.getTile().getProperties().get(playerSpawn) != null) {
+                            else if (room.hasProperty(col, row, playerSpawn)) {
                                 room.setPlayerSpawn(new Point(col, row));
                             }
-                            if (currentCell.getTile().getProperties().get(playerReturn) != null) {
+                            else if (room.hasProperty(col, row, playerReturn)) {
                                 room.setPlayerReturn(new Point(col, row));
                             }
+                            else if (room.hasProperty(col, row, Constants.POTION_PROPERTY)) {
+                                EntityController.spawnPotion((String)room.getProperty(col, row, Constants.POTION_PROPERTY), room, col, row);
+                            }
+
+                            else if (room.hasProperty(col, row, Constants.BOOK_PROPERTY)) {
+                                int amount = Integer.parseInt((String)room.getProperty(col, row, Constants.BOOK_PROPERTY));
+                                for(int i = 0 ; i<amount; i++){
+                                    EntityController.spawnBook(room, col, row);
+                                }
+                            }
+
                         }
 
 
                         /* ------ Create book obstacles -----*/
-                        if (currentCell != null && currentCell.getTile() != null){
-                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ALL)!= null) {
+                        if (room.hasProperty(col,row,Constants.COLLISION_PROPERTY_ALL)){
                                 room.addCollision(col, row, Constants.COLLISION_OBSTACLE);
                             }
-                            if(currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_ZOMBIE) != null ||
-                                    currentCell.getTile().getProperties().get(Constants.COLLISION_PROPERTY_PLAYER) != null){
+                            if(room.hasProperty(col,row,Constants.COLLISION_PROPERTY_ZOMBIE) ||
+                                    room.hasProperty(col,row,Constants.COLLISION_PROPERTY_PLAYER)){
                                 room.addCollision(col, row, Constants.COLLISION_ACTOR_OBSTACLE);
                             }
 
                         }
                     }
                 }
-            }
-            room.setHasBeenTraversed(true);
-        }
+        room.setHasBeenTraversed(true);
+
     }
+
+
 
     /**
      * Runs traverseRoomIfNeeded using the default values stored in the game model. If none are stored new ones are created.

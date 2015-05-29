@@ -105,7 +105,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 MapController mapController = new MapController();
-                World currentWorld = mapController.getWorld(); //gets world from singleton gameModel
                 ((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
             }
         });

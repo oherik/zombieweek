@@ -1,8 +1,10 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.PotionType;
 import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.awt.*;
@@ -30,7 +32,7 @@ public class EntityController {
     public static void knockOut(Zombie z){
         z.setSprite("core/assets/zombie_test_sleep.png");      //TODO temp, borde vara z.getDeadSprite() eller n�t
         z.scaleSprite(1f / Constants.TILE_SIZE);
-        GameModel.getInstance().addEntityToRemove(z);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),z);
         z.knockOut();                                                                   //TODO Zombie b�r f� en hit() eller n�t ist�llet
         AudioController.playSound(GameModel.getInstance().res.getSound("zombie_sleeping"));
 
@@ -65,11 +67,11 @@ public class EntityController {
         Point position = mapController.getPlayerBufferPosition();
         Player player;
         try {
-            player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"), gameModel.getRoom().getWorld(), position.x, position.y);
         }catch (NullPointerException e){
             System.err.println("No buffered position found. Placing player at room spawn.");
             position = GameModel.getInstance().getRoom().getPlayerSpawn();
-            player = new Player(res.getTexture("emilia"), mapController.getWorld(), position.x, position.y);
+            player = new Player(res.getTexture("emilia"),gameModel.getRoom().getWorld(), position.x, position.y);
         }
         setPlayer(player); //TODO test);
         return player;
@@ -142,9 +144,16 @@ public class EntityController {
     public static void hitGround(Book book){
         book.setOnGround(true);
         //TODO g�ra boken mindre, l�gga till ljud etc
-        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER | Constants.COLLISION_ACTOR_OBSTACLE;
         setMaskBits(book, maskBits);
         setFriction(book, 4f, 3f);
+    }
+
+    public static void spawnBook(Room room, int x, int y){
+        Book book = new Book(x,y,room);
+        hitGround(book);
+        GameModel.getInstance().addBook(book);
+
     }
 
 
@@ -177,7 +186,7 @@ public class EntityController {
      * @param b The book
      */
     public static void pickUp(Player p, Book b){
-            GameModel.getInstance().addEntityToRemove(b); //TODO beh�vs b�da dessa?
+            GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),b); //TODO beh�vs b�da dessa?
             b.markForRemoval();             //TODO beh�vs b�da dessa?
             p.increaseAmmunition();
             AudioController.playSound(GameModel.getInstance().res.getSound("pick_up_book"));
@@ -186,7 +195,7 @@ public class EntityController {
 
     /* ------------------------ ENTITY ----------------------------*/
     public static void remove(Entity entity){
-        GameModel.getInstance().addEntityToRemove(entity);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),entity);
         entity.markForRemoval();
     }
 
@@ -244,4 +253,26 @@ public class EntityController {
                     "\nInternal error message: " + e.getMessage());
         }
     }
+
+
+    public static void spawnPotion(String typeName, Room room, int x, int y){
+        spawnPotion(PotionType.valueOf(typeName), room, x, y);
+    }
+
+    public static void spawnPotion(PotionType type, Room room, int x, int y){
+        switch(type){
+            case HEALTH:
+                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-health")), room.getWorld(), x, y));
+                break;
+            case SPEED:
+                room.addPotion(new Potion(type, new Sprite(GameModel.getInstance().res.getTexture("potion-speed")), room.getWorld(), x, y));
+                break;
+            default:
+                //TODO randomize?
+                break;
+        }
+
+
+    }
+
 }
