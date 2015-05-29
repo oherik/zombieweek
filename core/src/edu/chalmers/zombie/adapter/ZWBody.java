@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Erik on 2015-05-28.
+ * Modified by Neda
  */
 public class ZWBody {
     private com.badlogic.gdx.physics.box2d.Body body;
@@ -143,6 +144,16 @@ public class ZWBody {
             fixtures.add(new ZWFixture(f));
         }
         return fixtures;
+    }
+
+    public Vector getWorldCenter() {
+
+        return new Vector(body.getWorldCenter());
+    }
+
+    public void applyLinearImpulse(Vector impulse, Vector point, boolean bool) {
+
+        body.applyLinearImpulse(impulse.getLibVector(), point.getLibVector(), bool);
     }
 
 }
