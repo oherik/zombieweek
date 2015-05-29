@@ -169,4 +169,23 @@ public class ZWBody {
         body.applyLinearImpulse(impulse.getLibVector(), point.getLibVector(), bool);
     }
 
+    public void setAngularDamping(float angularDamping) {
+
+        body.setAngularDamping(angularDamping);
+    }
+
+    public float getAngularVelocity() {
+
+        return body.getAngularVelocity();
+    }
+
+    public void applyAngularImpulse(int impulse, boolean wake) {
+
+        body.applyAngularImpulse(impulse, wake);
+    }
+
+    public void applyForceToCenter(float x, float y, boolean wake) {
+
+        body.applyForceToCenter(x, y, wake);
+    }
 }

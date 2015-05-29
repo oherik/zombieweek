@@ -56,14 +56,14 @@ public class ContactController {
                     switch(fixtureA.getCategoryBits()){
                         case Constants.COLLISION_PLAYER:
                             Player p = gameModel.getPlayer();
-                            EntityController.pickUp(p, b);
+                                ProjectileController.pickUp(p, b);
                             break;
                         case Constants.COLLISION_ZOMBIE:
                             Zombie z = (Zombie) fixtureA.getBodyUserData();
-                            EntityController.applyHit(z, b);
+                            ProjectileController.applyHit(z, b);
                             break;
                         case Constants.COLLISION_OBSTACLE:
-                            EntityController.hitGround(b);
+                            ProjectileController.hitGround(b);
                             break;
                         case Constants.COLLISION_WATER:
                             //TODO plums
@@ -77,7 +77,7 @@ public class ContactController {
                 switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
-                        EntityController.increaseWaterTilesTouching(player);
+                        PlayerController.increaseWaterTilesTouching(player);
                         break;
                 }
                 break;
@@ -86,7 +86,7 @@ public class ContactController {
                 switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
-                        EntityController.increaseSneakTilesTouching(player);
+                        PlayerController.increaseSneakTilesTouching(player);
                         break;
                 }
                 break;
@@ -101,7 +101,7 @@ public class ContactController {
                     case Constants.COLLISION_PROJECTILE:
                         Book book = (Book) fixtureB.getBodyUserData();
                         Zombie z = (Zombie) fixtureA.getBodyUserData();
-                        EntityController.applyHit(z, book);
+                        ProjectileController.applyHit(z, book);
 
                 }
 
@@ -109,10 +109,10 @@ public class ContactController {
                 Player player = gameModel.getPlayer();
                 switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_SNEAK:
-                        EntityController.increaseSneakTilesTouching(player);
+                        PlayerController.increaseSneakTilesTouching(player);
                         break;
                     case Constants.COLLISION_WATER:
-                        EntityController.increaseWaterTilesTouching(player);
+                        PlayerController.increaseWaterTilesTouching(player);
                         break;
                     case Constants.COLLISION_ZOMBIE:
                         Zombie zombie = (Zombie) fixtureA.getBodyUserData();
@@ -145,14 +145,14 @@ public class ContactController {
                 switch (fixtureA.getCategoryBits()) {        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
-                        EntityController.decreaseWaterTilesTouching(player);
+                        PlayerController.decreaseWaterTilesTouching(player);
                         break;
                 }
             case (Constants.COLLISION_SNEAK):
                 switch (fixtureA.getCategoryBits()) {        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
-                        EntityController.decreaseSneakTilesTouching(player);
+                        PlayerController.decreaseSneakTilesTouching(player);
                         break;
                 }
 
@@ -160,15 +160,15 @@ public class ContactController {
                 Player player = gameModel.getPlayer();
                 switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_SNEAK:
-                        EntityController.decreaseSneakTilesTouching(player);
+                        PlayerController.decreaseSneakTilesTouching(player);
                         break;
                     case Constants.COLLISION_WATER:
-                       EntityController.decreaseWaterTilesTouching(player);
+                       PlayerController.decreaseWaterTilesTouching(player);
                         break;
                     case Constants.COLLISION_PROJECTILE:
                         Book b = (Book) fixtureA.getBodyUserData();
                         Player p = gameModel.getPlayer();
-                        EntityController.pickUp(p, b);
+                        ProjectileController.pickUp(p, b);
                         break;
                 }
         }

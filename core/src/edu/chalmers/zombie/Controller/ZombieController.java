@@ -144,6 +144,7 @@ public class ZombieController {
      */
     public static void knockOut(Zombie z){
         GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),z);
+        z.getAnimator().setCurrentStillFrame(1);
         z.knockOut();                                                                   //TODO Zombie b�r f� en hit() eller n�t ist�llet
         AudioController.playSound(GameModel.getInstance().res.getSound("zombie_sleeping"));
     }
