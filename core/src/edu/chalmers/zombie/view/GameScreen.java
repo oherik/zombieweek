@@ -219,6 +219,7 @@ public class GameScreen extends ZWScreen{
             for (Potion p : gameModel.getRoom().getPotions()) {
                 p.draw(batch);
             }
+
             /* ------ Draw the player ------ */
             player.draw(batch);
 

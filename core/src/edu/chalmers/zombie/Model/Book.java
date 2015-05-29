@@ -1,9 +1,6 @@
 package edu.chalmers.zombie.model;
 
-import edu.chalmers.zombie.adapter.ZWVector;
-import edu.chalmers.zombie.adapter.ZWBody;
-import edu.chalmers.zombie.adapter.ZWSprite;
-import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
@@ -60,14 +57,15 @@ public class Book extends Entity {
         omega= 20;  //TODO finns i entity?
         damage = 40;
         onGround = false;
-
+        //Load sprite
+        ZWSprite sprite = new ZWSprite(new ZWTexture("core/assets/Images/bookSprite.png"));
+        sprite.setSize(1/3f, 1/2f);
+        System.out.println(sprite.getWidth());
+        super.setSprite(sprite);
         setInMotion();
 
-        //Load sprite
-        ZWSprite sprite = new ZWSprite(GameModel.getInstance().res.getTexture("book"));
-        sprite.setSize(1/3f, 1/2f);
-        super.setSprite(sprite);
-        super.scaleSprite(1f / Constants.TILE_SIZE);
+
+        //super.scaleSprite(1f / Constants.TILE_SIZE);
 
         getBody().setUserData(this);
 

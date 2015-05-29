@@ -75,7 +75,7 @@ public class GameModel {
     }
 
     private void initializeProjectileTextures(){
-        res.loadTexture("book", "core/assets/bookSprite.png");
+        res.loadTexture("book", "core/assets/Images/bookSprite.png");
     }
 
     private void initializeSounds(){
