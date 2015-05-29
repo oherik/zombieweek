@@ -1,47 +1,49 @@
 package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import edu.chalmers.zombie.adapter.ZWStage;
 
 /**
+ * Model for the screens
+ *
  * Created by Tobias on 15-05-28.
  */
 public class ScreenModel {
 
-    private Stage pauseStage;
-    private Stage gameOverStage;
-    private Stage soundAndSettingStage;
-    private Stage nextLevelStage;
+    private ZWStage pauseStage;
+    private ZWStage gameOverStage;
+    private ZWStage soundAndSettingStage;
+    private ZWStage nextLevelStage;
     public ScreenModel(){}
 
-    public Stage getSoundAndSettingStage() {
+    public ZWStage getSoundAndSettingStage() {
         return soundAndSettingStage;
     }
 
-    public void setSoundAndSettingStage(Stage soundAndSettingStage) {
+    public void setSoundAndSettingStage(ZWStage soundAndSettingStage) {
         this.soundAndSettingStage = soundAndSettingStage;
     }
 
-    public Stage getPauseStage() {
+    public ZWStage getPauseStage() {
         return pauseStage;
     }
 
-    public void setPauseStage(Stage pauseStage) {
+    public void setPauseStage(ZWStage pauseStage) {
         this.pauseStage = pauseStage;
     }
 
-    public Stage getGameOverStage() {
+    public ZWStage getGameOverStage() {
         return gameOverStage;
     }
 
-    public void setGameOverStage(Stage gameOverStage) {
+    public void setGameOverStage(ZWStage gameOverStage) {
         this.gameOverStage = gameOverStage;
     }
 
-    public Stage getNextLevelStage() {
+    public ZWStage getNextLevelStage() {
         return nextLevelStage;
     }
 
-    public void setNextLevelStage(Stage nextLevelStage) {
+    public void setNextLevelStage(ZWStage nextLevelStage) {
         this.nextLevelStage = nextLevelStage;
     }
 
