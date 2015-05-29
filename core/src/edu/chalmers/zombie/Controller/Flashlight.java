@@ -214,14 +214,14 @@ public class Flashlight {
         returnTriangles = s.toArray();
         return returnTriangles;
     }
-    private PolygonRegion createDarkRegion(){
+    private ZWPolygonRegion createDarkRegion(){
         float[] vertices = createArrayOfVertices();
         short[] triangles = calculateTriangles(vertices);
-        PolygonRegion darkness = new PolygonRegion(new TextureRegion(darkTexture), vertices, triangles);
+        ZWPolygonRegion darkness = new ZWPolygonRegion(new ZWTextureRegion(darkTexture), vertices, triangles);
         return darkness;
     }
-    private Sprite createLight(){
-        Sprite light = new Sprite(lightTexture);
+    private ZWSprite createLight(){
+        ZWSprite light = new ZWSprite(lightTexture);
         light.setAlpha(0.2f);
         return light;
     }
