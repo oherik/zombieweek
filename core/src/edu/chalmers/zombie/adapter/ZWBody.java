@@ -213,4 +213,8 @@ public class ZWBody {
     public Vector getLocalCenter(){
         return new Vector(body.getLocalCenter());
     }
+
+    public float getMass(){
+        return body.getMass();
+    }
 }
