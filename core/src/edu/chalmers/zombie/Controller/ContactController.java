@@ -34,7 +34,7 @@ public class ContactController {
      * @param fixtureB  The second fixture
      */
 
-    public void beginContact (ZWFixture fixtureA, ZWFixture fixtureB) {
+    public static void beginContact (ZWFixture fixtureA, ZWFixture fixtureB) {
         GameModel gameModel = GameModel.getInstance();
         gameModel.clearEntitiesToRemove();
         switch(fixtureB.getCategoryBits()) {
@@ -127,7 +127,7 @@ public class ContactController {
      * @param fixtureA The first fixture
      * @param fixtureB  The second fixture
      */
-    public void endContact (ZWFixture fixtureA, ZWFixture fixtureB){
+    public static void endContact (ZWFixture fixtureA, ZWFixture fixtureB){
         GameModel gameModel = GameModel.getInstance();
         switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_WATER):
@@ -168,7 +168,7 @@ public class ContactController {
      * @param fixtureA The first fixture
      * @param fixtureB  The second fixture
      */
-    public  void preSolve(ZWFixture fixtureA, ZWFixture fixtureB){
+    public static void preSolve(ZWFixture fixtureA, ZWFixture fixtureB){
         GameModel gameModel = GameModel.getInstance();
         switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_PLAYER):
