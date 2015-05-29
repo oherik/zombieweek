@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 /**
  * Created by daniel on 5/28/2015.
  */
-public class SpriteWrapper {
+public class ZWSprite {
     private Sprite sprite;
-    public SpriteWrapper(Texture texture){
+    public ZWSprite(Texture texture){
         sprite = new Sprite(texture);
     }
-    public SpriteWrapper(Sprite sprite){
+    public ZWSprite(Sprite sprite){
         this.sprite = sprite;
     }
     public Sprite getSprite(){

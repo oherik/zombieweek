@@ -31,13 +31,8 @@ She has also worked on the use cases.
 - The documentation needs to be updated.
 - The book should have feedback.
 - It would be nice to add grenades and potions to the game.
-
-Making the zombies move and attack is top priority.
-Flashlight needs to have more parameters.
-The menu won’t work together with the flashlight.
-Different zombies should be able to spawn.
-We should perhaps also create player enums.
-There’s a bug where the ammunition count goes up too much when picking up multiple books.
+- A timer would help make the game more unique.
+- The HUD needs an update.
 
 4. Outcomes and assignments (5 min)
 

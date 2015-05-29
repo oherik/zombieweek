@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 /**
  * Created by daniel on 5/28/2015.
  */
-public class PolygonRegionWrapper {
+public class ZWPolygonRegion {
 
     private PolygonRegion polygonRegion;
 
-    public PolygonRegionWrapper(TextureRegion textureRegion, float[] vertices, short[] triangles){
+    public ZWPolygonRegion(TextureRegion textureRegion, float[] vertices, short[] triangles){
         polygonRegion = new PolygonRegion(textureRegion, vertices, triangles);
     }
     public PolygonRegion getPolygonRegion(){

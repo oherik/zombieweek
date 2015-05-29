@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Created by daniel on 5/28/2015.
  */
-public class BatchWrapper {
+public class ZWBatch {
     private SpriteBatch spriteBatch;
     private PolygonSpriteBatch polygonSpriteBatch;
-    public BatchWrapper(){
+    public ZWBatch(){
         spriteBatch = new SpriteBatch();
         polygonSpriteBatch = new PolygonSpriteBatch();
     }
@@ -25,7 +25,7 @@ public class BatchWrapper {
     public void polygonSpriteBatchEnd(){
         polygonSpriteBatch.end();
     }
-    public void drawPolygonRegion(PolygonRegionWrapper polygonRegionWrapper, float x, float y){
-        polygonSpriteBatch.draw(polygonRegionWrapper.getPolygonRegion(), x, y);
+    public void drawPolygonRegion(ZWPolygonRegion ZWPolygonRegion, float x, float y){
+        polygonSpriteBatch.draw(ZWPolygonRegion.getPolygonRegion(), x, y);
     }
 }
