@@ -17,4 +17,8 @@ public class ZWBitmapFont {
      * @param scale The scale
      */
     public void scale(float scale){font.scale(scale);}
+
+    public BitmapFont getBitmapFont() {
+        return this.font;
+    }
 }

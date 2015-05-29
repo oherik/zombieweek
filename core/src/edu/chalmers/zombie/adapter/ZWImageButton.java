@@ -26,6 +26,14 @@ public class ZWImageButton {
         buttonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(zwTexture.getTexture()));
     }
 
+    public void setImageDown(ZWTexture zwTexture){
+        buttonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(zwTexture.getTexture()));
+    }
+
+    public void setImageOver(ZWTexture zwTexture){
+        buttonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(zwTexture.getTexture()));
+    }
+
     public void setSize(float width, float height){ imageButton.setSize(width,height);}
 
     public void setPosition(float x, float y){imageButton.setPosition(x,y);}

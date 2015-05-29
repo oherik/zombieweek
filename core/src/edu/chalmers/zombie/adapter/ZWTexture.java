@@ -24,5 +24,6 @@ public class ZWTexture {
         return  (new ZWPixmap(this.texture.getTextureData().consumePixmap()));
     }
 
+    public void dispose(){this.texture.dispose();}
 
 }

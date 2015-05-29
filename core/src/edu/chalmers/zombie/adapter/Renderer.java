@@ -50,6 +50,11 @@ public class Renderer {
 
     }
 
+    public ZWBatch getBatch(){
+        return new ZWBatch(mapRenderer.getBatch());
+    }
+
+
     public void renderBox2DDebug(Room room){
         debugRenderer.render(room.getWorld().getWorld(), camera.combined);
         camera.update();
@@ -58,7 +63,7 @@ public class Renderer {
     public void drawEntity(Entity entity){
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        entity.draw(mapRenderer.getBatch());
+        entity.draw(new ZWBatch(mapRenderer.getBatch()));
         mapRenderer.getBatch().end();
     }
 

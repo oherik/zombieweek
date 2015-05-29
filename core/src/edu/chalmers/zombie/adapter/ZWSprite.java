@@ -74,4 +74,10 @@ public class ZWSprite {
 
     public void setRegion(ZWTextureRegion textureRegion){sprite.setRegion(textureRegion.getTextureRegion());}
 
+    public void setPosition(float x, float y){
+        sprite.setPosition(x, y);
+    }
+    public void setOriginCenter(){
+        sprite.setOriginCenter();
+    }
 }
