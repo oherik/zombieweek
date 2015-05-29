@@ -16,6 +16,7 @@ import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * This controller class makes all the different calculations regarding the maps, rooms, worlds and objects in them.
@@ -86,12 +87,13 @@ public class MapController {
         //TODO sluta simma, sluta sneaka
         EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
         int oldRoomIndex = gameModel.getCurrentRoomIndex();
-        gameModel.setCurrentRoomIndex(roomIndex);
-        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getPlayer());
+
+        GameModel.getInstance().addEntityToRemove(getRoom(),GameModel.getInstance().getPlayer());
         for(Book book : gameModel.getBooks()){
             book.markForRemoval();
-            gameModel.addEntityToRemove(book);
+            gameModel.addEntityToRemove(getRoom(),book);
         }
+        gameModel.setCurrentRoomIndex(roomIndex);
         gameModel.clearBookList();
         PhysicsController.traverseRoomIfNeeded(getRoom());
         if(oldRoomIndex>roomIndex){
@@ -304,7 +306,7 @@ public class MapController {
             if(player == null){
                player = EntityController.createNewPlayer();
             }
-            if(player.getBody() == null){
+            if(player.getBody() == null||player.getBody().getWorld()!=getRoom().getWorld()){
                 System.out.println(getPlayerBufferPosition());
                 player.createDefaultBody(currentRoom.getWorld(), getPlayerBufferPosition());
             }
@@ -357,8 +359,10 @@ public class MapController {
      * Removes the entity bodies from the world if necessary
      */
     private void removeEntities(){
-        for(Entity e: gameModel.getEntitiesToRemove()){
-            gameModel.getRoom().destroyBody(e);
+        for(Map.Entry<Room, ArrayList<Entity>> e: gameModel.getEntitiesToRemove().entrySet()){
+            for(Entity entity : e.getValue()) {
+                gameModel.getRoom().destroyBody(entity);
+            }
         }
         gameModel.clearEntitiesToRemove();
     }
@@ -382,7 +386,7 @@ public class MapController {
             if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
                 EntityController.hitGround(b);
             if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
-                gameModel.addEntityToRemove(b);
+                gameModel.addEntityToRemove(getRoom(),b);
                 b.markForRemoval();
             }
             if (b.toRemove())

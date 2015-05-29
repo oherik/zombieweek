@@ -55,7 +55,7 @@ public class PlayerController {
 
         }
         room.removePotion(potion);
-        GameModel.getInstance().addEntityToRemove(potion);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),potion);
     }
     public static void drinkHealthPotion(Player p){
         if(p.getLives()+ Constants.POTION_HEALTH_AMOUNT>100) {

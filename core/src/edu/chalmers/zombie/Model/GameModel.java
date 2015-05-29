@@ -9,9 +9,7 @@ import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Stores the game data. The model implements the singleton pattern
@@ -28,7 +26,7 @@ public class GameModel {
     private int currentRoom;
     private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
-    private Set entitiesToRemove;
+    private Map entitiesToRemove;
     private ArrayList<CollisionObject> collisionObjects;
     private String metaLayerName;
     private  boolean worldNeedsUpdate; //If a map change has been called
@@ -59,7 +57,7 @@ public class GameModel {
         res.loadTexture("zombie-data-dead", "core/assets/Images/zombie-data-dead.png");
         res.loadTexture("zombie-data", "core/assets/Images/zombie-data.png");
         res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
-        res.loadTexture("zombie-it-dead","core/assets/Images/zombie-it-dead.png");
+        res.loadTexture("zombie-it-dead", "core/assets/Images/zombie-it-dead.png");
         res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
 
         res.loadTexture("potion-health", "core/assets/Images/healthpotion.png");
@@ -76,7 +74,7 @@ public class GameModel {
         stepping=new AtomicBoolean(false);
 
         rooms = new ArrayList<Room>();
-        entitiesToRemove = new HashSet<Entity>();
+        entitiesToRemove = new HashMap<Room, ArrayList<Entity>>();
         worldNeedsUpdate = true;
         //addTestLevel();                                 //TODO debug
         //addTestLevel_2();                                 //TODO debug
@@ -229,13 +227,20 @@ public class GameModel {
         grenades.add(grenade);
     }
 
-    public void addEntitiesToRemove(Set<Entity> entitySet){this.entitiesToRemove = entitySet; }
+    //public void addEntitiesToRemove(Set<Entity> entitySet){this.entitiesToRemove = entitySet; }
 
-    public void addEntityToRemove(Entity entity){this.entitiesToRemove.add(entity); }
+    public void addEntityToRemove(Room room, Entity entity){
+        if(entitiesToRemove.get(room) == null){
+            entitiesToRemove.put(room, new ArrayList<Entity>());
+        }
+        ArrayList<Entity> entities = (ArrayList<Entity>) entitiesToRemove.get(room);
+        entities.add(entity);
+        entitiesToRemove.put(room, entities);
+    }
 
     public void clearEntitiesToRemove(){this.entitiesToRemove.clear();}
 
-    public Set<Entity> getEntitiesToRemove() {return this.entitiesToRemove; }
+    public Map<Room, ArrayList<Entity>> getEntitiesToRemove() {return this.entitiesToRemove; }
 
     /**
      * @return The current room's zombies
