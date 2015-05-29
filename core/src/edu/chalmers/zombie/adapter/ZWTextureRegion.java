@@ -23,7 +23,9 @@ public class ZWTextureRegion {
 
     public ZWTextureRegion(TextureRegion textureRegion){this.textureRegion=textureRegion;}
 
-    public ZWTextureRegion(ZWTexture zwTexture){this.textureRegion.setTexture(zwTexture.getTexture());}
+    public ZWTextureRegion(ZWTexture zwTexture){
+            this.textureRegion = new TextureRegion();
+            this.textureRegion.setTexture(zwTexture.getTexture());}
 
 
     public static ZWTextureRegion[] split(ZWTexture texture,int tileWidth, int tileHeight){
