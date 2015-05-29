@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
@@ -51,7 +52,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * @param x     The zombie's x coordinate
      * @param y     The zombie's y coordinate
      */
-    public Zombie(Texture walkingTexture, Texture stillTexture, Texture deadTexture, World world, float x, float y){
+    public Zombie(Texture walkingTexture, ZWTexture stillTexture, Texture deadTexture, World world, float x, float y){
         super(walkingTexture, world, x, y);
 
         if(walkingTexture == null) {

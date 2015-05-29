@@ -1,5 +1,6 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.utils.Animator;
 import edu.chalmers.zombie.utils.Constants;
 
