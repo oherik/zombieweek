@@ -18,9 +18,9 @@ import java.awt.*;
  */
 public abstract class Entity {
 
-    private Sprite sprite;
-    private Body body;
-    private World world;
+    private ZWSprite sprite;
+    private ZWBody body;
+    private ZWWorld world;
     private boolean remove = false;
     private Animator animator;
     private boolean isAnimated = false; //is entity is animated
@@ -48,14 +48,14 @@ public abstract class Entity {
         sprite.setY(y);
     }
 
-    public Entity(Texture texture, World world, float x, float y){
-        this(world);
+    public Entity(ZWTexture texture, ZWWorld world, float x, float y){
+        this(ZWWorld);
         animator = new Animator();
         isAnimated = true;
 
-        TextureRegion[] textureRegions = TextureRegion.split(texture,32,32)[0];
+        ZWTextureRegion[] textureRegions = ZWTextureRegion.split(texture,32,32);
         setAnimator(textureRegions, 1 / 12f);
-        sprite = new Sprite(getAnimator().getFrame()); //gets the first frame to start with
+        sprite = new ZWSprite(getAnimator().getFrame()); //gets the first frame to start with
         sprite.setSize(32,32);
         sprite.setX(x);
         sprite.setY(y);
@@ -68,7 +68,7 @@ public abstract class Entity {
     }
 
 
-    public void setAnimator(TextureRegion[] frames, float delay){
+    public void setAnimator(ZWTextureRegion[] frames, float delay){
         animator.setFrames(frames, delay);
     }
 
@@ -118,7 +118,7 @@ public abstract class Entity {
      * Draws the sprite
      * @param batch The sprite batch in which to draw it
      */
-    public void draw(Batch batch) {
+    public void draw(ZWBatch batch) {
 
         if (body != null) {
             updateRotation();
@@ -132,7 +132,7 @@ public abstract class Entity {
                 animator.update(deltaTime);
 
                 if (getBodySpeed() < 0.2f) { //not moving
-                    TextureRegion stillFrame = animator.getStillFrame();
+                    ZWTextureRegion stillFrame = animator.getStillFrame();
                     if (stillFrame != null) {
                         sprite.setRegion(stillFrame);
                     } else {
@@ -144,7 +144,7 @@ public abstract class Entity {
                 }
             }
             else{
-                TextureRegion stillFrame = animator.getStillFrame();
+                ZWTextureRegion stillFrame = animator.getStillFrame();
                 if (stillFrame != null) {
                     sprite.setRegion(stillFrame);
                 } else {
@@ -171,29 +171,29 @@ public abstract class Entity {
      * Updates the sprite's position based on the position of the body.
      */
     private void updatePosition(){
-        sprite.setY(body.getPosition().y - sprite.getWidth() / 2f);
-        sprite.setX(body.getPosition().x - sprite.getHeight() / 2f);
+        sprite.setY(body.getPosition().getY() - sprite.getWidth() / 2f);
+        sprite.setX(body.getPosition().getX() - sprite.getHeight() / 2f);
     }
 
     /**
      * @return The body's x position
      */
     public float getX(){
-        return body.getPosition().x;
+        return body.getPosition().getX();
     }
 
     /**
      * @return The body's y position
      */
     public float getY(){
-        return body.getPosition().y;
+        return body.getPosition().getY();
     }
 
     /**
      * Disposes the sprite
      */
     public void dispose(){
-        sprite.getTexture().dispose();
+        sprite.dispose();
     }
 
     /**
@@ -216,14 +216,14 @@ public abstract class Entity {
      * Sets the entity's body
      * @param body  The new body
      */
-    public void setBody(Body body) {
+    public void setBody(ZWBody body) {
         this.body=body;
     }
 
     /**
      * @return The world in which the entity's body resides
      */
-    public World getWorld(){
+    public ZWWorld getWorld(){
         return this.world;
     }
 
@@ -231,7 +231,7 @@ public abstract class Entity {
      * Sets the entity's sprite
      * @param sprite The new sprite
      */
-    public void setSprite(Sprite sprite){
+    public void setSprite(ZWSprite sprite){
         this.sprite = sprite;
         updateRotation();
         updatePosition();
@@ -242,7 +242,7 @@ public abstract class Entity {
      * @param spritePath    The path to the sprite
      */
     public void setSprite(String spritePath){
-        this.sprite = new Sprite(new Texture(spritePath));
+        this.sprite = new ZWSprite(new ZWTexture(spritePath));
     }
     /**
      * Removes the body from the world in which it resides. It also sets the body to null, since it otherwise can cause
@@ -274,22 +274,20 @@ public abstract class Entity {
      * Sets the current player world
      * @param world The current world
      */
-    public void setWorld(World world){
+    public void setWorld(ZWWorld world){
         this.world=world;
     }
 
     public Animator getAnimator(){return animator;}
 
-    public Sprite getSprite(){return sprite;}
+    public ZWSprite getSprite(){return sprite;}
 
     /**
      * Sets the entity's category bits, used for collision detection
      * @param bits  The category bits
      */
     public void setCategoryBits(short bits) throws NullPointerException{
-        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
-        newFilter.categoryBits = bits;
-        getBody().getFixtureList().get(0).setFilterData(newFilter);
+        body.getFixtureList().get(0).setCategoryBits(bits);
     }
 
     /**
@@ -297,9 +295,7 @@ public abstract class Entity {
      * @param bits  The mask bits
      */
     public void setMaskBits(short bits) throws NullPointerException{
-        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
-        newFilter.maskBits = bits;
-        getBody().getFixtureList().get(0).setFilterData(newFilter);
+        body.getFixtureList().get(0).setMaskBits(bits);
     }
     
     public float getBodySpeed(){

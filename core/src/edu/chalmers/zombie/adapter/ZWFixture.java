@@ -32,10 +32,14 @@ public class ZWFixture {
         return fixture.getFilterData().categoryBits;
     }
     public void setCategoryBits(short categoryBits){
-        fixture.getFilterData().categoryBits = categoryBits;
+        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
+        newFilter.categoryBits = categoryBits;
+        fixture.setFilterData(newFilter);
     }
     public void setMaskBits(short maskBits){
-        fixture.getFilterData().maskBits = maskBits;
+        Filter newFilter = getBody().getFixtureList().get(0).getFilterData();
+        newFilter.maskBits = maskBits;
+        fixture.setFilterData(newFilter);
     }
     public Object getBodyUserData(){
         return fixture.getBody().getUserData();
@@ -45,5 +49,8 @@ public class ZWFixture {
     }
     public Object getUserData(){
         return fixture.getUserData();
+    }
+    public short getMaskBits(){
+        return fixture.getFilterData().maskBits;
     }
 }

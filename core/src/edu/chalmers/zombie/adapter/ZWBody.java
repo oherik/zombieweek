@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.utils.Constants;
 
+import java.util.ArrayList;
+
 /**
  * Created by Erik on 2015-05-28.
  */
@@ -133,6 +135,14 @@ public class ZWBody {
 
     public void setUserData(Object obj){
         body.setUserData(obj);
+    }
+
+    public ArrayList<ZWFixture> getFixtureList(){
+        ArrayList fixtures = new ArrayList<ZWFixture>();
+        for(Fixture f: body.getFixtureList()){
+            fixtures.add(new ZWFixture(f));
+        }
+        return fixtures;
     }
 
 }

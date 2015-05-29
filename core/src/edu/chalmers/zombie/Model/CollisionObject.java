@@ -1,7 +1,6 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import edu.chalmers.zombie.adapter.ZWBody;
 
 /**
  * A class which stores a body definition, a fixture definition, the name of the collision object and, if applicable,
