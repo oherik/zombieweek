@@ -1,12 +1,7 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
-import edu.chalmers.zombie.model.CreatureInterface;
-import edu.chalmers.zombie.model.Entity;
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Zombie;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.utils.Constants;
-
-
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PotionType;
 
@@ -134,7 +129,7 @@ public class Player extends Entity implements CreatureInterface {
      * Moves player if needed.
      */
     public void moveIfNeeded(){
-        getBody().applyForce(force, getBody().getLocalCenter(), true);
+        getBody().applyForce(force, getBody().getLocalCenter());
     }
 
     public void setLegPower(int  legPower){
@@ -429,12 +424,35 @@ public class Player extends Entity implements CreatureInterface {
      * @param point The point where to create the new body
      * @return A new default body
      */
-    public Body createDefaultBody(World world, Point point){
+    public ZWBody createDefaultBody(ZWWorld world, Point point){
         if(this.getBody()!=null) {
             this.removeBody();
         }
         this.setWorld(world);
-        this.setBody(bodyDef, fixDef);
+        ZWBody body = new ZWBody();
+        body.createBodyDef(true,(float)point.x+0.5f,(float)point.y+0.5f,dampening,dampening);
+
+        Vector[] vectors = new Vector[8];
+        vectors[0] = new Vector(2f,-1.5f);
+        vectors[1] = new Vector(3f,-0.5f);
+        vectors[2] = new Vector(3f,0.5f);
+        vectors[3] = new Vector(2f,1.5f);
+        vectors[4] = new Vector(-2f,1.5f);
+        vectors[5] = new Vector(-3f,0.5f);
+        vectors[6] = new Vector(-3f,-0.5f);
+        vectors[7] = new Vector(-2f,-1.5f);
+        for (Vector vector:vectors){
+            vector.scl(1f/6.5f);
+        }
+
+
+        short categoryBits = Constants.COLLISION_PLAYER;
+        short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
+                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+
+        body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
+
+        this.setBody(body);
         this.setPosition(point);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
         return this.getBody();
@@ -451,8 +469,35 @@ public class Player extends Entity implements CreatureInterface {
         this.removeBody();
         Point p = new Point(x,y);
         this.setPosition(p);
-        this.setBody(bodyDef, fixDef);
+
+        ZWBody body = new ZWBody();
+        body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
+
+        Vector[] vectors = new Vector[8];
+        vectors[0] = new Vector(2f,-1.5f);
+        vectors[1] = new Vector(3f,-0.5f);
+        vectors[2] = new Vector(3f,0.5f);
+        vectors[3] = new Vector(2f,1.5f);
+        vectors[4] = new Vector(-2f,1.5f);
+        vectors[5] = new Vector(-3f,0.5f);
+        vectors[6] = new Vector(-3f,-0.5f);
+        vectors[7] = new Vector(-2f,-1.5f);
+        for (Vector vector:vectors){
+            vector.scl(1f/6.5f);
+        }
+
+
+        short categoryBits = Constants.COLLISION_PLAYER;
+        short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
+                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+
+        body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
+
+        this.setBody(body);
+        getBody().setFixedRotation(true);   //Så att spelaren inte roterar
+
         return this;
+
     }
 
     /**
@@ -465,7 +510,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     public void setPosition(Point point){
-        getBody().setTransform(point.x + 0.5f, point.y + 0.5f, getBody().getAngle()); //+0.5f because we want it in the middle
+        getBody().setTransform((float)point.getX() + 0.5f, (float)point.getY() + 0.5f, getBody().getAngle()); //+0.5f because we want it in the middle
         updateRotation();
     }
     public Hand getHand(){

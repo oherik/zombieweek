@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.utils.Constants;
 
 /**

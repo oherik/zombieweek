@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Player;
 
 /**
  * Created by daniel on 5/27/2015.

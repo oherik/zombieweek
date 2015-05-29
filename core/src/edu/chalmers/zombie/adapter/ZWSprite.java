@@ -16,7 +16,9 @@ public class ZWSprite {
         this.sprite = sprite;
     }
     public ZWSprite(ZWTextureRegion textureRegion){this.sprite = new Sprite(textureRegion.getTextureRegion());}
-
+    public ZWTexture getTexture(){
+        return new ZWTexture(sprite.getTexture());
+    }
     public Sprite getSprite(){
         return sprite;
     }

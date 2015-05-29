@@ -182,6 +182,10 @@ public class ZWBody {
         this.body.setTransform(vector.getLibVector(),rotation);
     }
 
+    public void setTransform(float x, float y, float rotation){
+        setTransform(new Vector(x,y),rotation);
+    }
+
     public void setAngularDamping(float angularDamping) {
 
         body.setAngularDamping(angularDamping);
@@ -200,5 +204,13 @@ public class ZWBody {
     public void applyForceToCenter(float x, float y, boolean wake) {
 
         body.applyForceToCenter(x, y, wake);
+    }
+
+    public void applyForce(Vector force, Vector position){
+        body.applyForce(force.getLibVector(), position.getLibVector(), true);
+    }
+
+    public Vector getLocalCenter(){
+        return new Vector(body.getLocalCenter());
     }
 }
