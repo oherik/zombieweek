@@ -28,16 +28,4 @@ public interface CreatureInterface {
      * @return true if creature has been attacked, false if not
      */
     boolean hasBeenAttacked();
-
-    /**
-     * A method which sets the physical representation of the creature.
-     * @param body Body
-     */
-    void setBody(Body body);
-
-    /**
-     * A method which returns the physical representation of the creature.
-     * @return Body
-     */
-    Body getBody();
 }
