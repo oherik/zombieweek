@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Erik
  * Modified by Erik
  */
-public class PhysicsController {
+public class SpawnController {
 
     /**
      * Saves the collision objects
@@ -118,12 +118,6 @@ public class PhysicsController {
 
     private static void traverseRoomIfNeeded(ArrayList<CollisionObject> collisionObjects, Room room) {
         if(!room.hasBeenTraversed()) { //if the room already has these initialized there's no point in continuing
-            Room currentRoom = GameModel.getInstance().getRoom();
-
-            String zombieSpawn = "zombie_spawn"; //TODO test tills vi f�r flera sorters zombies
-            String playerSpawn = "player_spawn"; //TODO test tills ovan �r fixat
-            String playerReturn = "player_return"; //TODO test tills ovan �r fixat
-
                 for (int row = 0; row < room.getTiledHeight(); row++) {       //TODO on�digt att g� igenom allt?
                     for (int col = 0; col < room.getTiledWidth(); col++) {
                         if (room.hasMetaData(col, row)) {        //There's a meta data tile on that position
@@ -146,28 +140,27 @@ public class PhysicsController {
                             if(toAdd != null) {
                                 collisionObjects.add(toAdd);
                             }
-                            if (room.hasProperty(col, row, zombieSpawn)) {           //TODO skapa en spawnEntities-metod ist�llet. Och en huvudmetod som g�r igenom b�da metoderna
-                                ZombieController.spawnZombie((String) room.getProperty(col, row, zombieSpawn), col, row);
+                            if (room.hasProperty(col, row, Constants.ZOMBIE_SPAWN)) {
+                                ZombieController.spawnZombie((String) room.getProperty(col, row,  Constants.ZOMBIE_SPAWN), col, row);
                             }
-                            else if (room.hasProperty(col, row, playerSpawn)) {
+                            else if (room.hasProperty(col, row, Constants.PLAYER_SPAWN)) {
                                 room.setPlayerSpawn(new Point(col, row));
                             }
-                            else if (room.hasProperty(col, row, playerReturn)) {
+                            else if (room.hasProperty(col, row, Constants.PLAYER_RETURN)) {
                                 room.setPlayerReturn(new Point(col, row));
                             }
                             else if (room.hasProperty(col, row, Constants.POTION_PROPERTY)) {
-                                EntityController.spawnPotion((String)room.getProperty(col, row, Constants.POTION_PROPERTY), room, col, row);
+                                PotionController.spawnPotion((String) room.getProperty(col, row, Constants.POTION_PROPERTY), room, col, row);
                             }
 
                             else if (room.hasProperty(col, row, Constants.BOOK_PROPERTY)) {
                                 int amount = Integer.parseInt((String)room.getProperty(col, row, Constants.BOOK_PROPERTY));
                                 for(int i = 0 ; i<amount; i++){
-                                    EntityController.spawnBook(room, col, row);
+                                    ProjectileController.spawnStillBook(room, col, row);
                                 }
                             }
 
                         }
-
 
                         /* ------ Create book obstacles -----*/
                         if (room.hasProperty(col,row,Constants.COLLISION_PROPERTY_ALL)){
@@ -184,8 +177,6 @@ public class PhysicsController {
         room.setHasBeenTraversed(true);
 
     }
-
-
 
     /**
      * Runs traverseRoomIfNeeded using the default values stored in the game model. If none are stored new ones are created.
