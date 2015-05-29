@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
  * Created by daniel on 5/28/2015.
+ * Modified by Neda
  */
 public class ZWSprite {
     private Sprite sprite;
