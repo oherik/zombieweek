@@ -81,6 +81,7 @@ public class MapController {
         if (roomIndex < 0 || roomIndex > maxSize){
         throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
         }
+        //if(!gameModel.worldNeedsUpdate()){
         gameModel.getPlayer().setSneakTilesTouching(0);
         gameModel.getPlayer().setWaterTilesTouching(0);
         gameModel.getPlayer().setHidden(false);
@@ -104,7 +105,7 @@ public class MapController {
         }
         else
             setPlayerBufferPosition(getRoom().getPlayerSpawn());
-        gameModel.setPlayer(null);
+
         gameModel.setWorldNeedsUpdate(true);
     }
 

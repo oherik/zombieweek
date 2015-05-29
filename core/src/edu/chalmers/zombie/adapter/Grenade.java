@@ -130,7 +130,7 @@ public class Grenade extends Entity{
                 }
             }
             for (Fixture f: fixturesInRadius){
-                f.getBody().setAngularVelocity(20000f);
+
             }
         }
     }

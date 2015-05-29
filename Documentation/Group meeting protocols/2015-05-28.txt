@@ -4,6 +4,53 @@ Meeting Agenda
 
   Facilitator: Daniel Johansson
 
+  Participants: Neda Farhand, Tobias Hallberg, Daniel Johansson, Erik Öhrn
+
+1. Objectives (5 min). Resolve any issues preventing the team to
+  continue.
+
+- There is a bug that makes the player spawn under the table in the second world.
+
+
+2. Reports (15 min) from previous meeting
+
+- Erik has made it so the zombies move towards the player using the dijkstra algorithm. 
+He made it  so the zombies can be placed in tiled and so that they can rotate. 
+
+- Tobias changed the body of the plyer so it has the same shape as the player. He also wrote on the SDD and the RAD.
+He also started on a game over view.
+
+- Neda has made attack work. She also fixed many small things such that the zombie gets attacked when the book hits it first.
+She has also worked on the use cases. 
+
+- Daniel worked on the flashlight. He also added a grenade class. He also added a red screen when the player gets hit by the zombies.
+
+3. Discussion items (35 min)
+
+- We need to refactor more, to make it more like MVC. 
+- The documentation needs to be updated.
+- The book should have feedback.
+- It would be nice to add grenades and potions to the game.
+- A timer would help make the game more unique.
+- The HUD needs an update.
+
+4. Outcomes and assignments (5 min)
+
+- Neda will update the use cases. She will work on attack and spawn methods in ZombieController as well as uploading more levels. 
+- Erik will help Neda with the zombie movement and spawning. He will also create tile maps for the new levels. 
+- Daniel will complete the flashlight class.
+- Tobias will help Daniel with flashlight/pause menu bug fixing. He will also remake the entity bodies more fit to the sprites. He will furthermore work on documentation.
+
+5. Wrap up
+- The book bug is low priority and will have to wait.
+- The next meeting will be held on Thursday the 28th of May at 10:30 in F4058.
+=======
+Meeting Agenda
+
+  Date: 2015-05-28
+
+  Facilitator: Daniel Johansson
+
   Participants: Neda Farhand, Tobias Hallberg, Daniel Johansson, Erik …hrn
 
 1. Objectives (5 min). Resolve any issues preventing the team to
