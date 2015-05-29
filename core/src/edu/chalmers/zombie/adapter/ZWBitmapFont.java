@@ -21,4 +21,14 @@ public class ZWBitmapFont {
     public BitmapFont getBitmapFont() {
         return this.font;
     }
+
+    public void draw(ZWSpriteBatch spriteBatch, String text, float x, float y){
+        font.draw(spriteBatch.getSpriteBatch(),text,x,y);
+    }
+
+    public void setColor(float r, float g, float b, float a){
+        font.setColor(r,g,b,a);
+    }
+
+
 }
