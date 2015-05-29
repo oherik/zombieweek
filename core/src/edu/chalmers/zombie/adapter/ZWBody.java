@@ -169,6 +169,12 @@ public class ZWBody {
         body.applyLinearImpulse(impulse.getLibVector(), point.getLibVector(), bool);
     }
 
+    public void setFixedRotation(boolean bool){this.body.setFixedRotation(bool);}
+
+    public void setTransform(Vector vector, float rotation){
+        this.body.setTransform(vector.getLibVector(),rotation);
+    }
+
     public void setAngularDamping(float angularDamping) {
 
         body.setAngularDamping(angularDamping);
