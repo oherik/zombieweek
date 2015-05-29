@@ -22,7 +22,7 @@ public class Book extends Entity {
     private boolean onGround;
 
     public Book(float x, float y, Room room){
-        this(0,x,y,room.getWorld(),new Vector2(0,0));
+        this(0,x,y,room.getWorld().getWorld(),new Vector2(0,0));
         speed = 0;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;

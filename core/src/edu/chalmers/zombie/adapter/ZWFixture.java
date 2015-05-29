@@ -12,6 +12,9 @@ import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 public class ZWFixture {
     private Fixture fixture;
     private FixtureDef fixDef;
+    public ZWFixture(Fixture fixture){
+        this.fixture = fixture;
+    }
     public ZWFixture(Fixture fixture, FixtureDef fixDef){
         this.fixture = fixture;
         this.fixDef = fixDef;
@@ -34,7 +37,13 @@ public class ZWFixture {
     public void setMaskBits(short maskBits){
         fixture.getFilterData().maskBits = maskBits;
     }
-    public Object getUserData(){
+    public Object getBodyUserData(){
         return fixture.getBody().getUserData();
+    }
+    public void setUserData(Object object){
+        fixture.setUserData(object);
+    }
+    public Object getUserData(){
+        return fixture.getUserData();
     }
 }

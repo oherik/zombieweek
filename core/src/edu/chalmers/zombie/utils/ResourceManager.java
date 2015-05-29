@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import edu.chalmers.zombie.adapter.ZWTiledMap;
 
 import java.util.HashMap;
 
@@ -17,7 +18,7 @@ public class ResourceManager {
 
     //Sprites?
     private HashMap<String, Texture> textureMap;
-    private HashMap<String, TiledMap> tiledmapMap;
+    private HashMap<String, ZWTiledMap> tiledmapMap;
     private HashMap<String, Sound> soundMap;
 
 
@@ -26,7 +27,7 @@ public class ResourceManager {
      */
     public ResourceManager(){
         textureMap = new HashMap<String, Texture>();
-        tiledmapMap = new HashMap<String, TiledMap>();
+        tiledmapMap = new HashMap<String, ZWTiledMap>();
         soundMap = new HashMap<String, Sound>();
     }
 
@@ -78,7 +79,7 @@ public class ResourceManager {
             throw new NullPointerException("Tiled map: no path recieved");
         }
 
-        TiledMap tiledMap = new TmxMapLoader().load(path);
+        ZWTiledMap tiledMap = new ZWTiledMap(path);
 
         if (tiledMap == null) {
             throw new NullPointerException("Tiled map: incorrect path name");
@@ -92,14 +93,14 @@ public class ResourceManager {
      * @param key The tiled map
      * @return tiled map
      */
-    public TiledMap getTiledMap(String key){ return tiledmapMap.get(key);}
+    public ZWTiledMap getTiledMap(String key){ return tiledmapMap.get(key);}
 
     /**
      * Dispose tiled map
      * @param key The tiled map key
      */
     public void disposeTiledMap(String key){
-        TiledMap tiledMap = tiledmapMap.get(key);
+        ZWTiledMap tiledMap = tiledmapMap.get(key);
         if (tiledMap!=null){tiledMap.dispose();}
     }
 
