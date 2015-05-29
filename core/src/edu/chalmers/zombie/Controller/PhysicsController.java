@@ -82,7 +82,7 @@ public class PhysicsController {
 
         //Player collision
         categoryBits = Constants.COLLISION_ACTOR_OBSTACLE;
-        maskBits = Constants.COLLISION_ENTITY;
+        maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
         ZWBody playerCollisionBody = new ZWBody();
         playerCollisionBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_PLAYER, playerCollisionBody));
@@ -155,6 +155,13 @@ public class PhysicsController {
                             }
                             else if (room.hasProperty(col, row, Constants.POTION_PROPERTY)) {
                                 EntityController.spawnPotion((String)room.getProperty(col, row, Constants.POTION_PROPERTY), room, col, row);
+                            }
+
+                            else if (room.hasProperty(col, row, Constants.BOOK_PROPERTY)) {
+                                int amount = Integer.parseInt((String)room.getProperty(col, row, Constants.BOOK_PROPERTY));
+                                for(int i = 0 ; i<amount; i++){
+                                    EntityController.spawnBook(room, col, row);
+                                }
                             }
 
                         }

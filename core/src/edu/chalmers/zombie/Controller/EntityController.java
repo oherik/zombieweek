@@ -144,9 +144,16 @@ public class EntityController {
     public static void hitGround(Book book){
         book.setOnGround(true);
         //TODO g�ra boken mindre, l�gga till ljud etc
-        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER | Constants.COLLISION_ACTOR_OBSTACLE;
         setMaskBits(book, maskBits);
         setFriction(book, 4f, 3f);
+    }
+
+    public static void spawnBook(Room room, int x, int y){
+        Book book = new Book(x,y,room);
+        hitGround(book);
+        GameModel.getInstance().addBook(book);
+
     }
 
 

@@ -21,6 +21,31 @@ public class Book extends Entity {
     private long timeCreated;
     private boolean onGround;
 
+    public Book(float x, float y, Room room){
+        this(0,x,y,room.getWorld(),new Vector2(0,0));
+        speed = 0;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x+0.5f,y+0.5f);
+        bodyDef.bullet = true;
+
+        //Load shape
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width/2/ Constants.PIXELS_PER_METER, height/2/Constants.PIXELS_PER_METER);
+
+        //Load fixture def
+        FixtureDef fixDef = new FixtureDef();
+        fixDef.shape = shape;
+        fixDef.density = (float)Math.pow(width/Constants.PIXELS_PER_METER, height/Constants.PIXELS_PER_METER);
+        fixDef.restitution = 0;
+        fixDef.friction = 8f;
+        fixDef.filter.categoryBits = Constants.COLLISION_PROJECTILE;
+        fixDef.filter.maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_PLAYER | Constants.COLLISION_DOOR | Constants.COLLISION_ACTOR_OBSTACLE;
+
+        //Set body
+        super.setBody(bodyDef, fixDef);
+        getBody().setUserData(this);
+    }
 
     /**
      * Creates a book in front of the player. Since it uses vectors the speed of the book will depend on the player's speed.

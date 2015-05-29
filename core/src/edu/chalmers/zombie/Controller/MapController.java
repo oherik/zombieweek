@@ -386,8 +386,8 @@ public class MapController {
             if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
                 EntityController.hitGround(b);
             if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
-                gameModel.addEntityToRemove(getRoom(),b);
-                b.markForRemoval();
+              //  gameModel.addEntityToRemove(getRoom(),b);
+                //b.markForRemoval(); //TODO ha med?
             }
             if (b.toRemove())
                 books.remove(i); //Förenklad forsats skulle göra detta svårt

@@ -19,7 +19,8 @@ public class Constants {
     public static final String COLLISION_PROPERTY_WATER = "water";
     public static final String COLLISION_PROPERTY_SNEAK = "sneak";
     public static final String COLLISION_PROPERTY_PLAYER = "collision_player";
-    public static String POTION_PROPERTY = "potion";
+    public static final String POTION_PROPERTY = "potion";
+    public static final String BOOK_PROPERTY = "book";
 
     //Kollisionshantering
     public static final short COLLISION_PLAYER= 2;
