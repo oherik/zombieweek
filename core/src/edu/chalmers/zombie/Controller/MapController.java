@@ -102,7 +102,7 @@ public class MapController {
         }
         else
             setPlayerBufferPosition(getRoom().getPlayerSpawn());
-
+        gameModel.setPlayer(null);
         gameModel.setWorldNeedsUpdate(true);
     }
 
@@ -298,7 +298,7 @@ public class MapController {
             PhysicsController.traverseRoomIfNeeded(getRoom());
 
             /* ------ Remove old entities ------ */
-            removeEntities();
+           // removeEntities();
 
             /* ------ Update player ------ */
             if(player == null){
@@ -332,7 +332,7 @@ public class MapController {
         /* ------- Updates projectiles ------*/
         updateBooks();
 
-        if(gameModel.getPlayer().getBody()!=null) {       //Another world is loading
+        if(gameModel.getPlayer()!=null && gameModel.getPlayer().getBody()!=null) {       //Another world is loading
 
             /* ------ Move player ------*/
             gameModel.getPlayer().moveIfNeeded();
