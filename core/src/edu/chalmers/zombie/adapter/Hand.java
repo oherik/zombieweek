@@ -1,12 +1,5 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 
@@ -18,7 +11,7 @@ public class Hand {
     private float direction = 0;
     private Thread aimRight = new Thread();
     private Thread aimLeft = new Thread();
-    private Sprite aimer = new Sprite(new Texture("core/assets/aimer.png"));
+    private ZWSprite aimer = new ZWSprite(new ZWTexture("core/assets/aimer.png"));
     private Player player;
     private boolean mouseAiming = false;
     private boolean throwingGrenade = false;
@@ -84,7 +77,7 @@ public class Hand {
         aimRight.stop();
         aimLeft.stop();
     }
-    public void drawAimer(Batch batch){
+    public void drawAimer(ZWBatch batch){
         if (!throwingGrenade){
             aimer.setPosition(player.getX() - 0.25f + (float)(Math.cos(direction + Constants.PI/2)), player.getY() - 0.25f
                     + (float)(Math.sin(direction + Constants.PI/2)));
@@ -94,15 +87,15 @@ public class Hand {
         }
 
     }
-    public void drawGrenadeAimer(ShapeRenderer shapeRenderer){
+    public void drawGrenadeAimer(ZWShapeRenderer shapeRenderer){
         if (throwingGrenade){
-            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.setColor(ZWShapeRenderer.Color.GREEN);
             shapeRenderer.line(mouseX - 10, mouseY -10, mouseX +10, mouseY+10);
             shapeRenderer.line(mouseX - 10, mouseY + 10, mouseX + 10, mouseY -10);
             shapeRenderer.circle(mouseX, mouseY, 20);
         }
     }
-    public Sprite getAimer(){
+    public ZWSprite getAimer(){
         return aimer;
     }
 
@@ -117,10 +110,10 @@ public class Hand {
 
     public void setMousePosition(int x, int y){
         mouseX = x;
-        mouseY = Gdx.graphics.getHeight() - y;
+        mouseY = (int)ZWGameEngine.getWindowHeight() - y;
         if (mouseAiming) {
-            float deltaX = Gdx.graphics.getWidth() / 2 - x;
-            float deltaY = y - Gdx.graphics.getHeight() / 2;
+            float deltaX = ZWGameEngine.getWindowWidth() / 2 - x;
+            float deltaY = y - ZWGameEngine.getWindowHeight() / 2;
             direction = (float) Math.atan2((double) deltaY, (double) deltaX) + Constants.PI / 2;
         }
     }
