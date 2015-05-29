@@ -21,7 +21,7 @@ import java.util.Objects;
  * and other algorithms.
  */
 public class Room {
-    private World world;
+    private ZWWorld world;
     private TiledMap tiledMap;
     private ArrayList zombies, potions;
     private boolean hasBeenTraversed;
@@ -46,7 +46,7 @@ public class Room {
         metaLayer.setVisible(false);
 
         //Create the world
-        world = new World(new Vector2(0, 0), true);
+        world = new ZWWorld();
         world.setContactListener(new ContactListener());
         hasBeenTraversed = false;
 
@@ -63,14 +63,12 @@ public class Room {
 
 
     public void createBody(ZWBody body, Object userData){
-        Body b2body = world.createBody(body.getBodyDef());
-        b2body.createFixture(body.getFixtureDef());
-        body.setBody(b2body);
-        b2body.setUserData(userData);
+        ZWBody newBody = world.createBody(body);
+        newBody.setUserData(userData);
     }
 
     public void createFixture(ZWBody body, Object userData){
-        Fixture fixture = world.createBody(body.getBodyDef()).createFixture(body.getFixtureDef());
+        Fixture fixture = world.createBody(body).createFixture(body.getFixtureDef());
         fixture.setUserData(userData);
     }
 

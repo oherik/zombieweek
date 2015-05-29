@@ -123,4 +123,16 @@ public class ZWBody {
         body.setAngularDamping(angularDampening);
     }
 
+    public Fixture createFixture(FixtureDef fixtureDef){
+        body.createFixture(fixtureDef);
+    }
+
+    public void setBody(ZWBody body){
+        this.body = body.getBody();
+    }
+
+    public void setUserData(Object obj){
+        body.setUserData(obj);
+    }
+
 }
