@@ -11,13 +11,13 @@ import edu.chalmers.zombie.model.GameModel;
 public class EntityController {
 
     public static void knockBack(Entity attacker, Entity victim, float amount){
-        knockBack(new Vector(attacker.getX(),attacker.getY()),victim,amount);
+        knockBack(new ZWVector(attacker.getX(),attacker.getY()),victim,amount);
     }
 
-    public static void knockBack(Vector attackerPosition, Entity victim, float amount){
+    public static void knockBack(ZWVector attackerPosition, Entity victim, float amount){
         float dx = victim.getX()-attackerPosition.getX();
         float dy = victim.getY()-attackerPosition.getY();
-        Vector push = new Vector(dx,dy);
+        ZWVector push = new ZWVector(dx,dy);
         push.setLength(amount);
         victim.applyLinearImpulse(push);
     }

@@ -5,22 +5,22 @@ import com.badlogic.gdx.math.Vector2;
 /** An adapter class for libGDX's Vector2
  * Modified by Neda
  */
-public class Vector {
+public class ZWVector {
     private Vector2 vector;
 
-    public Vector(){
+    public ZWVector(){
         vector = new Vector2();
     }
 
-    public Vector(Vector2 libVector){
+    public ZWVector(Vector2 libVector){
         vector = libVector;
     }
 
-    public Vector(Vector vector){
+    public ZWVector(ZWVector vector){
         this.vector = vector.getLibVector();
     }
 
-    public Vector(float x, float y){
+    public ZWVector(float x, float y){
 
         vector = new Vector2(x,y);
     }
@@ -35,7 +35,7 @@ public class Vector {
     public void setX(float x){vector.x=x;}
     public void setY(float y){vector.y=y;}
 
-    public void set(Vector vector){
+    public void set(ZWVector vector){
         this.vector.set(vector.getLibVector());
     }
 
@@ -67,12 +67,12 @@ public class Vector {
         return vector;
     }
 
-    public Vector add(float x, float y){
+    public ZWVector add(float x, float y){
         vector.add(x,y);
         return this;
     }
 
-    public Vector add(Vector vector){
+    public ZWVector add(ZWVector vector){
         this.vector.add(vector.getLibVector());
         return this;
     }

@@ -13,8 +13,8 @@ public class Flashlight {
     private ZWWorld world;
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
     private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
-    private Vector playerPosition = new Vector();
-    Vector collisionPoint = new Vector();
+    private ZWVector playerPosition = new ZWVector();
+    ZWVector collisionPoint = new ZWVector();
     private float currentFraction = 1337;
     private boolean foundFixture;
     private ArrayList<Float> collisionPoints = new ArrayList<Float>();
@@ -23,8 +23,8 @@ public class Flashlight {
     private float width;
     private int numberOfRays;
     private float length;
-    private Vector[] rays;
-    private ArrayList<Vector> endPoints = new ArrayList<Vector>();
+    private ZWVector[] rays;
+    private ArrayList<ZWVector> endPoints = new ArrayList<ZWVector>();
     private int maxYIndex;
     private float[] corners = new float[8];
     private float lengthFraction;
@@ -94,14 +94,14 @@ public class Flashlight {
         playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
     }
     private void initializeRays(){
-        rays = new Vector[numberOfRays];
+        rays = new ZWVector[numberOfRays];
     }
     private void calculateEndPoints(){
         for(int i = 0; i<numberOfRays; i++) {
-            rays[i] = new Vector(1, 1);
+            rays[i] = new ZWVector(1, 1);
             rays[i].setLength(length);
             rays[i].setAngleRad(direction - width / 2 + i * width / numberOfRays);
-            Vector end = new Vector(rays[i]);
+            ZWVector end = new ZWVector(rays[i]);
             end.add(playerPosition);
             endPoints.add(lengthenRay(playerPosition,end,0.4f));
             int x = 0;
@@ -109,26 +109,26 @@ public class Flashlight {
     }
 
     private void lengthenRays(){
-        for(Vector v : rays) {
+        for(ZWVector v : rays) {
             v.set(lengthenRay(playerPosition, v, 0.4f));
         }
     }
 
-    private Vector lengthenRay(Vector origin, Vector end,float dist){
+    private ZWVector lengthenRay(ZWVector origin, ZWVector end,float dist){
         float dy = origin.getY()-end.getY();
         float dx = origin.getX()-end.getX();
         float dl= (float)(Math.sqrt(dy*dy+dx*dx));
         float y = end.getY() - dy*dist/dl;
         float x = end.getX() - dx*dist/dl;
-        return new Vector(x,y);
+        return new ZWVector(x,y);
     }
     private void calculateCollisionPoints(){
-        for (Vector ray : rays) {
+        for (ZWVector ray : rays) {
             currentFraction = 1337;
             foundFixture = false;
             rayCast(ray);
             if (foundFixture) {
-                Vector temp = new Vector(ray);
+                ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
                 int tempIndex = endPoints.indexOf(lengthenRay(playerPosition,temp,0.4f));
                 endPoints.remove(lengthenRay(playerPosition,temp,0.4f));
@@ -140,15 +140,15 @@ public class Flashlight {
         collisionPoints.clear();
     }
 
-    private void rayCast(Vector ray) {
+    private void rayCast(ZWVector ray) {
         world.rayCast(callback, playerPosition, sum(ray, playerPosition));
     }
-    private Vector sum(Vector v1, Vector v2){
-        Vector tmpVector1 = new Vector();
-        Vector tmpVector2 = new Vector();
+    private ZWVector sum(ZWVector v1, ZWVector v2){
+        ZWVector tmpVector1 = new ZWVector();
+        ZWVector tmpVector2 = new ZWVector();
         tmpVector1.set(v1);
         tmpVector2.set(v2);
-        Vector returnVector = tmpVector1.add(tmpVector2);
+        ZWVector returnVector = tmpVector1.add(tmpVector2);
         return returnVector;
     }
     private void calculateMaxYIndex(){
@@ -221,7 +221,7 @@ public class Flashlight {
     private ZWRayCastCallback createCallback(){
         ZWRayCastCallback returnCallback = new ZWRayCastCallback() {
             @Override
-            public float reportRayFixture(ZWFixture fixture, Vector point, Vector normal, float fraction) {
+            public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
                 if (fixture.getCategoryBits()== Constants.COLLISION_OBSTACLE ||
                         fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
                     if (fraction < currentFraction) {

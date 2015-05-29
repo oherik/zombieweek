@@ -53,9 +53,9 @@ public abstract class Entity {
         sprite.setY(y);
     }
 
-    public void applyLinearImpulse(Vector force){
-        Vector vectorForce = new Vector(force.getX(), force.getY());
-        Vector bodyPoint = getBody().getWorldCenter();
+    public void applyLinearImpulse(ZWVector force){
+        ZWVector vectorForce = new ZWVector(force.getX(), force.getY());
+        ZWVector bodyPoint = getBody().getWorldCenter();
         getBody().applyLinearImpulse(vectorForce, bodyPoint, true);
     }
 
@@ -94,7 +94,7 @@ public abstract class Entity {
      * Makes the body move linearly
      * @param velocity  The body's new velocity
      */
-    protected void setBodyVelocity(Vector velocity){
+    protected void setBodyVelocity(ZWVector velocity){
         this.body.setLinearVelocity(velocity);
     }
 
@@ -202,7 +202,7 @@ public abstract class Entity {
         return sprite.getWidth();
     }
 
-    public abstract Vector getVelocity(); //TODO empty
+    public abstract ZWVector getVelocity(); //TODO empty
 
     /**
      * Sets the entity's body
@@ -211,7 +211,7 @@ public abstract class Entity {
     public void setBody(ZWBody body) {
         this.body=world.createBody(body);
         System.out.println(this.body.getBody());
-        this.body.createFixture(); //TODO göras internt?
+        this.body.createFixture(); //TODO gï¿½ras internt?
     }
 
     /**
