@@ -106,14 +106,12 @@ public class GameScreen implements Screen{
        MenuController.initializeMenus(); //TODO: should be done in factory
 
          /* ------- Set input --------*/
-        InputProcessor inputProcessorTwo = GameModel.getInstance().getScreenModel().getPauseStage();
-        InputProcessor inputProcessorOne = new InputController();
-        InputProcessor inputProcessorThree = GameModel.getInstance().getScreenModel().getSoundAndSettingStage();
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(inputProcessorTwo);
-        inputMultiplexer.addProcessor(inputProcessorThree);
-        inputMultiplexer.addProcessor(inputProcessorOne);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        ZWInputMultiplexer inputMultiplexer = new ZWInputMultiplexer();
+        inputMultiplexer.addInputProcessor(GameModel.getInstance().getScreenModel().getPauseStage());
+        inputMultiplexer.addInputProcessor(new InputController());
+        inputMultiplexer.addInputProcessor(GameModel.getInstance().getScreenModel().getSoundAndSettingStage());
+        
+        ZWGameEngine.setInputProcessor(inputMultiplexer);
 
         //TODO debug
         mapController.printCollisionTileGrid();
