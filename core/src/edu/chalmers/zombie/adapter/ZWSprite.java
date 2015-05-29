@@ -70,4 +70,5 @@ public class ZWSprite {
         sprite.setRotation(degrees);
     }
     
+    public void setRegion(ZWTextureRegion textureRegion){sprite.setRegion(textureRegion.getTextureRegion());}
 }
