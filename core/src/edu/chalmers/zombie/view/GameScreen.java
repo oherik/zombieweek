@@ -1,20 +1,5 @@
 package edu.chalmers.zombie.view;
 
-import com.badlogic.gdx.*;
-
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
-
 import edu.chalmers.zombie.adapter.*;
 
 import edu.chalmers.zombie.controller.*;
@@ -29,7 +14,7 @@ import java.awt.*;
 /**
  * Created by Tobias on 15-04-02.
  */
-public class GameScreen implements Screen{
+public class GameScreen extends ZWScreen{
     private World currentWorld;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -190,8 +175,8 @@ public class GameScreen implements Screen{
         Player player = gameModel.getPlayer();
 
         /* ------ Render the background color ------ */
-        Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ZWGameEngine.clearColor(0,0,0,1);
+        ZWGameEngine.clearBufferBit();
 
 
         //Uppdatera fysik
@@ -274,9 +259,9 @@ public class GameScreen implements Screen{
             String playerAmmo = "Ammo: " + player.getAmmunition();
             batchHUD.begin();
             bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-            bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight() - 10);
-            bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight() - 25);
-            bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight() - 40);
+            bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
+            bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
+            bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
             batchHUD.end();
 
 
@@ -332,16 +317,7 @@ public class GameScreen implements Screen{
 
 
 
-        //render HUD
-        playerPos = "X: " + gameModel.getPlayer().getX() + ", Y: " + gameModel.getPlayer().getY();
-        playerHealth = "Health: " + gameModel.getPlayer().getLives();
-        playerAmmo = "Ammo: " + gameModel.getPlayer().getAmmunition();
-            batchHUD.begin();
-        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        bitmapFont.draw(batchHUD, playerHealth, 10, Gdx.graphics.getHeight()-10);
-        bitmapFont.draw(batchHUD, playerAmmo, 10, Gdx.graphics.getHeight()-25);
-        bitmapFont.draw(batchHUD, playerPos, 10, Gdx.graphics.getHeight()-40);
-        batchHUD.end();
+
         }
             /* ------ Test path finding ------ */
             if (steps % 60 == 0) {   //uppdaterar varje sekund  //TODO debug
@@ -364,8 +340,8 @@ public class GameScreen implements Screen{
 
     private void updateGameOver(){
         /* ------ Render the background color ------ */
-        Gdx.gl.glClearColor(0, 0, 0, 1);       //Black
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ZWGameEngine.clearColor(0,0,0,1);
+        ZWGameEngine.clearBufferBit();
         GameModel.getInstance().getScreenModel().getGameOverStage().act();
         GameModel.getInstance().getScreenModel().getGameOverStage().draw();
     }
