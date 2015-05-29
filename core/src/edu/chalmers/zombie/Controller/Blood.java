@@ -1,25 +1,21 @@
 package edu.chalmers.zombie.controller;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Timer;
-import edu.chalmers.zombie.adapter.Player;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
 
 /**
  * Created by daniel on 5/27/2015.
  */
 public class Blood {
-    private Sprite blood;
-    private Timer t = new Timer();
+    private ZWSprite blood;
+    private ZWTimer t = new ZWTimer();
     private boolean drawing = false;
-    private Timer.Task task;
+    private ZWTask task;
     public Blood(){
-        Texture bloodTexture = new Texture("core/assets/blood.png");
-        blood = new Sprite(bloodTexture);
+        ZWTexture bloodTexture = new ZWTexture("core/assets/blood.png");
+        blood = new ZWSprite(bloodTexture);
         blood.setAlpha(0.4f);
-        task = new Timer.Task() {
+        task = new ZWTask() {
             @Override
             public void run() {
                 GameModel gameModel = GameModel.getInstance();
@@ -30,7 +26,7 @@ public class Blood {
         };
     }
 
-    public void draw(SpriteBatch spriteBatch){
+    public void draw(ZWBatch spriteBatch){
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
         if (drawing && player.isHit()){
