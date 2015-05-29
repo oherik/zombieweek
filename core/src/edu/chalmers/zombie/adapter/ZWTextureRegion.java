@@ -43,7 +43,4 @@ public class ZWTextureRegion {
     public TextureRegion getTextureRegion(){return this.textureRegion;}
 
 
-
-
-
 }

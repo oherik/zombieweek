@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.controller.MapController;
-import edu.chalmers.zombie.controller.PhysicsController;
+import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -106,7 +106,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
         mapController = new MapController();
-        PhysicsController.setCollisionObjects();
+        SpawnController.setCollisionObjects();
         mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
 
         super.getBody().setAngularDamping(10000);

@@ -46,4 +46,8 @@ public class ZWWorld {
     public World getWorld(){
         return world;
     }
+
+    public void rayCast(ZWRayCastCallback callback, Vector point1, Vector point2){
+        world.rayCast(callback, point1.getLibVector(), point2.getLibVector());
+    }
 }

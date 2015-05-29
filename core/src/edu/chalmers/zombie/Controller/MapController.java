@@ -89,7 +89,7 @@ public class MapController {
         }
         gameModel.setCurrentRoomIndex(roomIndex);
         gameModel.clearBookList();
-        PhysicsController.traverseRoomIfNeeded(getRoom());
+        SpawnController.traverseRoomIfNeeded(getRoom());
         if(oldRoomIndex>roomIndex){
             if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getRoom().getPlayerSpawn());
@@ -291,7 +291,7 @@ public class MapController {
             Player player = GameModel.getInstance().getPlayer();
 
             /* ------ Update physics ------ */
-            PhysicsController.traverseRoomIfNeeded(getRoom());
+            SpawnController.traverseRoomIfNeeded(getRoom());
 
             /* ------ Remove old entities ------ */
            // removeEntities();
