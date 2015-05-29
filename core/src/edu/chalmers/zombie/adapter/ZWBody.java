@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.Room;
+import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class ZWBody {
         if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
             this.fixture = box2Body.getFixtureList().get(0);
         fixtureDef = body.getFixtureDef();
-        bodyDef = body.getBodyDef();
+        //bodyDef = body.getBodyDef();
     }
 
     public boolean bodyIsInRoom(Room room){
@@ -54,6 +55,7 @@ public class ZWBody {
         fixtureDef.filter.maskBits = maskBits;
         fixtureDef.filter.categoryBits = categoryBits;
         fixtureDef.isSensor = isSensor;
+        fixtureDef.density = 1;
     }
 
     public void createBodyDef(boolean dynamic, float x, float y, float linearDampening, float angularDampening){
@@ -211,7 +213,6 @@ public class ZWBody {
     }
 
     public void applyAngularImpulse(int impulse, boolean wake) {
-        System.out.println(impulse);
         body.applyAngularImpulse(impulse, wake);
     }
 

@@ -53,6 +53,9 @@ public class ContactController {
                         case Constants.COLLISION_OBSTACLE:
                             ProjectileController.hitGround(b);
                             break;
+                        case Constants.COLLISION_DOOR:
+                            ProjectileController.hitGround(b);
+                            break;
                         case Constants.COLLISION_WATER:
                             //TODO plums
                             EntityController.remove(b);
