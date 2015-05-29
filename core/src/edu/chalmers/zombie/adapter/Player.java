@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 
 

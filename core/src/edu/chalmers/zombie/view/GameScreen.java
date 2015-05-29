@@ -2,8 +2,6 @@ package edu.chalmers.zombie.view;
 
 import com.badlogic.gdx.*;
 
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -12,38 +10,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import com.badlogic.gdx.utils.*;
-
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.StringBuilder;
 import edu.chalmers.zombie.adapter.*;
 
 import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
-import edu.chalmers.zombie.utils.MenuBuilder;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
-import java.awt.Label;
-import java.util.ArrayList;
 
 /**
  * Created by Tobias on 15-04-02.

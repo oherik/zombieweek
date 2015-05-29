@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.Zombie;
 import edu.chalmers.zombie.utils.ZombieType;
 
 import java.awt.*;
