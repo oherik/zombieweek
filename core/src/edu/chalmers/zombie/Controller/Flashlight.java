@@ -3,11 +3,7 @@ package edu.chalmers.zombie.controller;
 /**
  * Created by daniel on 5/19/2015.
  */
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.EarClippingTriangulator;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.ShortArray;
 import com.sun.istack.internal.NotNull;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.GameModel;
@@ -18,8 +14,8 @@ public class Flashlight {
     private World world;
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
     private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
-    private Vector2 playerPosition = new Vector2();
-    Vector2 collisionPoint = new Vector2();
+    private Vector playerPosition = new Vector();
+    Vector collisionPoint = new Vector();
     private float currentFraction = 1337;
     private boolean foundFixture;
     private ArrayList<Float> collisionPoints = new ArrayList<Float>();
@@ -28,8 +24,8 @@ public class Flashlight {
     private float width;
     private int numberOfRays;
     private float length;
-    private Vector2[] rays;
-    private ArrayList<Vector2> endPoints = new ArrayList<Vector2>();
+    private Vector[] rays;
+    private ArrayList<Vector> endPoints = new ArrayList<Vector>();
     private int maxYIndex;
     private float[] corners = new float[8];
     private float lengthFraction;
@@ -58,7 +54,7 @@ public class Flashlight {
         this.lengthFraction = lengthFraction;
         initializeRays();
     }
-    public void draw(PolygonSpriteBatch psb, SpriteBatch sb){
+    public void draw(ZWBatch batch){
         world = GameModel.getInstance().getRoom().getWorld().getWorld();
         clearAll();
         calculateLength();
@@ -69,10 +65,10 @@ public class Flashlight {
        // lengthenRays();
         calculateMaxYIndex();
         calculateCorners();
-        PolygonRegion darkness = createDarkRegion();
-        Sprite light = createLight();
-        light.draw(sb);
-        psb.draw(darkness, 0, 0);
+        ZWPolygonRegion darkness = createDarkRegion();
+        ZWSprite light = createLight();
+        light.draw(batch);
+        batch.drawPolygonRegion(darkness, 0, 0);
     }
     private void clearAll(){
         endPoints.clear();
@@ -99,14 +95,14 @@ public class Flashlight {
         playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
     }
     private void initializeRays(){
-        rays = new Vector2[numberOfRays];
+        rays = new Vector[numberOfRays];
     }
     private void calculateEndPoints(){
         for(int i = 0; i<numberOfRays; i++) {
-            rays[i] = new Vector2(1, 1);
+            rays[i] = new Vector(1, 1);
             rays[i].setLength(length);
             rays[i].setAngleRad(direction - width / 2 + i * width / numberOfRays);
-            Vector2 end = new Vector2(rays[i]);
+            Vector end = new Vector(rays[i]);
             end.add(playerPosition);
             endPoints.add(lengthenRay(playerPosition,end,0.4f));
             int x = 0;
@@ -114,26 +110,26 @@ public class Flashlight {
     }
 
     private void lengthenRays(){
-        for(Vector2 v : rays) {
+        for(Vector v : rays) {
             v.set(lengthenRay(playerPosition, v, 0.4f));
         }
     }
 
-    private Vector2 lengthenRay(Vector2 origin, Vector2 end,float dist){
+    private Vector lengthenRay(Vector origin, Vector end,float dist){
         float dy = origin.y-end.y;
         float dx = origin.x-end.x;
         float dl= (float)(Math.sqrt(dy*dy+dx*dx));
         float y = end.y - dy*dist/dl;
         float x = end.x - dx*dist/dl;
-        return new Vector2(x,y);
+        return new Vector(x,y);
     }
     private void calculateCollisionPoints(){
-        for (Vector2 ray : rays) {
+        for (Vector ray : rays) {
             currentFraction = 1337;
             foundFixture = false;
             rayCast(ray);
             if (foundFixture) {
-                Vector2 temp = new Vector2(ray);
+                Vector temp = new Vector(ray);
                 temp.add(playerPosition);
                 int tempIndex = endPoints.indexOf(lengthenRay(playerPosition,temp,0.4f));
                 endPoints.remove(lengthenRay(playerPosition,temp,0.4f));
@@ -145,15 +141,15 @@ public class Flashlight {
         collisionPoints.clear();
     }
 
-    private void rayCast(Vector2 ray) {
+    private void rayCast(Vector ray) {
         world.rayCast(callback, playerPosition, sum(ray, playerPosition));
     }
-    private Vector2 sum(Vector2 v1, Vector2 v2){
-        Vector2 tmpVector1 = new Vector2();
-        Vector2 tmpVector2 = new Vector2();
+    private Vector sum(Vector v1, Vector v2){
+        Vector tmpVector1 = new Vector();
+        Vector tmpVector2 = new Vector();
         tmpVector1.set(v1);
         tmpVector2.set(v2);
-        Vector2 returnVector = tmpVector1.add(tmpVector2);
+        Vector returnVector = tmpVector1.add(tmpVector2);
         return returnVector;
     }
     private void calculateMaxYIndex(){
@@ -208,11 +204,9 @@ public class Flashlight {
         return floatArray;
     }
     private short[] calculateTriangles(float[] vertices) {
-        EarClippingTriangulator ecp = new EarClippingTriangulator();
-        short[] returnTriangles;
-        ShortArray s = ecp.computeTriangles(vertices);
-        returnTriangles = s.toArray();
-        return returnTriangles;
+        ZWEarClippingTriangulator ect = new ZWEarClippingTriangulator();
+        short[] triangles = ect.computeTriangles(vertices);
+        return triangles;
     }
     private ZWPolygonRegion createDarkRegion(){
         float[] vertices = createArrayOfVertices();

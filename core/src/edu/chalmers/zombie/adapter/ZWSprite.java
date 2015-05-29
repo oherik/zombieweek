@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.adapter;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
@@ -9,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class ZWSprite {
     private Sprite sprite;
-    public ZWSprite(Texture texture){
-        sprite = new Sprite(texture);
+    public ZWSprite(ZWTexture texture){
+        sprite = new Sprite(texture.getTexture());
     }
     public ZWSprite(Sprite sprite){
         this.sprite = sprite;
@@ -19,8 +18,8 @@ public class ZWSprite {
     public Sprite getSprite(){
         return sprite;
     }
-    public void draw(Batch batch){
-        sprite.draw(batch);
+    public void draw(ZWBatch batch){
+        sprite.draw(batch.getSpriteBatch());
     }
     public void setAlpha(float alpha){
         sprite.setAlpha(alpha);

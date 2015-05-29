@@ -15,6 +15,10 @@ public class Vector {
         vector = libVector;
     }
 
+    public Vector(Vector vector){
+        this.vector = vector.getLibVector();
+    }
+
     public Vector(float x, float y){
 
         vector = new Vector2(x,y);
@@ -28,8 +32,16 @@ public class Vector {
         vector.set(x, y);
     }
 
+    public void set(Vector vector){
+        this.vector.set(vector.getLibVector());
+    }
+
     public float angleRad(){
         return vector.angleRad();
+    }
+
+    public void setAngleRad( float angleRad){
+        this.vector.setAngleRad(angleRad);
     }
 
     public float angle(){
@@ -55,5 +67,10 @@ public class Vector {
     public Vector add(float x, float y){
         vector.add(x,y);
         return this;
+    }
+
+    public Vector add(Vector vector){
+        this.vector.add(vector.getLibVector());
+
     }
 }
