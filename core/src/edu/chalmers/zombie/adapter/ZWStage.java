@@ -24,4 +24,7 @@ public class ZWStage {
     public void draw(){stage.draw();}
 
 
+    public Stage getStage() {
+        return this.stage;
+    }
 }
