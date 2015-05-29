@@ -32,7 +32,7 @@ public class EntityController {
     public static void knockOut(Zombie z){
         z.setSprite("core/assets/zombie_test_sleep.png");      //TODO temp, borde vara z.getDeadSprite() eller n�t
         z.scaleSprite(1f / Constants.TILE_SIZE);
-        GameModel.getInstance().addEntityToRemove(z);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),z);
         z.knockOut();                                                                   //TODO Zombie b�r f� en hit() eller n�t ist�llet
         AudioController.playSound(GameModel.getInstance().res.getSound("zombie_sleeping"));
 
@@ -179,7 +179,7 @@ public class EntityController {
      * @param b The book
      */
     public static void pickUp(Player p, Book b){
-            GameModel.getInstance().addEntityToRemove(b); //TODO beh�vs b�da dessa?
+            GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),b); //TODO beh�vs b�da dessa?
             b.markForRemoval();             //TODO beh�vs b�da dessa?
             p.increaseAmmunition();
             AudioController.playSound(GameModel.getInstance().res.getSound("pick_up_book"));
@@ -188,7 +188,7 @@ public class EntityController {
 
     /* ------------------------ ENTITY ----------------------------*/
     public static void remove(Entity entity){
-        GameModel.getInstance().addEntityToRemove(entity);
+        GameModel.getInstance().addEntityToRemove(GameModel.getInstance().getRoom(),entity);
         entity.markForRemoval();
     }
 

@@ -96,13 +96,37 @@
    </properties>
    <image width="32" height="32" source="../Tiles/speedpotion.png"/>
   </tile>
+  <tile id="15">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/book1.png"/>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/book2.png"/>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="book" value="3"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/book3.png"/>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="book" value="4"/>
+   </properties>
+   <image width="32" height="32" source="../Tiles/book4.png"/>
+  </tile>
  </tileset>
- <tileset firstgid="16" name="map" tilewidth="1600" tileheight="800">
+ <tileset firstgid="20" name="map" tilewidth="1600" tileheight="800">
   <tile id="0">
    <image width="1600" height="800" source="Test_world_2_bottom.png"/>
   </tile>
  </tileset>
- <tileset firstgid="17" name="sd" tilewidth="1" tileheight="1"/>
+ <tileset firstgid="21" name="sd" tilewidth="1" tileheight="1"/>
  <imagelayer name="bottom">
   <image source="level_1_room_1_bottom.png"/>
  </imagelayer>
@@ -120,7 +144,7 @@
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFgwmwEsBMODAhfawk2E8M4CBSHanmwtQxQzGxgAUJDwb70d1Cbvij+4efBDfhM5dSdaP2jxz7+QbYfnSAL58PNvvZB9h+UswlRR26HkL1Din20wqPgsEHANmLAfM=
+   eJxjYBgFgwmwEsBMODAhfawk2E8LQKr9zFBMCHBAaRYkTE/7YQDdfnS3kBv+6P7hJ8FN+MylVN2o/aP209p+Phxq8OVzatqPDQgOsP0MSPYL4VHDTkP7sekhVO+QYj+t8CgYfAAANZoCFg==
   </data>
  </layer>
 </map>

@@ -49,7 +49,7 @@ public class Constants {
 
     //Potions
     public static int POTION_HEALTH_AMOUNT = 50;
-    public static float POTION_SPEED_SCALE = 2f;
+    public static float POTION_SPEED_SCALE = 3f;
     public static int POTION_SPEED_TIME_MILLIS = 5000;
 
 
