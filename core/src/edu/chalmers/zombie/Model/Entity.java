@@ -210,7 +210,6 @@ public abstract class Entity {
      */
     public void setBody(ZWBody body) {
         this.body=world.createBody(body);
-        System.out.println(this.body.getBody());
         this.body.createFixture(); //TODO göras internt?
     }
 

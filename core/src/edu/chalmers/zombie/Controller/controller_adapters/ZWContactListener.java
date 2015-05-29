@@ -11,7 +11,6 @@ import edu.chalmers.zombie.controller.ContactController;
  * Created by Erik on 2015-05-29.
  */
 public class ZWContactListener  implements com.badlogic.gdx.physics.box2d.ContactListener  {
-    private ContactController contactController;
     /**
      * Called when two fixtures begin to touch.
      *
@@ -21,7 +20,7 @@ public class ZWContactListener  implements com.badlogic.gdx.physics.box2d.Contac
     public void beginContact(Contact contact) {
         ZWFixture fixtureA = new ZWFixture(contact.getFixtureA());
         ZWFixture fixtureB = new ZWFixture(contact.getFixtureB());
-        contactController.beginContact(fixtureA,fixtureB);
+        ContactController.beginContact(fixtureA,fixtureB);
     }
 
     /**
@@ -33,7 +32,7 @@ public class ZWContactListener  implements com.badlogic.gdx.physics.box2d.Contac
     public void endContact(Contact contact) {
         ZWFixture fixtureA = new ZWFixture(contact.getFixtureA());
         ZWFixture fixtureB = new ZWFixture(contact.getFixtureB());
-        contactController.endContact(fixtureA, fixtureB);
+        ContactController.endContact(fixtureA, fixtureB);
 
     }
 
@@ -41,7 +40,7 @@ public class ZWContactListener  implements com.badlogic.gdx.physics.box2d.Contac
     public void preSolve(Contact contact, Manifold oldManifold) {
         ZWFixture fixtureA = new ZWFixture(contact.getFixtureA());
         ZWFixture fixtureB = new ZWFixture(contact.getFixtureB());
-        contactController.preSolve(fixtureA, fixtureB);
+        ContactController.preSolve(fixtureA, fixtureB);
 
     }
 

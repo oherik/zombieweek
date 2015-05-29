@@ -186,7 +186,6 @@ public class ZWBody {
     }
 
     public void applyLinearImpulse(Vector impulse, Vector point, boolean bool) {
-
         body.applyLinearImpulse(impulse.getLibVector(), point.getLibVector(), bool);
     }
 
@@ -211,7 +210,7 @@ public class ZWBody {
     }
 
     public void applyAngularImpulse(int impulse, boolean wake) {
-
+        System.out.println(impulse);
         body.applyAngularImpulse(impulse, wake);
     }
 

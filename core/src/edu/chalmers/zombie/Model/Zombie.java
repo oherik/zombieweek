@@ -63,7 +63,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         ZWBody body = new ZWBody();
         body.createBodyDef(true, x+0.5f, y+0.5f, 20f, 20f);
         body.setFixtureDef(0.8f, 0, 1, 1, categoryBits, maskBits, false);
-
         //Set vectors
         force = new Vector(0,0);
         point = new Vector(0,0);
