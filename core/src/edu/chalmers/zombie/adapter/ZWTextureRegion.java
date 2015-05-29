@@ -13,12 +13,11 @@ public class ZWTextureRegion {
         this.textureRegion = new TextureRegion();
     }
 
+    public ZWTextureRegion(ZWTexture zwTexture){this.textureRegion.setTexture(zwTexture.getTexture());}
 
     public ZWTexture getZWTexture(){return new ZWTexture(this.textureRegion.getTexture());}
 
-    public ZWTexture consumePixmap(){
-        return  new ZWTexture(new ZWPixmap(this.textureRegion.getTexture().getTextureData().consumePixmap()));
-    }
+
 
 
 
