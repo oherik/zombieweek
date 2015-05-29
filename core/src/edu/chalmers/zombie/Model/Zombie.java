@@ -189,8 +189,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         this.type = type;
     }
 
-    public abstract void attack();
-
     public void setZombiePosition(Point pos) {
 
         position = pos;

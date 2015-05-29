@@ -15,10 +15,10 @@ public class BasicZombie extends Zombie {
 
    // private Sprite sprite;
     //private int hp;
-    private World world;
+    private ZWWorld world;
     private Point position;
 
-    public BasicZombie(/*Sprite sprite,*/ World world, int x, int y) {
+    public BasicZombie(/*Sprite sprite,*/ ZWWorld world, int x, int y) {
 
         super(GameModel.getInstance().res.getTexture("zombie"),
                 GameModel.getInstance().res.getTexture("zombie-still"),
@@ -35,18 +35,7 @@ public class BasicZombie extends Zombie {
     }
 
     @Override
-    public void attack() {
-
-    }
-
-    @Override
-    public Zombie spawn(World world, int x, int y) {
-
-        return new BasicZombie(world, x, y);
-    }
-
-    @Override
-    public Vector2 getVelocity() {
+    public Vector getVelocity() {
         return null;
     }
 }

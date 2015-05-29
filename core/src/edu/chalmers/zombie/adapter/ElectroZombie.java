@@ -14,11 +14,10 @@ import java.awt.*;
 public class ElectroZombie extends Zombie {
 
     private Sprite sprite;
-    //private int hp;
-    private World world;
+    private ZWWorld world;
     private Point position;
 
-    public ElectroZombie(World world, int x, int y) {
+    public ElectroZombie(ZWWorld world, int x, int y) {
 
         super(null,null,null, world, x, y);
         setType(ZombieType.ELECTRO);
@@ -33,18 +32,7 @@ public class ElectroZombie extends Zombie {
     }
 
     @Override
-    public void attack() {
-
-    }
-
-    @Override
-    public Zombie spawn(World world, int x, int y) {
-
-        return new ElectroZombie(world, x, y);
-    }
-
-    @Override
-    public Vector2 getVelocity() {
+    public Vector getVelocity() {
         return null;
     }
 }
