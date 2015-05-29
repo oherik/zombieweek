@@ -66,6 +66,7 @@ public class GameModel {
         res.loadTexture("player","core/assets/player_professional_final_version.png");
         res.loadTexture("emilia","core/assets/Images/emilia.png");
         res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");
+        res.loadTexture("emilia-still","core/assets/Images/emilia-still.png");
     }
 
     private void initializePotionTextures(){
