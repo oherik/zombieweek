@@ -95,9 +95,9 @@ public class ZWBody {
         return body.getLinearVelocity().len();
     }
 
-    public void setBody(Body body){
-        this.body = body;
-    }
+    //public void setBody(Body body){
+     //   this.body = body;
+    //}
 
     public void setLinearVelocity(Vector velocity){
         body.setLinearVelocity(velocity.getLibVector());
@@ -123,8 +123,8 @@ public class ZWBody {
         body.setAngularDamping(angularDampening);
     }
 
-    public Fixture createFixture(FixtureDef fixtureDef){
-        body.createFixture(fixtureDef);
+    public ZWFixture createFixture(FixtureDef fixtureDef){
+        return new ZWFixture(body.createFixture(fixtureDef));
     }
 
     public void setBody(ZWBody body){

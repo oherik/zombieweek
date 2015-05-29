@@ -307,9 +307,9 @@ public class MapController {
             if(player == null){
                player = EntityController.createNewPlayer();
             }
-            if(player.getBody() == null||player.getBody().getWorld()!=getRoom().getWorld()){
+            if(player.getBody() == null||player.getBody().getWorld()!=getRoom().getWorld().getWorld()){
                 System.out.println(getPlayerBufferPosition());
-                player.createDefaultBody(currentRoom.getWorld(), getPlayerBufferPosition());
+                player.createDefaultBody(currentRoom.getWorld().getWorld(), getPlayerBufferPosition());
             }
 
             /* ------ Update screen ------ */

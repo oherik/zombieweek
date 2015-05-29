@@ -38,4 +38,11 @@ public class ZWWorld {
         return new ZWBody(world.createBody(body.getBodyDef()));
     }
 
+    public void destroyBody(ZWBody body){
+        world.destroyBody(body.getBody());
+    }
+
+    public World getWorld(){
+        return world;
+    }
 }

@@ -22,12 +22,12 @@ import java.util.Objects;
  */
 public class Room {
     private ZWWorld world;
-    private TiledMap tiledMap;
+    private ZWTiledMap tiledMap;
     private ArrayList zombies, potions;
     private boolean hasBeenTraversed;
     Point playerSpawn, playerReturn;
-    TiledMapTileLayer metaLayer;
-    TiledMapImageLayer topLayer, bottomLayer;
+    //TiledMapTileLayer metaLayer;
+    //TiledMapImageLayer topLayer, bottomLayer;
     private short[][] collisionTileGrid;
 
     /**
@@ -36,14 +36,14 @@ public class Room {
      * @param tiledMap The map of the level
      * @throws NullPointerException if the path name is incorrect or not found
      */
-    public Room(TiledMap tiledMap) {
+    public Room(ZWTiledMap tiledMap) {
         this.tiledMap = tiledMap;
 
         //Initialize the layers
-        metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(Constants.META_LAYER);
-        topLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.TOP_LAYER);
-        bottomLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.BOTTOM_LAYER);
-        metaLayer.setVisible(false);
+        //metaLayer = (TiledMapTileLayer) tiledMap.getLayers().get(Constants.META_LAYER);
+        //topLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.TOP_LAYER);
+        //bottomLayer = (TiledMapImageLayer) tiledMap.getLayers().get(Constants.BOTTOM_LAYER);
+        tiledMap.setVisibible(Constants.META_LAYER, false);
 
         //Create the world
         world = new ZWWorld();
@@ -53,7 +53,7 @@ public class Room {
         zombies = new ArrayList<Zombie>();
         potions = new ArrayList<Potion>();
 
-        collisionTileGrid = new short[metaLayer.getWidth()][metaLayer.getHeight()];
+        collisionTileGrid = new short[tiledMap.getTiledWidth()][tiledMap.getTiledHeight()];
 
     }
 
@@ -68,12 +68,12 @@ public class Room {
     }
 
     public void createFixture(ZWBody body, Object userData){
-        Fixture fixture = world.createBody(body).createFixture(body.getFixtureDef());
+        ZWFixture fixture = world.createBody(body).createFixture(body.getFixtureDef());
         fixture.setUserData(userData);
     }
 
     public void destroyBody(ZWBody body){
-            this.world.destroyBody(body.getBody());
+            this.world.destroyBody(body);
             body.setBody(null);
             body = null;
     }
@@ -106,26 +106,6 @@ public class Room {
         return collisionTileGrid;
     }
 
-    /**
-     * @return The map's meta data layer
-     */
-    public TiledMapTileLayer getMetaLayer() {
-        return this.metaLayer;
-    }
-
-    /**
-     * @return The map's top graphical layer
-     */
-    public TiledMapImageLayer getTopLayer() {
-        return this.topLayer;
-    }
-
-    /**
-     * @return The map's bottom graphical layer
-     */
-    public TiledMapImageLayer getBottomLayer() {
-        return this.bottomLayer;
-    }
 
     /**
      * @return The level's zombies
@@ -176,14 +156,14 @@ public class Room {
     /**
      * @return the level's map
      */
-    public TiledMap getMap() {
+    public ZWTiledMap getMap() {
         return this.tiledMap;
     }
 
     /**
      * @return the level's Box2D World
      */
-    public World getWorld() {
+    public ZWWorld getWorld() {
         return this.world;
     }
 
@@ -196,15 +176,6 @@ public class Room {
         e.removeBody();
     }
 
-    /**
-     * Destroys a body
-     *
-     * @param b The body which will be destroyed
-     */
-    public void destroyBody(Body b) {
-        getWorld().destroyBody(b);
-        b = null; //To avoid null pointer exceptions
-    }
 
     /**
      * Sets a variable which is true if the bodies (collision objects) have been initialized
@@ -258,32 +229,26 @@ public class Room {
      * @return The map's width in tiles
      */
     public int getTiledWidth(){
-        return tiledMap.getProperties().get("width", Integer.class);
+        return tiledMap.getTiledWidth();
     }
 
     public boolean hasMetaData(int col, int row){
-        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
-        return (currentCell != null && currentCell.getTile() != null);
+        return !tiledMap.tileIsEmpty(Constants.META_LAYER, col, row);
     }
 
     public boolean hasProperty(int col, int row, String property){
-        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
-        return (hasMetaData(col, row) && currentCell.getTile().getProperties().get(property) != null);
+        return tiledMap.hasProperty(Constants.META_LAYER, col, row, property);
     }
 
     public Object getProperty(int col, int row, String propertyName){
-        TiledMapTileLayer.Cell currentCell = metaLayer.getCell(col, row);
-        if(hasProperty(col, row,propertyName))
-            return currentCell.getTile().getProperties().get(propertyName);
-        else
-            return null;
+       return tiledMap.getProperty(Constants.META_LAYER, col, row, propertyName);
     }
 
     /**
      * @return The map's height in tiles
      */
     public int getTiledHeight(){
-        return tiledMap.getProperties().get("height", Integer.class);
+        return tiledMap.getTiledHeight();
     }
 
 }
