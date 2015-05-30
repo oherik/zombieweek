@@ -171,10 +171,18 @@ public class Player extends Entity implements CreatureInterface {
 
     }
 
+    public void setForceY(float speed){force.setY(speed);}
+
+    public void setForceX(float speed){force.setX(speed);}
+
+    public void setSpeed(int speed){this.speed = speed;}
+
+
+
     /**
      * Updates Body rotation
      */
-    private void updateRotation(){
+    public void updateRotation(){
         GameModel gameModel = GameModel.getInstance();
         ZWBody body = getBody();
         float rotation =  direction.getRotation();
@@ -204,7 +212,7 @@ public class Player extends Entity implements CreatureInterface {
 
        // setBodyVelocity(force);
         updateSpeed();
-        updateDirecton();
+        updateDirection();
         updateRotation();
 
         moveIfNeeded();
@@ -213,12 +221,16 @@ public class Player extends Entity implements CreatureInterface {
     /**
      * Updates player speed
      */
-    private void updateSpeed(){force.setLength(speed);}
+    public void updateSpeed(){force.setLength(speed);}
+
+    public float getSpeed(){return this.speed;}
+
+    public void setForceLength(float speed){force.setLength(speed);}
 
     /**
      * Sets Direction from variable force
      */
-    private void updateDirecton(){
+    public void updateDirection(){
 
         if(force.getY() > 0){
             if (force.getX() > 0){
@@ -245,6 +257,10 @@ public class Player extends Entity implements CreatureInterface {
         }
 
     }
+
+    public ZWVector getForce(){return this.force;}
+
+    public void setDirection(Direction direction){this.direction = direction;}
 
 
 
@@ -301,7 +317,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     @Override
-    protected void setBodyVelocity(ZWVector velocity){
+    public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
 
