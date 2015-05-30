@@ -81,4 +81,8 @@ public class ZWVector {
         this.vector.scl(scale);
     }
 
+    public boolean equals(ZWVector other){
+        return this.getLibVector().equals(other.getLibVector());
+    }
+
 }

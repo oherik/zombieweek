@@ -91,6 +91,10 @@ public class ZWRenderer {
         camera.update();
     }
 
+    public OrthographicCamera getCamera(){
+        return camera;
+    }
+
 
 }
 

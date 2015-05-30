@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
  * Created by daniel on 5/28/2015.
- * Modified by Neda
+ * Modified by Neda, Erik
  */
 public class ZWSprite {
     private Sprite sprite;
@@ -24,6 +24,9 @@ public class ZWSprite {
     }
     public void draw(ZWBatch batch){
         sprite.draw(batch.getBatch());
+    }
+    public void draw(ZWSpriteBatch batch){
+        sprite.draw(batch.getSpriteBatch());
     }
     public void setAlpha(float alpha){
         sprite.setAlpha(alpha);
