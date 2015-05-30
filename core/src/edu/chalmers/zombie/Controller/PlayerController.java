@@ -17,7 +17,7 @@ import java.util.TimerTask;
 
 /**
  * Created by neda on 2015-05-28.
- * Modified by Neda
+ * Modified by Neda and Tobias
  */
 public class PlayerController {
 
@@ -86,7 +86,7 @@ public class PlayerController {
     /**
      * Moves player if needed.
      */
-    public static void moveIfNeeded(){
+    private static void moveIfNeeded(){
         ZWVector force = getPlayer().getForce();
         getPlayer().getBody().applyForce(force, getPlayer().getBody().getLocalCenter());
     }
@@ -127,7 +127,67 @@ public class PlayerController {
             }
         }
         player.setDirection(direction);
+    }
 
+    /**
+     * Checks if keys are released simultaneously
+     */
+    private static void checkSimultaneousRelease(){
+        Thread keyThread = getPlayer().getKeyThread();
+        final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
+        if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
+
+            //Keys were released at the same time (thread is sleeping/waiting)
+            if(!GameModel.getInstance().isStepping()) {
+                updateMovement();
+            }
+        } else {
+            keyThread = new Thread() {
+                public void run() {
+                    try {
+                        getPlayer().getKeyThread().sleep(timeSensitiveness); //waiting for new key release
+                        updateMovement();
+                        //if(getWorld().isLocked())     //TODO hack för att inte krascha
+                    } catch (InterruptedException e) {
+                        System.out.println("------ Key thread interrupted -------\n" + e);
+                    }
+                    //keyThread.interrupt();
+                }
+            };
+            getPlayer().setKeyThread(keyThread);
+            getPlayer().getKeyThread().start();
+        }
+    }
+
+    /**
+     * Checks if diagonal stop is on and checks simultaneous release of keys, else updateMovement directly
+     */
+    private static void updateDiagonal(){
+        if (getPlayer().isDiagonalStop()) {
+            checkSimultaneousRelease();
+        } else {
+            updateMovement();
+        }
+    }
+
+    /**
+     * Sets speed in x-axis to zero
+     */
+    public static void stopX() {
+        Player player = getPlayer();
+        player.setForceX(0);
+        if(player.getForce().getY() == 0){player.setSpeed(0);}
+        updateDiagonal();
+    }
+
+    /**
+     * Sets speed in y-axis to zero
+     */
+    public static void stopY(){
+        Player player = getPlayer();
+        player.setForceY(0);
+        if(player.getForce().getX() == 0){player.setSpeed(0);}
+        updateDiagonal();
     }
 
     /**
