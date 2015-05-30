@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Room {
     private ZWWorld world;
     private ZWTiledMap tiledMap;
-    private ArrayList zombies, potions;
+    private ArrayList zombies, potions, books;
     private boolean hasBeenTraversed;
     Point playerSpawn, playerReturn;
     private short[][] collisionTileGrid;
@@ -42,6 +42,7 @@ public class Room {
 
         zombies = new ArrayList<Zombie>();
         potions = new ArrayList<Potion>();
+        books = new ArrayList<Book>();
 
         collisionTileGrid = new short[tiledMap.getTiledWidth()][tiledMap.getTiledHeight()];
 
@@ -66,6 +67,18 @@ public class Room {
             this.world.destroyBody(body);
             body.setBody(null);
             body = null;
+    }
+
+    public void addBook(Book b){
+        books.add(b);
+    }
+
+    public void removeBook(Book b){
+        books.remove(b);
+    }
+
+    public ArrayList<Book> getBooks(){
+        return books;
     }
 
 

@@ -177,7 +177,7 @@ public class GameModel {
     }
 
     public ArrayList<Book> getBooks(){
-        return books;
+        return getRoom().getBooks();
     }
 
     public ArrayList<Grenade> getGrenades() {
@@ -185,7 +185,7 @@ public class GameModel {
     }
 
     public void addBook(Book book){
-        books.add(book);
+        getRoom().addBook(book);
     }
 
     public void addGrenade(Grenade grenade){
@@ -264,7 +264,7 @@ public class GameModel {
     public int getHighestCompletedRoom(){return highestCompletedRoom;}
 
     public void clearBookList(){
-        this.books.clear();
+        getRoom().getBooks().clear();
     }
 
     public void toggleFlashlight(){
