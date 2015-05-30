@@ -28,8 +28,6 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    //private FixtureDef fixDef;
-    //private BodyDef bodyDef;
     private PotionType potion;
     private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
     private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
@@ -38,7 +36,8 @@ public class Player extends Entity implements CreatureInterface {
     //The hand is throwing the book and aiming.
     private Hand hand = new Hand(this);
 
-    private boolean isHit = false;
+    private boolean isHit = true;
+    private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
 
 
     public Player(ZWTexture texture, ZWWorld world, float x, float y) {
@@ -128,6 +127,7 @@ public class Player extends Entity implements CreatureInterface {
 
     /**
      * Moves player if needed.
+     * TODO: should be removed
      */
     public void moveIfNeeded(){
         getBody().applyForce(force, getBody().getLocalCenter());
@@ -145,6 +145,7 @@ public class Player extends Entity implements CreatureInterface {
     }
     /**
      * Moves player
+     * TODO: should be removed
      * @param direction Direction to move in
      */
     public void move(Direction direction) {
@@ -181,6 +182,7 @@ public class Player extends Entity implements CreatureInterface {
 
     /**
      * Updates Body rotation
+     * TODO: should be removed
      */
     public void updateRotation(){
         GameModel gameModel = GameModel.getInstance();
@@ -207,6 +209,7 @@ public class Player extends Entity implements CreatureInterface {
 
     /**
      * Updates velocity, direction and rotation of body
+     * TODO: should be removed
      */
     private void updateMovement(){
 
@@ -229,6 +232,7 @@ public class Player extends Entity implements CreatureInterface {
 
     /**
      * Sets Direction from variable force
+     * TODO: should be removed
      */
     public void updateDirection(){
 
@@ -266,8 +270,9 @@ public class Player extends Entity implements CreatureInterface {
 
     /**
      * Method that checks if keys are released simultaneously
+     * TODO: should be removed
      */
-    private void checkSimultaneousRelease(){
+    public void checkSimultaneousRelease(){
         final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
         if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
 
@@ -275,9 +280,7 @@ public class Player extends Entity implements CreatureInterface {
            if(!GameModel.getInstance().isStepping()) {
                updateMovement();
            }
-
         } else {
-
             keyThread = new Thread() {
                 public void run() {
                     try {
@@ -290,30 +293,47 @@ public class Player extends Entity implements CreatureInterface {
                     //keyThread.interrupt();
                 }
             };
-
             keyThread.start();
         }
+    }
 
+    public Thread getKeyThread(){return this.keyThread;}
 
+    public void setKeyThread(Thread keyThread){this.keyThread = keyThread;}
+
+    public boolean isDiagonalStop(){return this.diagonalStop;}
+
+    /**
+     * TODO: should be removed
+     */
+    private void updateDiagonal(){
+        if (diagonalStop) {
+            checkSimultaneousRelease();
+        } else {
+            updateMovement();
+        }
     }
 
 
     /**
      * Sets speed in x-axis to zero
+     * TODO: should be removed
      */
     public void stopX() {
         force.setX(0);
         if (force.getY() == 0) { this.speed = 0;}
-      //  checkSimultaneousRelease();
+
+        updateDiagonal();
     }
 
     /**
      * Sets speed in y-axis to zero
+     * TODO: should be removed
      */
     public void stopY(){
         force.setY(0);
         if (force.getX() == 0) { this.speed = 0;}
-     //   checkSimultaneousRelease();
+        updateDiagonal();
     }
 
     @Override
@@ -323,6 +343,7 @@ public class Player extends Entity implements CreatureInterface {
 
     /**
      * Updates position of player
+     * TODO: should be removed
      */
     private void updatePosition(){
         //setY((float)y);
@@ -332,6 +353,7 @@ public class Player extends Entity implements CreatureInterface {
 
     /**
      * Updates location of player
+     * TODO: should be removed
      */
     private void updateLocation(float deltaTime){
         //setX(getX() + deltaTime * force.x);
