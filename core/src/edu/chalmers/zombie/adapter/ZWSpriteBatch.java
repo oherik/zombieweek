@@ -19,4 +19,8 @@ public class ZWSpriteBatch {
     public void dispose(){
         spriteBatch.dispose();
     }
+
+    public void setCombinedCamera(ZWRenderer renderer){
+        spriteBatch.setProjectionMatrix(renderer.getCamera().combined);
+    }
 }

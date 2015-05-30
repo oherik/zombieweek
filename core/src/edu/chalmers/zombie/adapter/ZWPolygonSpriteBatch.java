@@ -23,7 +23,7 @@ public class ZWPolygonSpriteBatch {
         polygonSpriteBatch.dispose();
     }
 
-    public void draw(ZWPolygonRegion region, float x, float y){
+    public void drawPolygonRegion(ZWPolygonRegion region, float x, float y){
         polygonSpriteBatch.draw(region.getPolygonRegion(),x,y);
     }
 }
