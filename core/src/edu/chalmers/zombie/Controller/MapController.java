@@ -78,12 +78,12 @@ public class MapController {
         int oldRoomIndex = gameModel.getCurrentRoomIndex();
 
         GameModel.getInstance().addEntityToRemove(getRoom(), GameModel.getInstance().getPlayer());
-        for(Book book : gameModel.getBooks()){
-            book.markForRemoval();
-            gameModel.addEntityToRemove(getRoom(),book);
-        }
+       // for(Book book : gameModel.getBooks()){
+       //     book.markForRemoval();
+      //      gameModel.addEntityToRemove(getRoom(),book);
+      //  }
         gameModel.setCurrentRoomIndex(roomIndex);
-        gameModel.clearBookList();
+       // gameModel.clearBookList();
         SpawnController.traverseRoomIfNeeded(getRoom());
         if(oldRoomIndex>roomIndex){
             if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
