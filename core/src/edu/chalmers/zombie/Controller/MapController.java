@@ -156,7 +156,7 @@ public class MapController {
      * @param angle the angle to check, in radians (0 is east, pi is west)
      * @return  true if the path is obstructed, false otherwise
      */
-    public static boolean pathObstructed(Vector position, Room room, float distance, float angle){
+    public static boolean pathObstructed(ZWVector position, Room room, float distance, float angle){
     /* Input checks */
         if(position == null ||room== null)
             throw new NullPointerException("The input mustn't be null");
@@ -166,7 +166,7 @@ public class MapController {
             throw new IndexOutOfBoundsException("The position must be within meta layer bounds");//TODO kanske inte behövs i och med att det checkas i relevant metod
         if(distance < 0)
             throw new IndexOutOfBoundsException("The distance must be positive");
-        Vector endPosition = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
+        ZWVector endPosition = position.add(distance * (float) Math.cos(angle), distance * (float) Math.sin(angle));
         /* Extract and convert the positions to map coordinates */
         int x_origin = Math.round(position.getX() - position.getX() % 1 - 0.5f);
         int y_origin = Math.round(position.getY() - position.getY() % 1 - 0.5f);

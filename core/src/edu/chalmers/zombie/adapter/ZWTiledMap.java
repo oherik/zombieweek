@@ -25,7 +25,7 @@ public class ZWTiledMap {
     public boolean tileIsEmpty(String layer, int col, int row) {
         TiledMapTileLayer  tiledLayer = (TiledMapTileLayer) tiledMap.getLayers().get(layer);
         TiledMapTileLayer.Cell currentCell = tiledLayer.getCell(col, row);
-        return(currentCell==null&&currentCell.getTile()==null);
+        return(currentCell==null||currentCell.getTile()==null);
     }
 
     public boolean hasProperty(String layer, int col, int row, String property){

@@ -48,14 +48,15 @@ public class ZombieController {
                         z.setNextPathTile(temp);
                     }
                 }
-                    Vector direction = new Vector(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
+
+                    ZWVector direction = new ZWVector(z.getNextPathTile().x - zombieTile.x, z.getNextPathTile().y - zombieTile.y);
+
                     direction.setLength(z.getSpeed());
                     //Rotate
 
                     float currentAngle = z.getBody().getAngle() % (Constants.PI * 2) - Constants.PI * 0.5f; //TODO fixa s� impuls funkar
                     float directionAngle = direction.angleRad();
                     float rotation = directionAngle - currentAngle + z.getBody().getAngularVelocity() * Constants.TIMESTEP;      //TODO fixa;
-
                     //Keep it within Pi och -Pi
                     if (rotation < -Constants.PI)
                         rotation += Constants.PI * 2f;

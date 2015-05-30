@@ -1,7 +1,9 @@
 package edu.chalmers.zombie.controller;
 
+import edu.chalmers.zombie.adapter.ZWBody;
+import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.Player;
-import edu.chalmers.zombie.adapter.Potion;
+import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
@@ -24,12 +26,108 @@ public class PlayerController {
 
     /**
      * A method which moves player in given direction.
-     * @param player the player to be moved.
      * @param direction the direction a player will move in.
      */
-    public static void move(Player player, Direction direction) {
+    public static void move(Direction direction) {
+        Player player = getPlayer();
+        int legPower = player.getLegPower();
+       player.setSpeed(legPower);
+        switch (direction){
+            case NORTH:
+                player.setForceY(legPower);
+                break;
+            case SOUTH:
+                player.setForceY(-legPower);
+                break;
+            case WEST:
+                player.setForceX(-legPower);
+                break;
+            case EAST:
+                player.setForceX(legPower);
+                break;
+            default:
+                break;
+        }
 
-        //TODO: fill in move.
+        updateMovement();
+    }
+
+    /**
+     * Updates velocity, direction and rotation of body
+     */
+    private static void updateMovement(){
+
+        // setBodyVelocity(force);
+        updateSpeed();
+        updateDirection();
+        updateRotation();
+
+        moveIfNeeded();
+    }
+
+    /**
+     * Updates Body rotation
+     */
+    private static void updateRotation(){
+        GameModel gameModel = GameModel.getInstance();
+        Player player = gameModel.getPlayer();
+        ZWBody body = player.getBody();
+        float rotation =  player.getDirection().getRotation();
+        //Checks if world.step() is running. If it is running it tries again and again until step isn't running.
+        //This is the reason why sometimes the game lags and a StackOverflowError happens.
+        if (!gameModel.isStepping()) {
+            body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
+        } else{
+            EntityController.updateRotation(player);
+            // Commenting the section above causes no issues and fizes the StackOverflowError.
+        }
+    }
+
+    /**
+     * Moves player if needed.
+     */
+    public static void moveIfNeeded(){
+        ZWVector force = getPlayer().getForce();
+        getPlayer().getBody().applyForce(force, getPlayer().getBody().getLocalCenter());
+    }
+
+    /**
+     * Updates player speed
+     */
+    private static void updateSpeed(){getPlayer().updateSpeed();} //TODO: needed?
+
+    /**
+     * Sets Direction from variable force
+     */
+    private static void updateDirection(){
+        Player player = getPlayer();
+        ZWVector force = player.getForce();
+        Direction direction = player.getDirection();
+        if(force.getY() > 0){
+            if (force.getX() > 0){
+                direction = Direction.NORTH_EAST;
+            } else if (force.getX() < 0){
+                direction = Direction.NORTH_WEST;
+            } else {
+                direction = Direction.NORTH;
+            }
+        } else if (force.getY() < 0){
+            if (force.getX() > 0){
+                direction = Direction.SOUTH_EAST;
+            } else if (force.getX() < 0){
+                direction = Direction.SOUTH_WEST;
+            } else {
+                direction = Direction.SOUTH;
+            }
+        } else {
+            if (force.getX() > 0){
+                direction = Direction.EAST;
+            } else if (force.getX() < 0){
+                direction = Direction.WEST;
+            }
+        }
+        player.setDirection(direction);
+
     }
 
     /**
@@ -134,8 +232,8 @@ public class PlayerController {
         }
         player.setSneakTilesTouching(player.getSneakTilesTouching() + 1);
         //TODO add more sneak stuff
-        player.setHidden(true); //TODO Nödvändigt? Zombien kommer ändå inte kunna hitta till spelaren
-        EntityController.setFriction(player, Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);  //TODO onödigt att göra varje gång?
+        player.setHidden(true); //TODO Nï¿½dvï¿½ndigt? Zombien kommer ï¿½ndï¿½ inte kunna hitta till spelaren
+        EntityController.setFriction(player, Constants.PLAYER_FRICTION_SNEAK, Constants.PLAYER_FRICTION_SNEAK);  //TODO onï¿½digt att gï¿½ra varje gï¿½ng?
     }
 
     /**

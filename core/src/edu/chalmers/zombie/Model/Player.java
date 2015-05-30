@@ -21,7 +21,7 @@ public class Player extends Entity implements CreatureInterface {
     private boolean isHidden;
     private int width;
     private int height;
-    private Vector force;
+    private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
     //Holds the players speed.
@@ -45,19 +45,20 @@ public class Player extends Entity implements CreatureInterface {
         super(texture, world, x, y);
 
         //Set still image frame
-        GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
+        //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
         ZWTexture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
         ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,32,32);
         getAnimator().addStillFrame(stillFrame[0]);
 
         //Set overlay image (Hand)
-        GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
+        //GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
         ZWTexture overlayTexture = GameModel.getInstance().res.getTexture("emilia-hand");
+        System.out.println(overlayTexture.getTexture());
         ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
 
 
-        legPower =  75; //Styr maxhastigheten
+        legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         width = Constants.PLAYER_SIZE;
@@ -67,18 +68,18 @@ public class Player extends Entity implements CreatureInterface {
 
         body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
 
-        Vector[] vectors = new Vector[8];
+        ZWVector[] vectors = new ZWVector[8];
 
-        vectors[0] = new Vector(2f,-1.5f);
-        vectors[1] = new Vector(3f,-0.5f);
-        vectors[2] = new Vector(3f,0.5f);
-        vectors[3] = new Vector(2f,1.5f);
-        vectors[4] = new Vector(-2f,1.5f);
-        vectors[5] = new Vector(-3f,0.5f);
-        vectors[6] = new Vector(-3f,-0.5f);
-        vectors[7] = new Vector(-2f,-1.5f);
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
 
-        for (Vector vector:vectors){
+        for (ZWVector vector:vectors){
             vector.scl(1f/6.5f);
         }
 
@@ -97,7 +98,7 @@ public class Player extends Entity implements CreatureInterface {
         killCount = 0;
         ammunition = 5;
         lives = 100;
-        force = new Vector(0,0);
+        force = new ZWVector(0,0);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
 
 
@@ -170,10 +171,18 @@ public class Player extends Entity implements CreatureInterface {
 
     }
 
+    public void setForceY(float speed){force.setY(speed);}
+
+    public void setForceX(float speed){force.setX(speed);}
+
+    public void setSpeed(int speed){this.speed = speed;}
+
+
+
     /**
      * Updates Body rotation
      */
-    private void updateRotation(){
+    public void updateRotation(){
         GameModel gameModel = GameModel.getInstance();
         ZWBody body = getBody();
         float rotation =  direction.getRotation();
@@ -203,7 +212,7 @@ public class Player extends Entity implements CreatureInterface {
 
        // setBodyVelocity(force);
         updateSpeed();
-        updateDirecton();
+        updateDirection();
         updateRotation();
 
         moveIfNeeded();
@@ -212,12 +221,16 @@ public class Player extends Entity implements CreatureInterface {
     /**
      * Updates player speed
      */
-    private void updateSpeed(){force.setLength(speed);}
+    public void updateSpeed(){force.setLength(speed);}
+
+    public float getSpeed(){return this.speed;}
+
+    public void setForceLength(float speed){force.setLength(speed);}
 
     /**
      * Sets Direction from variable force
      */
-    private void updateDirecton(){
+    public void updateDirection(){
 
         if(force.getY() > 0){
             if (force.getX() > 0){
@@ -244,6 +257,10 @@ public class Player extends Entity implements CreatureInterface {
         }
 
     }
+
+    public ZWVector getForce(){return this.force;}
+
+    public void setDirection(Direction direction){this.direction = direction;}
 
 
 
@@ -300,7 +317,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
     @Override
-    protected void setBodyVelocity(Vector velocity){
+    public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
 
@@ -415,7 +432,7 @@ public class Player extends Entity implements CreatureInterface {
     }
 
 
-    public Vector getVelocity(){
+    public ZWVector getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
@@ -432,16 +449,16 @@ public class Player extends Entity implements CreatureInterface {
         ZWBody body = new ZWBody();
         body.createBodyDef(true,(float)point.x+0.5f,(float)point.y+0.5f,dampening,dampening);
 
-        Vector[] vectors = new Vector[8];
-        vectors[0] = new Vector(2f,-1.5f);
-        vectors[1] = new Vector(3f,-0.5f);
-        vectors[2] = new Vector(3f,0.5f);
-        vectors[3] = new Vector(2f,1.5f);
-        vectors[4] = new Vector(-2f,1.5f);
-        vectors[5] = new Vector(-3f,0.5f);
-        vectors[6] = new Vector(-3f,-0.5f);
-        vectors[7] = new Vector(-2f,-1.5f);
-        for (Vector vector:vectors){
+        ZWVector[] vectors = new ZWVector[8];
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
+        for (ZWVector vector:vectors){
             vector.scl(1f/6.5f);
         }
 
@@ -473,16 +490,16 @@ public class Player extends Entity implements CreatureInterface {
         ZWBody body = new ZWBody();
         body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
 
-        Vector[] vectors = new Vector[8];
-        vectors[0] = new Vector(2f,-1.5f);
-        vectors[1] = new Vector(3f,-0.5f);
-        vectors[2] = new Vector(3f,0.5f);
-        vectors[3] = new Vector(2f,1.5f);
-        vectors[4] = new Vector(-2f,1.5f);
-        vectors[5] = new Vector(-3f,0.5f);
-        vectors[6] = new Vector(-3f,-0.5f);
-        vectors[7] = new Vector(-2f,-1.5f);
-        for (Vector vector:vectors){
+        ZWVector[] vectors = new ZWVector[8];
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
+        for (ZWVector vector:vectors){
             vector.scl(1f/6.5f);
         }
 

@@ -4,6 +4,8 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.AudioController;
 import edu.chalmers.zombie.controller.MenuController;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.view.GameScreen;
+import edu.chalmers.zombie.view.MainMenuScreen;
 
 /**
  * Builder to create menus
@@ -99,7 +101,14 @@ public class MenuBuilder {
         mainMenuButton.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
-                    ZWGameEngine.exit();
+                    ZWGameEngine.setScreen(new MainMenuScreen());
+            }
+        });
+
+        quitGameButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                ZWGameEngine.exit();
             }
         });
 
@@ -129,6 +138,22 @@ public class MenuBuilder {
         table.setFillParent(true);
         gameOverStage.addActor(table);
 
+        startOverButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                //TODO:probably needs to do some other stuff here to make "start over" work
+                ZWGameEngine.setScreen(new GameScreen());
+            }
+        });
+
+        quitGameButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                ZWGameEngine.exit();
+            }
+        });
+
+
         return gameOverStage;
 
     }
@@ -136,7 +161,22 @@ public class MenuBuilder {
     public static ZWStage createNextLevelStage(){
         ZWStage nextLevelStage = new ZWStage();
 
-        //TODO: create the stage!
+        ZWSkin skin = (new MenuBuilder()).createMenuSkin(); //only for buttons
+
+        ZWTable table = new ZWTable();
+
+        ZWLabel label = new ZWLabel("You made it!");
+        label.scale(2.5f);
+
+        table.add(label,15);
+
+
+        //TODO: do we want buttons in the next level screen?
+
+
+        table.setFillParent(true);
+        nextLevelStage.addActor(table);
+
 
         return nextLevelStage;
     }

@@ -3,6 +3,7 @@ package edu.chalmers.zombie.controller;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Handles the calculations that has to do with the zombies, the player, books, etc
@@ -11,13 +12,13 @@ import edu.chalmers.zombie.model.GameModel;
 public class EntityController {
 
     public static void knockBack(Entity attacker, Entity victim, float amount){
-        knockBack(new Vector(attacker.getX(),attacker.getY()),victim,amount);
+        knockBack(new ZWVector(attacker.getX(),attacker.getY()),victim,amount);
     }
 
-    public static void knockBack(Vector attackerPosition, Entity victim, float amount){
+    public static void knockBack(ZWVector attackerPosition, Entity victim, float amount){
         float dx = victim.getX()-attackerPosition.getX();
         float dy = victim.getY()-attackerPosition.getY();
-        Vector push = new Vector(dx,dy);
+        ZWVector push = new ZWVector(dx,dy);
         push.setLength(amount);
         victim.applyLinearImpulse(push);
     }
@@ -34,7 +35,7 @@ public class EntityController {
      * @param angularDampening  How high the angular, or rotational, friciton should be
      */
     public static void setFriction(Entity entity, float linearDampening, float angularDampening) {
-        if (entity.getBody() != null) {
+        if (entity.getBody().getBody() != null) {
             entity.getBody().setLinearDamping(linearDampening);
             entity.getBody().setAngularDamping(angularDampening);
         }
@@ -72,6 +73,16 @@ public class EntityController {
             System.err.println("Tried to set mask bits, but the entity's body and/or fixture was null. No mask bits set." +
                     "\nInternal error message: " + e.getMessage());
         }
+    }
+
+    public static void updateRotation(Entity entity){
+        System.out.println("updateRotation");
+        ZWBody body = entity.getBody();
+        ZWSprite sprite = entity.getSprite();
+        float angle = body.getAngle();
+        float angleDegrees = angle * 180.0f / Constants.PI;
+        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+        sprite.setRotation(angleDegrees);
     }
 
 

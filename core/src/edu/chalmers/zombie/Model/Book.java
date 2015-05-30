@@ -1,33 +1,28 @@
 package edu.chalmers.zombie.model;
 
-import edu.chalmers.zombie.adapter.Vector;
-import edu.chalmers.zombie.adapter.ZWBody;
-import edu.chalmers.zombie.adapter.ZWSprite;
-import edu.chalmers.zombie.adapter.ZWWorld;
-import edu.chalmers.zombie.model.Entity;
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Room;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Created by daniel on 4/21/2015.
  */
 public class Book extends Entity {
-    private Vector force;
+    private ZWVector force;
     private float direction;
     private int speed, omega, damage;
-    private Vector initialVelocity;
-    private float width, height;
+
+    private ZWVector initialVelocity;
+
     private long timeCreated;
     private boolean onGround;
 
     public Book(float x, float y, Room room){
-        this(0,x,y,room.getWorld(),new Vector(0,0));
+        this(0,x,y,room.getWorld(),new ZWVector(0,0));
         speed = 0;
         ZWBody body = new ZWBody();
         body.createBodyDef(true, x+0.5f, y+0.5f, 0, 0, true);
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_PLAYER | Constants.COLLISION_DOOR | Constants.COLLISION_ACTOR_OBSTACLE;
-        body.setFixtureDef(8f, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), Constants.COLLISION_PROJECTILE, maskBits, false);
+        body.setFixtureDef(8f, 0, 1/3f, 1/2f, Constants.COLLISION_PROJECTILE, maskBits, false);
         getBody().setUserData(this);
     }
 
@@ -39,16 +34,16 @@ public class Book extends Entity {
      * @param world In which world to create the physical representation of the book
      * @param initialVelocity  The speed which to add to the throwing speed
      */
-    public Book(float d, float x, float y, ZWWorld world, Vector initialVelocity) {
+    public Book(float d, float x, float y, ZWWorld world, ZWVector initialVelocity) {
         super(world);
 
         //Set variables
         this.direction=d;
         this.initialVelocity = initialVelocity;
-        force = new Vector(1,1); //if 0,0 setLength wont work
+        force = new ZWVector(1,1); //if 0,0 setLength wont work
 
         //Update position to be in front of player
-        Vector position = getUpdatedPosition(x,y);
+        ZWVector position = getUpdatedPosition(x,y);
 
         ZWBody body = new ZWBody();
         body.createBodyDef(true,x+0.5f,y+0.5f,0,0,true);
@@ -62,14 +57,15 @@ public class Book extends Entity {
         omega= 20;  //TODO finns i entity?
         damage = 40;
         onGround = false;
-
+        //Load sprite
+        ZWSprite sprite = new ZWSprite(new ZWTexture("core/assets/Images/bookSprite.png"));
+        sprite.setSize(1/3f, 1/2f);
+        System.out.println(sprite.getWidth());
+        super.setSprite(sprite);
         setInMotion();
 
-        //Load sprite
-        ZWSprite sprite = new ZWSprite(GameModel.getInstance().res.getTexture("book"));
-        sprite.setSize(width, height);
-        super.setSprite(sprite);
-        super.scaleSprite(1f / Constants.TILE_SIZE);
+
+        //super.scaleSprite(1f / Constants.TILE_SIZE);
 
         getBody().setUserData(this);
 
@@ -101,7 +97,7 @@ public class Book extends Entity {
         }
 
     @Override
-    public Vector getVelocity() {
+    public ZWVector getVelocity() {
         return getBody().getLinearVelocity();
     }
 
@@ -116,7 +112,7 @@ public class Book extends Entity {
     }
 
     @Override
-    protected void setBodyVelocity(Vector velocity){
+    protected void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
     @Override
@@ -130,9 +126,9 @@ public class Book extends Entity {
      * @return The new position for the book
      */
     //TODO move to EntityController
-    public Vector getUpdatedPosition(float x, float y){
+    public ZWVector getUpdatedPosition(float x, float y){
         float distance = 0f;
-        Vector position = new Vector(x,y);
+        ZWVector position = new ZWVector(x,y);
         position.setY((float)(y + distance*Math.sin(direction + Constants.PI/2)));
         position.setX((float)(x + distance*Math.cos(direction + Constants.PI/2)));
 

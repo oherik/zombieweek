@@ -13,7 +13,7 @@ public class Hand {
     private float direction = 0;
     private Thread aimRight = new Thread();
     private Thread aimLeft = new Thread();
-    private ZWSprite aimer = new ZWSprite(new ZWTexture("core/assets/aimer.png"));
+    private ZWSprite aimer = new ZWSprite(new ZWTexture("core/assets/Images/aimer.png"));
     private Player player;
     private boolean mouseAiming = false;
     private boolean throwingGrenade = false;
