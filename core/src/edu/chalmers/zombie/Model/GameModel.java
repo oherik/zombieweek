@@ -53,7 +53,7 @@ public class GameModel {
     private void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
         res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
         res.loadTiledMap("room1", "core/assets/Map/Level_1_room_2.tmx");
-        res.loadTiledMap("room2", "core/assets/Map/Test_world_2_next.tmx");
+        res.loadTiledMap("room2", "core/assets/Map/Level_1_room_3.tmx");
 
         addRoom(new Room(res.getTiledMap("room0"))); //0
         addRoom(new Room(res.getTiledMap("room1"))); //1
