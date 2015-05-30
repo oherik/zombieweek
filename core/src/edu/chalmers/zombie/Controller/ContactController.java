@@ -62,8 +62,8 @@ public class ContactController {
                             break;
                     }
 
+                break;
 
-                                                            break;
             case (Constants.COLLISION_WATER):
                 switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_PLAYER:
@@ -93,8 +93,10 @@ public class ContactController {
                         Book book = (Book) fixtureB.getBodyUserData();
                         Zombie z = (Zombie) fixtureA.getBodyUserData();
                         ProjectileController.applyHit(z, book);
+                        break;
 
                 }
+                break;
 
             case (Constants.COLLISION_PLAYER):
                 Player player = gameModel.getPlayer();
@@ -122,6 +124,7 @@ public class ContactController {
                         PlayerController.pickUpPotion(gameModel.getPlayer(), potion);
                         break;
                 }
+                break;
         }
     }
 
