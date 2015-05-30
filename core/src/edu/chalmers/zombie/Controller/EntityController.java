@@ -3,6 +3,7 @@ package edu.chalmers.zombie.controller;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Animator;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
@@ -83,6 +84,73 @@ public class EntityController {
         float angleDegrees = angle * 180.0f / Constants.PI;
         sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
         sprite.setRotation(angleDegrees);
+    }
+
+    /**
+     * Updates the sprite's position based on the position of the body.
+     */
+    private static void updatePosition(Entity entity){
+        ZWSprite sprite = entity.getSprite();
+        ZWBody body = entity.getBody();
+        sprite.setY(body.getPosition().getY() - sprite.getWidth() / 2f);
+        sprite.setX(body.getPosition().getX() - sprite.getHeight() / 2f);
+    }
+
+    /**
+     * Updates the entities sprite
+     * @param entity The entity
+     */
+    public static void updateSprite(Entity entity){
+
+        ZWBody body = entity.getBody();
+
+        if (body != null) {
+            updateRotation(entity);
+            updatePosition(entity);
+        }
+
+        if(entity.isAnimated()){ //only if Entity should be animated
+            Animator animator = entity.getAnimator();
+
+            ZWSprite sprite = entity.getSprite();
+
+            if(body != null) {
+                float bodySpeed = getBodySpeed(entity);
+                if (bodySpeed>9)  bodySpeed=9;
+                float deltaTime = 1 / (300f - bodySpeed * 28); //fix to get a realistic movement
+
+                animator.update(deltaTime);
+
+                if (getBodySpeed(entity) < 0.2f) { //not moving
+                    ZWTextureRegion stillFrame = animator.getStillFrame();
+                    if (stillFrame != null) {
+                        sprite.setRegion(stillFrame);
+                    } else {
+                        sprite.setRegion(animator.getFrame());
+                    }
+
+                } else { //is moving
+                    sprite.setRegion(animator.getFrame());
+                }
+            }
+            else{
+                ZWTextureRegion stillFrame = animator.getStillFrame();
+                if (stillFrame != null) {
+                    sprite.setRegion(stillFrame);
+                } else {
+                    sprite.setRegion(animator.getFrame());
+                }
+            }
+        }
+    }
+
+    public static float getBodySpeed(Entity entity){
+        try {
+            return entity.getBody().getLinearVelocity().len();
+        } catch (NullPointerException e) {
+            System.err.println("Get body speed: no body found");
+            return 0f;
+        }
     }
 
 

@@ -304,4 +304,16 @@ public abstract class Entity {
         }
     }
 
+    public boolean isAnimated() {
+        return isAnimated;
+    }
+
+    public void setAnimated(boolean isAnimated) {
+        this.isAnimated = isAnimated;
+    }
+
+    public void setAnimator(Animator animator) {
+        this.animator = animator;
+    }
+
 }
