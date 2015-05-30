@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import edu.chalmers.zombie.adapter.ZWBatch;
+import edu.chalmers.zombie.controller.EntityController;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Room;
@@ -78,9 +79,12 @@ public class Renderer {
     public void drawEntity(Entity entity){
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        entity.draw(new ZWBatch(mapRenderer.getBatch()));
+        EntityController.updateSprite(entity); //updates
+        entity.getSprite().draw(new ZWBatch(mapRenderer.getBatch()));
         mapRenderer.getBatch().end();
     }
+
+
     public float unprojectX(float x){
         return camera.unproject(new Vector3(x, 0, 0)).x;
     }
