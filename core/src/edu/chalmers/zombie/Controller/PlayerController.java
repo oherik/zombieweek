@@ -56,12 +56,9 @@ public class PlayerController {
      * Updates velocity, direction and rotation of body
      */
     private static void updateMovement(){
-
-        // setBodyVelocity(force);
         updateSpeed();
         updateDirection();
         updateRotation();
-
         moveIfNeeded();
     }
 
@@ -86,7 +83,7 @@ public class PlayerController {
     /**
      * Moves player if needed.
      */
-    private static void moveIfNeeded(){
+    public static void moveIfNeeded(){
         ZWVector force = getPlayer().getForce();
         getPlayer().getBody().applyForce(force, getPlayer().getBody().getLocalCenter());
     }

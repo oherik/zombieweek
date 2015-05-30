@@ -124,52 +124,14 @@ public class Player extends Entity implements CreatureInterface {
         killCount = killCount + 1;
     }
 
-
-    /**
-     * Moves player if needed.
-     * TODO: should be removed
-     */
-    public void moveIfNeeded(){
-        getBody().applyForce(force, getBody().getLocalCenter());
-    }
-
     public void setLegPower(int  legPower){
         this.legPower = legPower;
         speed = legPower;
         updateSpeed();
-
     }
 
     public int getLegPower(){
         return legPower;
-    }
-    /**
-     * Moves player
-     * TODO: should be removed
-     * @param direction Direction to move in
-     */
-    public void move(Direction direction) {
-
-        speed = legPower;
-        switch (direction){
-            case NORTH:
-                force.setY(speed);
-                break;
-            case SOUTH:
-                force.setY(-speed);
-                break;
-            case WEST:
-                force.setX(-speed);
-                break;
-            case EAST:
-                force.setX(speed);
-                break;
-            default:
-                break;
-        }
-
-        updateMovement();
-
     }
 
     public void setForceY(float speed){force.setY(speed);}
@@ -177,8 +139,6 @@ public class Player extends Entity implements CreatureInterface {
     public void setForceX(float speed){force.setX(speed);}
 
     public void setSpeed(int speed){this.speed = speed;}
-
-
 
     /**
      * Updates Body rotation
@@ -205,22 +165,6 @@ public class Player extends Entity implements CreatureInterface {
         return direction;
     }
 
-
-
-    /**
-     * Updates velocity, direction and rotation of body
-     * TODO: should be removed
-     */
-    private void updateMovement(){
-
-       // setBodyVelocity(force);
-        updateSpeed();
-        updateDirection();
-        updateRotation();
-
-        moveIfNeeded();
-    }
-
     /**
      * Updates player speed
      */
@@ -230,72 +174,9 @@ public class Player extends Entity implements CreatureInterface {
 
     public void setForceLength(float speed){force.setLength(speed);}
 
-    /**
-     * Sets Direction from variable force
-     * TODO: should be removed
-     */
-    public void updateDirection(){
-
-        if(force.getY() > 0){
-            if (force.getX() > 0){
-                direction = Direction.NORTH_EAST;
-            } else if (force.getX() < 0){
-                direction = Direction.NORTH_WEST;
-            } else {
-                direction = Direction.NORTH;
-            }
-        } else if (force.getY() < 0){
-            if (force.getX() > 0){
-                direction = Direction.SOUTH_EAST;
-            } else if (force.getX() < 0){
-                direction = Direction.SOUTH_WEST;
-            } else {
-                direction = Direction.SOUTH;
-            }
-        } else {
-            if (force.getX() > 0){
-                direction = Direction.EAST;
-            } else if (force.getX() < 0){
-                direction = Direction.WEST;
-            }
-        }
-
-    }
-
     public ZWVector getForce(){return this.force;}
 
     public void setDirection(Direction direction){this.direction = direction;}
-
-
-
-    /**
-     * Method that checks if keys are released simultaneously
-     * TODO: should be removed
-     */
-    public void checkSimultaneousRelease(){
-        final int timeSensitiveness = 50; //release keys within x millisec and they are released simultaneously
-        if (keyThread!=null && keyThread.getState() == Thread.State.TIMED_WAITING){
-
-                //Keys were released at the same time (thread is sleeping/waiting)
-           if(!GameModel.getInstance().isStepping()) {
-               updateMovement();
-           }
-        } else {
-            keyThread = new Thread() {
-                public void run() {
-                    try {
-                        keyThread.sleep(timeSensitiveness); //waiting for new key release
-                        updateMovement();
-                        //if(getWorld().isLocked())     //TODO hack för att inte krascha
-                    } catch (InterruptedException e) {
-                        System.out.println("------ Key thread interrupted -------\n" + e);
-                    }
-                    //keyThread.interrupt();
-                }
-            };
-            keyThread.start();
-        }
-    }
 
     public Thread getKeyThread(){return this.keyThread;}
 
@@ -303,62 +184,9 @@ public class Player extends Entity implements CreatureInterface {
 
     public boolean isDiagonalStop(){return this.diagonalStop;}
 
-    /**
-     * TODO: should be removed
-     */
-    private void updateDiagonal(){
-        if (diagonalStop) {
-            checkSimultaneousRelease();
-        } else {
-            updateMovement();
-        }
-    }
-
-
-    /**
-     * Sets speed in x-axis to zero
-     * TODO: should be removed
-     */
-    public void stopX() {
-        force.setX(0);
-        if (force.getY() == 0) { this.speed = 0;}
-
-        updateDiagonal();
-    }
-
-    /**
-     * Sets speed in y-axis to zero
-     * TODO: should be removed
-     */
-    public void stopY(){
-        force.setY(0);
-        if (force.getX() == 0) { this.speed = 0;}
-        updateDiagonal();
-    }
-
     @Override
     public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
-    }
-
-    /**
-     * Updates position of player
-     * TODO: should be removed
-     */
-    private void updatePosition(){
-        //setY((float)y);
-        //setX((float) x);
-        //TODO: delete?
-    }
-
-    /**
-     * Updates location of player
-     * TODO: should be removed
-     */
-    private void updateLocation(float deltaTime){
-        //setX(getX() + deltaTime * force.x);
-        //setY(getY() + deltaTime * force.y);
-        //TODO: delete?
     }
 
     /**
@@ -381,12 +209,6 @@ public class Player extends Entity implements CreatureInterface {
 
         return isAttacked;
     }
-
-    /*
-    public Sprite getSprite() {
-
-        return sprite;
-    }*/
 
     @Override
     public void setBody(ZWBody body) {
@@ -551,6 +373,7 @@ public class Player extends Entity implements CreatureInterface {
     public void setPosition(Point point){
         getBody().setTransform((float)point.getX() + 0.5f, (float)point.getY() + 0.5f, getBody().getAngle()); //+0.5f because we want it in the middle
         updateRotation();
+        //TODO: should be done in controller, method updateRotation will be removed
     }
     public Hand getHand(){
         return this.hand;
