@@ -36,4 +36,6 @@ public class ZWBatch {
     public Batch getBatch(){
         return batch;
     }
+
+
 }

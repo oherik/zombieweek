@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.view;
+package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -70,17 +70,11 @@ public class ZWRenderer {
     }
 
 
-    public void renderBox2DDebug(Room room){
-        debugRenderer.render(room.getWorld().getWorld(), camera.combined);
+    public void renderBox2DDebug(ZWWorld world){
+        debugRenderer.render(world.getWorld(), camera.combined);
         camera.update();
     }
 
-    public void drawEntity(Entity entity){
-        mapRenderer.getBatch().begin();
-        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        entity.draw(new ZWBatch(mapRenderer.getBatch()));
-        mapRenderer.getBatch().end();
-    }
     public float unprojectX(float x){
         return camera.unproject(new Vector3(x, 0, 0)).x;
     }

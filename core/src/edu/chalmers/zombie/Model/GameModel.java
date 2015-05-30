@@ -3,7 +3,7 @@ package edu.chalmers.zombie.model;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
-import edu.chalmers.zombie.view.ZWRenderer;
+import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.*;

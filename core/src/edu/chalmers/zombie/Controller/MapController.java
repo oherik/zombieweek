@@ -5,7 +5,7 @@ import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.TileRayTracing;
-import edu.chalmers.zombie.view.ZWRenderer;
+import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;

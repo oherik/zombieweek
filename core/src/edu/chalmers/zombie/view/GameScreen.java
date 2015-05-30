@@ -312,7 +312,7 @@ public class GameScreen extends ZWScreen{
             /* ------ Draw the box2d debug ------ */
             //gameModel.getRenderer().renderBox2DDebug(gameModel.getRoom()); //TODO debug
 
-            ZWRenderer.renderBox2DDebug(gameModel.getRoom());
+            ZWRenderer.renderBox2DDebug(gameModel.getRoom().getWorld());
             //boxDebug.render(gameModel.getRoom().getWorld().getWorld(),camera.combined);
 
             /*---------------- END TEST -------------------------*/
