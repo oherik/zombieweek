@@ -335,7 +335,7 @@ public class MapController {
         if(gameModel.getPlayer()!=null && gameModel.getPlayer().getBody()!=null) {       //Another world is loading
 
             /* ------ Move player ------*/
-            gameModel.getPlayer().moveIfNeeded();
+            PlayerController.moveIfNeeded();
 
             /* ------ Move zombies ------ */
             moveZombies();
