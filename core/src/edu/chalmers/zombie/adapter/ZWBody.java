@@ -31,9 +31,9 @@ public class ZWBody {
         //bodyDef = body.getBodyDef();
     }
 
-    public boolean bodyIsInRoom(Room room){
+    public boolean bodyIsInWorld(ZWWorld world){
         World bodyWorld = body.getWorld();
-        World roomWorld = room.getWorld().getWorld();
+        World roomWorld = world.getWorld();
         return (bodyWorld == roomWorld);
     }
 

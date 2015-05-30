@@ -62,7 +62,7 @@ public class Book extends Entity {
         sprite.setSize(1/3f, 1/2f);
         System.out.println(sprite.getWidth());
         super.setSprite(sprite);
-        setInMotion();
+        //setInMotion();
 
 
         //super.scaleSprite(1f / Constants.TILE_SIZE);

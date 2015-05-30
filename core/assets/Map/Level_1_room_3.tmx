@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="89" height="41" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="27" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="mesh" tilewidth="32" tileheight="32">
   <tile id="0">
    <properties>
@@ -38,7 +38,7 @@
   <tile id="5">
    <properties>
     <property name="collision_zombie" value="true"/>
-    <property name="door" value="2"/>
+    <property name="door" value="3"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
   </tile>
@@ -134,23 +134,23 @@
  </tileset>
  <tileset firstgid="22" name="sd" tilewidth="1" tileheight="1"/>
  <imagelayer name="bottom">
-  <image source="level_1_room_2_bottom.png"/>
+  <image source="level_1_room_3_bottom.png"/>
  </imagelayer>
  <imagelayer name="middle">
-  <image source="Level_1_room_2_middle.png"/>
+  <image source="Level_1_room_3_middle.png"/>
  </imagelayer>
  <imagelayer name="middle_dark">
-  <image source="Level_1_room_2_middle_dark.png"/>
+  <image source="Level_1_room_3_middle_dark.png"/>
  </imagelayer>
- <imagelayer name="top">
-  <image source="Level_1_room_2_top.png"/>
+ <imagelayer name="top" visible="0">
+  <image source="Level_1_room_3_top.png"/>
  </imagelayer>
- <layer name="meta" width="89" height="41">
+ <layer name="meta" width="27" height="20">
   <properties>
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztl30LgjAQh6Xs5Y+IAr//Z41AaYxpd7ed0/k8cES037keh5tdBwAAcFwu1GKVoFSfFsGxP6XWMo6XuRbocRTHD+X4+/iJY39w7A+OfWHP82fNs5vmjF7ijL9mfivvIC04ronGcc41cv9nTg8c+/do1XF45sexbAzr2E6u4/NYvTEvBcc2x32QD0vaQ5pvxbEl7+U4vt8tOZ5by5K8xfFcHsfpvMbxoMzv3bH0Gjwr/o/BsZ3a52OP53EqW5NSjl/R9777rSfpPQoz2jmE2SH6rRXHE6k1lcq/hf0sc5h4Btma1HI8R7wGLXNIZWuicbznqonUMdjBsT849if2dxOMAR1L+8JW9oxW+Ho8RYVbAAAfPkZFCRE=
+   eJxjYBjegJVCTKpdlLhzsNrFNMztYqejXcQCAQrsGq7pkN52YdPDgUUNpeUGMe6jxO/YzGLDg6lp1ygYBcgAALBHASk=
   </data>
  </layer>
 </map>
