@@ -47,7 +47,7 @@ public class Flashlight {
         this.width = width;
         this.length = length;
         this.numberOfRays = numberOfRays;
-        if (lengthFraction < 0.05f || 0.95f > lengthFraction){
+        if (lengthFraction < 0.05f || 0.95f < lengthFraction){
             throw new IllegalArgumentException("The lengthFraction has to be between 0.05 and 0.95");
         }
         this.lengthFraction = lengthFraction;
@@ -130,8 +130,13 @@ public class Flashlight {
             if (foundFixture) {
                 ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
-                int tempIndex = endPoints.indexOf(lengthenRay(playerPosition,temp,0.4f));
-                endPoints.remove(lengthenRay(playerPosition,temp,0.4f));
+                int tempIndex = -1;
+                for(int i = 0; 0<endPoints.size(); i++) {
+                    if(endPoints.get(0).equals(lengthenRay(playerPosition,temp, 0.4f)));
+                    tempIndex = i;
+                }
+                endPoints.remove(tempIndex);
+               // endPoints.remove(lengthenRay(playerPosition,temp,0.4f));
                 endPoints.add(tempIndex, lengthenRay(playerPosition,collisionPoint,0.4f));
             }
 

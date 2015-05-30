@@ -277,19 +277,22 @@ public class GameScreen extends ZWScreen{
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
             if (gameModel.isFlashlightEnabled()){
-                ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
-                ZWSpriteBatch sb = new ZWSpriteBatch();
-                sb.begin();
-                psb.setCombinedCamera(renderer);
-                psb.begin();
+                //ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
+                //ZWSpriteBatch sb = new ZWSpriteBatch();
+                ZWBatch batch = renderer.getBatch();
+                batch.begin();
+                renderer.setCombinedCameraBatch();
+                //psb.setCombinedCamera(renderer);
+               // psb.begin();
                 if (flashlight==null){
                     flashlight = new Flashlight(currentWorld,Constants.PI/4,3,5,0.75f);
                 }
-                flashlight.draw(psb,sb);
-                psb.end();
-                sb.end();
-                psb.dispose();
-                sb.dispose();
+                flashlight.draw(batch);
+                //psb.end();
+               // sb.end();
+                //psb.dispose();
+                //sb.dispose();
+                batch.end();
             } else{
                 ZWSpriteBatch sb = new ZWSpriteBatch();
                 ZWSprite darkness = gameModel.getDarknessOverlay();
