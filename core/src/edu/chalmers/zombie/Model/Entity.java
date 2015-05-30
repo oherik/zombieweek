@@ -119,7 +119,9 @@ public abstract class Entity {
 
         if(isAnimated){ //only if Entity should be animated
             if(body != null) {
-                float deltaTime = 1 / (300f - getBodySpeed() * 28); //fix to get a realistic movement
+                float bodySpeed = getBodySpeed();
+                if (getBodySpeed()>9)  bodySpeed=9;
+                float deltaTime = 1 / (300f - bodySpeed * 28); //fix to get a realistic movement
 
                 animator.update(deltaTime);
 
@@ -211,7 +213,7 @@ public abstract class Entity {
     public void setBody(ZWBody body) {
         this.body=world.createBody(body);
 
-        this.body.createFixture(); //TODO göras internt?
+        this.body.createFixture(); //TODO gï¿½ras internt?
 
     }
 

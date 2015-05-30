@@ -2,8 +2,10 @@ package edu.chalmers.zombie.utils;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.AudioController;
+import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.MenuController;
 import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.model.ScreenModel;
 import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
 
@@ -83,8 +85,7 @@ public class MenuBuilder {
 
         ZWStage pauseStage = new ZWStage();
 
-        MenuBuilder menuBuilder = new MenuBuilder();
-        ZWSkin skin = menuBuilder.createMenuSkin();
+        ZWSkin skin = createMenuSkin();
 
         ZWTable table = new ZWTable();
 
@@ -120,7 +121,7 @@ public class MenuBuilder {
 
         ZWStage gameOverStage = new ZWStage();
 
-        ZWSkin skin = (new MenuBuilder()).createMenuSkin();
+        ZWSkin skin = createMenuSkin();
 
         ZWTable table = new ZWTable();
 
@@ -179,5 +180,128 @@ public class MenuBuilder {
 
 
         return nextLevelStage;
+    }
+
+
+    /**
+     * Sets up the stage for the main menu
+     */
+    public static ZWStage createMainStage(){
+
+        ZWStage mainStage = new ZWStage();
+
+        ZWSkin skin = createMenuSkin();
+
+        ZWTable table = new ZWTable();
+
+        ZWTextButton newGameButton = new ZWTextButton("New game", skin);
+        final ZWTextButton levelButton = new ZWTextButton("Choose level", skin);
+        ZWTextButton exitGameButton = new ZWTextButton("Exit game", skin);
+
+        table.add(newGameButton,250,50,15);
+        table.add(levelButton,250,50,15);
+        table.add(exitGameButton, 250, 50, 15);
+
+        table.setFillParent(true);
+        mainStage.addActor(table);
+
+        newGameButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                ZWGameEngine.setScreen(new GameScreen());
+            }
+        });
+
+        levelButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                ScreenModel screenModel = GameModel.getInstance().getScreenModel();
+                screenModel.setMenuState(ScreenModel.MenuState.LEVEL_MENU);
+                ZWGameEngine.setInputProcessor(screenModel.getLevelChooserStage());
+                levelButton.toggle();
+            }
+        });
+
+        exitGameButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                ZWGameEngine.exit();
+            }
+        });
+
+        return mainStage;
+
+    }
+
+
+    /**
+     * Sets up the stage for the level chooser menu
+     */
+    public static ZWStage createLevelChooserStage(){
+        ZWStage levelStage = new ZWStage();
+        ZWSkin skin = createMenuSkin();
+        ZWTable table = new ZWTable();
+        table.setFillParent(true);
+        levelStage.addActor(table);
+
+        int levelsCompleted = GameModel.getInstance().getHighestCompletedRoom();
+
+        for (int i = 0;i <= levelsCompleted;i++){
+            String buttonName = "Room " + (i+1);
+            final int level = i;
+            ZWTextButton levelButton = new ZWTextButton(buttonName, skin);
+            table.add(levelButton,250,50,15);
+
+
+            levelButton.addListener(new ZWClickAction(){
+                @Override
+                public void clicked(){
+                    MapController mapController = new MapController();
+                    ZWWorld world = mapController.getRoom(level).getWorld();
+                    ZWGameEngine.setScreen(new GameScreen());
+                }
+            });
+
+
+        }
+
+
+        /*--- Back button ---*/
+        ZWImageButton backIconButton = new ZWImageButton();
+        backIconButton.setImageUp(new ZWTexture("core/assets/arrowLeft_grey.png"));
+        backIconButton.setImageDown(new ZWTexture("core/assets/arrowLeft.png"));
+        backIconButton.setImageOver(new ZWTexture("core/assets/arrowLeft_lightgrey.png"));
+
+        backIconButton.setSize(30,30);
+        backIconButton.setPosition(10, ZWGameEngine.getWindowHeight()-40);
+
+        levelStage.addActor(backIconButton);
+
+        backIconButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                ScreenModel screenModel = GameModel.getInstance().getScreenModel();
+                screenModel.setMenuState(ScreenModel.MenuState.MAIN_MENU);
+                ZWGameEngine.setInputProcessor(screenModel.getMainStage());
+            }
+        });
+
+        return levelStage;
+    }
+
+    /**
+     * Sets up the stage for the settings menu
+     */
+    public static ZWStage createSettingsStage(){
+        ZWStage settingsStage = new ZWStage();
+        ZWTable table = new ZWTable();
+
+        //TODO: Add settings stuff, eg switches for controls/sound etc
+
+        table.setFillParent(true);
+        settingsStage.addActor(table);
+
+        return settingsStage;
+
     }
 }

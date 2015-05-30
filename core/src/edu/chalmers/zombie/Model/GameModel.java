@@ -169,13 +169,6 @@ public class GameModel {
         this.currentRoom = i;
     }
 
-    /**
-     * Updates the player position
-     */
-    public void movePlayer(Direction direction){
-            player.move(direction);
-    }
-
     public ArrayList<Book> getBooks(){
         return getRoom().getBooks();
     }

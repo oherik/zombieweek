@@ -13,6 +13,12 @@ public class ScreenModel {
     private ZWStage gameOverStage;
     private ZWStage soundAndSettingStage;
     private ZWStage nextLevelStage;
+    private ZWStage mainStage;
+    private ZWStage levelChooserStage;
+    private ZWStage settingsStage;
+    public enum MenuState{MAIN_MENU, LEVEL_MENU, SETTINGS_MENU}
+    private MenuState menuState;
+
     public ScreenModel(){}
 
     public ZWStage getSoundAndSettingStage() {
@@ -47,6 +53,35 @@ public class ScreenModel {
         this.nextLevelStage = nextLevelStage;
     }
 
+    public ZWStage getMainStage() {
+        return mainStage;
+    }
 
+    public void setMainStage(ZWStage mainStage) {
+        this.mainStage = mainStage;
+    }
 
+    public ZWStage getLevelChooserStage() {
+        return levelChooserStage;
+    }
+
+    public void setLevelChooserStage(ZWStage levelChooserStage) {
+        this.levelChooserStage = levelChooserStage;
+    }
+
+    public ZWStage getSettingsStage() {
+        return settingsStage;
+    }
+
+    public void setSettingsStage(ZWStage settingsStage) {
+        this.settingsStage = settingsStage;
+    }
+
+    public MenuState getMenuState() {
+        return menuState;
+    }
+
+    public void setMenuState(MenuState menuState) {
+        this.menuState = menuState;
+    }
 }
