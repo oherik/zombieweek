@@ -16,7 +16,7 @@ public class ZWCircle {
      * the gdx class Circle.
      * @param x x-coordinate of circle center.
      * @param y y-coordinate of circle center.
-     * @param radius the circle's radius. 
+     * @param radius the circle's radius.
      */
     public ZWCircle(float x, float y, float radius) {
 
