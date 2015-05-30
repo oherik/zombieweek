@@ -23,7 +23,7 @@ public class ZWSprite {
         return sprite;
     }
     public void draw(ZWBatch batch){
-        sprite.draw(batch.getSpriteBatch());
+        sprite.draw(batch.getBatch());
     }
     public void setAlpha(float alpha){
         sprite.setAlpha(alpha);
