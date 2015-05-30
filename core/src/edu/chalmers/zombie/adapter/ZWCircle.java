@@ -23,10 +23,6 @@ public class ZWCircle {
         circle = new Circle(x, y, radius);
     }
 
-    /**
-     * A method which returns the libGDX circle instance of a ZWCircle.
-     * @return this.circle.
-     */
     private Circle getCircleInstance() {
 
         return this.circle;
