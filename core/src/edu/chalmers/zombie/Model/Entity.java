@@ -111,45 +111,62 @@ public abstract class Entity {
      * @param batch The sprite batch in which to draw it
      */
     public void draw(ZWBatch batch) {
-
         if (body != null) {
             updateRotation();
             updatePosition();
          }
 
         if(isAnimated){ //only if Entity should be animated
-            if(body != null) {
-                float bodySpeed = getBodySpeed();
-                if (getBodySpeed()>9)  bodySpeed=9;
-                float deltaTime = 1 / (300f - bodySpeed * 28); //fix to get a realistic movement
-
-                animator.update(deltaTime);
-
-                if (getBodySpeed() < 0.2f) { //not moving
-                    ZWTextureRegion stillFrame = animator.getStillFrame();
-                    if (stillFrame != null) {
-                        sprite.setRegion(stillFrame);
-                    } else {
-                        sprite.setRegion(animator.getFrame());
-                    }
-
-                } else { //is moving
-                    sprite.setRegion(animator.getFrame());
-                }
+            setDrawingAnimation();
             }
-            else{
+
+        sprite.draw(batch);
+    }
+
+    public void draw(ZWSpriteBatch spriteBatch){
+        if (body != null) {
+            updateRotation();
+            updatePosition();
+        }
+
+        if(isAnimated){ //only if Entity should be animated
+            setDrawingAnimation();
+        }
+
+        sprite.draw(spriteBatch);
+    }
+
+    private void setDrawingAnimation(){
+        if(body != null) {
+            float bodySpeed = getBodySpeed();
+            if (getBodySpeed()>9)  bodySpeed=9;
+            float deltaTime = 1 / (300f - bodySpeed * 28); //fix to get a realistic movement
+
+            animator.update(deltaTime);
+
+            if (getBodySpeed() < 0.2f) { //not moving
                 ZWTextureRegion stillFrame = animator.getStillFrame();
                 if (stillFrame != null) {
                     sprite.setRegion(stillFrame);
                 } else {
                     sprite.setRegion(animator.getFrame());
                 }
+
+            } else { //is moving
+                sprite.setRegion(animator.getFrame());
             }
         }
-
-        sprite.draw(batch);
-
+        else {
+            ZWTextureRegion stillFrame = animator.getStillFrame();
+            if (stillFrame != null) {
+                sprite.setRegion(stillFrame);
+            } else {
+                sprite.setRegion(animator.getFrame());
+            }
+        }
     }
+
+
 
     /**
      * Updates the sprite's rotation based on the angle of the body

@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Room;

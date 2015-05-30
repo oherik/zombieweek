@@ -180,7 +180,7 @@ public class GameScreen extends ZWScreen{
         GameModel gameModel = GameModel.getInstance();
         MapController.updateRoomIfNeeded();
         //setMapRenderer(gameModel.getRenderer().getMapRenderer());
-        ZWRenderer ZWRenderer = gameModel.getZWRenderer();
+        ZWRenderer renderer = gameModel.getZWRenderer();
         setDisplayedWorld(gameModel.getRoom().getWorld());
         Player player = gameModel.getPlayer();
 
@@ -202,16 +202,16 @@ public class GameScreen extends ZWScreen{
             MapController.setCameraPosition(player.getX(), player.getY());
             /* ------ Draw the background map layer ------ */
             int[] backgroundLayers = {0};
-            ZWRenderer.renderMapLayer(backgroundLayers);
-            ZWRenderer.setCameraView();
+            renderer.renderMapLayer(backgroundLayers);
+            renderer.setCameraView();
 
-                 //mapRenderer.render();
+            //mapRenderer.render();
             steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
-            ZWBatch batch = ZWRenderer.getBatch();
+            ZWBatch batch = renderer.getBatch();
             batch.begin();
-            ZWRenderer.setCombinedCameraBatch();
+            renderer.setCombinedCameraBatch();
 
              /* ------ Draw the zombies ------ */
             for (Zombie z : gameModel.getZombies()) {
@@ -231,34 +231,33 @@ public class GameScreen extends ZWScreen{
             batch.end();
 
 
-           // grenadeShapeRenderer.setAutoShapeType(true);
-           // grenadeShapeRenderer.begin();
-        //    player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
-        //    grenadeShapeRenderer.end();
+            // grenadeShapeRenderer.setAutoShapeType(true);
+            // grenadeShapeRenderer.begin();
+            //    player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
+            //    grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
-            if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
+            if (gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
-                    ZWRenderer.renderMapLayer(middleLayers);
+                renderer.renderMapLayer(middleLayers);
 
-            }
-            else{
+            } else {
                 int[] middleLayers = {1};
-                ZWRenderer.renderMapLayer(middleLayers);
+                renderer.renderMapLayer(middleLayers);
 
             }
-            batch = ZWRenderer.getBatch();
+            batch = renderer.getBatch();
             batch.begin();
-            ZWRenderer.setCombinedCameraBatch();
+            renderer.setCombinedCameraBatch();
             /* ------ Draw books ------ */
-            for (Book b: gameModel.getBooks()){
+            for (Book b : gameModel.getBooks()) {
                 b.draw(batch);
             }
-            for (Grenade g: gameModel.getGrenades()){
+            for (Grenade g : gameModel.getGrenades()) {
                 g.draw(batch);
             }
 
             /* ------ Finished drawing sprites ------ */
-          batch.end();
+            batch.end();
 
 
 
@@ -274,17 +273,17 @@ public class GameScreen extends ZWScreen{
             batchHUD.end();
 
 
-
+        }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-/*
+
             if (gameModel.isFlashlightEnabled()){
-                PolygonSpriteBatch psb = new PolygonSpriteBatch();
-                SpriteBatch sb = new SpriteBatch();
+                ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
+                ZWSpriteBatch sb = new ZWSpriteBatch();
                 sb.begin();
-                psb.setProjectionMatrix(camera.combined);
+                psb.setCombinedCamera(renderer);
                 psb.begin();
                 if (flashlight==null){
-                    flashlight = new Flashlight(currentWorld,Constants.PI*0.25f,100,10);
+                    flashlight = new Flashlight(currentWorld,Constants.PI/4,3,5,0.75f);
                 }
                 flashlight.draw(psb,sb);
                 psb.end();
@@ -292,47 +291,24 @@ public class GameScreen extends ZWScreen{
                 psb.dispose();
                 sb.dispose();
             } else{
-                SpriteBatch sb = new SpriteBatch();
-                sprite.setSize(650,480);
+                ZWSpriteBatch sb = new ZWSpriteBatch();
+                ZWSprite darkness = gameModel.getDarknessOverlay();
+                darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
                 sb.begin();
-                sprite.draw(sb);
+                darkness.draw(sb);
                 player.draw(sb);
                 sb.end();
             }
-*/
-            //-----------------------------------------------------------------------
 
-            /*---------------- END TEST -------------------------*/
-        /* ------Draw the foreground layer ------ */
+
             drawBlood();
             int[] foregroundLayers = {3};
 
-                ZWRenderer.renderMapLayer(foregroundLayers);
-
-            /* ------ Draw the box2d debug ------ */
-            //gameModel.getRenderer().renderBox2DDebug(gameModel.getRoom()); //TODO debug
-
-            ZWRenderer.renderBox2DDebug(gameModel.getRoom().getWorld());
-            //boxDebug.render(gameModel.getRoom().getWorld().getWorld(),camera.combined);
-
-            /*---------------- END TEST -------------------------*/
-         /*--------------------------TESTA PATH FINDING------------------------------------*/
-
-            //Skapa path finding        //TODO debug
-
-            if (steps % 60 == 0) {   //uppdaterar varje sekund
-               // updateZombiePaths();
-            }
-        /*-----------------SLUTTESTAT---------------------*/
+                renderer.renderMapLayer(foregroundLayers);
 
 
+            renderer.renderBox2DDebug(gameModel.getRoom().getWorld());
 
-
-        }
-            /* ------ Test path finding ------ */
-            if (steps % 60 == 0) {   //uppdaterar varje sekund  //TODO debug
-              // updateZombiePaths();
-            }
         /** Render settings and sound buttons **/
         GameModel.getInstance().getScreenModel().getSoundAndSettingStage().act();
         GameModel.getInstance().getScreenModel().getSoundAndSettingStage().draw();

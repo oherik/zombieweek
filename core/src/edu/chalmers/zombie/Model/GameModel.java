@@ -29,6 +29,7 @@ public class GameModel {
     private GameState gameState; //the state of the game
     private ZWRenderer ZWRenderer;
     private ScreenModel screenModel;
+    private ZWSprite darknessSprite;
 
     /**
      * Initializes the game model
@@ -45,10 +46,16 @@ public class GameModel {
         initializePlayerTextures();
         initializePotionTextures();
         initializeZombieTextures();
+        initializeRenderTextures();
         initializeProjectileTextures();
         initializeSounds();
         initializeRooms();
+        darknessSprite = new ZWSprite(res.getTexture("darkness-overlay"));
        }
+
+    private void initializeRenderTextures(){
+        res.loadTexture("darkness-overlay", "core/assets/darkness.png");
+    }
 
     private void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
         res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
@@ -96,6 +103,7 @@ public class GameModel {
         res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
     }
 
+
     /**
      * @return  The current instance of the game model
      */
@@ -103,6 +111,12 @@ public class GameModel {
         return instance;
     }
 
+    /**
+     * @return  The sprite that is rendered over everything that's not lit up by the flashlight
+     */
+    public ZWSprite getDarknessOverlay(){
+        return darknessSprite;
+    }
   
     /**
      * @return The game's renderer

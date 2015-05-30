@@ -15,4 +15,8 @@ public class ZWSpriteBatch {
     public void end(){this.spriteBatch.end();}
 
     public SpriteBatch getSpriteBatch(){return this.spriteBatch;}
+
+    public void dispose(){
+        spriteBatch.dispose();
+    }
 }
