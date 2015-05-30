@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.controller;
 
+import edu.chalmers.zombie.adapter.ZWBody;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.model.Potion;
@@ -29,19 +30,20 @@ public class PlayerController {
      */
     public static void move(Direction direction) {
         Player player = getPlayer();
-        int speed = player.getLegPower();
+        int legPower = player.getLegPower();
+       player.setSpeed(legPower);
         switch (direction){
             case NORTH:
-                player.setForceY(speed);
+                player.setForceY(legPower);
                 break;
             case SOUTH:
-                player.setForceY(-speed);
+                player.setForceY(-legPower);
                 break;
             case WEST:
-                player.setForceX(-speed);
+                player.setForceX(-legPower);
                 break;
             case EAST:
-                player.setForceX(speed);
+                player.setForceX(legPower);
                 break;
             default:
                 break;
@@ -57,10 +59,28 @@ public class PlayerController {
 
         // setBodyVelocity(force);
         updateSpeed();
-        updateDirecton();
-        EntityController.updateRotation(getPlayer());
+        updateDirection();
+        updateRotation();
 
         moveIfNeeded();
+    }
+
+    /**
+     * Updates Body rotation
+     */
+    private static void updateRotation(){
+        GameModel gameModel = GameModel.getInstance();
+        Player player = gameModel.getPlayer();
+        ZWBody body = player.getBody();
+        float rotation =  player.getDirection().getRotation();
+        //Checks if world.step() is running. If it is running it tries again and again until step isn't running.
+        //This is the reason why sometimes the game lags and a StackOverflowError happens.
+        if (!gameModel.isStepping()) {
+            body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
+        } else{
+            EntityController.updateRotation(player);
+            // Commenting the section above causes no issues and fizes the StackOverflowError.
+        }
     }
 
     /**
@@ -74,12 +94,12 @@ public class PlayerController {
     /**
      * Updates player speed
      */
-    private static void updateSpeed(){getPlayer().setForceLength(getPlayer().getSpeed());} //TODO: needed?
+    private static void updateSpeed(){getPlayer().updateSpeed();} //TODO: needed?
 
     /**
      * Sets Direction from variable force
      */
-    private static void updateDirecton(){
+    private static void updateDirection(){
         Player player = getPlayer();
         ZWVector force = player.getForce();
         Direction direction = player.getDirection();

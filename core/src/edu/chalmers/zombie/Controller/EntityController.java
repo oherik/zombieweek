@@ -76,6 +76,7 @@ public class EntityController {
     }
 
     public static void updateRotation(Entity entity){
+        System.out.println("updateRotation");
         ZWBody body = entity.getBody();
         ZWSprite sprite = entity.getSprite();
         float angle = body.getAngle();
