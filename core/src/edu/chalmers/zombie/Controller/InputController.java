@@ -144,11 +144,13 @@ public class InputController implements InputProcessor{
     public boolean keyUp(int keycode) {
         if(!gameModel.isStepping()) {   //Don't do any movements while the game world is stepping
             if(keycode == Input.Keys.D || keycode == Input.Keys.A){
-                getPlayer().stopX();
+                //getPlayer().stopX();
+                PlayerController.stopX();
             }
 
             if (keycode == Input.Keys.W || keycode == Input.Keys.S){
-                getPlayer().stopY();
+                //getPlayer().stopY();
+                PlayerController.stopY();
             }
 
             if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
