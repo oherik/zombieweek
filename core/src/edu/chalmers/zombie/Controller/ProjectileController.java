@@ -43,7 +43,7 @@ public class ProjectileController {
         if(!b.isOnGround()) {
             int damage = b.getDamage();
             z.decHp(damage);
-            if (z.getHP() <= 0) {
+            if (z.getHp() <= 0) {
                 ZombieController.knockOut(z);
             }
             EntityController.knockBack(b, z, damage / 10);

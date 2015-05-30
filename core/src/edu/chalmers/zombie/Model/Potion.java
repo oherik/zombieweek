@@ -11,6 +11,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
+ * A class for the potions in the game ZombieWeek.
+ *
+ * Potions are entities and contain a sprite, body and position along with
+ * an ability to affect the player's properties such as increasing speed
+ * and number of lives.
+ *
  * Created by neda on 2015-05-19.
  * Modified by Neda
  */
@@ -23,6 +29,16 @@ public class Potion extends Entity {
     private ZWVector velocity;
     private PotionType type;
 
+    /**
+     * Constructor for class Potion.
+     *
+     * Since no type is specified, a type will be randomized.
+     * Remaining potion properties will be as specified by constructor call.
+     * @param sprite
+     * @param world
+     * @param x
+     * @param y
+     */
     public Potion(ZWSprite sprite, ZWWorld world, int x, int y) {
 
         super(sprite, world, x, y);
@@ -32,14 +48,23 @@ public class Potion extends Entity {
         randomizePotion();
     }
 
+    /**
+     * Constructor for class Potion. Will create a potion as specified.
+     * @param potionType
+     * @param sprite
+     * @param world
+     * @param x
+     * @param y
+     */
     public Potion(PotionType potionType, ZWSprite sprite, ZWWorld world, int x, int y) {
 
         super(sprite, world, x, y);
         velocity = new ZWVector(0,0);
         this.sprite = sprite;
         this.world = world;
-        type = potionType;
         position = new Point(x, y);
+
+        setPotionType(potionType);
 
         ZWBody potionBody = new ZWBody();
         short categoryBits = Constants.COLLISION_POTION;
@@ -49,24 +74,6 @@ public class Potion extends Entity {
         super.setBody(potionBody);
         super.scaleSprite(0.5f / Constants.TILE_SIZE);
         super.getBody().setUserData(this);
-
-        switch (potionType) {
-            case HEALTH:
-
-                break;
-            case SPEED:
-
-                break;
-            case IMMUNITY:
-
-                break;
-            case SUPER_STRENGTH:
-
-                break;
-            default:
-
-                break;
-        }
 
         hasBeenRemoved = false;
 
@@ -83,11 +90,18 @@ public class Potion extends Entity {
         return new Potion(type, sprite, world, x, y);
     }
 
+    /**
+     * A method which set's whether or not a potion has been removed.
+     * @param hasBeenRemoved
+     */
     public void setHasBeenRemoved(boolean hasBeenRemoved) {
 
         this.hasBeenRemoved = hasBeenRemoved;
     }
 
+    /**
+     * A method which removes a potion's body should it be set as removed.
+     */
     public void removeIfNecessary() {
 
         if (hasBeenRemoved) {
@@ -122,5 +136,13 @@ public class Potion extends Entity {
      */
     public PotionType getType() {
         return type;
+    }
+
+    /**
+     * A method which sets the potion's type.
+     * @param type desired PotionType.
+     */
+    public void setPotionType(PotionType type) {
+        this.type = type;
     }
 }
