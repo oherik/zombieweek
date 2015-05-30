@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Created by Tobias on 15-05-29.
+ * Modified by Tobias
  */
 public class ZWTextureRegion {
     private TextureRegion textureRegion;
@@ -24,8 +25,9 @@ public class ZWTextureRegion {
     public ZWTextureRegion(TextureRegion textureRegion){this.textureRegion=textureRegion;}
 
     public ZWTextureRegion(ZWTexture zwTexture){
-            this.textureRegion = new TextureRegion();
-            this.textureRegion.setTexture(zwTexture.getTexture());}
+            this.textureRegion = new TextureRegion(zwTexture.getTexture());
+            //this.textureRegion.setTexture(zwTexture.getTexture());
+    }
 
 
     public static ZWTextureRegion[] split(ZWTexture texture,int tileWidth, int tileHeight){
