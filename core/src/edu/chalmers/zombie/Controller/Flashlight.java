@@ -131,9 +131,10 @@ public class Flashlight {
                 ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
                 int tempIndex = -1;
-                for(int i = 0; 0<endPoints.size(); i++) {
-                    if(endPoints.get(0).equals(lengthenRay(playerPosition,temp, 0.4f)));
-                    tempIndex = i;
+                for(int i = 0; i < endPoints.size(); i++) {
+                    if(endPoints.get(i).equals(lengthenRay(playerPosition,temp, 0.4f))) {
+                        tempIndex = i;
+                    }
                 }
                 endPoints.remove(tempIndex);
                // endPoints.remove(lengthenRay(playerPosition,temp,0.4f));
