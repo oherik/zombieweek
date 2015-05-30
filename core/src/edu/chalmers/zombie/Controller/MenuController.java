@@ -17,15 +17,20 @@ public class MenuController {
 
     /**
      * Creates new instances for the menus
+     * //TODO: maybe need 2 of this. One for GameScreen-menus and one for MainMenuScreen-menus
      */
     public static void initializeMenus(){
 
         ScreenModel screenModel = GameModel.getInstance().getScreenModel();
 
+        //GameScreen menus
         screenModel.setGameOverStage(MenuBuilder.createGameOverMenu());
         screenModel.setSoundAndSettingStage(MenuBuilder.createSoundAndSettingsMenu());
         screenModel.setPauseStage(MenuBuilder.createPauseMenu());
-
+        //MainMenuScreen Menus
+        screenModel.setMainStage(MenuBuilder.createMainStage());
+        screenModel.setLevelChooserStage(MenuBuilder.createLevelChooserStage());
+        screenModel.setSettingsStage(MenuBuilder.createSettingsStage());
     }
 
     /**
