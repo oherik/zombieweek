@@ -28,6 +28,7 @@ public class Hand {
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
         Book book = new Book(direction, player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
+        book.setInMotion();
         gameModel.addBook(book);
     }
     public void throwGrenade(){
