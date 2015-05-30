@@ -15,16 +15,16 @@ import edu.chalmers.zombie.utils.Constants;
  * Made as it's own class to not tangle up GameModel with LibGDX specific types, but it's otherwise a model class.
  * Created by Erik on 2015-05-24.
  */
-public class Renderer {
+public class ZWRenderer {
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
 
-    public Renderer(){
+    public ZWRenderer(){
         camera = new OrthographicCamera();
     }
 
-    public Renderer(Room room, float width, float height){
+    public ZWRenderer(Room room, float width, float height){
         mapRenderer = new OrthogonalTiledMapRenderer(room.getMap().getTiledMap(), 1f / (float) Constants.TILE_SIZE);
         camera = new OrthographicCamera(width,height);
         debugRenderer = new Box2DDebugRenderer();
