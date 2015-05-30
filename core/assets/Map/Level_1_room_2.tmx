@@ -11,7 +11,7 @@
   <tile id="1">
    <properties>
     <property name="collision_zombie" value="true"/>
-    <property name="door" value="1"/>
+    <property name="door" value="0"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_green.png"/>
   </tile>

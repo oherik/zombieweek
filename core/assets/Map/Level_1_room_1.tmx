@@ -50,7 +50,7 @@
   </tile>
   <tile id="7">
    <properties>
-    <property name="player_return" value=""/>
+    <property name="player_return" value="true"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_pink.png"/>
   </tile>
