@@ -47,23 +47,23 @@ public class InputController implements InputProcessor{
         switch (keycode) {
             case Input.Keys.W:
                 //move north
-                //PlayerController.move(Direction.NORTH);
-                gameModel.movePlayer(Direction.NORTH);
+                PlayerController.move(Direction.NORTH);
+                //gameModel.movePlayer(Direction.NORTH);
                 break;
             case Input.Keys.S:
                 //move south
-                //PlayerController.move(Direction.SOUTH);
-                gameModel.movePlayer(Direction.SOUTH);
+                PlayerController.move(Direction.SOUTH);
+                //gameModel.movePlayer(Direction.SOUTH);
                 break;
             case Input.Keys.D:
                 //move east
-                //PlayerController.move(Direction.EAST);
-                gameModel.movePlayer(Direction.EAST);
+                PlayerController.move(Direction.EAST);
+                //gameModel.movePlayer(Direction.EAST);
                 break;
             case Input.Keys.A:
                 //move west
-                //PlayerController.move(Direction.WEST);
-                gameModel.movePlayer(Direction.WEST);
+                PlayerController.move(Direction.WEST);
+                //gameModel.movePlayer(Direction.WEST);
                 break;
             case Input.Keys.SPACE:
                 //throw book
