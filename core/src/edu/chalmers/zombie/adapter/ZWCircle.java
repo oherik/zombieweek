@@ -11,6 +11,13 @@ public class ZWCircle {
 
     Circle circle;
 
+    /**
+     * Constructor for the class ZWCircle which sends a constructor call to
+     * the gdx class Circle.
+     * @param x x-coordinate of circle center.
+     * @param y y-coordinate of circle center.
+     * @param radius the circle's radius. 
+     */
     public ZWCircle(float x, float y, float radius) {
 
         circle = new Circle(x, y, radius);
