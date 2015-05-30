@@ -76,8 +76,9 @@ public class GameScreen extends ZWScreen{
          /* ------- Set input --------*/
         ZWInputMultiplexer inputMultiplexer = new ZWInputMultiplexer();
         inputMultiplexer.addInputProcessor(GameModel.getInstance().getScreenModel().getPauseStage());
-        inputMultiplexer.addInputProcessor(new InputController());
         inputMultiplexer.addInputProcessor(GameModel.getInstance().getScreenModel().getSoundAndSettingStage());
+        inputMultiplexer.addInputProcessor(new InputController());
+
         
         ZWGameEngine.setInputProcessor(inputMultiplexer);
 
