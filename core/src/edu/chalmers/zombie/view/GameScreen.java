@@ -275,7 +275,7 @@ public class GameScreen extends ZWScreen{
 
         }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-
+/*
             if (gameModel.isFlashlightEnabled()){
                 //ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
                 //ZWSpriteBatch sb = new ZWSpriteBatch();
@@ -303,7 +303,7 @@ public class GameScreen extends ZWScreen{
                 sb.end();
             }
 
-
+*/
             drawBlood();
             int[] foregroundLayers = {3};
 
