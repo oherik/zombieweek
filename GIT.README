@@ -10,3 +10,8 @@ En hel del av Eriks additions och deletions består alltså av dessa gitinspecto
 additions och deletions kan det vara nödvändigt att starta gitinspector med flaggan "-f java", då 
 själva projektet är skrivet i Java men gitinspector i Python.
 
+Användarnamn:
+oherik			Erik Öhrn
+PuzzelIT		Neda Farhnad
+thunderskills	Daniel Johansson
+toobew			Tobias Hallberg
