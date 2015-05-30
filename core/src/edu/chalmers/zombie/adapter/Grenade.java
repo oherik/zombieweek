@@ -4,7 +4,6 @@ import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
 import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.view.Renderer;
 
 import java.util.ArrayList;
 
@@ -62,9 +61,9 @@ public class Grenade extends Entity {
         setAngularVelocity(0);
     }
     private void unproject(){
-        Renderer renderer = new Renderer();
-        float unprojectedX = renderer.unprojectX(targetX);
-        float unprojectedY = renderer.unprojextY(targetY);
+        ZWRenderer ZWRenderer = new ZWRenderer();
+        float unprojectedX = ZWRenderer.unprojectX(targetX);
+        float unprojectedY = ZWRenderer.unprojextY(targetY);
         float width = ZWGameEngine.getWindowWidth()/Constants.TILE_SIZE;
         float height = ZWGameEngine.getWindowHeight()/Constants.TILE_SIZE;
         this.targetX = originalPlayerPosition.getX() + unprojectedX*width/2;

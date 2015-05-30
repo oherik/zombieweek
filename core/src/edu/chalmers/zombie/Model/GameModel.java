@@ -1,10 +1,9 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
-import edu.chalmers.zombie.view.Renderer;
+import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.*;
@@ -28,7 +27,7 @@ public class GameModel {
     private Map entitiesToRemove;
     private Point playerBufferPosition; //Can't alter the player position directly in the world step
     private GameState gameState; //the state of the game
-    private Renderer renderer;
+    private ZWRenderer ZWRenderer;
     private ScreenModel screenModel;
 
     /**
@@ -48,7 +47,18 @@ public class GameModel {
         initializeZombieTextures();
         initializeProjectileTextures();
         initializeSounds();
+        initializeRooms();
        }
+
+    private void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
+        res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
+        res.loadTiledMap("room1", "core/assets/Map/Level_1_room_2.tmx");
+        res.loadTiledMap("room2", "core/assets/Map/Test_world_2_next.tmx");
+
+        addRoom(new Room(res.getTiledMap("room0"))); //0
+        addRoom(new Room(res.getTiledMap("room1"))); //1
+        addRoom(new Room(res.getTiledMap("room2"))); //2
+    }
 
     private void initializeZombieTextures(){
         res.loadTexture("zombie-still", "core/assets/Images/zombie-still.png");
@@ -97,15 +107,15 @@ public class GameModel {
     /**
      * @return The game's renderer
      */
-    public Renderer getRenderer(){
-        return this.renderer;
+    public ZWRenderer getZWRenderer(){
+        return this.ZWRenderer;
     }
 
     /**
      * Sets the game's renderer
      */
 
-    public void setRenderer(Renderer renderer){this.renderer=renderer;}
+    public void setZWRenderer(ZWRenderer ZWRenderer){this.ZWRenderer = ZWRenderer;}
 
     /**
      * @return  The player

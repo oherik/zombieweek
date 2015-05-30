@@ -5,7 +5,7 @@ import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.TileRayTracing;
-import edu.chalmers.zombie.view.Renderer;
+import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -40,16 +40,6 @@ public class MapController {
      * Creates the different rooms and stores them in the model
      */
 
-    public static void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
-        GameModel gameModel = GameModel.getInstance();
-        gameModel.res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
-        gameModel.res.loadTiledMap("room1", "core/assets/Map/Test_world_3.tmx");
-        gameModel.res.loadTiledMap("room2", "core/assets/Map/Test_world_2_next.tmx");
-
-        gameModel.addRoom(new Room(gameModel.res.getTiledMap("room0"))); //0
-        gameModel.addRoom(new Room(gameModel.res.getTiledMap("room1"))); //1
-        gameModel.addRoom(new Room(gameModel.res.getTiledMap("room2"))); //2
-    }
 
 
     /**
@@ -310,9 +300,9 @@ public class MapController {
             }
 
             /* ------ Update screen ------ */
-            if(gameModel.getRenderer() == null)
-                gameModel.setRenderer(new Renderer(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight()));  //TODO ej här!
-            gameModel.getRenderer().updateRoom(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());          //TODO ej här!
+            if(gameModel.getZWRenderer() == null)
+                gameModel.setZWRenderer(new ZWRenderer(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight()));  //TODO ej här!
+            gameModel.getZWRenderer().updateRoom(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());          //TODO ej här!
 
             /* ------ Save game ------ */
             SaveLoadController saveLoadController = new SaveLoadController();
@@ -397,11 +387,11 @@ public class MapController {
     }
 
     public static void resizeRenderer(int width, int height){
-        GameModel.getInstance().getRenderer().resizeCamera(width,height);
+        GameModel.getInstance().getZWRenderer().resizeCamera(width,height);
     }
 
     public static void setCameraPosition(float x, float y){
-        GameModel.getInstance().getRenderer().setCameraPosition(x, y);
+        GameModel.getInstance().getZWRenderer().setCameraPosition(x, y);
     }
 
 

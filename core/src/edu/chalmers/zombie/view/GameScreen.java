@@ -57,7 +57,7 @@ public class GameScreen extends ZWScreen{
        // mapController = new MapController();
 
             /* ------ Initialize room  ------ */
-        MapController.initializeRooms();
+        //MapController.initializeRooms();
         MapController.setWorldNeedsUpdate(true);
         MapController.updateRoomIfNeeded();
 
@@ -180,7 +180,7 @@ public class GameScreen extends ZWScreen{
         GameModel gameModel = GameModel.getInstance();
         MapController.updateRoomIfNeeded();
         //setMapRenderer(gameModel.getRenderer().getMapRenderer());
-        Renderer renderer = gameModel.getRenderer();
+        ZWRenderer ZWRenderer = gameModel.getZWRenderer();
         setDisplayedWorld(gameModel.getRoom().getWorld());
         Player player = gameModel.getPlayer();
 
@@ -202,16 +202,16 @@ public class GameScreen extends ZWScreen{
             MapController.setCameraPosition(player.getX(), player.getY());
             /* ------ Draw the background map layer ------ */
             int[] backgroundLayers = {0};
-            renderer.renderMapLayer(backgroundLayers);
-            renderer.setCameraView();
+            ZWRenderer.renderMapLayer(backgroundLayers);
+            ZWRenderer.setCameraView();
 
                  //mapRenderer.render();
             steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
-            ZWBatch batch = renderer.getBatch();
+            ZWBatch batch = ZWRenderer.getBatch();
             batch.begin();
-            renderer.setCombinedCameraBatch();
+            ZWRenderer.setCombinedCameraBatch();
 
              /* ------ Draw the zombies ------ */
             for (Zombie z : gameModel.getZombies()) {
@@ -238,17 +238,17 @@ public class GameScreen extends ZWScreen{
              /* ------Draw the middle layer ------ */
             if(gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
-                    renderer.renderMapLayer(middleLayers);
+                    ZWRenderer.renderMapLayer(middleLayers);
 
             }
             else{
                 int[] middleLayers = {1};
-                renderer.renderMapLayer(middleLayers);
+                ZWRenderer.renderMapLayer(middleLayers);
 
             }
-            batch = renderer.getBatch();
+            batch = ZWRenderer.getBatch();
             batch.begin();
-            renderer.setCombinedCameraBatch();
+            ZWRenderer.setCombinedCameraBatch();
             /* ------ Draw books ------ */
             for (Book b: gameModel.getBooks()){
                 b.draw(batch);
@@ -307,12 +307,12 @@ public class GameScreen extends ZWScreen{
             drawBlood();
             int[] foregroundLayers = {3};
 
-                renderer.renderMapLayer(foregroundLayers);
+                ZWRenderer.renderMapLayer(foregroundLayers);
 
             /* ------ Draw the box2d debug ------ */
             //gameModel.getRenderer().renderBox2DDebug(gameModel.getRoom()); //TODO debug
 
-            renderer.renderBox2DDebug(gameModel.getRoom());
+            ZWRenderer.renderBox2DDebug(gameModel.getRoom().getWorld());
             //boxDebug.render(gameModel.getRoom().getWorld().getWorld(),camera.combined);
 
             /*---------------- END TEST -------------------------*/

@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.view;
+package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -16,16 +16,16 @@ import edu.chalmers.zombie.utils.Constants;
  * Made as it's own class to not tangle up GameModel with LibGDX specific types, but it's otherwise a model class.
  * Created by Erik on 2015-05-24.
  */
-public class Renderer {
+public class ZWRenderer {
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
 
-    public Renderer(){
+    public ZWRenderer(){
         camera = new OrthographicCamera();
     }
 
-    public Renderer(Room room, float width, float height){
+    public ZWRenderer(Room room, float width, float height){
         mapRenderer = new OrthogonalTiledMapRenderer(room.getMap().getTiledMap(), 1f / (float) Constants.TILE_SIZE);
         camera = new OrthographicCamera(width,height);
         debugRenderer = new Box2DDebugRenderer();
@@ -71,19 +71,10 @@ public class Renderer {
     }
 
 
-    public void renderBox2DDebug(Room room){
-        debugRenderer.render(room.getWorld().getWorld(), camera.combined);
+    public void renderBox2DDebug(ZWWorld world){
+        debugRenderer.render(world.getWorld(), camera.combined);
         camera.update();
     }
-
-    public void drawEntity(Entity entity){
-        mapRenderer.getBatch().begin();
-        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        EntityController.updateSprite(entity); //updates
-        entity.getSprite().draw(new ZWBatch(mapRenderer.getBatch()));
-        mapRenderer.getBatch().end();
-    }
-
 
     public float unprojectX(float x){
         return camera.unproject(new Vector3(x, 0, 0)).x;

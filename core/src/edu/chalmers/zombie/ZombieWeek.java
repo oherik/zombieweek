@@ -15,7 +15,7 @@ public class ZombieWeek extends Game {
 
 	public void create () {
         mapController = new MapController();
-        mapController.initializeRooms();
+       // mapController.initializeRooms();
         //setScreen(new MainMenuScreen()); //Main menu screen
         setScreen(new GameScreen()); //Game screen
 	}
