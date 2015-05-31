@@ -61,11 +61,13 @@ public class GameModel {
         res.loadTiledMap("level1_room1", "core/assets/Map/Level_1_room_1.tmx");
         res.loadTiledMap("level1_room2", "core/assets/Map/Level_1_room_2.tmx");
         res.loadTiledMap("level1_room3", "core/assets/Map/Level_1_room_3.tmx");
+        res.loadTiledMap("level1_room4", "core/assets/Map/Level_1_room_4.tmx");
 
         levels.add(new Level());
         addRoom(levels.get(0), new Room(res.getTiledMap("level1_room1"))); //0
         addRoom(levels.get(0), new Room(res.getTiledMap("level1_room2"))); //1
         addRoom(levels.get(0), new Room(res.getTiledMap("level1_room3"))); //2
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room4"))); //3
     }
 
     private void initializeZombieTextures(){
