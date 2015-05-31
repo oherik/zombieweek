@@ -283,7 +283,7 @@ public class GameScreen extends ZWScreen{
 
         }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-
+/*
 
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
@@ -297,7 +297,7 @@ public class GameScreen extends ZWScreen{
                 darkness.draw(sb);
                 sb.end();
             }
-
+*/
 
             drawBlood();
             int[] foregroundLayers = {3};
