@@ -7,6 +7,7 @@ import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /** Stores the game data. The model implements the singleton pattern
  * Created by Tobias on 15-04-02.
@@ -18,7 +19,6 @@ public class GameModel {
     public static ResourceManager res;
     private Player player;
     private int currentLevel, currentRoom, highestCompletedLevel, highestCompletedRoom;
-    private ArrayList<Room> rooms;
     private ArrayList<Level> levels;
     private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
@@ -38,7 +38,7 @@ public class GameModel {
         currentRoom = 0;   //TODO test
         res = new ResourceManager();
         stepping=false;
-        rooms = new ArrayList<Room>();
+        levels = new ArrayList<Level>();
         entitiesToRemove = new HashMap<Room, ArrayList<Entity>>();
         worldNeedsUpdate = true;
         soundOn = true;
@@ -150,30 +150,30 @@ public class GameModel {
      * Adds a room
      */
     public void addRoom(Room room){
-        rooms.add(room);
+        levels.get(currentLevel).addRoom(room);
     }
 
     /**
      * Sets all rooms
      */
     private void setRooms(ArrayList<Room> rooms){
-        this.rooms = rooms;
+        levels.get(currentLevel).setRooms(rooms);
     }
 
     /**
      * @return  The current room
      */
-    public Room getRoom(){return rooms.get(currentRoom); }
+    public Room getRoom(){return levels.get(currentLevel).getRoom(currentRoom); }
 
     /**
      * @return  The room specified by an index
      * @throws  IndexOutOfBoundsException if the index is non-valid
      */
     public Room getRoom(int roomIndex) throws IndexOutOfBoundsException{
-        if(roomIndex >= rooms.size())
+        if(roomIndex >= levels.get(currentLevel).numberOfRooms())
             throw new IndexOutOfBoundsException("GameModel: the getRoom index exceeds array size");
         currentRoom = roomIndex;
-        return rooms.get(roomIndex);
+        return levels.get(currentLevel).getRoom(roomIndex);
     }
 
     /**
@@ -191,6 +191,31 @@ public class GameModel {
         if(i < 0)
             throw new IndexOutOfBoundsException("GameModel: current room must be >= 0");
         this.currentRoom = i;
+    }
+
+    /**
+     * Sets the current level
+     * @param levelIndex    The new level
+     * @throws IndexOutOfBoundsException    If the level index is non valid
+     */
+    public void setCurrentLevelIndex(int levelIndex) throws IndexOutOfBoundsException{
+        if(levelIndex < 0 || levelIndex >= levels.size())
+            throw new IndexOutOfBoundsException("GameModel: current level must be >= 0 and < levels.size()");
+        this.currentRoom = levelIndex;
+    }
+
+    /**
+     * @return  The index of the current level
+     */
+    public int getCurrentLevelIndex(){
+        return currentLevel;
+    }
+
+    /**
+     * @return  The current level
+     */
+    public Level getLevel(){
+        return levels.get(currentLevel);
     }
 
     public ArrayList<Book> getBooks(){
@@ -245,7 +270,11 @@ public class GameModel {
 
 
     public ArrayList<Room> getRooms(){
-        return rooms;
+        return levels.get(currentLevel).getRooms();
+    }
+
+    public ArrayList<Level> getLevels(){
+        return levels;
     }
 
     public void setWorldNeedsUpdate(boolean bool){

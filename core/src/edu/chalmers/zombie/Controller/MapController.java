@@ -36,9 +36,28 @@ public class MapController {
         GameModel gameModel = GameModel.getInstance();
         return gameModel.getRoom();}
 
+
     /**
-     * Creates the different rooms and stores them in the model
+     * Loads a new level. If the level is in front of the current one the player is placed in the first room. If it's
+     * behind the current one she's placed in the last room of that level.
+     * @param levelIndex    The level to load
+     * @throws IndexOutOfBoundsException if the level index is non-valid
      */
+    public static void loadLevel(int levelIndex) throws IndexOutOfBoundsException{
+        GameModel gameModel = GameModel.getInstance();
+        int maxSize = gameModel.getLevels().size() - 1;
+        if (levelIndex < 0 || levelIndex > maxSize){
+            throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
+        }
+        int oldIndex = gameModel.getCurrentLevelIndex();
+        gameModel.setCurrentLevelIndex(levelIndex);
+        if(oldIndex<levelIndex) {
+            loadRoom(gameModel.getLevel().numberOfRooms() - 1);
+        } else{
+            loadRoom(0);
+        }
+
+    }
 
 
 
@@ -57,7 +76,7 @@ public class MapController {
         GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getRooms().size() - 1;
         if (roomIndex < 0 || roomIndex > maxSize){
-        throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
+            throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
         }
         //if(!gameModel.worldNeedsUpdate()){
         gameModel.getPlayer().setSneakTilesTouching(0);

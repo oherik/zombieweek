@@ -38,6 +38,7 @@ public class Constants {
     public static final short COLLISION_SNEAK = 128;
     public static final short COLLISION_ACTOR_OBSTACLE = 256;
     public static final short COLLISION_POTION = 512;
+    public static final short COLLISION_LEVEL = 1024;
 
     //Fysikhantering
     public static final float TIMESTEP = 1/60f;
