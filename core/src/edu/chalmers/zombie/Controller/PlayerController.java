@@ -229,12 +229,12 @@ public class PlayerController {
         int deltaSpeed = newSpeed-originalSpeed;
         p.setLegPower(newSpeed);
         Timer timer = new Timer();
-        timer.schedule(new setSpeed(p.getLegPower() - deltaSpeed), Constants.POTION_SPEED_TIME_MILLIS);//Ej originalSpeed ifall spelaren plockat upp en till
+        timer.schedule(new SetSpeed(p.getLegPower() - deltaSpeed), Constants.POTION_SPEED_TIME_MILLIS);//Ej originalSpeed ifall spelaren plockat upp en till
 
     }
-    static class setSpeed extends TimerTask {
+    static class SetSpeed extends TimerTask {
         private int speed;
-        public setSpeed(int speed){
+        public SetSpeed(int speed){
             this.speed = speed;
         }
         public void run() {
