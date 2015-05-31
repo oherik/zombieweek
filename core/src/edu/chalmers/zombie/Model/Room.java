@@ -152,7 +152,6 @@ public class Room {
      * @param p The potion to remove
      */
     public void removePotion(Potion p){
-        p.dispose();
         potions.remove(p);
     }
 
