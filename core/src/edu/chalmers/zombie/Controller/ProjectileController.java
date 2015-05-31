@@ -1,6 +1,6 @@
 package edu.chalmers.zombie.controller;
 
-import edu.chalmers.zombie.adapter.Grenade;
+import edu.chalmers.zombie.model.Grenade;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.model.AimingSystem;

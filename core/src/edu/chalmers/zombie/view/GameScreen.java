@@ -8,8 +8,6 @@ import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 
-import java.awt.*;
-
 /**
  * The applications game screen
  *

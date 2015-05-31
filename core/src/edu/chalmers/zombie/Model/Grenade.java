@@ -1,6 +1,7 @@
-package edu.chalmers.zombie.adapter;
+package edu.chalmers.zombie.model;
 
 import com.badlogic.gdx.math.Vector2;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.EntityController;
 import edu.chalmers.zombie.controller.ProjectileController;
 import edu.chalmers.zombie.controller.ZombieController;
