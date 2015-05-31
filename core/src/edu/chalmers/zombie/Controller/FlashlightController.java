@@ -119,10 +119,12 @@ public class FlashlightController {
                         fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
                     if (fraction < currentFraction) {
                         currentFraction = fraction;
-                        flashlightModel.setCollisionPoint(point);
+                        flashlightModel.setCollisionPoint(new ZWVector(point));
                     }
                     foundFixture = true;
+
                 }
+
                 return 1;
             }
         };

@@ -34,8 +34,8 @@ public class GameModel {
     private FlashlightModel flashlightModel;
     private PlayerType playerType;
     private AimingSystem aimingSystem;
-    private boolean fearOfTheDark;
     private boolean firstTimePlay = true;
+    private boolean fearOfTheDark = true;
 
     /**
      * Initializes the game model
