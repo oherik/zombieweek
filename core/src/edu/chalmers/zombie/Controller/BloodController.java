@@ -7,12 +7,12 @@ import edu.chalmers.zombie.model.actors.Player;
 /**
  * Created by daniel on 5/27/2015.
  */
-public class Blood {
+public class BloodController {
     private ZWSprite blood;
     private ZWTimer t = new ZWTimer();
     private boolean drawing = false;
     private ZWTask task;
-    public Blood(){
+    public BloodController(){
         ZWTexture bloodTexture = new ZWTexture("core/assets/blood.png");
         blood = new ZWSprite(bloodTexture);
         blood.setAlpha(0.4f);
@@ -26,7 +26,9 @@ public class Blood {
             }
         };
     }
-
+    /*
+    *draws a red transparent layer over the screen so it looks like blood.
+     */
     public void draw(ZWSpriteBatch spriteBatch){
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();

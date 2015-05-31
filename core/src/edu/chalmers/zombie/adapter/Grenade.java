@@ -1,8 +1,12 @@
 package edu.chalmers.zombie.adapter;
 
+import edu.chalmers.zombie.controller.EntityController;
+import edu.chalmers.zombie.controller.ProjectileController;
+import edu.chalmers.zombie.controller.ZombieController;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ public class Grenade extends Entity {
     private ArrayList<ZWFixture> foundFixtures = new ArrayList<ZWFixture>();
     private ZWWorld world;
     private ZWTimer timer;
+    private int damage = 0;
     public Grenade(int targetX, int targetY, float x, float y, ZWWorld world){
         super(world);
         this.world = world;
@@ -38,7 +43,7 @@ public class Grenade extends Entity {
         ZWSprite grenadeSprite = new ZWSprite(grenadeTexture);
         ZWBody body = new ZWBody();
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
-        body.createBodyDef(true, x, y, 0, 0, true);
+        body.createBodyDef(true, x+0.5f, y+0.5f, 0, 0, true);
         body.setFixtureDef(0, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), Constants.COLLISION_PROJECTILE, maskBits, false);
         super.setBody(body);
         super.setSprite(grenadeSprite);
@@ -90,10 +95,14 @@ public class Grenade extends Entity {
     @Override
     public void draw(ZWBatch batch) {
         super.draw(batch);
-        stopIfNeeded();
+        if (force.len() !=0){
+            stopIfNeeded();
+        }
+
     }
     private ZWVector[] rays;
     public void explode(){
+        stop();
         ZWRayCastCallback callback = createCallback();
         ZWVector grenadePosition = new ZWVector(getX(), getY());
         rays = new ZWVector[100];
@@ -113,9 +122,18 @@ public class Grenade extends Entity {
                 }
             }
             for (ZWFixture f: fixturesInRadius){
-
+                if (f.getBodyUserData() instanceof Zombie){
+                    Zombie z = (Zombie)f.getBodyUserData();
+                    z.decHp(damage);
+                    if (z.getHp() <= 0) {
+                        ZombieController.knockOut(z);
+                        GameModel.getInstance().getPlayer().incKillCount();
+                    }
+                    EntityController.knockBack(this, z, 3);
+                }
             }
         }
+        EntityController.remove(this);
     }
     private boolean checkIfInsideRadius(ZWFixture fixture, ZWVector ray){
         ZWVector fixturePosition = fixture.getPosition();
