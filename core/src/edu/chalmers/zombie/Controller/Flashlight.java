@@ -87,7 +87,6 @@ public class Flashlight {
     }
 
     private void fetchDirection(){
-        GameModel gameModel = GameModel.getInstance();
         direction = AimingController.getDirection() + Constants.PI/2;
     }
     private void fetchPlayerPosition(){
