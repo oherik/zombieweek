@@ -9,6 +9,7 @@ import edu.chalmers.zombie.utils.PotionType;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A class for the potions in the game ZombieWeek.
@@ -121,9 +122,7 @@ public class Potion extends Entity {
         types.add(PotionType.SUPER_STRENGTH);
         types.add(PotionType.IMMUNITY);
 
-        System.out.println(((int)Math.random()*11) + " "); // <-- For debugging
-
-        int i = (((int)Math.random()*11) / 4);
+        int i = new Random().nextInt(4);
 
         PotionType pt = types.get(i);
 

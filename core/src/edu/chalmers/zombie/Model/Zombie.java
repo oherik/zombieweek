@@ -35,10 +35,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public Zombie(ZWTexture walkingTexture, ZWTexture stillTexture, ZWTexture deadTexture, ZWWorld world, float x, float y, int size){
         super(walkingTexture, world, x, y, size);
 
-        if(walkingTexture == null) {
-            walkingTexture = GameModel.getInstance().res.getTexture("zombie");
-            setSprite(new ZWSprite(walkingTexture));
-        }
         if(stillTexture == null){
             stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
         }

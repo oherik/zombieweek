@@ -15,6 +15,7 @@ public class ZWBatch {
        // spriteBatch = new SpriteBatch();
         polygonSpriteBatch = new PolygonSpriteBatch();
         this.batch = batch;
+        polygonSpriteBatch = new PolygonSpriteBatch();
     }
     public void begin(){
         batch.begin();

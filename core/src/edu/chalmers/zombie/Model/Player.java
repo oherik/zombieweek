@@ -198,7 +198,7 @@ public class Player extends Entity implements CreatureInterface {
     @Override
     public boolean hasBeenAttacked() {
 
-        return isAttacked;
+        return lives>100;   //TODO ändra hur detta fungerar
     }
 
     @Override
