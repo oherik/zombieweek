@@ -166,14 +166,7 @@ public class GameModel {
     public void addRoom(Level level, Room room){
         level.addRoom(room);
     }
-
-    /**
-     * Sets all rooms
-     */
-    private void setRooms(ArrayList<Room> rooms){
-        levels.get(currentLevel).setRooms(rooms);
-    }
-
+    
     /**
      * @return  The current room
      */

@@ -277,14 +277,6 @@ public class Player extends Entity implements CreatureInterface {
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
-    private void setDefaultBody(){
-        if(this.getBody()!=null) {
-            this.removeBody();
-        }
-
-
-    }
-
     /**
      * Creates a new default body at the given position
      * @param x The x coordinate where to create the new body
