@@ -14,6 +14,14 @@ public class ZWTable {
         table.add(zwTextButton.getButton()).size(x,y).padBottom(padBottom).row();
     }
 
+    public void addSameRow(ZWImageButton imageButton, boolean uniform){
+        if (uniform){
+            table.add(imageButton.getButton()).uniform();
+        } else {
+            table.add(imageButton.getButton());
+        }
+    }
+
     public void add(ZWLabel label, float padBottom){
         table.add(label.getLabel()).padBottom(padBottom).row();
     }
