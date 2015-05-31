@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import edu.chalmers.zombie.adapter.ZWInputProcessor;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
@@ -14,7 +15,7 @@ import edu.chalmers.zombie.utils.GameState;
  *
  * Created by Tobias on 15-04-01.
  */
-public class InputController implements InputProcessor{
+public class InputController extends ZWInputProcessor {
 
     GameModel gameModel;
     MapController mapController;
@@ -97,7 +98,11 @@ public class InputController implements InputProcessor{
                         System.out.println("GAME STARTED");
                         gameModel.setGameState(GameState.GAME_RUNNING);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
             }
 
@@ -172,6 +177,8 @@ public class InputController implements InputProcessor{
             case GAME_RUNNING:
                 tryThrowingBook();
                 break;
+            default:
+                break;
         }
         return true;
     }
@@ -191,6 +198,8 @@ public class InputController implements InputProcessor{
         switch (gameModel.getGameState()) {
             case GAME_RUNNING:
                 getPlayer().getHand().setMousePosition(screenX, screenY);
+                break;
+            default:
                 break;
         }
 

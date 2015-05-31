@@ -20,7 +20,8 @@ public class ZWVector{
     }
 
     public ZWVector(ZWVector vector){
-        this.vector = vector.getLibVector();
+        this.vector = new Vector2();
+        this.vector.set(vector.getLibVector());
     }
 
     public ZWVector(float x, float y){

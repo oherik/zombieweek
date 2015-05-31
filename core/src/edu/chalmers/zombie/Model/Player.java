@@ -9,7 +9,7 @@ import java.awt.*;
 
 /**
  * Created by neda on 2015-03-31.
- * Modified by Tobias and Erik
+ * Modified by Tobias, Erik and Neda
  */
 public class Player extends Entity implements CreatureInterface {
 
@@ -36,7 +36,7 @@ public class Player extends Entity implements CreatureInterface {
     //The hand is throwing the book and aiming.
     private Hand hand = new Hand(this);
 
-    private boolean isHit = true;
+    private boolean isHit = false;
     private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
 
 

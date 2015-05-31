@@ -410,10 +410,6 @@ public class MapController {
             long lifeTime = 5000; //life time for book in millisec
             if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
                 ProjectileController.hitGround(b);
-            if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
-              //  gameModel.addEntityToRemove(getRoom(),b);
-                //b.markForRemoval(); //TODO ha med?
-            }
             if (b.toRemove())
                 books.remove(i); //Förenklad forsats skulle göra detta svårt
         }
