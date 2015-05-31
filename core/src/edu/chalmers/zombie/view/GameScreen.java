@@ -34,6 +34,7 @@ public class GameScreen extends ZWScreen{
     private ZWSpriteBatch sb = new ZWSpriteBatch();
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
+    private ZWBatch batch;
 
 
 
@@ -215,7 +216,7 @@ public class GameScreen extends ZWScreen{
             steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
-            ZWBatch batch = renderer.getBatch();
+          batch = renderer.getBatch();
             batch.begin();
             renderer.setCombinedCameraBatch();
 
@@ -272,7 +273,7 @@ public class GameScreen extends ZWScreen{
 
         }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-/*
+
 
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
@@ -286,7 +287,7 @@ public class GameScreen extends ZWScreen{
                 darkness.draw(sb);
                 sb.end();
             }
-*/
+
 
             drawBlood();
             int[] foregroundLayers = {3};

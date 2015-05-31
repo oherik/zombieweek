@@ -14,7 +14,6 @@ public class ZWBatch {
     public ZWBatch(Batch batch){
         polygonSpriteBatch = new PolygonSpriteBatch();
         this.batch = batch;
-        polygonSpriteBatch = new PolygonSpriteBatch();
     }
     public void begin(){
         batch.begin();
@@ -35,6 +34,10 @@ public class ZWBatch {
 
         polygonSpriteBatch.dispose();
         batch.dispose();
+    }
+
+    public void setBatch(Batch batch){
+        this.batch = batch;
     }
 
 }
