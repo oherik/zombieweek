@@ -14,13 +14,15 @@ import edu.chalmers.zombie.utils.Constants;
 public class ProjectileController {
 
     /**
-     * Performs the calculations necessary for the book to hit the ground. It calls other methods to set the collision detection to players and other books as well and to apply friction.
+     * Performs the calculations necessary for the book to hit the ground. It calls other methods to set the
+     * collision detection to players and other books as well and to apply friction.
      * @param book  The book
      */
     public static void hitGround(Book book){
         book.setOnGround(true);
         //TODO g?ra boken mindre, l?gga till ljud etc
-        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_DOOR;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER
+                | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_DOOR;
         EntityController.setMaskBits(book, maskBits);
         EntityController.setFriction(book, 4f, 3f);
     }
