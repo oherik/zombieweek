@@ -12,11 +12,6 @@ import java.awt.*;
  */
 public class DataZombie extends Zombie {
 
-    private Sprite sprite;
-    //private int hp;
-    private ZWWorld world;
-    private Point position;
-
     public DataZombie(ZWWorld world, int x, int y) {
 
         super(GameModel.getInstance().res.getTexture("zombie-data"),
@@ -27,9 +22,6 @@ public class DataZombie extends Zombie {
 
 
         setType(ZombieType.DATA);
-        this.world = world;
-        this.sprite = sprite;
-        position = new Point(x, y);
         setDetectionRadius(1);
         setStartingHp(90000);
         setSpeed(800);
