@@ -9,6 +9,7 @@ import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Created by Erik on 2015-05-29.
+ * Modified by Neda.
  */
 public class ProjectileController {
 
@@ -45,6 +46,7 @@ public class ProjectileController {
             z.decHp(damage);
             if (z.getHp() <= 0) {
                 ZombieController.knockOut(z);
+                GameModel.getInstance().getPlayer().incKillCount();
             }
             EntityController.knockBack(b, z, damage / 10);
             hitGround(b);

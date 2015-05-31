@@ -6,7 +6,7 @@ import edu.chalmers.zombie.utils.Constants;
 
 /** A custom contact listener. It registers the different contacts and forward the commands to the other controllers.
  * Created by Erik on 2015-04-18.
- * Modified by Neda. 
+ * Modified by Neda.
  */
 public class ContactController {
 
@@ -237,12 +237,4 @@ public class ContactController {
                 break;
         }
     }
-
-
-
-
-
-
-
-
 }
