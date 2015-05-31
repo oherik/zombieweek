@@ -46,7 +46,7 @@ public class MenuBuilder {
 
         ZWStage soundAndSettingStage = new ZWStage();
 
-        GameModel.getInstance().res.loadTexture("audio-off","core/assets/Images/audioOff.png");
+        GameModel.getInstance().res.loadTexture("audio-off","core/assets/Images/audioOff.png");//TODO: should use resource manager
         GameModel.getInstance().res.loadTexture("audio-on","core/assets/Images/audioOn.png");
         GameModel.getInstance().res.loadTexture("settings","core/assets/Images/settings.png");
 
@@ -208,7 +208,10 @@ public class MenuBuilder {
         newGameButton.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
-                ZWGameEngine.setScreen(new GameScreen());
+                ScreenModel screenModel = GameModel.getInstance().getScreenModel();
+                screenModel.setMenuState(ScreenModel.MenuState.CHARACTER_MENU);
+                ZWGameEngine.setInputProcessor(screenModel.getCharacterStage());
+                //ZWGameEngine.setScreen(new GameScreen());
             }
         });
 
@@ -267,15 +270,26 @@ public class MenuBuilder {
 
 
         /*--- Back button ---*/
+        ZWImageButton backIconButton = createBackButton();
+
+        levelStage.addActor(backIconButton);
+
+        return levelStage;
+    }
+
+    /**
+     * Creates a back button in the top left of the screen
+     * @return
+     */
+    private static ZWImageButton createBackButton(){
+        /*--- Back button ---*/
         ZWImageButton backIconButton = new ZWImageButton();
-        backIconButton.setImageUp(new ZWTexture("core/assets/arrowLeft_grey.png"));
+        backIconButton.setImageUp(new ZWTexture("core/assets/arrowLeft_grey.png"));//TODO: should use resource manager
         backIconButton.setImageDown(new ZWTexture("core/assets/arrowLeft.png"));
         backIconButton.setImageOver(new ZWTexture("core/assets/arrowLeft_lightgrey.png"));
 
         backIconButton.setSize(30,30);
         backIconButton.setPosition(10, ZWGameEngine.getWindowHeight()-40);
-
-        levelStage.addActor(backIconButton);
 
         backIconButton.addListener(new ZWClickAction(){
             @Override
@@ -286,7 +300,60 @@ public class MenuBuilder {
             }
         });
 
-        return levelStage;
+        return backIconButton;
+    }
+
+    public static ZWStage createCharacterStage(){
+
+        ZWStage characterStage = new ZWStage();
+
+        ZWImageButton characterButtonLeft = new ZWImageButton();
+        ZWImageButton characterButtonRight = new ZWImageButton();
+
+
+        characterButtonLeft.setImageUp(new ZWTexture("core/assets/Images/emilia-300400.png")); //TODO: should use resource manager
+        characterButtonRight.setImageUp(new ZWTexture("core/assets/Images/emil-300400.png"));//TODO: should use resource manager
+
+        int width = 300;
+        int height = 400;
+        int paddingBottom = 50;
+        int paddingLeft = 15;
+
+        characterButtonLeft.setSize(width,height);
+        characterButtonLeft.setPosition(paddingLeft, paddingBottom);
+
+        characterButtonRight.setSize(width,height);
+        characterButtonRight.setPosition(paddingLeft+width, paddingBottom);
+
+        characterStage.addActor(characterButtonLeft);
+        characterStage.addActor(characterButtonRight);
+
+
+        characterButtonLeft.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                //TODO: need to set emilia to correct player character
+                ZWGameEngine.setScreen(new GameScreen());
+            }
+        });
+
+
+
+        characterButtonRight.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                //TODO: need to set emil to correct player character
+                ZWGameEngine.setScreen(new GameScreen());
+            }
+        });
+
+
+        //Back button
+        ZWImageButton backButton = createBackButton();
+        characterStage.addActor(backButton);
+
+
+        return characterStage;
     }
 
     /**

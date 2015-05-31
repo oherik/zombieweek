@@ -16,7 +16,8 @@ public class ScreenModel {
     private ZWStage mainStage;
     private ZWStage levelChooserStage;
     private ZWStage settingsStage;
-    public enum MenuState{MAIN_MENU, LEVEL_MENU, SETTINGS_MENU}
+    private ZWStage characterStage;
+    public enum MenuState{MAIN_MENU, LEVEL_MENU, SETTINGS_MENU,CHARACTER_MENU}
     private MenuState menuState;
 
     public ScreenModel(){}
@@ -84,4 +85,13 @@ public class ScreenModel {
     public void setMenuState(MenuState menuState) {
         this.menuState = menuState;
     }
+
+    public ZWStage getCharacterStage() {
+        return characterStage;
+    }
+
+    public void setCharacterStage(ZWStage characterStage) {
+        this.characterStage = characterStage;
+    }
+
 }
