@@ -251,26 +251,17 @@ public class MenuBuilder {
 
         int amountOfLevels = GameModel.getInstance().getAmountOfLevelsInGame();
 
-        System.out.println("Amount of levels: " + amountOfLevels + ", levelsCompleted" + levelsCompleted);
-
         for (int i = 0;i <= amountOfLevels-1;i++){
             String buttonName = "Level " + (i+1);
             final int level = i;
             ZWTextButton levelButton;
 
             if (i>levelsCompleted){ //not completed levels
-                System.out.println("level:" + i + "is disabled");
-
                 ZWSkin disabledSkin = createMenuSkin();
                 disabledSkin.createDisabledButtons();
-
                 levelButton = new ZWTextButton(buttonName, disabledSkin);
-
             } else { //completed levels
-
-
                 levelButton = new ZWTextButton(buttonName, skin);
-
                 levelButton.addListener(new ZWClickAction(){
                     @Override
                     public void clicked(){
@@ -278,18 +269,9 @@ public class MenuBuilder {
                         ZWGameEngine.setScreen(new GameScreen());
                     }
                 });
-
             }
-
+            
             table.add(levelButton,250,50,15);
-
-
-
-
-
-
-
-
         }
 
 
