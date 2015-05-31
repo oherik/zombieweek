@@ -166,7 +166,7 @@ public class GameModel {
     public void addRoom(Level level, Room room){
         level.addRoom(room);
     }
-    
+
     /**
      * @return  The current room
      */

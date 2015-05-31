@@ -9,14 +9,8 @@ import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
 
 public class ZombieWeek extends Game {
-    private InputController inputController;
-    private MapController mapController;
 
-
-	public void create () {
-        mapController = new MapController();
-       // mapController.initializeRooms();
-        //setScreen(new MainMenuScreen()); //Main menu screen
+    public void create () {
         setScreen(new GameScreen()); //Game screen
 	}
 
