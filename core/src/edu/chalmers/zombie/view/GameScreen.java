@@ -1,15 +1,12 @@
 package edu.chalmers.zombie.view;
 
-
 import edu.chalmers.zombie.adapter.*;
-
 import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
-import edu.chalmers.zombie.utils.PathAlgorithm;
 
 import java.awt.*;
 
@@ -42,10 +39,6 @@ public class GameScreen extends ZWScreen{
      * Creates a new screen based on a set tile size, i.e. pixels per meters.
      */
     public GameScreen(float tileSize){
-        float width = ZWGameEngine.getWindowWidth();
-        float height = ZWGameEngine.getWindowHeight();
-
-
             /* ------ Initialize room  ------ */
         MapController.setWorldNeedsUpdate(true);
         MapController.updateRoomIfNeeded();
@@ -66,11 +59,8 @@ public class GameScreen extends ZWScreen{
         //TODO: add NextLevelStage as inputprocessor here
         inputMultiplexer.addInputProcessor(GameModel.getInstance().getScreenModel().getSoundAndSettingStage());
         inputMultiplexer.addInputProcessor(new InputController());
-
         
         ZWGameEngine.setInputProcessor(inputMultiplexer);
-
-
 
     }
 
@@ -279,5 +269,5 @@ public class GameScreen extends ZWScreen{
         bloodController.draw(sb);
         sb.end();
     }
-    
+
 }
