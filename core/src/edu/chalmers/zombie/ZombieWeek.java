@@ -8,8 +8,8 @@ import edu.chalmers.zombie.view.MainMenuScreen;
 public class ZombieWeek extends Game {
 
 	public void create () {
-        //setScreen(new MainMenuScreen()); //Main menu screen
-        setScreen(new GameScreen()); //Game screen
+        setScreen(new MainMenuScreen()); //Main menu screen
+        //setScreen(new GameScreen()); //Game screen
 	}
 
 	@Override
