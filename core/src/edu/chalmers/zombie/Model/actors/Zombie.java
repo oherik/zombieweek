@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
