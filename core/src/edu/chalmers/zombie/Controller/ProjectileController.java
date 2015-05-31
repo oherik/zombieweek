@@ -48,7 +48,7 @@ public class ProjectileController {
                 ZombieController.knockOut(z);
                 GameModel.getInstance().getPlayer().incKillCount();
             }
-            EntityController.knockBack(b, z, damage / 10);
+            EntityController.knockBack(b, z, damage / 10f);
             hitGround(b);
             // GameModel.getInstance().addEntityToRemove(b);
             //b.markForRemoval();
