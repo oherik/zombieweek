@@ -27,7 +27,7 @@ public class Blood {
         };
     }
 
-    public void draw(ZWBatch spriteBatch){
+    public void draw(ZWSpriteBatch spriteBatch){
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
         if (drawing && player.isHit()){

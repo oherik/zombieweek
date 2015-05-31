@@ -279,22 +279,21 @@ public class GameScreen extends ZWScreen{
         }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
-
+/*
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
                 if (flashlight==null){
-                    flashlight = new Flashlight(currentWorld,Constants.PI/4,3,5,0.75f);
+                    flashlight = new Flashlight(currentWorld,Constants.PI/4,100,5,0.75f);
                 }
-                flashlight.draw(sb, psb);
+                flashlight.draw(psb);
             } else{
                 darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
                 sb.begin();
                 darkness.draw(sb);
-                player.draw(sb);
                 sb.end();
             }
 
-
+*/
             drawBlood();
             int[] foregroundLayers = {3};
 
@@ -365,9 +364,9 @@ public class GameScreen extends ZWScreen{
     private Blood blood = new Blood();
  //   private SpriteBatch sb = new SpriteBatch();
     private void drawBlood(){
- //           sb.begin();
- //           blood.draw(sb);
- //           sb.end();
+        sb.begin();
+        blood.draw(sb);
+        sb.end();
     }
 
 

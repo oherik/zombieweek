@@ -53,7 +53,7 @@ public class Flashlight {
         this.lengthFraction = lengthFraction;
         initializeRays();
     }
-    public void draw(ZWSpriteBatch spriteBatch, ZWPolygonSpriteBatch polygonSpriteBatch){
+    public void draw(ZWPolygonSpriteBatch polygonSpriteBatch){
         world = GameModel.getInstance().getRoom().getWorld();
         clearAll();
         calculateLength();
@@ -61,16 +61,9 @@ public class Flashlight {
         fetchPlayerPosition();
         calculateEndPoints();
         calculateCollisionPoints();
-       // lengthenRays();
         calculateMaxYIndex();
         calculateCorners();
-        //Fram tills hit verkar allt fungera som det borde. Vi får in massa punkter som stämmer i vertices.
-        //Anledningen till att inget ritas ut måste ligga nedan eller i någon av klasserna som används nedan.
-        //Eftersom varken ljusset eller mörkret ritas ut är det mest sannolikt att felet ligger i någon av klasserna
-        //som används för att rita båda. Den enda är ZWTexture. Dock verkar inget problem finnas i ZWTexture.
         ZWPolygonRegion darkness = createDarkRegion();
-        ZWSprite light = createLight();
-        //ight.draw(spriteBatch);
         polygonSpriteBatch.begin();
         polygonSpriteBatch.drawPolygonRegion(darkness, 0, 0);
         polygonSpriteBatch.end();
@@ -134,7 +127,6 @@ public class Flashlight {
             foundFixture = false;
             rayCast(ray);
             if (foundFixture) {
-                System.out.println("bra");
                 ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
                 int tempIndex = endPoints.indexOf(temp);
@@ -236,11 +228,6 @@ public class Flashlight {
             vertices[i+1] = vertices[i+1] * Constants.TILE_SIZE - playerPosition.getY() * Constants.TILE_SIZE + ZWGameEngine.getWindowHeight()/2;
         }
         return vertices;
-    }
-    private ZWSprite createLight(){
-        ZWSprite light = new ZWSprite(lightTexture);
-        light.setAlpha(0.2f);
-        return light;
     }
     private ZWRayCastCallback createCallback(){
         ZWRayCastCallback returnCallback = new ZWRayCastCallback() {
