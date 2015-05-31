@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="27" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="44" height="21" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="mesh" tilewidth="32" tileheight="32">
   <tile id="0">
    <properties>
@@ -11,7 +11,7 @@
   <tile id="1">
    <properties>
     <property name="collision_zombie" value="true"/>
-    <property name="door" value="1"/>
+    <property name="door" value="2"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_green.png"/>
   </tile>
@@ -38,7 +38,7 @@
   <tile id="5">
    <properties>
     <property name="collision_zombie" value="true"/>
-    <property name="level" value="1"/>
+    <property name="door" value="4"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
   </tile>
@@ -134,23 +134,23 @@
  </tileset>
  <tileset firstgid="22" name="sd" tilewidth="1" tileheight="1"/>
  <imagelayer name="bottom">
-  <image source="level_1_room_3_bottom.png"/>
+  <image source="level_1_room_4_bottom.png"/>
  </imagelayer>
  <imagelayer name="middle">
-  <image source="Level_1_room_3_middle.png"/>
+  <image source="level_1_room_4_middle.png"/>
  </imagelayer>
  <imagelayer name="middle_dark">
-  <image source="Level_1_room_3_middle_dark.png"/>
+  <image source="level_1_room_4_middle_dark.png"/>
  </imagelayer>
  <imagelayer name="top" visible="0">
-  <image source="Level_1_room_3_top.png"/>
+  <image source="level_1_room_4_top.png"/>
  </imagelayer>
- <layer name="meta" width="27" height="20">
+ <layer name="meta" width="44" height="21">
   <properties>
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBjegJVCTKpdlLhzsNrFNMztYqejXcQCAQrsGq7pkN52YdPDgUUNpeUGMe6jxO/YzGLDg6lp1ygYBcgAALBHASk=
+   eJztlOEKgCAMBkUye/8nlsBAwjEl57b4Dg5h/jlBDQHsIFUjYWLU6uX2NaR63uSRgwoz02sB9MpC3WGrvTdnZ4be71x19dL74KlX4r0djavx+J/NzLX5U69VAaAonaMCUg==
   </data>
  </layer>
 </map>

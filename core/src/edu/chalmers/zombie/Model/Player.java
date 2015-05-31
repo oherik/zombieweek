@@ -41,7 +41,7 @@ public class Player extends Entity implements CreatureInterface {
 
 
     public Player(ZWTexture texture, ZWWorld world, float x, float y) {
-        super(texture, world, x, y);
+        super(texture, world, x, y,32);
 
         //Set still image frame
         //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
@@ -315,7 +315,8 @@ public class Player extends Entity implements CreatureInterface {
 
         short categoryBits = Constants.COLLISION_PLAYER;
         short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
-                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE |
+                Constants.COLLISION_LEVEL;
 
         body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
 

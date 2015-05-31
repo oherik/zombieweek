@@ -2,6 +2,7 @@ package edu.chalmers.zombie.utils;
 
 /**
  * Created by Tobias on 15-04-02.
+ * Modified by Erik
  */
 public class Constants {
 
@@ -11,9 +12,10 @@ public class Constants {
 
     //Room
     public static final String META_LAYER = "meta";
-    public static final String COLLISION_PROPERTY_DOOR = "door"; //TODO för resten med?
-    public static final String COLLISION_PROPERTY_ALL = "collision_all"; //TODO för resten med?
-    public static final String COLLISION_PROPERTY_ZOMBIE = "collision_zombie"; //TODO för resten med?
+    public static final String COLLISION_PROPERTY_DOOR = "door";
+    public static final String COLLISION_PROPERTY_LEVEL = "level";
+    public static final String COLLISION_PROPERTY_ALL = "collision_all";
+    public static final String COLLISION_PROPERTY_ZOMBIE = "collision_zombie";
     public static final String COLLISION_PROPERTY_WATER = "water";
     public static final String COLLISION_PROPERTY_SNEAK = "sneak";
     public static final String COLLISION_PROPERTY_PLAYER = "collision_player";
@@ -36,6 +38,7 @@ public class Constants {
     public static final short COLLISION_SNEAK = 128;
     public static final short COLLISION_ACTOR_OBSTACLE = 256;
     public static final short COLLISION_POTION = 512;
+    public static final short COLLISION_LEVEL = 1024;
 
     //Fysikhantering
     public static final float TIMESTEP = 1/60f;

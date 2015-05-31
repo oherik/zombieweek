@@ -19,7 +19,7 @@ public class ArchZombie extends Zombie {
 
     public ArchZombie(ZWWorld world, int x, int y) {
 
-        super(null,null,null, world, x, y);
+        super(null,null,null, world, x, y,32);
         setType(ZombieType.ARCH);
         this.world = world;
         this.sprite = sprite;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="27" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="46" height="35" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="mesh" tilewidth="32" tileheight="32">
   <tile id="0">
    <properties>
@@ -11,7 +11,7 @@
   <tile id="1">
    <properties>
     <property name="collision_zombie" value="true"/>
-    <property name="door" value="1"/>
+    <property name="door" value="0"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_green.png"/>
   </tile>
@@ -38,7 +38,7 @@
   <tile id="5">
    <properties>
     <property name="collision_zombie" value="true"/>
-    <property name="level" value="1"/>
+    <property name="door" value="2"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
   </tile>
@@ -134,23 +134,23 @@
  </tileset>
  <tileset firstgid="22" name="sd" tilewidth="1" tileheight="1"/>
  <imagelayer name="bottom">
-  <image source="level_1_room_3_bottom.png"/>
+  <image source="level_2_room_2_bottom.png"/>
  </imagelayer>
  <imagelayer name="middle">
-  <image source="Level_1_room_3_middle.png"/>
+  <image source="level_2_room_2_middle.png"/>
  </imagelayer>
- <imagelayer name="middle_dark">
-  <image source="Level_1_room_3_middle_dark.png"/>
+ <imagelayer name="middle_dark" visible="0">
+  <image source="level_2_room_2_middle_dark.png"/>
  </imagelayer>
  <imagelayer name="top" visible="0">
-  <image source="Level_1_room_3_top.png"/>
+  <image source="level_2_room_2_top.png"/>
  </imagelayer>
- <layer name="meta" width="27" height="20">
+ <layer name="meta" width="46" height="35">
   <properties>
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBjegJVCTKpdlLhzsNrFNMztYqejXcQCAQrsGq7pkN52YdPDgUUNpeUGMe6jxO/YzGLDg6lp1ygYBcgAALBHASk=
+   eJztlt0KgDAIRl3RD9H7P28MCmKks01rxXfAm9Q8DMYkAgAA8CeGF6PW24J+D23O2ntl6kLmP4fbosw9dd5ab20O3jI5b6+5HJ2iJlC73pNQ07I3h4dzxNPbyznieS/hfW9uTX+gb3if/SRn7n2R3h1pbinn/kD5c27RWwO3P0l71cFcMTel1Fv73WruVf8TMSZhtfcDAAAAlmz+nAKN
   </data>
  </layer>
 </map>

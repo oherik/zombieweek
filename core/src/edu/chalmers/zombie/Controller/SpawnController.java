@@ -67,6 +67,13 @@ public class SpawnController {
         doorBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
         collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_DOOR, doorBody));
 
+        //Level door
+        categoryBits = Constants.COLLISION_LEVEL;
+        maskBits = Constants.COLLISION_ENTITY | Constants.COLLISION_PROJECTILE;
+        ZWBody levelBody = new ZWBody();
+        levelBody.setFixtureDef(0, 0.1f, 1f, 1f, categoryBits, maskBits, false);
+        collisionObjects.add(new CollisionObject(Constants.COLLISION_PROPERTY_LEVEL, levelBody));
+
         //Sneak, sensor
         categoryBits = Constants.COLLISION_SNEAK;
         maskBits = Constants.COLLISION_PLAYER;
@@ -126,10 +133,15 @@ public class SpawnController {
                             for (CollisionObject obj : collisionObjects) {
                                 if (room.hasProperty(col, row, obj.getName())){
                                     obj.getBody().setBodyDefPosition((col + 0.5f), (row + 0.5f));
-                                    if(obj.getName().equals(Constants.COLLISION_PROPERTY_DOOR)){
+                                    if(obj.getName().equals(Constants.COLLISION_PROPERTY_DOOR)){    //Add new room door
                                         toAdd = obj.clone();
                                         toRemove = obj;
                                         obj.setProperty((String) room.getProperty(col, row, Constants.COLLISION_PROPERTY_DOOR));
+                                    }
+                                    else if(obj.getName().equals(Constants.COLLISION_PROPERTY_LEVEL)){  //Add new level door
+                                        toAdd = obj.clone();
+                                        toRemove = obj;
+                                        obj.setProperty((String) room.getProperty(col, row, Constants.COLLISION_PROPERTY_LEVEL));
                                     }
                                     room.createFixture(obj.getBody(), obj);
                                 }

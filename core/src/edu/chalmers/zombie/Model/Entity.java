@@ -40,18 +40,19 @@ public abstract class Entity {
         sprite.setY(y);
     }
 
-    public Entity(ZWTexture texture, ZWWorld world, float x, float y){
+    public Entity(ZWTexture texture, ZWWorld world, float x, float y, int size){
         this(world);
         animator = new Animator();
         isAnimated = true;
 
-        ZWTextureRegion[] textureRegions = ZWTextureRegion.split(texture,32,32);
+        ZWTextureRegion[] textureRegions = ZWTextureRegion.split(texture,size,size);
         setAnimator(textureRegions, 1 / 12f);
         sprite = new ZWSprite(getAnimator().getFrame()); //gets the first frame to start with
-        sprite.setSize(32,32);
+        sprite.setSize(size,size);
         sprite.setX(x);
         sprite.setY(y);
     }
+
 
     public void applyLinearImpulse(ZWVector force){
         ZWVector vectorForce = new ZWVector(force.getX(), force.getY());
@@ -263,6 +264,7 @@ public abstract class Entity {
      * null pointer exceptions.
      */
     public void removeBody(){
+
         this.world.destroyBody(body);
         this.body = null;}
 

@@ -20,7 +20,7 @@ public class ITZombie extends Zombie {
 
         super(GameModel.getInstance().res.getTexture("zombie-it"),
                 GameModel.getInstance().res.getTexture("zombie-it-still"),
-                GameModel.getInstance().res.getTexture("zombie-it-dead"), world, x, y);
+                GameModel.getInstance().res.getTexture("zombie-it-dead"), world, x, y,32);
         setType(ZombieType.IT);
         this.world = world;
         this.sprite = sprite;

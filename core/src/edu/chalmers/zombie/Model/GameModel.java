@@ -7,6 +7,7 @@ import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /** Stores the game data. The model implements the singleton pattern
  * Created by Tobias on 15-04-02.
@@ -18,7 +19,6 @@ public class GameModel {
     public static ResourceManager res;
     private Player player;
     private int currentLevel, currentRoom, highestCompletedLevel, highestCompletedRoom;
-    private ArrayList<Room> rooms;
     private ArrayList<Level> levels;
     private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
@@ -35,10 +35,11 @@ public class GameModel {
      * Initializes the game model
      */
     private GameModel(){
+        currentLevel = 0;
         currentRoom = 0;   //TODO test
         res = new ResourceManager();
         stepping=false;
-        rooms = new ArrayList<Room>();
+        levels = new ArrayList<Level>();
         entitiesToRemove = new HashMap<Room, ArrayList<Entity>>();
         worldNeedsUpdate = true;
         soundOn = true;
@@ -58,13 +59,22 @@ public class GameModel {
     }
 
     private void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
-        res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
-        res.loadTiledMap("room1", "core/assets/Map/Level_1_room_2.tmx");
-        res.loadTiledMap("room2", "core/assets/Map/Level_1_room_3.tmx");
+        res.loadTiledMap("level1_room1", "core/assets/Map/Level_1_room_1.tmx");
+        res.loadTiledMap("level1_room2", "core/assets/Map/Level_1_room_2.tmx");
+        res.loadTiledMap("level1_room3", "core/assets/Map/Level_1_room_3.tmx");
+        res.loadTiledMap("level2_room1", "core/assets/Map/Level_2_room_1.tmx");
+        res.loadTiledMap("level2_room2", "core/assets/Map/Level_2_room_2.tmx");
+        res.loadTiledMap("level2_room3", "core/assets/Map/Level_2_room_3.tmx");
 
-        addRoom(new Room(res.getTiledMap("room0"))); //0
-        addRoom(new Room(res.getTiledMap("room1"))); //1
-        addRoom(new Room(res.getTiledMap("room2"))); //2
+        levels.add(0, new Level());
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room1")));
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room2")));
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room3")));
+
+        levels.add(1, new Level());
+        addRoom(levels.get(1), new Room(res.getTiledMap("level2_room1")));
+        addRoom(levels.get(1), new Room(res.getTiledMap("level2_room2")));
+        addRoom(levels.get(1), new Room(res.getTiledMap("level2_room3")));
     }
 
     private void initializeZombieTextures(){
@@ -77,6 +87,10 @@ public class GameModel {
         res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
         res.loadTexture("zombie-it-dead", "core/assets/Images/zombie-it-dead.png");
         res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
+        res.loadTexture("zombie-boss-still","core/assets/Images/zombie-boss-still.png");
+        res.loadTexture("zombie-boss-dead", "core/assets/Images/zombie-boss-dead.png");
+        res.loadTexture("zombie-boss", "core/assets/Images/zombie-boss.png");
+
     }
 
     private void initializePlayerTextures(){
@@ -147,33 +161,49 @@ public class GameModel {
     }
 
     /**
-     * Adds a room
+     * Adds a room to a level
      */
-    public void addRoom(Room room){
-        rooms.add(room);
+    public void addRoom(Level level, Room room){
+        level.addRoom(room);
     }
 
     /**
      * Sets all rooms
      */
     private void setRooms(ArrayList<Room> rooms){
-        this.rooms = rooms;
+        levels.get(currentLevel).setRooms(rooms);
     }
 
     /**
      * @return  The current room
      */
-    public Room getRoom(){return rooms.get(currentRoom); }
+    public Room getRoom(){return levels.get(currentLevel).getRoom(currentRoom); }
 
     /**
      * @return  The room specified by an index
      * @throws  IndexOutOfBoundsException if the index is non-valid
      */
     public Room getRoom(int roomIndex) throws IndexOutOfBoundsException{
-        if(roomIndex >= rooms.size())
+        if(roomIndex >= levels.get(currentLevel).numberOfRooms())
             throw new IndexOutOfBoundsException("GameModel: the getRoom index exceeds array size");
+        if(roomIndex < 0)
+            throw new IndexOutOfBoundsException("GameModel: the getRoom index must be 0 or greater");
         currentRoom = roomIndex;
-        return rooms.get(roomIndex);
+        return levels.get(currentLevel).getRoom(roomIndex);
+    }
+
+    /**
+     * Returns a level
+     * @param levelIndex    Which level to get
+     * @return  The level with the specified index
+     * @throws IndexOutOfBoundsException    If the index is non valid
+     */
+    public Level getLevel(int levelIndex) throws IndexOutOfBoundsException{
+        if(levelIndex >= levels.size())
+            throw new IndexOutOfBoundsException("GameModel: the getLevel index exceeds array size");
+        if(levelIndex < 0)
+            throw new IndexOutOfBoundsException("GameModel: the getLevel index must be 0 or greater");
+        return levels.get(levelIndex);
     }
 
     /**
@@ -191,6 +221,31 @@ public class GameModel {
         if(i < 0)
             throw new IndexOutOfBoundsException("GameModel: current room must be >= 0");
         this.currentRoom = i;
+    }
+
+    /**
+     * Sets the current level
+     * @param levelIndex    The new level
+     * @throws IndexOutOfBoundsException    If the level index is non valid
+     */
+    public void setCurrentLevelIndex(int levelIndex) throws IndexOutOfBoundsException{
+        if(levelIndex < 0 || levelIndex >= levels.size())
+            throw new IndexOutOfBoundsException("GameModel: current level must be >= 0 and < levels.size()");
+        this.currentLevel = levelIndex;
+    }
+
+    /**
+     * @return  The index of the current level
+     */
+    public int getCurrentLevelIndex(){
+        return currentLevel;
+    }
+
+    /**
+     * @return  The current level
+     */
+    public Level getLevel(){
+        return levels.get(currentLevel);
     }
 
     public ArrayList<Book> getBooks(){
@@ -245,7 +300,11 @@ public class GameModel {
 
 
     public ArrayList<Room> getRooms(){
-        return rooms;
+        return levels.get(currentLevel).getRooms();
+    }
+
+    public ArrayList<Level> getLevels(){
+        return levels;
     }
 
     public void setWorldNeedsUpdate(boolean bool){

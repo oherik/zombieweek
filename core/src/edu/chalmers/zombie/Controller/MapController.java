@@ -36,10 +36,39 @@ public class MapController {
         GameModel gameModel = GameModel.getInstance();
         return gameModel.getRoom();}
 
-    /**
-     * Creates the different rooms and stores them in the model
-     */
 
+    /**
+     * Loads a new level. If the level is in front of the current one the player is placed in the first room. If it's
+     * behind the current one she's placed in the last room of that level.
+     * @param levelIndex    The level to load
+     * @throws IndexOutOfBoundsException if the level index is non-valid
+     */
+    public static void loadLevel(int levelIndex) throws IndexOutOfBoundsException{
+        GameModel gameModel = GameModel.getInstance();
+        int maxSize = gameModel.getLevels().size() - 1;
+        if (levelIndex < 0 || levelIndex > maxSize){
+            throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
+        }
+        int oldIndex = gameModel.getCurrentLevelIndex();
+        gameModel.setCurrentLevelIndex(levelIndex);
+        int oldRoomIndex = gameModel.getCurrentRoomIndex();
+        if(oldIndex>levelIndex) {
+            gameModel.setCurrentRoomIndex(gameModel.getLevel(levelIndex).numberOfRooms() - 1);
+            loadRoom(oldIndex, levelIndex, oldRoomIndex, gameModel.getCurrentRoomIndex());
+        } else{
+            loadRoom(oldIndex, levelIndex,oldRoomIndex, 0);
+        }
+
+    }
+
+    /**
+     * Loads a room in the same level
+     * @param roomIndex The room to load
+     */
+    public static void loadRoom(int roomIndex){
+        int levelIndex = GameModel.getInstance().getCurrentLevelIndex();
+        loadRoom(levelIndex,levelIndex, GameModel.getInstance().getCurrentRoomIndex(), roomIndex);
+    }
 
 
     /**
@@ -50,14 +79,19 @@ public class MapController {
      * room, if needed and sets a variable in the game model that the renderer needs to update the world in the next
      * world step.
      *
-     * @param roomIndex the room to load
+     * @param newRoomIndex the room to load
+     * @param oldRoomIndex the previous room
+     * @param newLevelIndex the level the room is in
+     * @param oldLevelIndex the level the old rom is in
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
-    public static void loadRoom(int roomIndex) {
+    private static void loadRoom(int oldLevelIndex, int newLevelIndex, int oldRoomIndex, int newRoomIndex) {
+        System.out.println("old in" + oldRoomIndex);
+        System.out.println("new in" + newRoomIndex);
         GameModel gameModel = GameModel.getInstance();
-        int maxSize = gameModel.getRooms().size() - 1;
-        if (roomIndex < 0 || roomIndex > maxSize){
-        throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
+        int maxSize = gameModel.getLevel().numberOfRooms() - 1;
+        if (newRoomIndex < 0 || newRoomIndex > maxSize){
+            throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
         }
         //if(!gameModel.worldNeedsUpdate()){
         gameModel.getPlayer().setSneakTilesTouching(0);
@@ -65,17 +99,16 @@ public class MapController {
         gameModel.getPlayer().setHidden(false);
         //TODO sluta simma, sluta sneaka
         EntityController.setFriction(gameModel.getPlayer(), Constants.PLAYER_FRICTION_DEFAULT, Constants.PLAYER_FRICTION_DEFAULT);
-        int oldRoomIndex = gameModel.getCurrentRoomIndex();
+        GameModel.getInstance().addEntityToRemove(gameModel.getLevel(oldLevelIndex).getRoom(oldRoomIndex), GameModel.getInstance().getPlayer());
 
-        GameModel.getInstance().addEntityToRemove(getRoom(), GameModel.getInstance().getPlayer());
        // for(Book book : gameModel.getBooks()){
        //     book.markForRemoval();
       //      gameModel.addEntityToRemove(getRoom(),book);
       //  }
-        gameModel.setCurrentRoomIndex(roomIndex);
+        gameModel.setCurrentRoomIndex(newRoomIndex);
        // gameModel.clearBookList();
         SpawnController.traverseRoomIfNeeded(getRoom());
-        if(oldRoomIndex>roomIndex){
+        if(oldRoomIndex > newRoomIndex || oldLevelIndex > newLevelIndex){
             if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getRoom().getPlayerSpawn());
             else

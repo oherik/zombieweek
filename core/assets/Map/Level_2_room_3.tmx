@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="27" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="75" height="39" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="mesh" tilewidth="32" tileheight="32">
   <tile id="0">
    <properties>
@@ -38,7 +38,7 @@
   <tile id="5">
    <properties>
     <property name="collision_zombie" value="true"/>
-    <property name="level" value="1"/>
+    <property name="door" value="2"/>
    </properties>
    <image width="32" height="32" source="../Tiles/mesh_yellow.png"/>
   </tile>
@@ -134,23 +134,23 @@
  </tileset>
  <tileset firstgid="22" name="sd" tilewidth="1" tileheight="1"/>
  <imagelayer name="bottom">
-  <image source="level_1_room_3_bottom.png"/>
+  <image source="level_2_room_3_bottom.png"/>
  </imagelayer>
  <imagelayer name="middle">
-  <image source="Level_1_room_3_middle.png"/>
+  <image source="level_2_room_3_middle.png"/>
  </imagelayer>
- <imagelayer name="middle_dark">
-  <image source="Level_1_room_3_middle_dark.png"/>
+ <imagelayer name="middle_dark" visible="0">
+  <image source="level_2_room_3_middle_dark.png"/>
  </imagelayer>
  <imagelayer name="top" visible="0">
-  <image source="Level_1_room_3_top.png"/>
+  <image source="level_2_room_3_top.png"/>
  </imagelayer>
- <layer name="meta" width="27" height="20">
+ <layer name="meta" width="75" height="39">
   <properties>
    <property name="level" value="2"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBjegJVCTKpdlLhzsNrFNMztYqejXcQCAQrsGq7pkN52YdPDgUUNpeUGMe6jxO/YzGLDg6lp1ygYBcgAALBHASk=
+   eJztmW0LgyAURtsgtkHsjf3/3zoiZCLlHvW2WZ4D94vKox3MoroOUui9Ogbl94HmAVcToYeTMKZV2Fc6uNJxHm7CmNZhX+ngSgdXOntz1RvWXPYSgzCmNqzWmurKev5foKz1HOl7RnLGtmGmPXX+WvDXejfKibXljKkF7kGdf7nibE/PxtWnba9nu3UO+0rPwZWegys9pzVXl4Kc1lyV5OBKz8GVnoOrifB/Q4mrLZUFua62RC2uXkbrGLkaZq1BC/vKClzp4Oo77rszrnRyXB0MygrleeCu51E415Irar33NACw4Q3TGAWj
   </data>
  </layer>
 </map>

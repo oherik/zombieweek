@@ -16,14 +16,6 @@ public class Level {
 
     public Level(){
         roomList = new ArrayList<Room>();
-
-        GameModel gameModel = GameModel.getInstance();
-
-        roomList.add(new Room(gameModel.res.getTiledMap("room0")));
-        roomList.add(new Room(gameModel.res.getTiledMap("room1")));
-        roomList.add(new Room(gameModel.res.getTiledMap("room2")));
-
-
     }
 
     /**
@@ -43,5 +35,19 @@ public class Level {
         return roomList.get(index);
     }
 
+    /**
+     * Sets a complete set of rooms
+     * @param roomList  The rooms to set
+     */
+    public void setRooms(ArrayList<Room> roomList){
+        this.roomList = roomList;
+    }
 
+    public int numberOfRooms(){
+        return roomList.size();
+    }
+
+    public ArrayList<Room> getRooms(){
+        return roomList;
+    }
 }

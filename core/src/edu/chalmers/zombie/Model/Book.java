@@ -21,7 +21,8 @@ public class Book extends Entity {
         speed = 0;
         ZWBody body = new ZWBody();
         body.createBodyDef(true, x+0.5f, y+0.5f, 0, 0, true);
-        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_PLAYER | Constants.COLLISION_DOOR | Constants.COLLISION_ACTOR_OBSTACLE;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_PLAYER | Constants.COLLISION_DOOR | Constants.COLLISION_ACTOR_OBSTACLE |
+                Constants.COLLISION_LEVEL;
         body.setFixtureDef(8f, 0, 1/3f, 1/2f, Constants.COLLISION_PROJECTILE, maskBits, false);
         getBody().setUserData(this);
     }
@@ -60,7 +61,6 @@ public class Book extends Entity {
         //Load sprite
         ZWSprite sprite = new ZWSprite(GameModel.getInstance().res.getTexture("book"));
         sprite.setSize(1/3f, 1/2f);
-        System.out.println(sprite.getWidth());
         super.setSprite(sprite);
         //setInMotion();
 
