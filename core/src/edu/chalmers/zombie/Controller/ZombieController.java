@@ -18,7 +18,7 @@ public class ZombieController {
     public static void move(Zombie z) {
 
         if (z.getBody() != null) {
-        Point playerPosition = z.getThisMapController().getPlayerPosition();
+        Point playerPosition = MapController.getPlayerPosition();
         Point zombiePosition = z.getZombiePosition();
 
         Player player = GameModel.getInstance().getPlayer();
