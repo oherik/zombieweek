@@ -11,6 +11,7 @@ import edu.chalmers.zombie.model.ScreenModel;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
+import sun.jvm.hotspot.memory.PlaceholderEntry;
 
 /**
  * Builder to create menus
@@ -271,8 +272,11 @@ public class MenuBuilder {
                 levelButton.addListener(new ZWClickAction(){
                     @Override
                     public void clicked(){
-                        MapController.loadLevel(level);
+                        GameModel.getInstance().setCurrentRoomIndex(0);
+                        GameModel.getInstance().setCurrentLevelIndex(level);
+
                         ZWGameEngine.setScreen(new GameScreen());
+                        MapController.loadLevel(level);
                     }
                 });
             }
