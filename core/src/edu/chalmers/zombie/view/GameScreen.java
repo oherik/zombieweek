@@ -366,11 +366,11 @@ public class GameScreen extends ZWScreen{
         sb.dispose();
         psb.dispose();
     }
-    private Blood blood = new Blood();
+    private BloodController bloodController = new BloodController();
  //   private SpriteBatch sb = new SpriteBatch();
     private void drawBlood(){
         sb.begin();
-        blood.draw(sb);
+        bloodController.draw(sb);
         sb.end();
     }
 

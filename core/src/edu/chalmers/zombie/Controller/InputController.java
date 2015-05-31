@@ -120,7 +120,7 @@ public class InputController extends ZWInputProcessor {
         if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(new ZWVector(getPlayer().getBody().getPosition()), mapController.getRoom(),distance,angle) ) {
             player.decreaseAmmunition();
             if (player.getAimingController().isThrowingGrenade()){
-                player.getAimingController().throwGrenade();
+               ProjectileController.throwGrenade();
             } else{
                 throwBook();
             }

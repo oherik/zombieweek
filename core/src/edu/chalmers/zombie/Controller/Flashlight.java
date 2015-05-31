@@ -53,6 +53,9 @@ public class Flashlight {
         this.lengthFraction = lengthFraction;
         initializeRays();
     }
+    /*
+    *draws a black polygon that is shaped like everything that is not inside the flashlight circle segment.
+     */
     public void draw(ZWPolygonSpriteBatch polygonSpriteBatch){
         world = GameModel.getInstance().getRoom().getWorld();
         clearAll();
