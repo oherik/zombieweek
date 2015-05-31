@@ -1,5 +1,7 @@
 package edu.chalmers.zombie.controller;
 
+import edu.chalmers.zombie.adapter.Grenade;
+import edu.chalmers.zombie.model.AimingSystem;
 import edu.chalmers.zombie.model.Book;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
@@ -72,5 +74,19 @@ public class ProjectileController {
         AudioController.playSound(GameModel.getInstance().res.getSound("pick_up_book"));
     }
 
-
+    public static void throwBook(){
+        GameModel gameModel = GameModel.getInstance();
+        Player player = gameModel.getPlayer();
+        AimingSystem aimingSystem = player.getAimingController().getAimingSystem();
+        Book book = new Book(aimingSystem.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
+        book.setInMotion();
+        gameModel.addBook(book);
+    }
+    public static void throwGrenade(){
+        GameModel gameModel = GameModel.getInstance();
+        Player player = gameModel.getPlayer();
+        AimingSystem aimingSystem = player.getAimingController().getAimingSystem();
+        Grenade grenade = new Grenade(aimingSystem.getMouseX(), aimingSystem.getMouseY(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
+        gameModel.addGrenade(grenade);
+    }
 }

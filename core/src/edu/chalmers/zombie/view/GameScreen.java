@@ -267,37 +267,26 @@ public class GameScreen extends ZWScreen{
 
 
 
-            /* ------ Render HUD ------ */
-            String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
-            String playerHealth = "Health: " + player.getLives();
-            String playerAmmo = "Ammo: " + player.getAmmunition();
-            String level= "Level: " + (gameModel.getCurrentLevelIndex()+1);
-            batchHUD.begin();
-            bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-            bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
-            bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
-            bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
-            bitmapFont.draw(batchHUD, level, 10, ZWGameEngine.getWindowHeight() - 55);
-            batchHUD.end();
+
 
 
         }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
-/*
+
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
-                if (flashlight==null){
-                    flashlight = new Flashlight(currentWorld,Constants.PI/4,100,5,0.75f);
-                }
-                flashlight.draw(psb);
+
+
+                gameModel.getFlashlight().draw(psb);
+
             } else{
                 darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
                 sb.begin();
                 darkness.draw(sb);
                 sb.end();
             }
-*/
+
 
             drawBlood();
             int[] foregroundLayers = {3};
@@ -306,7 +295,18 @@ public class GameScreen extends ZWScreen{
 
 
             renderer.renderBox2DDebug(gameModel.getRoom().getWorld());
-
+ /* ------ Render HUD ------ */
+        String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
+        String playerHealth = "Health: " + player.getLives();
+        String playerAmmo = "Ammo: " + player.getAmmunition();
+        String level= "Level: " + (gameModel.getCurrentLevelIndex()+1);
+        batchHUD.begin();
+        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
+        bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
+        bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
+        bitmapFont.draw(batchHUD, level, 10, ZWGameEngine.getWindowHeight() - 55);
+        batchHUD.end();
         /** Render settings and sound buttons **/
         GameModel.getInstance().getScreenModel().getSoundAndSettingStage().act();
         GameModel.getInstance().getScreenModel().getSoundAndSettingStage().draw();
@@ -366,11 +366,11 @@ public class GameScreen extends ZWScreen{
         sb.dispose();
         psb.dispose();
     }
-    private Blood blood = new Blood();
+    private BloodController bloodController = new BloodController();
  //   private SpriteBatch sb = new SpriteBatch();
     private void drawBlood(){
         sb.begin();
-        blood.draw(sb);
+        bloodController.draw(sb);
         sb.end();
     }
 

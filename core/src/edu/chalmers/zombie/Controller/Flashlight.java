@@ -39,13 +39,12 @@ public class Flashlight {
         lengthFraction = 0.75f;
         initializeRays();
     }
-    public Flashlight(@NotNull ZWWorld world, float width, int numberOfRays, float length, float lengthFraction)throws NullPointerException, IllegalArgumentException{
+    public Flashlight(@NotNull ZWWorld world, float width, int numberOfRays, float lengthFraction)throws NullPointerException, IllegalArgumentException{
         if (world == null){
             throw new NullPointerException("The world is null");
         }
         this.world = world;
         this.width = width;
-        this.length = length;
         this.numberOfRays = numberOfRays;
         if (lengthFraction < 0.05f || 0.95f < lengthFraction){
             throw new IllegalArgumentException("The lengthFraction has to be between 0.05 and 0.95");
@@ -53,6 +52,9 @@ public class Flashlight {
         this.lengthFraction = lengthFraction;
         initializeRays();
     }
+    /*
+    *draws a black polygon that is shaped like everything that is not inside the flashlight circle segment.
+     */
     public void draw(ZWPolygonSpriteBatch polygonSpriteBatch){
         world = GameModel.getInstance().getRoom().getWorld();
         clearAll();

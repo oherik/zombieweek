@@ -19,10 +19,9 @@ public class AimingSystem {
     private int mouseY;
     public AimingSystem(Player player){
         this.player = player;
-        aimer.setSize(0.5f, 0.5f);
+        aimer.setSize(1f, 1f);
     }
     public float getDirection(){
-        System.out.println(direction);
         return direction;
     }
     public ZWSprite getSprite(){
