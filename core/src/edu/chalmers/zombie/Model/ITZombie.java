@@ -8,6 +8,8 @@ import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 
 /**
+ * An IT zombie has a low speed and an intermediate resilience. It does a damage of 65 percent,
+ * which is fairly high. It has a detection radius of 5, which is intermediate, borderline low.
  * Created by neda on 2015-05-20.
  */
 public class ITZombie extends Zombie {
