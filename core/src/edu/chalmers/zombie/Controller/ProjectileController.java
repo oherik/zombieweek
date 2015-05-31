@@ -90,7 +90,7 @@ public class ProjectileController {
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
         AimingSystem aimingSystem = player.getAimingController().getAimingSystem();
-        Book book = new Book(aimingSystem.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
+        Book book = new Book(aimingSystem.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
         setInMotion(book);
         gameModel.addBook(book);
     }
