@@ -54,11 +54,10 @@ public class MapController {
         int oldRoomIndex = gameModel.getCurrentRoomIndex();
         if(oldIndex>levelIndex) {
             gameModel.setCurrentRoomIndex(gameModel.getLevel(levelIndex).numberOfRooms() - 1);
-            loadRoom(oldIndex, levelIndex, oldRoomIndex, gameModel.getCurrentRoomIndex());
         } else{
-            loadRoom(oldIndex, levelIndex,oldRoomIndex, 0);
+            gameModel.setCurrentRoomIndex(0);
         }
-
+        loadRoom(oldIndex, levelIndex,oldRoomIndex, 0);
     }
 
     /**
@@ -108,7 +107,13 @@ public class MapController {
         gameModel.setCurrentRoomIndex(newRoomIndex);
        // gameModel.clearBookList();
         SpawnController.traverseRoomIfNeeded(getRoom());
-        if(oldRoomIndex > newRoomIndex || oldLevelIndex > newLevelIndex){
+        if(oldRoomIndex > newRoomIndex && oldLevelIndex >= newLevelIndex){
+            if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
+                setPlayerBufferPosition(getRoom().getPlayerSpawn());
+            else
+                setPlayerBufferPosition(getRoom().getPlayerReturn());
+        }
+        else if(oldLevelIndex > newLevelIndex){
             if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getRoom().getPlayerSpawn());
             else

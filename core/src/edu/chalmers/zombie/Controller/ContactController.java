@@ -131,6 +131,8 @@ public class ContactController {
                         break;
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -192,7 +194,6 @@ public class ContactController {
      * @param fixtureB  The second fixture
      */
     public static void preSolve(ZWFixture fixtureA, ZWFixture fixtureB){
-        GameModel gameModel = GameModel.getInstance();
         switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_PLAYER):
                 switch (fixtureA.getCategoryBits()){        //Not made as an if-statement if more collision alternatives are to be added

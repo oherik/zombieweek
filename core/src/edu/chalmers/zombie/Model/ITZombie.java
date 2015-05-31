@@ -12,19 +12,12 @@ import java.awt.*;
  */
 public class ITZombie extends Zombie {
 
-    private Sprite sprite;
-    private ZWWorld world;
-    private Point position;
-
     public ITZombie(ZWWorld world, int x, int y) {
 
         super(GameModel.getInstance().res.getTexture("zombie-it"),
                 GameModel.getInstance().res.getTexture("zombie-it-still"),
                 GameModel.getInstance().res.getTexture("zombie-it-dead"), world, x, y,32);
         setType(ZombieType.IT);
-        this.world = world;
-        this.sprite = sprite;
-        position = new Point(x, y);
         setDetectionRadius(5);
         setStartingHp(100);
         setSpeed(30);
