@@ -35,6 +35,7 @@ public class GameModel {
     private PlayerType playerType;
     private AimingSystem aimingSystem;
     private boolean fearOfTheDark;
+    private boolean firstTimePlay = true;
 
     /**
      * Initializes the game model
@@ -397,4 +398,8 @@ public class GameModel {
     public void setFearOfTheDark(boolean b){
         fearOfTheDark = b;
     }
+
+    public void setfirstTimePlay(boolean b){firstTimePlay = b;}
+
+    public boolean isFirstTimePlay(){return firstTimePlay;}
 }
