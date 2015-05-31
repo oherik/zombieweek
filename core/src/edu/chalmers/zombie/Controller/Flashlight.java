@@ -39,13 +39,12 @@ public class Flashlight {
         lengthFraction = 0.75f;
         initializeRays();
     }
-    public Flashlight(@NotNull ZWWorld world, float width, int numberOfRays, float length, float lengthFraction)throws NullPointerException, IllegalArgumentException{
+    public Flashlight(@NotNull ZWWorld world, float width, int numberOfRays, float lengthFraction)throws NullPointerException, IllegalArgumentException{
         if (world == null){
             throw new NullPointerException("The world is null");
         }
         this.world = world;
         this.width = width;
-        this.length = length;
         this.numberOfRays = numberOfRays;
         if (lengthFraction < 0.05f || 0.95f < lengthFraction){
             throw new IllegalArgumentException("The lengthFraction has to be between 0.05 and 0.95");
