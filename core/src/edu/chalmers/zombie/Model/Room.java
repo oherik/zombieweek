@@ -103,10 +103,14 @@ public class Room {
     }
 
     /**
-     * @return  The collision grid for the zombies as a 2d short array.
+     * @return  A copy of the collision grid as a 2d short array.
      */
     public short[][] getCollisionTileGrid(){
-        return collisionTileGrid;
+        short[][] dest = new short[collisionTileGrid.length][collisionTileGrid[0].length];
+        for(int i=0; i<collisionTileGrid.length; i++)
+            for(int j=0; j<collisionTileGrid[i].length; j++)
+                dest[i][j]=collisionTileGrid[i][j];
+        return dest;
     }
 
 
