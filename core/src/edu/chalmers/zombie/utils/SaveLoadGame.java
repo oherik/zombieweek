@@ -106,8 +106,8 @@ public class SaveLoadGame {
         loadProperties();
         GameModel gameModel = GameModel.getInstance();
         int level = gameModel.getCurrentLevelIndex();
-        int health = gameModel.getPlayer().getLives();
-        int ammo = gameModel.getPlayer().getAmmunition();
+        //int health = gameModel.getPlayer().getLives();
+        //int ammo = gameModel.getPlayer().getAmmunition();
         int highestReachedLevel = getHighestLevelFromProperties();
 
         //checks if player has reached a higher level than before
@@ -122,8 +122,8 @@ public class SaveLoadGame {
         System.out.println("Saved Highest reached levl: "+properties.getProperty("highestReachedLevel"));
 
         properties.setProperty("level", Integer.toString(level));
-        properties.setProperty("health", Integer.toString(health));
-        properties.setProperty("ammo", Integer.toString(ammo));
+        //properties.setProperty("health", Integer.toString(health));
+        //properties.setProperty("ammo", Integer.toString(ammo));
     }
 
     /**
