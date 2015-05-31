@@ -20,6 +20,7 @@ public class ZWRenderer {
     private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
+    private ZWBatch zwBatch;
 
     public ZWRenderer(){
         camera = new OrthographicCamera();
@@ -29,6 +30,7 @@ public class ZWRenderer {
         mapRenderer = new OrthogonalTiledMapRenderer(room.getMap().getTiledMap(), 1f / (float) Constants.TILE_SIZE);
         camera = new OrthographicCamera(width,height);
         debugRenderer = new Box2DDebugRenderer();
+        zwBatch = new ZWBatch(mapRenderer.getBatch());
     }
 
     public OrthogonalTiledMapRenderer getMapRenderer(){
@@ -59,15 +61,16 @@ public class ZWRenderer {
         camera.position.set(x, y, 0);
         camera.update();
         mapRenderer.setView(camera);
+        zwBatch.setBatch(mapRenderer.getBatch());
     }
 
     public void updateRoom(Room room, float width, float height){
         mapRenderer = new OrthogonalTiledMapRenderer(room.getMap().getTiledMap(),1f / (float) Constants.TILE_SIZE);
-
+        zwBatch.setBatch(mapRenderer.getBatch());
     }
 
     public ZWBatch getBatch(){
-        return new ZWBatch(mapRenderer.getBatch());
+        return zwBatch;
     }
 
 

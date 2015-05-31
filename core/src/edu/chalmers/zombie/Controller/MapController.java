@@ -91,8 +91,6 @@ public class MapController {
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
     private static void loadRoom(int oldLevelIndex, int newLevelIndex, int oldRoomIndex, int newRoomIndex) {
-        System.out.println("old in" + oldRoomIndex);
-        System.out.println("new in" + newRoomIndex);
         GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getLevel().numberOfRooms() - 1;
         if (newRoomIndex < 0 || newRoomIndex > maxSize){
@@ -154,15 +152,6 @@ public class MapController {
     public static Point getPlayerPosition(){
         GameModel gameModel = GameModel.getInstance();
         return new Point(Math.round(gameModel.getPlayer().getX()), Math.round(gameModel.getPlayer().getY()));
-    }
-
-    /**
-     * Updates the player's position
-     * @param point Where the player will be placed
-     */
-    public static void updatePlayerPosition(Point point){
-        GameModel gameModel = GameModel.getInstance();
-               gameModel.getPlayer().setPosition(point.x+0.5f, point.y+0.5f); //+0.5f so it will be placed in the middle of the tile
     }
 
     /**
@@ -336,11 +325,12 @@ public class MapController {
 
             /* ------ Update player ------ */
             if(player == null){
-               player = PlayerController.createNewPlayer();
+               player = PlayerController.updatePlayer();
             }
             if(player.getBody() == null||!player.getBody().bodyIsInWorld(getRoom().getWorld())){
                 System.out.println(getPlayerBufferPosition());
-                player.createDefaultBody(currentRoom.getWorld(), (float) getPlayerBufferPosition().getX()+0.5f, (float) getPlayerBufferPosition().getY()+0.5f); //+0.5 since we want it palced in the middle of the tile
+
+                PlayerController.setWorldAndPosition(currentRoom.getWorld(), (float) getPlayerBufferPosition().getX()+0.5f, (float) getPlayerBufferPosition().getY()+0.5f);
             }
 
             /* ------ Update screen ------ */
@@ -354,9 +344,6 @@ public class MapController {
 
             /* ------ Mark as updated ------ */
             setWorldNeedsUpdate(false);
-
-            //TODO debug
-            printCollisionTileGrid();
         }
         /* ------ Update physics ------ */
         stepWorld();
