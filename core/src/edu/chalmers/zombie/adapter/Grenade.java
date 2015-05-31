@@ -61,9 +61,7 @@ public class Grenade extends Entity {
     }
     private void setInMotion(){
         force.setLength(speed);
-        force.setAngleRad(direction + Constants.PI*1/2);
-        setBodyVelocity(force);
-        setAngularVelocity(0);
+        ProjectileController.setInMotion(this, force, direction, 0);
     }
     private void unproject(){
         ZWRenderer ZWRenderer = new ZWRenderer();
@@ -75,7 +73,7 @@ public class Grenade extends Entity {
         this.targetY = originalPlayerPosition.getY() - unprojectedY*height/2;
     }
     @Override
-    protected void setBodyVelocity(ZWVector velocity){
+    public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
     public ZWVector getVelocity(){
@@ -98,7 +96,6 @@ public class Grenade extends Entity {
         if (force.len() !=0){
             stopIfNeeded();
         }
-
     }
     private ZWVector[] rays;
     public void explode(){
@@ -133,7 +130,8 @@ public class Grenade extends Entity {
                 }
             }
         }
-        EntityController.remove(this);
+        this.markForRemoval();
+        this.getSprite().setAlpha(0);
     }
     private boolean checkIfInsideRadius(ZWFixture fixture, ZWVector ray){
         ZWVector fixturePosition = fixture.getPosition();
@@ -169,4 +167,5 @@ public class Grenade extends Entity {
         };
         return task;
     }
+
 }

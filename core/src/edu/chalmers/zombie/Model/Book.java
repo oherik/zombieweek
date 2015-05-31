@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.controller.ProjectileController;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
@@ -110,11 +111,11 @@ public class Book extends Entity {
     }
 
     @Override
-    protected void setBodyVelocity(ZWVector velocity){
+    public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
     @Override
-    protected void setAngularVelocity(float omega){
+    public void setAngularVelocity(float omega){
         super.setAngularVelocity(omega);
     }
 
@@ -141,10 +142,9 @@ public class Book extends Entity {
     //TODO move to EntityController
     public void setInMotion(){
         force.setLength(speed);
-        force.setAngleRad(direction + Constants.PI*1/2);
+        force.setAngleRad(direction + Constants.PI * 1 / 2);
         force.add(initialVelocity); // Add the player velocity
-        setBodyVelocity(force);
-        setAngularVelocity(omega);
+        ProjectileController.setInMotion(this, force, direction, omega);
     }
 
     /**

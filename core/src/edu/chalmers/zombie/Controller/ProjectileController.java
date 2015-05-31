@@ -1,12 +1,11 @@
 package edu.chalmers.zombie.controller;
 
+import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.adapter.Grenade;
-import edu.chalmers.zombie.model.AimingSystem;
-import edu.chalmers.zombie.model.Book;
+import edu.chalmers.zombie.adapter.ZWVector;
+import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
@@ -88,5 +87,10 @@ public class ProjectileController {
         AimingSystem aimingSystem = player.getAimingController().getAimingSystem();
         Grenade grenade = new Grenade(aimingSystem.getMouseX(), aimingSystem.getMouseY(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
         gameModel.addGrenade(grenade);
+    }
+    public static void setInMotion(Entity entity, ZWVector force, float direction, float omega){
+        force.setAngleRad(direction + Constants.PI*1/2);
+        entity.setBodyVelocity(force);
+        entity.setAngularVelocity(0);
     }
 }

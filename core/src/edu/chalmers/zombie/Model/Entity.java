@@ -96,7 +96,7 @@ public abstract class Entity {
      * Makes the body move linearly
      * @param velocity  The body's new velocity
      */
-    protected void setBodyVelocity(ZWVector velocity){
+    public void setBodyVelocity(ZWVector velocity){
         this.body.setLinearVelocity(velocity);
     }
 
@@ -104,7 +104,7 @@ public abstract class Entity {
      * Maked the body rotate
      * @param omega The angular velocity
      */
-    protected void setAngularVelocity(float omega){
+    public void setAngularVelocity(float omega){
         this.body.setAngularVelocity(omega);
     }
 
