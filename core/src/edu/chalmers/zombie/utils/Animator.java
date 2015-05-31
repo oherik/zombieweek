@@ -24,14 +24,12 @@ public class Animator {
     private long systemTime; //stores system time
     private int currentStillFrame;
 
-
     /**
      * Creates an empty Animator
      */
     public Animator(){
         stillFrames = new ArrayList<ZWTextureRegion>();
     }
-
 
     /**
      * Created an Animator with frames and a time delay.
@@ -63,23 +61,32 @@ public class Animator {
         this.stillFrames = stillFrames;
     }
 
+    /**
+     * Adds still frame
+     * @param stillFrame The frame
+     */
     public void addStillFrame(ZWTextureRegion stillFrame){
         stillFrames.add(stillFrame);
     }
 
-
+    /**
+     * Sets overlay frame
+     * @param overlayFrame The frame that will overlay
+     */
     public void setOverlayFrame(ZWTextureRegion overlayFrame){
         this.overlayFrame = overlayFrame;
 
     }
 
+    /**
+     * Set the time to overlay starting now
+     * @param overlayTime The time in milliseconds
+     */
     public void setOverlay(int overlayTime){
         this.overlayTime = overlayTime;
         overlay = true;
         systemTime = System.currentTimeMillis();
     }
-
-
 
     /**
      * Updates the animation
@@ -100,13 +107,6 @@ public class Animator {
         while (time>= timeDelay){
             step();
         }
-    }
-
-    /**
-     * Makes animation step once
-     */
-    public void stepOnce(){
-        step();
     }
 
     /**
@@ -180,11 +180,4 @@ public class Animator {
 
         return  combinedTextureRegion;
     }
-
-    /**
-     * @param timeDelay The time delay
-     */
-    public void setTimeDelay(float timeDelay){this.timeDelay = timeDelay;}
-
-
 }
