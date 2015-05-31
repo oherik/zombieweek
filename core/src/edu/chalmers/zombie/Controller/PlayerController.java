@@ -191,6 +191,16 @@ public class PlayerController {
     }
 
     /**
+     * Makes player throw book
+     */
+    public static void throwBook(){
+        Player player = getPlayer();
+        AimingController aimingController = new AimingController(player);
+        aimingController.throwBook();
+        player.getAnimator().setOverlay(400); //time in millisec of Hand to be shown when trowing
+    }
+
+    /**
      * A method which controls the picking up of a potion, and the effects of it.
      * @param player the player picking up the potion.
      * @param potion the potion being picked up.

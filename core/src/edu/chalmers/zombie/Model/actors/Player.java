@@ -349,13 +349,6 @@ public class Player extends Entity implements CreatureInterface {
         return this.aimingController;
     }
 
-    //TODO : move to PlayerController
-    public void throwBook(){
-        aimingController.throwBook();
-        getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
-    }
-
-
     public int getWaterTilesTouching(){
         return waterTilesTouching;
     }

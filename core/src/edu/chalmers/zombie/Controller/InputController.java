@@ -134,9 +134,7 @@ public class InputController extends ZWInputProcessor {
      * Throws a book
      */
     private void throwBook(){
-        Player player = gameModel.getPlayer();
-        player.throwBook();
-
+        PlayerController.throwBook();
         AudioController.playSound(gameModel.res.getSound("throw"));
     }
     /**
