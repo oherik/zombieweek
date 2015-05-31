@@ -59,7 +59,7 @@ public class GameScreen extends ZWScreen{
         //TODO: add NextLevelStage as inputprocessor here
         inputMultiplexer.addInputProcessor(GameModel.getInstance().getScreenModel().getSoundAndSettingStage());
         inputMultiplexer.addInputProcessor(new InputController());
-        
+
         ZWGameEngine.setInputProcessor(inputMultiplexer);
 
     }
