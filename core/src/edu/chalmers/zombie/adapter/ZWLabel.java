@@ -27,4 +27,8 @@ public class ZWLabel {
     public void scale(float scale){this.font.getBitmapFont().scale(scale);}
 
     public Label getLabel(){return this.label;}
+
+    public void setLabel(String str){
+        label = new Label(str, labelStyle);
+    }
 }
