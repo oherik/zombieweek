@@ -35,8 +35,8 @@ public class GameModel {
      * Initializes the game model
      */
     private GameModel(){
-        currentLevel = 1;
-        currentRoom = 2;   //TODO test
+        currentLevel = 0;
+        currentRoom = 0;   //TODO test
         res = new ResourceManager();
         stepping=false;
         levels = new ArrayList<Level>();
