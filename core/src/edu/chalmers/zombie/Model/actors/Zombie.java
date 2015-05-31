@@ -239,7 +239,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * @return position (Point).
      */
     public Point getZombiePosition() {
-
+        position.x = Math.round(getX()-0.5f);
+        position.y = Math.round(getY()-0.5f);
         return position;
     }
 
@@ -288,6 +289,9 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return force;
     }
 
+    public void clearNextPathTile(){
+        this.nextPathTile = getZombiePosition();
+    }
     /**
      * A method which returns the point of applied force on zombie.
      * @return point (ZWVector).
