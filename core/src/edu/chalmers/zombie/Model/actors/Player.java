@@ -1,6 +1,6 @@
 package edu.chalmers.zombie.model.actors;
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.AimingController;
+import edu.chalmers.zombie.model.AimingSystem;
 import edu.chalmers.zombie.utils.*;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
@@ -16,8 +16,9 @@ public class Player extends Entity implements CreatureInterface {
 
     private int killCount;
     private int lives;
+    private int maxLives = 100;
     private int ammunition;
-    private int grenadeAmmo = 5; //TODO: remove?
+    private int grenadeAmmo = 5;
     private boolean isHidden;
     private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
@@ -28,8 +29,7 @@ public class Player extends Entity implements CreatureInterface {
     private int waterTilesTouching;
     private int sneakTilesTouching;
     private Thread keyThread; //Keeps track of key releases
-    //The hand is throwing the book and aiming.
-    private AimingController aimingController = new AimingController(this);
+    private AimingSystem aimingSystem = new AimingSystem(this);
 
     private boolean isHit = false;
     private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
@@ -37,16 +37,13 @@ public class Player extends Entity implements CreatureInterface {
     public Player(PlayerType type, ZWBody body, ZWWorld world, float x, float y) {
         super(GameModel.getInstance().res.getTexture(type.getImageAnimatedKey()), world, x, y, Constants.PLAYER_SIZE);
 
+
+
         //Set still image frame
-        ZWTexture stillTexture = GameModel.getInstance().res.getTexture(type.getImageStandingStillKey());
-        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
-        getAnimator().addStillFrame(stillFrame[0]);
+        addStillImage(type);
 
         //Set overlay image (Hand)
-        ZWTexture overlayTexture = GameModel.getInstance().res.getTexture(type.getImageOverlayKey());
-        System.out.println(overlayTexture.getTexture());
-        ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
-        getAnimator().setOverlayFrame(overlayFrame);
+        setOverlayImage(type);
 
         setWaterTilesTouching(0);
         setSneakTilesTouching(0);
@@ -56,18 +53,36 @@ public class Player extends Entity implements CreatureInterface {
 
         killCount = 0;
         ammunition = 5;
-        lives = 100;
+        lives = maxLives;
         force = new ZWVector(0,0);
 
         setBody(body);
         super.scaleSprite(1f / Constants.TILE_SIZE);
     }
 
+    public void addStillImage(PlayerType type){
+        ZWTexture stillTexture = GameModel.getInstance().res.getTexture(type.getImageStandingStillKey());
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
+        getAnimator().addStillFrame(stillFrame[0]);
+    }
+
+    public void setStandingStillImage(PlayerType type){
+        ZWTexture stillTexture = GameModel.getInstance().res.getTexture(type.getImageStandingStillKey());
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
+        getAnimator().setStillFrame(stillFrame[0],0);
+    }
+
+    public void setOverlayImage(PlayerType type){
+        ZWTexture overlayTexture = GameModel.getInstance().res.getTexture(type.getImageOverlayKey());
+        ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
+        getAnimator().setOverlayFrame(overlayFrame);
+    }
+
     /**
      * A method to get current players kill count.
      * @return int killCount.
      */
-    public int getKillCount() { //TODO: remove?
+    public int getKillCount() {
         return killCount;
     }
 
@@ -120,8 +135,6 @@ public class Player extends Entity implements CreatureInterface {
      */
     public float getSpeed(){return this.speed;}
 
-    public void setForceLength(float speed){force.setLength(speed);}//TODO: remove?
-
     public ZWVector getForce(){return this.force;}
 
     /**
@@ -139,15 +152,6 @@ public class Player extends Entity implements CreatureInterface {
     @Override
     public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
-    }
-
-    /**
-     * A method used when player is attacking zombie.
-     * @param zombie the zombie that is attacked.
-     */
-    public void attack(Zombie zombie) {//TODO: remove?
-
-        // TODO: fill in with attack of zombie instance
     }
 
     @Override
@@ -173,13 +177,6 @@ public class Player extends Entity implements CreatureInterface {
 
         return super.getBody();
     }
-
-    /**
-     * A method that increases ammuntion.
-     */
-    public void addBook(){
-        ++ammunition;
-    } //TODO: remove?
 
     /**
      * Since the ammunition count can't be negative it checks if it's >0 before decreasing it
@@ -251,9 +248,6 @@ public class Player extends Entity implements CreatureInterface {
      * A method which returns the player's Hand instance.
      * @return hand instance (Hand).
      */
-    public AimingController getAimingController(){
-        return this.aimingController;
-    }
 
     public int getWaterTilesTouching(){
         return waterTilesTouching;
@@ -294,4 +288,29 @@ public class Player extends Entity implements CreatureInterface {
     public boolean isHit(){
         return isHit;
     }
+
+    /**
+     * Decreases grenade ammunition with 1
+     */
+    public void decreaseGrenadeAmmunition(){
+        this.grenadeAmmo = this.grenadeAmmo - 1;
+    }
+
+    public int getGrenadeAmmo(){
+        return grenadeAmmo;
+    }
+
+    /**
+     * Refills life
+     */
+    public void lifeRefill() {
+        this.lives = maxLives;
+    }
+
+    public float getRadDirection(){
+        return GameModel.getInstance().getAimingSystem().getDirection();
+    }
+
+
+
 }

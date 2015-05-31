@@ -4,7 +4,7 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.MenuController;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.ScreenModel;
-import edu.chalmers.zombie.controller.SaveLoadController;
+import edu.chalmers.zombie.utils.SaveLoadGame;
 
 /**
  * The main menu screen of the game
@@ -15,9 +15,6 @@ public class MainMenuScreen extends ZWScreen {
 
     @Override
     public void show() {
-        SaveLoadController saveLoadController = new SaveLoadController(); //TODO: should not be instantiated here, but loads saved game to gameModel and therefore needed
-        saveLoadController.loadGame();
-        
         MenuController.initializeMenus();
 
         System.out.println("--- MAIN MENU ---");
@@ -34,10 +31,6 @@ public class MainMenuScreen extends ZWScreen {
         ScreenModel screenModel = GameModel.getInstance().getScreenModel();
         ScreenModel.MenuState menuState = screenModel.getMenuState();
         switch (menuState){
-            case MAIN_MENU:
-                screenModel.getMainStage().act();
-                screenModel.getMainStage().draw();
-                break;
             case LEVEL_MENU:
                 screenModel.getLevelChooserStage().act();
                 screenModel.getLevelChooserStage().draw();
@@ -49,6 +42,14 @@ public class MainMenuScreen extends ZWScreen {
             case CHARACTER_MENU:
                 screenModel.getCharacterStage().act();
                 screenModel.getCharacterStage().draw();
+                break;
+            case GAMEMODE_STATE:
+                screenModel.getGameModeStage().act();
+                screenModel.getGameModeStage().draw();
+                break;
+            default: //main menu
+                screenModel.getMainStage().act();
+                screenModel.getMainStage().draw();
                 break;
         }
     }

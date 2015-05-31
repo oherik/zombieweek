@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
@@ -67,9 +66,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
-        SpawnController.setCollisionObjects();
-
-                isKnockedOut = false;
+        isKnockedOut = false;
 
         //Set system time created
         timeSinceLastPath = System.currentTimeMillis();
@@ -242,7 +239,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * @return position (Point).
      */
     public Point getZombiePosition() {
-
+        position.x = Math.round(getX()-0.5f);
+        position.y = Math.round(getY()-0.5f);
         return position;
     }
 
@@ -291,6 +289,9 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return force;
     }
 
+    public void clearNextPathTile(){
+        this.nextPathTile = getZombiePosition();
+    }
     /**
      * A method which returns the point of applied force on zombie.
      * @return point (ZWVector).

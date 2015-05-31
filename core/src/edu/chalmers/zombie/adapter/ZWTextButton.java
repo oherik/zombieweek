@@ -18,6 +18,8 @@ public class ZWTextButton {
         this.textButton.addListener(new ZWClickListener(zwClickAction));
     }
 
+    public void setDisabled(boolean bool){textButton.setDisabled(bool);}
+
 
     public void toggle(){this.textButton.toggle();}
 }

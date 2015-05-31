@@ -13,8 +13,6 @@ public class ZWLabel {
     private com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle;
 
     public ZWLabel(String text){
-
-
         com.badlogic.gdx.utils.StringBuilder stringBuilder = new com.badlogic.gdx.utils.StringBuilder();
         stringBuilder.append(text);
 
@@ -22,6 +20,13 @@ public class ZWLabel {
         font = new ZWBitmapFont(); //sets font to 15pt Arial, if we want custom font -> via constructor
 
         labelStyle.font = font.getBitmapFont();
+
+        setLabel(text);
+    }
+
+    public void setColor(float r, float g, float b, float a){
+        font.setColor(r,g,b,a);
+        label.getStyle().font = font.getBitmapFont();
     }
 
     public void scale(float scale){this.font.getBitmapFont().scale(scale);}

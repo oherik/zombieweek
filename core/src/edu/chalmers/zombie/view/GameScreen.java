@@ -8,8 +8,6 @@ import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 
-import java.awt.*;
-
 /**
  * The applications game screen
  *
@@ -24,8 +22,8 @@ public class GameScreen extends ZWScreen{
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
     private ZWBatch batch;
-
-     private ZWShapeRenderer grenadeShapeRenderer = new ZWShapeRenderer();
+    private FlashlightController flashlightController = new FlashlightController();
+    private ZWShapeRenderer grenadeShapeRenderer = new ZWShapeRenderer();
 
     /**
      * Creates a game screen with the default tile size
@@ -62,6 +60,7 @@ public class GameScreen extends ZWScreen{
 
         ZWGameEngine.setInputProcessor(inputMultiplexer);
 
+        GameModel.getInstance().getAimingSystem().setPlayer(GameModel.getInstance().getPlayer());
     }
 
     /* ------ Setters and getters ------ */
@@ -152,12 +151,12 @@ public class GameScreen extends ZWScreen{
             player.draw(batch);
 
            /* ------ Draw the aimer ------ */
-            player.getAimingController().drawAimer(batch);
+            AimingController.drawAimer(batch);
             batch.end();
 
             grenadeShapeRenderer.setAutoShapeType(true);
             grenadeShapeRenderer.begin();
-            player.getAimingController().drawGrenadeAimer(grenadeShapeRenderer);
+            AimingController.drawGrenadeAimer(grenadeShapeRenderer);
             grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
             if (gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
@@ -186,25 +185,27 @@ public class GameScreen extends ZWScreen{
 
         }
 
+                        /* ----------------- TEST FLASHLIGHT -----------------*/
 
-
-            if (gameModel.isFlashlightEnabled()){
-                renderer.setCombinedCameraBatch();
-                gameModel.getFlashlight().draw(psb);
-
-            } else{
-                darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
-                sb.begin();
-                darkness.draw(sb);
-                sb.end();
+            if (gameModel.isFearOfTheDark()) {
+                if (gameModel.isFlashlightEnabled()){
+                    renderer.setCombinedCameraBatch();
+                    flashlightController.draw(gameModel.getFlashlightModel(),psb);
+                } else{
+                    darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
+                    sb.begin();
+                    darkness.draw(sb);
+                    sb.end();
+                }
             }
+
 
             drawBlood();
 
             int[] foregroundLayers = {3};
             renderer.renderMapLayer(foregroundLayers);
 
-            renderer.renderBox2DDebug(gameModel.getRoom().getWorld());  //TODO debug
+        //    renderer.renderBox2DDebug(gameModel.getRoom().getWorld());  //Uncomment to render all BOx2d bodies
 
             /* ------ Render HUD ------ */
         String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
@@ -215,8 +216,8 @@ public class GameScreen extends ZWScreen{
         bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
         bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
-        bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
-        bitmapFont.draw(batchHUD, level, 10, ZWGameEngine.getWindowHeight() - 55);
+        //bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
+        bitmapFont.draw(batchHUD, level, 10, ZWGameEngine.getWindowHeight() - 40);
         batchHUD.end();
 
         /** Render settings and sound buttons **/

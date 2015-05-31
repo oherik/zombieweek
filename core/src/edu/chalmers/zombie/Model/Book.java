@@ -12,13 +12,11 @@ public class Book extends Entity {
     private float direction;
     private int speed, omega, damage;
 
-    private ZWVector initialVelocity;
-
     private long timeCreated;
     private boolean onGround;
 
     public Book(float x, float y, Room room){
-        this(0,x,y,room.getWorld(),new ZWVector(0,0));
+        this(0,x,y,room.getWorld());
         speed = 0;
         ZWBody body = new ZWBody();
         body.createBodyDef(true, x+0.5f, y+0.5f, 0, 0, true);
@@ -34,14 +32,12 @@ public class Book extends Entity {
      * @param x The player's x position
      * @param y The player's y position
      * @param world In which world to create the physical representation of the book
-     * @param initialVelocity  The speed which to add to the throwing speed
      */
-    public Book(float d, float x, float y, ZWWorld world, ZWVector initialVelocity) {
+    public Book(float d, float x, float y, ZWWorld world) {
         super(world);
 
         //Set variables
         this.direction=d;
-        this.initialVelocity = initialVelocity;
         force = new ZWVector(1,1); //if 0,0 setLength wont work
 
         ZWBody body = new ZWBody();
@@ -72,6 +68,14 @@ public class Book extends Entity {
 
 
     }
+
+    /**
+     * @return The angular speed
+     */
+    public float getOmega(){
+        return omega;
+    }
+
     public boolean isOnGround(){
         return this.onGround;
     }
@@ -85,6 +89,13 @@ public class Book extends Entity {
      */
     public int getDamage(){
         return damage;
+    }
+
+    /**
+     * @return The direction the book is being thrown in
+     */
+    public float getDirection(){
+        return direction;
     }
 
     /**
@@ -110,42 +121,30 @@ public class Book extends Entity {
     }
 
     @Override
-    protected void setBodyVelocity(ZWVector velocity){
+    public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
     @Override
-    protected void setAngularVelocity(float omega){
+    public void setAngularVelocity(float omega){
         super.setAngularVelocity(omega);
     }
 
+    /**
+     * @return  The book's throwing force
+     */
+    public ZWVector getForce(){
+        return force;
+    }
 
     /**
-     * Get updated position to be in front of the coordinates given.
-     * @return The new position for the book
+     * @return The speed the book will be thrown at
      */
-    //TODO move to EntityController
-    public ZWVector getUpdatedPosition(float x, float y){
-        float distance = 0f;
-        ZWVector position = new ZWVector(x,y);
-        position.setY((float)(y + distance*Math.sin(direction + Constants.PI/2)));
-        position.setX((float)(x + distance*Math.cos(direction + Constants.PI/2)));
 
-        return position;
-
+    public int getThrowingSpeed(){
+        return speed;
     }
 
 
-    /**
-     *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
-     */
-    //TODO move to EntityController
-    public void setInMotion(){
-        force.setLength(speed);
-        force.setAngleRad(direction + Constants.PI*1/2);
-        force.add(initialVelocity); // Add the player velocity
-        setBodyVelocity(force);
-        setAngularVelocity(omega);
-    }
 
     /**
      * @return  The book's mass

@@ -12,59 +12,35 @@ import edu.chalmers.zombie.utils.Constants;
  * Created by daniel on 5/12/2015.
  */
 public class AimingController {
-    private AimingSystem aimingSystem;
-    private Thread aimRight = new Thread();
-    private Thread aimLeft = new Thread();
 
-    public AimingController(Player player){
-        aimingSystem = new AimingSystem(player);
-    }
-
-
-    public void startAimingRight() {
+    public static void startAimingRight() {
+        final AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         if (!aimingSystem.isMouseAiming()) {
-            aimLeft.stop();
-            aimRight = new Thread() {
-                public void run() {
-                    while (true) {
-                        aimingSystem.setDirection((float) (aimingSystem.getDirection() - 0.1));
-                        try {
-                            this.sleep(50);
-                        } catch (InterruptedException e) {
-
-                        }
-
-                    }
-                }
-            };
-            aimRight.start();
+            Thread aimLeft = aimingSystem.getAimLeft();
+            Thread aimRight = aimingSystem.getAimRight();
+            aimLeft.suspend();
+            aimRight.resume();
 
         }
     }
-    public void startAimingLeft(){
+    public static void startAimingLeft(){
+        final AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         if (!aimingSystem.isMouseAiming()) {
-            aimRight.stop();
-            aimLeft = new Thread() {
-                public void run() {
-                    while (true) {
-                        aimingSystem.setDirection((float) (aimingSystem.getDirection() + 0.1));
-                        try {
-                            this.sleep(50);
-                        } catch (InterruptedException e) {
-
-                        }
-
-                    }
-                }
-            };
-            aimLeft.start();
+            Thread aimRight = aimingSystem.getAimRight();
+            Thread aimLeft = aimingSystem.getAimLeft();
+            aimRight.suspend();
+            aimLeft.resume();
         }
     }
-    public void stopAiming(){
-        aimRight.stop();
-        aimLeft.stop();
+    public static void stopAiming(){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
+        Thread aimRight = aimingSystem.getAimRight();
+        Thread aimLeft = aimingSystem.getAimLeft();
+        aimRight.suspend();
+        aimLeft.suspend();
     }
-    public void drawAimer(ZWBatch batch){
+    public static void drawAimer(ZWBatch batch){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         ZWSprite aimer = aimingSystem.getSprite();
         float direction = aimingSystem.getDirection();
         Player player = aimingSystem.getPlayer();
@@ -77,7 +53,8 @@ public class AimingController {
         }
 
     }
-    public void drawGrenadeAimer(ZWShapeRenderer shapeRenderer){
+    public static void drawGrenadeAimer(ZWShapeRenderer shapeRenderer){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         if (aimingSystem.isThrowingGrenade()){
             float mouseX = aimingSystem.getMouseX();
             float mouseY = aimingSystem.getMouseY();
@@ -87,24 +64,29 @@ public class AimingController {
             shapeRenderer.circle(mouseX, mouseY, 20);
         }
     }
-    public void toggleMouseAiming(){
+    public static void toggleMouseAiming(){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         stopAiming();
         aimingSystem.toggleMouseAiming();
     }
 
-    public void setMousePosition(int x, int y){
+    public static void setMousePosition(int x, int y){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         aimingSystem.setMousePosition(x, y);
     }
-    public void toggleGrenadeThrowing(){
+    public static void toggleGrenadeThrowing(){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         aimingSystem.toggleGrenadeThrowing();
     }
-    public float getDirection(){
+    public static float getDirection(){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         return aimingSystem.getDirection();
     }
-    public boolean isThrowingGrenade(){
+    public static boolean isThrowingGrenade(){
+        AimingSystem aimingSystem = GameModel.getInstance().getAimingSystem();
         return aimingSystem.isThrowingGrenade();
     }
-    public AimingSystem getAimingSystem(){
-        return aimingSystem;
+    public static AimingSystem getAimingSystem(){
+       return GameModel.getInstance().getAimingSystem();
     }
 }

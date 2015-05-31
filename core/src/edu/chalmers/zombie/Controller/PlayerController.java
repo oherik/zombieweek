@@ -1,8 +1,7 @@
 package edu.chalmers.zombie.controller;
 
-import edu.chalmers.zombie.adapter.ZWBody;
-import edu.chalmers.zombie.adapter.ZWVector;
-import edu.chalmers.zombie.adapter.ZWWorld;
+import com.badlogic.gdx.Game;
+import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.model.Room;
@@ -29,7 +28,7 @@ public class PlayerController {
      */
     public static Player createPlayer(ZWWorld world, float x, float y){
         Player player = getPlayer();
-
+        System.out.println("Create player called");
         if(player!=null && player.getBody()!=null) {
             player.removeBody();
         }
@@ -61,6 +60,8 @@ public class PlayerController {
      * @param y The y coordinate
      */
     public static void setWorldAndPosition(ZWWorld world, float x, float y){
+        System.out.println("Set world and position");
+
         ZWBody body = createDefaultBody(x, y);
         Player player = getPlayer();
         player.setWorld(world);
@@ -250,9 +251,7 @@ public class PlayerController {
      * @return A new default body
      */
     public static ZWBody createDefaultBody(float x, float y){
-        System.out.println("creates default body");
-
-        float dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
+           float dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         ZWBody body = new ZWBody();
         body.createBodyDef(true,x,y,dampening,dampening);
@@ -441,6 +440,20 @@ public class PlayerController {
             if(player.getWaterTilesTouching()<0) {
                 player.setWaterTilesTouching(0);
             }
+        }
+    }
+
+    public static void genderSwopIfNeeded(){
+        Player player = getPlayer();
+
+        if (player!=null) {
+            PlayerType type = GameModel.getInstance().getPlayerType();
+            ZWTexture texture = GameModel.getInstance().res.getTexture(type.getImageAnimatedKey());
+            ZWTextureRegion[] textureRegions = ZWTextureRegion.split(texture, Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
+
+            player.setAnimator(textureRegions, 1 / 12f);
+            player.setOverlayImage(type);
+            player.setStandingStillImage(type);
         }
     }
 }

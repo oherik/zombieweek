@@ -1,14 +1,12 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.Flashlight;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PlayerType;
 import edu.chalmers.zombie.utils.ResourceManager;
 import edu.chalmers.zombie.adapter.ZWRenderer;
-import edu.chalmers.zombie.view.GameScreen;
 
 import java.awt.*;
 import java.util.*;
@@ -33,9 +31,11 @@ public class GameModel {
     private ZWRenderer ZWRenderer;
     private ScreenModel screenModel;
     private ZWSprite darknessSprite;
-    private Flashlight flashlight;
+    private FlashlightModel flashlightModel;
     private PlayerType playerType;
-
+    private AimingSystem aimingSystem;
+    private boolean firstTimePlay = true;
+    private boolean fearOfTheDark = true;
 
     /**
      * Initializes the game model
@@ -58,7 +58,8 @@ public class GameModel {
         initializeSounds();
         initializeRooms();
         darknessSprite = new ZWSprite(res.getTexture("darkness-overlay"));
-        flashlight = new Flashlight(getRoom().getWorld());
+        flashlightModel = new FlashlightModel(getRoom().getWorld());
+        aimingSystem = new AimingSystem(player);
        }
 
     private void initializeRenderTextures(){
@@ -105,6 +106,9 @@ public class GameModel {
         res.loadTexture("emilia","core/assets/Images/emilia.png");
         res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");
         res.loadTexture("emilia-still","core/assets/Images/emilia-still.png");
+        res.loadTexture("emil","core/assets/Images/emil.png");
+        res.loadTexture("emil-hand","core/assets/Images/emil-hand.png");
+        res.loadTexture("emil-still","core/assets/Images/emil-still.png");
     }
 
     private void initializePotionTextures(){
@@ -124,6 +128,13 @@ public class GameModel {
         res.loadSound("zombie_sleeping", "core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
     }
 
+    public AimingSystem getAimingSystem(){
+        return aimingSystem;
+    }
+
+    public void setAimingSystem(AimingSystem aimingSystem){
+        this.aimingSystem = aimingSystem;
+    }
 
     /**
      * @return  The current instance of the game model
@@ -340,6 +351,10 @@ public class GameModel {
 
     public int getHighestCompletedRoom(){return highestCompletedRoom;}
 
+    public void setHighestCompletedLevel(int level){this.highestCompletedLevel = level;}
+
+    public int getHighestCompletedLevel(){return highestCompletedLevel;}
+
     public void clearBookList(){
         getRoom().getBooks().clear();
     }
@@ -359,8 +374,8 @@ public class GameModel {
 
     public void setScreenModel(ScreenModel screenModel){this.screenModel = screenModel;}
 
-    public Flashlight getFlashlight(){
-        return flashlight;
+    public FlashlightModel getFlashlightModel(){
+        return flashlightModel;
     }
 
     public PlayerType getPlayerType() {
@@ -374,4 +389,17 @@ public class GameModel {
         this.playerType = playerType;
     }
 
+    public int getAmountOfLevelsInGame(){return levels.size();}
+
+    public boolean isFearOfTheDark(){
+        return fearOfTheDark;
+    }
+
+    public void setFearOfTheDark(boolean b){
+        fearOfTheDark = b;
+    }
+
+    public void setfirstTimePlay(boolean b){firstTimePlay = b;}
+
+    public boolean isFirstTimePlay(){return firstTimePlay;}
 }

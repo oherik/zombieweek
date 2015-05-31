@@ -1,27 +1,24 @@
-package edu.chalmers.zombie.controller;
+package edu.chalmers.zombie.utils;
 
 import edu.chalmers.zombie.model.GameModel;
 import java.io.*;
 import java.util.Properties;
 
 /**
- * Save and load game
+ * Save and load game using local file on device. If never played before, will create file.
  *
  * Created by Tobias on 15-05-12.
  */
-public class SaveLoadController {
+public class SaveLoadGame {
 
     private String fileName;
-    private GameModel gameModel;
     private OutputStream output;
     private InputStream input;
     private Properties properties;
 
-    public SaveLoadController(){
+    public SaveLoadGame(){
         fileName = "savedGame.properties";
-        gameModel = GameModel.getInstance();
         properties = new Properties();
-        //loadGame(); //loads current game data from file
     }
 
 
@@ -30,7 +27,6 @@ public class SaveLoadController {
      */
     public void saveGame(){
         updateProperties();
-
         try {
             output = new FileOutputStream(fileName);
             properties.store(output, null); //saving properties to file
@@ -61,12 +57,15 @@ public class SaveLoadController {
             System.out.println("--- LOADING GAMEFILE PROPERTIES ---");
 
             int highestReachedLevel = getHighestLevelFromProperties();
-            gameModel.setHighestCompletedRoom(highestReachedLevel);
+            GameModel.getInstance().setHighestCompletedLevel(highestReachedLevel);
+
+            GameModel.getInstance().setfirstTimePlay(false);
 
             //TODO: Save properties to gameModel
 
         } catch (IOException e) {
             System.out.println("--- FAILED TO LOAD GAME ---");
+            GameModel.getInstance().setfirstTimePlay(true);
             e.printStackTrace();
         } finally {
             if (input != null) {
@@ -82,26 +81,52 @@ public class SaveLoadController {
     }
 
     /**
+     * Loads properties from file
+     */
+    private void loadProperties(){
+        try {
+            input = new FileInputStream(fileName);
+            properties.load(input);
+        } catch (IOException e) {
+            System.out.println("--- FAILED TO LOAD GAME ---");
+            e.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    System.out.println("--- FAILED TO CLOSE INTPUT ---");
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
      * Updates properties from current game data
      */
     private void updateProperties(){
-        int level = gameModel.getCurrentRoomIndex();
-        int health = gameModel.getPlayer().getLives();
-        int ammo = gameModel.getPlayer().getAmmunition();
+        loadProperties();
+        GameModel gameModel = GameModel.getInstance();
+        int level = gameModel.getCurrentLevelIndex();
+        //int health = gameModel.getPlayer().getLives();
+        //int ammo = gameModel.getPlayer().getAmmunition();
         int highestReachedLevel = getHighestLevelFromProperties();
 
         //checks if player has reached a higher level than before
         if (level>=highestReachedLevel){
             properties.setProperty("highestReachedLevel", Integer.toString(level));
-            gameModel.setHighestCompletedRoom(level); //gives model the new highest completed level
+            gameModel.setHighestCompletedLevel(level); //gives model the new highest completed level
         } else {
             properties.setProperty("highestReachedLevel", Integer.toString(highestReachedLevel));
-            gameModel.setHighestCompletedRoom(highestReachedLevel);
+            gameModel.setHighestCompletedLevel(highestReachedLevel);
         }
 
+        System.out.println("Saved Highest reached levl: "+properties.getProperty("highestReachedLevel"));
+
         properties.setProperty("level", Integer.toString(level));
-        properties.setProperty("health", Integer.toString(health));
-        properties.setProperty("ammo", Integer.toString(ammo));
+        //properties.setProperty("health", Integer.toString(health));
+        //properties.setProperty("ammo", Integer.toString(ammo));
     }
 
     /**
@@ -109,8 +134,9 @@ public class SaveLoadController {
      * @return The highest level completed
      */
     private int getHighestLevelFromProperties(){
+        GameModel gameModel = GameModel.getInstance();
         int highestReachedLevel;
-        int level = gameModel.getCurrentRoomIndex();
+        int level = gameModel.getCurrentLevelIndex();
         String highest = properties.getProperty("highestReachedLevel");
         if (highest!=null){ //if property not saved
             highestReachedLevel = Integer.parseInt(highest);
@@ -120,15 +146,10 @@ public class SaveLoadController {
         return highestReachedLevel;
     }
 
-
     /**
      * @return A copy of the properties stored in file
      */
     public Properties getProperties(){
         return (Properties)properties.clone();
     }
-
-
-
-
 }

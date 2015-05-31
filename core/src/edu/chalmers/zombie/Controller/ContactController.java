@@ -70,7 +70,7 @@ public class ContactController {
                 } else{
                     if(fixtureB.getBodyUserData() instanceof Grenade){
                         Grenade g = (Grenade) fixtureB.getBodyUserData();
-                        g.stop();
+                        ProjectileController.stop(g);
                     }
                 }
                 break;
@@ -111,7 +111,7 @@ public class ContactController {
                             ProjectileController.applyHit(zombie, book);
                         } else{
                             Grenade g = (Grenade) fixtureA.getBodyUserData();
-                            g.stop();
+                            ProjectileController.stop(g);
                         }
                         break;
                     default:
