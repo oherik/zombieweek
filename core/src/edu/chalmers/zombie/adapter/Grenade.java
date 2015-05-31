@@ -83,7 +83,7 @@ public class Grenade extends Entity {
             stop();
         }
     }
-    private void stop(){
+    public void stop(){
         force.setLength(0);
         setBodyVelocity(force);
     }
