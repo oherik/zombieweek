@@ -22,6 +22,7 @@ public class AimingController {
     public void throwBook(){
         GameModel gameModel = GameModel.getInstance();
         Player player = aimingSystem.getPlayer();
+        System.out.println(aimingSystem.getDirection());
         Book book = new Book(aimingSystem.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
         book.setInMotion();
         gameModel.addBook(book);
