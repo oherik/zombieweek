@@ -157,15 +157,6 @@ public class MapController {
     }
 
     /**
-     * Updates the player's position
-     * @param point Where the player will be placed
-     */
-    public static void updatePlayerPosition(Point point){
-        GameModel gameModel = GameModel.getInstance();
-               gameModel.getPlayer().setPosition(point.x+0.5f, point.y+0.5f); //+0.5f so it will be placed in the middle of the tile
-    }
-
-    /**
      * Sets where the player should be when the world step is done
      * @param point Where the player will be placed after the step
      */
@@ -336,11 +327,12 @@ public class MapController {
 
             /* ------ Update player ------ */
             if(player == null){
-               player = PlayerController.createNewPlayer();
+               player = PlayerController.updatePlayer();
             }
             if(player.getBody() == null||!player.getBody().bodyIsInWorld(getRoom().getWorld())){
                 System.out.println(getPlayerBufferPosition());
-                player.createDefaultBody(currentRoom.getWorld(), (float) getPlayerBufferPosition().getX()+0.5f, (float) getPlayerBufferPosition().getY()+0.5f); //+0.5 since we want it palced in the middle of the tile
+
+                PlayerController.setWorldAndPosition(currentRoom.getWorld(), (float) getPlayerBufferPosition().getX()+0.5f, (float) getPlayerBufferPosition().getY()+0.5f);
             }
 
             /* ------ Update screen ------ */

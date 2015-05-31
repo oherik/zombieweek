@@ -67,16 +67,6 @@ public abstract class Entity {
     }
 
     /**
-     * Sets a body to use as a Box2D body
-     * @param bodyDef   The body's body definition
-     * @param fixDef    The body's fixture definition
-     */
-    /*public void setBody(BodyDef bodyDef, FixtureDef fixDef ){
-        this.body = world.createBody(bodyDef);
-        this.body.createFixture(fixDef);
-    }*/
-
-    /**
      * Scales the sprite
      * @param scale How the sprite should be scaled
      */
@@ -231,9 +221,7 @@ public abstract class Entity {
      */
     public void setBody(ZWBody body) {
         this.body=world.createBody(body);
-
         this.body.createFixture(); //TODO g�ras internt?
-
     }
 
     /**

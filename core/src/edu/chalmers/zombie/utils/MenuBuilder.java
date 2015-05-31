@@ -330,7 +330,7 @@ public class MenuBuilder {
         characterButtonLeft.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
-                //TODO: need to set emilia to correct player character
+                GameModel.getInstance().setPlayerType(PlayerType.EMILIA);
                 ZWGameEngine.setScreen(new GameScreen());
             }
         });
@@ -340,7 +340,7 @@ public class MenuBuilder {
         characterButtonRight.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
-                //TODO: need to set emil to correct player character
+                GameModel.getInstance().setPlayerType(PlayerType.EMIL);
                 ZWGameEngine.setScreen(new GameScreen());
             }
         });
