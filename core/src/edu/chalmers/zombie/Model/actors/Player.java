@@ -51,7 +51,7 @@ public class Player extends Entity implements CreatureInterface {
         setWaterTilesTouching(0);
         setSneakTilesTouching(0);
 
-        legPower =  350; //Styr maxhastigheten
+        legPower =  150; //Styr maxhastigheten
         //dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         killCount = 0;
