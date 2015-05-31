@@ -130,7 +130,7 @@ public class Grenade extends Entity {
                 }
             }
         }
-        this.markForRemoval();
+        EntityController.remove(this);
         this.getSprite().setAlpha(0);
     }
     private boolean checkIfInsideRadius(ZWFixture fixture, ZWVector ray){

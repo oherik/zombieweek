@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class Flashlight {
     private ZWWorld world;
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
-    private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
     private ZWVector playerPosition = new ZWVector();
     private ZWVector collisionPoint = new ZWVector();
     private float currentFraction = 1337;
@@ -105,7 +104,6 @@ public class Flashlight {
             ZWVector end = new ZWVector(rays[i]);
             end.add(playerPosition);
             endPoints.add(lengthenRay(playerPosition,end,0.4f));
-            int x = 0;
         }
     }
 
