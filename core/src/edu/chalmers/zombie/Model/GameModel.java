@@ -172,7 +172,7 @@ public class GameModel {
      */
     private void setRooms(ArrayList<Room> rooms){
         levels.get(currentLevel).setRooms(rooms);
-    }
+    } //TODO: remove?
 
     /**
      * @return  The current room

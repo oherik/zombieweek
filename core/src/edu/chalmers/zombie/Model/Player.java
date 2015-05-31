@@ -81,7 +81,7 @@ public class Player extends Entity implements CreatureInterface {
      * A method to get current players kill count.
      * @return int killCount.
      */
-    public int getKillCount() {
+    public int getKillCount() { //TODO: remove?
 
         return killCount;
     }
@@ -154,7 +154,7 @@ public class Player extends Entity implements CreatureInterface {
      */
     public float getSpeed(){return this.speed;}
 
-    public void setForceLength(float speed){force.setLength(speed);}
+    public void setForceLength(float speed){force.setLength(speed);}//TODO: remove?
 
     public ZWVector getForce(){return this.force;}
 
@@ -179,13 +179,13 @@ public class Player extends Entity implements CreatureInterface {
      * A method used when player is attacking zombie.
      * @param zombie the zombie that is attacked.
      */
-    public void attack(Zombie zombie) {
+    public void attack(Zombie zombie) {//TODO: remove?
 
         // TODO: fill in with attack of zombie instance
     }
 
     @Override
-    public void knockOut() {
+    public void knockOut() {//TODO: why is this called?
 
         // TODO: game over
     }
@@ -213,7 +213,7 @@ public class Player extends Entity implements CreatureInterface {
      */
     public void addBook(){
         ++ammunition;
-    }
+    } //TODO: remove?
 
     /**
      * Since the ammunition count can't be negative it checks if it's >0 before decreasing it
@@ -272,13 +272,6 @@ public class Player extends Entity implements CreatureInterface {
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
-    private void setDefaultBody(){
-        if(this.getBody()!=null) {
-            this.removeBody();
-        }
-
-
-    }
 
     /**
      * Creates a new default body at the given position
@@ -359,7 +352,7 @@ public class Player extends Entity implements CreatureInterface {
     //TODO: move to PlayerController
     public void throwGrenade(){
         hand.throwGrenade();
-    }
+    } //TODO: remove?
 
     public int getWaterTilesTouching(){
         return waterTilesTouching;
