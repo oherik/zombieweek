@@ -1,14 +1,11 @@
 package edu.chalmers.zombie.view;
 
 import edu.chalmers.zombie.adapter.*;
-
 import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;
-
-import java.awt.*;
 
 /**
  * The applications game screen
@@ -18,10 +15,6 @@ import java.awt.*;
  */
 public class GameScreen extends ZWScreen{
     private ZWWorld currentWorld;
-   // private OrthographicCamera camera;
-  //  private OrthogonalTiledMapRenderer mapRenderer;
-  //  private Box2DDebugRenderer boxDebug;
-    //private MapController mapController;
     private float tileSize;
     //HUD variables
     private ZWBitmapFont bitmapFont;
@@ -32,15 +25,8 @@ public class GameScreen extends ZWScreen{
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
 
-
-
-
-  //  private ShapeRenderer shapeRenderer = new ShapeRenderer();
-
-
     private Flashlight flashlight;
-  //  private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
-  //  private ShapeRenderer grenadeShapeRenderer = new ShapeRenderer();
+
     /**
      * Creates a game screen with the default tile size
      */

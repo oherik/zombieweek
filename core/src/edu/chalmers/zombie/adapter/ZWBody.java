@@ -28,7 +28,6 @@ public class ZWBody {
         if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
             this.fixture = box2Body.getFixtureList().get(0);
         fixtureDef = body.getFixtureDef();
-        //bodyDef = body.getBodyDef();
     }
 
     public boolean bodyIsInWorld(ZWWorld world){

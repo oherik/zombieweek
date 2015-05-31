@@ -12,33 +12,26 @@ public class ZWBatch {
     private PolygonSpriteBatch polygonSpriteBatch;
     private Batch batch;
     public ZWBatch(Batch batch){
-       // spriteBatch = new SpriteBatch();
         polygonSpriteBatch = new PolygonSpriteBatch();
         this.batch = batch;
         polygonSpriteBatch = new PolygonSpriteBatch();
     }
     public void begin(){
         batch.begin();
-        //spriteBatch.begin();
         polygonSpriteBatch.begin();
     }
     public void end(){
         batch.end();
-      //  spriteBatch.end();
         polygonSpriteBatch.end();
     }
     public void drawPolygonRegion(ZWPolygonRegion ZWPolygonRegion, float x, float y){
         polygonSpriteBatch.draw(ZWPolygonRegion.getPolygonRegion(), x, y);
     }
-   // public SpriteBatch getSpriteBatch(){
-   //     return spriteBatch;
-   // }
 
     public Batch getBatch(){
         return batch;
     }
     public void dispose(){
-        //spriteBatch.dispose();
         polygonSpriteBatch.dispose();
         batch.dispose();
     }
