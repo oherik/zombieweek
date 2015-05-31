@@ -62,6 +62,7 @@ public class GameScreen extends ZWScreen{
 
         ZWGameEngine.setInputProcessor(inputMultiplexer);
 
+        GameModel.getInstance().getAimingSystem().setPlayer(GameModel.getInstance().getPlayer());
     }
 
     /* ------ Setters and getters ------ */
@@ -152,12 +153,12 @@ public class GameScreen extends ZWScreen{
             player.draw(batch);
 
            /* ------ Draw the aimer ------ */
-            player.getAimingController().drawAimer(batch);
+            AimingController.drawAimer(batch);
             batch.end();
 
             grenadeShapeRenderer.setAutoShapeType(true);
             grenadeShapeRenderer.begin();
-            player.getAimingController().drawGrenadeAimer(grenadeShapeRenderer);
+            AimingController.drawGrenadeAimer(grenadeShapeRenderer);
             grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
             if (gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {

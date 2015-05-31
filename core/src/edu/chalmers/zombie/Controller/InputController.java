@@ -71,21 +71,21 @@ public class InputController extends ZWInputProcessor {
                 break;
             case Input.Keys.UP:
                 //aim left
-                getPlayer().getAimingController().startAimingLeft();
+                AimingController.startAimingLeft();
                 break;
             case Input.Keys.DOWN:
                 //aim right
-                getPlayer().getAimingController().startAimingRight();
+                AimingController.startAimingRight();
                 break;
             case Input.Keys.C:
                 //change aiming type
-                getPlayer().getAimingController().toggleMouseAiming();
+                AimingController.toggleMouseAiming();
                 break;
             case Input.Keys.F:
                 gameModel.toggleFlashlight();
                 break;
             case Input.Keys.G:
-                gameModel.getPlayer().getAimingController().toggleGrenadeThrowing();
+                AimingController.toggleGrenadeThrowing();
                 break;
             case Input.Keys.ESCAPE:
                 switch (gameModel.getGameState()) {
@@ -115,11 +115,12 @@ public class InputController extends ZWInputProcessor {
     private void tryThrowingBook(){
         Player player = gameModel.getPlayer();
         float distance = 1f;
-        float angle = player.getAimingController().getDirection()+Constants.PI*0.5f;
-        if (player.getAimingController().isThrowingGrenade() && player.getGrenadeAmmo() > 0){
+
+        float angle = AimingController.getDirection()+Constants.PI*0.5f;
+        if (AimingController.isThrowingGrenade() && player.getGrenadeAmmo() > 0){
             ProjectileController.throwGrenade();
             player.decreaseGrenadeAmmunition();
-        } else if (!player.getAimingController().isThrowingGrenade()){
+        } else if (!AimingController.isThrowingGrenade()){
             if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(new ZWVector(getPlayer().getBody().getPosition()), mapController.getRoom(),distance,angle) ) {
                 throwBook();
                 player.decreaseAmmunition();
@@ -156,7 +157,7 @@ public class InputController extends ZWInputProcessor {
 
             if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
                 //set aiming force to zero
-                getPlayer().getAimingController().stopAiming();
+                AimingController.stopAiming();
             } else {return false;}
         }
         return true;
@@ -193,7 +194,7 @@ public class InputController extends ZWInputProcessor {
     public boolean mouseMoved(int screenX, int screenY) {
         switch (gameModel.getGameState()) {
             case GAME_RUNNING:
-                getPlayer().getAimingController().setMousePosition(screenX, screenY);
+                AimingController.setMousePosition(screenX, screenY);
                 break;
             default:
                 break;

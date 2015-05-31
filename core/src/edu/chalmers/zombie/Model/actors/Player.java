@@ -28,8 +28,6 @@ public class Player extends Entity implements CreatureInterface {
     private int waterTilesTouching;
     private int sneakTilesTouching;
     private Thread keyThread; //Keeps track of key releases
-    //The hand is throwing the book and aiming.
-    private AimingController aimingController = new AimingController(this);
 
     private boolean isHit = false;
     private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
@@ -251,9 +249,6 @@ public class Player extends Entity implements CreatureInterface {
      * A method which returns the player's Hand instance.
      * @return hand instance (Hand).
      */
-    public AimingController getAimingController(){
-        return this.aimingController;
-    }
 
     public int getWaterTilesTouching(){
         return waterTilesTouching;
