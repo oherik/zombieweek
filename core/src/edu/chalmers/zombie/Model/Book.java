@@ -72,6 +72,14 @@ public class Book extends Entity {
 
 
     }
+
+    /**
+     * @return The angular speed
+     */
+    public float getOmega(){
+        return omega;
+    }
+
     public boolean isOnGround(){
         return this.onGround;
     }
@@ -85,6 +93,13 @@ public class Book extends Entity {
      */
     public int getDamage(){
         return damage;
+    }
+
+    /**
+     * @return The direction the book is being thrown in
+     */
+    public float getDirection(){
+        return direction;
     }
 
     /**
@@ -110,11 +125,11 @@ public class Book extends Entity {
     }
 
     @Override
-    protected void setBodyVelocity(ZWVector velocity){
+    public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
     }
     @Override
-    protected void setAngularVelocity(float omega){
+    public void setAngularVelocity(float omega){
         super.setAngularVelocity(omega);
     }
 
@@ -134,18 +149,21 @@ public class Book extends Entity {
 
     }
 
+    /**
+     * @return  The book's throwing force
+     */
+    public ZWVector getForce(){
+        return force;
+    }
 
     /**
-     *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
+     * @return The speed the book will be thrown at
      */
-    //TODO move to EntityController
-    public void setInMotion(){
-        force.setLength(speed);
-        force.setAngleRad(direction + Constants.PI*1/2);
-        force.add(initialVelocity); // Add the player velocity
-        setBodyVelocity(force);
-        setAngularVelocity(omega);
+    public int getThrowingSpeed(){
+        return speed;
     }
+
+
 
     /**
      * @return  The book's mass

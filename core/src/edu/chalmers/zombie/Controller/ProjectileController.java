@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.Grenade;
+import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.AimingSystem;
 import edu.chalmers.zombie.model.Book;
 import edu.chalmers.zombie.model.actors.Player;
@@ -63,6 +64,17 @@ public class ProjectileController {
     }
 
     /**
+     *  Starts moving the book using forces and angular rotation. The velocity of the book depends on if the player is moving and in which direction she's moving.
+     */
+    private static void setInMotion(Book b){
+        ZWVector force = b.getForce();
+        force.setLength(b.getThrowingSpeed());
+        force.setAngleRad(b.getDirection() + Constants.PI*1/2);
+        force.add(GameModel.getInstance().getPlayer().getVelocity()); // Add the player velocity
+        b.setBodyVelocity(force);
+        b.setAngularVelocity(b.getOmega());
+    }
+    /**
      * A player picks up a book
      * @param p The player
      * @param b The book
@@ -79,7 +91,7 @@ public class ProjectileController {
         Player player = gameModel.getPlayer();
         AimingSystem aimingSystem = player.getAimingController().getAimingSystem();
         Book book = new Book(aimingSystem.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
-        book.setInMotion();
+        setInMotion(book);
         gameModel.addBook(book);
     }
     public static void throwGrenade(){
