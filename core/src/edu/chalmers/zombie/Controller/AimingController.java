@@ -69,7 +69,7 @@ public class AimingController {
         float direction = aimingSystem.getDirection();
         Player player = aimingSystem.getPlayer();
         if (!aimingSystem.isThrowingGrenade()){
-            aimer.setPosition(player.getX() - 0.25f + (float) (Math.cos(direction + Constants.PI / 2)), player.getY() - 0.25f
+            aimer.setPosition(player.getX() - 0.5f + (float) (Math.cos(direction + Constants.PI / 2)), player.getY() - 0.5f
                     + (float) (Math.sin(direction + Constants.PI / 2)));
             aimer.setOriginCenter();
             aimer.setRotation((float) (direction * 57.2957795));
