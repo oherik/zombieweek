@@ -80,6 +80,7 @@ public class MenuBuilder {
 
     /**
      * Sets up the pause menu
+     * @return The ZWStage
      */
     public static ZWStage createPauseMenu(){
 
@@ -117,6 +118,10 @@ public class MenuBuilder {
         return pauseStage;
     }
 
+    /**
+     * Created the game over menu
+     * @return
+     */
     public static ZWStage createGameOverMenu(){
 
         ZWStage gameOverStage = new ZWStage();
@@ -185,6 +190,7 @@ public class MenuBuilder {
 
     /**
      * Sets up the stage for the main menu
+     * @return The ZWStage
      */
     public static ZWStage createMainStage(){
 
@@ -285,7 +291,7 @@ public class MenuBuilder {
 
     /**
      * Creates a back button in the top left of the screen
-     * @return
+     * @return The image button
      */
     private static ZWImageButton createBackButton(){
         /*--- Back button ---*/
@@ -309,6 +315,10 @@ public class MenuBuilder {
         return backIconButton;
     }
 
+    /**
+     * Creates the character menu
+     * @return The ZWStage
+     */
     public static ZWStage createCharacterStage(){
 
         ZWStage characterStage = new ZWStage();
@@ -364,6 +374,7 @@ public class MenuBuilder {
 
     /**
      * Sets up the stage for the settings menu
+     * @return The ZWStage
      */
     public static ZWStage createSettingsStage(){
         ZWStage settingsStage = new ZWStage();
