@@ -98,12 +98,22 @@ public class ProjectileController {
         Grenade grenade = new Grenade(aimingSystem.getMouseX(), aimingSystem.getMouseY(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
         setInMotion(grenade, grenade.getForce(), grenade.getDirection(), 0);
         initializeGrenadeTimer(grenade);
+        unproject(grenade);
         gameModel.addGrenade(grenade);
     }
     public static void setInMotion(Entity entity, ZWVector force, float direction, float omega){
         force.setAngleRad(direction + Constants.PI*1/2);
         entity.setBodyVelocity(force);
         entity.setAngularVelocity(omega);
+    }
+    private static void unproject(Grenade g){
+        ZWRenderer ZWRenderer = new ZWRenderer();
+        float unprojectedX = ZWRenderer.unprojectX(g.getTargetX());
+        float unprojectedY = ZWRenderer.unprojextY(g.getTargetY());
+        float width = ZWGameEngine.getWindowWidth()/Constants.TILE_SIZE;
+        float height = ZWGameEngine.getWindowHeight()/Constants.TILE_SIZE;
+        g.setTargetX(g.getOriginalPlayerPosition().getX() + unprojectedX*width/2);
+        g.setTargetY(g.getOriginalPlayerPosition().getY() - unprojectedY*height/2);
     }
 
     private static void initializeGrenadeTimer(Grenade g){
@@ -123,8 +133,8 @@ public class ProjectileController {
         return task;
     }
 
-    public static void explode(Grenade g){
-        g.stop();
+    private static void explode(Grenade g){
+        stop(g);
         ZWRayCastCallback callback = createCallback(g);
         ZWVector grenadePosition = new ZWVector(g.getX(), g.getY());
         ZWVector[] rays= new ZWVector[100];
@@ -165,6 +175,18 @@ public class ProjectileController {
                 (ray.getX() < fixturePosition.getX() && fixturePosition.getX() < g.getX())) &&
                 ((g.getY() < fixturePosition.getY() && fixturePosition.getY() < ray.getY()) ||
                         (ray.getY() < fixturePosition.getY() && fixturePosition.getY() < g.getY())));
+    }
+
+    public static void stopIfNeeded(Grenade g){
+        if ((g.getTargetX() - 0.1 < g.getX() && g.getX() < g.getTargetX() + 0.1) &&
+                (g.getTargetY() - 0.1 < g.getY() && g.getY() < g.getTargetY() + 0.1)){
+            stop(g);
+        }
+    }
+
+    public static void stop(Grenade g){
+        g.getForce().setLength(0);
+        g.setBodyVelocity(g.getForce());
     }
 
     private static ZWRayCastCallback createCallback(Grenade grenade){

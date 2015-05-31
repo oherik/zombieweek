@@ -362,7 +362,7 @@ public class MapController {
 
 
         /* ------- Updates projectiles ------*/
-        updateBooks();
+        updateProjectiles();
 
         if(gameModel.getPlayer()!=null && gameModel.getPlayer().getBody()!=null) {       //Another world is loading
 
@@ -410,6 +410,14 @@ public class MapController {
     /**
      * Updates projectiles
      */
+    private static void updateProjectiles(){
+        updateBooks();
+        updateGrenades();
+    }
+
+    /**
+     * Updates books
+     */
     private static void updateBooks(){
         GameModel gameModel = GameModel.getInstance();
         ArrayList<Book> books = gameModel.getBooks();
@@ -421,6 +429,19 @@ public class MapController {
                 ProjectileController.hitGround(b);
             if (b.toRemove())
                 books.remove(i); //Förenklad forsats skulle göra detta svårt
+        }
+    }
+
+    /**
+     * Updates grenades
+     */
+    private static void updateGrenades(){
+        GameModel gameModel = GameModel.getInstance();
+        ArrayList<Grenade> grenades = gameModel.getGrenades();
+        for(Grenade g : grenades) {
+            if (g.getForce().len() != 0) {
+                ProjectileController.stopIfNeeded(g);
+            }
         }
     }
 

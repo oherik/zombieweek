@@ -52,7 +52,6 @@ public class Grenade extends Entity {
         super.scaleSprite(1f / Constants.TILE_SIZE);
         getBody().setUserData(this);
         calculateDirection();
-        unproject();
         force.setLength(speed);
     }
     public ZWWorld getWorld(){
@@ -72,15 +71,7 @@ public class Grenade extends Entity {
     public ZWVector getForce(){
         return force;
     }
-    private void unproject(){
-        ZWRenderer ZWRenderer = new ZWRenderer();
-        float unprojectedX = ZWRenderer.unprojectX(targetX);
-        float unprojectedY = ZWRenderer.unprojextY(targetY);
-        float width = ZWGameEngine.getWindowWidth()/Constants.TILE_SIZE;
-        float height = ZWGameEngine.getWindowHeight()/Constants.TILE_SIZE;
-        this.targetX = originalPlayerPosition.getX() + unprojectedX*width/2;
-        this.targetY = originalPlayerPosition.getY() - unprojectedY*height/2;
-    }
+
     @Override
     public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
@@ -89,25 +80,28 @@ public class Grenade extends Entity {
         return getBody().getLinearVelocity();
     }
 
-    public void stopIfNeeded(){
-        if ((targetX - 0.1 < this.getX() && this.getX() < targetX + 0.1) &&
-                (targetY - 0.1 < this.getY() && this.getY() < targetY + 0.1)){
-            stop();
-        }
+    public float getTargetX(){
+        return targetX;
     }
-    public void stop(){
-        force.setLength(0);
-        setBodyVelocity(force);
+    public void setTargetX(float targetX){
+        this.targetX = targetX;
     }
+    public float getTargetY(){
+        return targetY;
+    }
+    public void setTargetY(float targetY){
+        this.targetY = targetY;
+    }
+    public ZWVector getOriginalPlayerPosition(){
+        return originalPlayerPosition;
+    }
+
     public float getExplosionRadius(){
         return  explosionRadius;
     }
     @Override
     public void draw(ZWBatch batch) {
         super.draw(batch);
-        if (force.len() !=0){
-            stopIfNeeded();
-        }
     }
 
     public ArrayList<ZWFixture> getFoundFixtures(){
