@@ -1,63 +1,26 @@
 package edu.chalmers.zombie.controller;
 
-/**
- * Created by daniel on 5/19/2015.
- * Modified by Erik
- */
-import com.sun.istack.internal.NotNull;
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.model.FlashlightModel;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
+
 import java.util.ArrayList;
 
-public class Flashlight {
-    private ZWWorld world;
-    private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
-    private ZWVector playerPosition = new ZWVector();
-    private ZWVector collisionPoint = new ZWVector();
-    private float currentFraction = 1337;
+/**
+ * Created by daniel on 5/31/2015.
+ */
+public class FlashlightController {
+    private FlashlightModel flashlightModel;
+    private float currentFraction;
     private boolean foundFixture;
-    private ArrayList<Float> collisionPoints = new ArrayList<Float>();
-    private float direction;
-    private ZWRayCastCallback callback = createCallback();
-    private float width;
-    private int numberOfRays;
-    private float length;
-    private ZWVector[] rays;
-    private ArrayList<ZWVector> endPoints = new ArrayList<ZWVector>();
-    private int maxYIndex;
-    private float[] corners = new float[8];
-    private float lengthFraction;
-
-    public Flashlight(@NotNull ZWWorld world) throws NullPointerException{
-        if (world == null){
-            throw new NullPointerException("The world is null");
-        }
-        this.world = world;
-        width = Constants.PI/4;
-        numberOfRays = 100;
-        lengthFraction = 0.75f;
-        initializeRays();
-    }
-    public Flashlight(@NotNull ZWWorld world, float width, int numberOfRays, float lengthFraction)throws NullPointerException, IllegalArgumentException{
-        if (world == null){
-            throw new NullPointerException("The world is null");
-        }
-        this.world = world;
-        this.width = width;
-        this.numberOfRays = numberOfRays;
-        if (lengthFraction < 0.05f || 0.95f < lengthFraction){
-            throw new IllegalArgumentException("The lengthFraction has to be between 0.05 and 0.95");
-        }
-        this.lengthFraction = lengthFraction;
-        initializeRays();
-    }
-    /*
+     /*
     *draws a black polygon that is shaped like everything that is not inside the flashlight circle segment.
      */
-    public void draw(ZWPolygonSpriteBatch polygonSpriteBatch){
-        world = GameModel.getInstance().getRoom().getWorld();
-        clearAll();
+    public void draw(FlashlightModel flashlightModel, ZWPolygonSpriteBatch polygonSpriteBatch){
+        this.flashlightModel = flashlightModel;
+        flashlightModel.setWorld(GameModel.getInstance().getRoom().getWorld());
+        flashlightModel.clearAll();
         calculateLength();
         fetchDirection();
         fetchPlayerPosition();
@@ -70,33 +33,38 @@ public class Flashlight {
         polygonSpriteBatch.drawPolygonRegion(darkness, 0, 0);
         polygonSpriteBatch.end();
     }
-    private void clearAll(){
-        endPoints.clear();
-    }
     private void calculateLength(){
+        float lengthFraction = flashlightModel.getLengthFraction();
         float tileSize = Constants.TILE_SIZE;
         float windowHeight = ZWGameEngine.getWindowHeight();
         float windowWidth = ZWGameEngine.getWindowWidth();
         float height =  (windowHeight/tileSize - windowHeight/tileSize/2)*lengthFraction;
         float width = (windowWidth/tileSize - windowWidth/tileSize/2)*lengthFraction;
         if (height > width){
-            length = width;
+            flashlightModel.setLength(width);
         } else{
-            length = height;
+            flashlightModel.setLength(height);
         }
     }
-
     private void fetchDirection(){
-        direction = AimingController.getDirection() + Constants.PI/2;
+        GameModel gameModel = GameModel.getInstance();
+        float direction = gameModel.getPlayer().getRadDirection() + Constants.PI/2;
+        flashlightModel.setDirection(direction);
     }
     private void fetchPlayerPosition(){
         GameModel gameModel = GameModel.getInstance();
+        ZWVector playerPosition = new ZWVector();
         playerPosition.set(gameModel.getPlayer().getX(), gameModel.getPlayer().getY());
-    }
-    private void initializeRays(){
-        rays = new ZWVector[numberOfRays];
+        flashlightModel.setPlayerPosition(playerPosition);
     }
     private void calculateEndPoints(){
+        int numberOfRays = flashlightModel.getNumberOfRays();
+        ZWVector[] rays = flashlightModel.getRays();
+        float length = flashlightModel.getLength();
+        float direction = flashlightModel.getDirection();
+        float width = flashlightModel.getWidth();
+        ZWVector playerPosition = flashlightModel.getPlayerPosition();
+        ArrayList<ZWVector> endPoints = flashlightModel.getEndPoints();
         for(int i = 0; i<numberOfRays; i++) {
             rays[i] = new ZWVector(1, 1);
             rays[i].setLength(length);
@@ -106,7 +74,6 @@ public class Flashlight {
             endPoints.add(lengthenRay(playerPosition,end,0.4f));
         }
     }
-
     private ZWVector lengthenRay(ZWVector origin, ZWVector end,float dist){
         float dy = origin.getY()-end.getY();
         float dx = origin.getX()-end.getX();
@@ -116,10 +83,16 @@ public class Flashlight {
         return new ZWVector(x,y);
     }
     private void calculateCollisionPoints(){
+        ZWVector[] rays = flashlightModel.getRays();
+        ZWVector playerPosition = flashlightModel.getPlayerPosition();
+        ArrayList<ZWVector> endPoints = flashlightModel.getEndPoints();
+        ZWVector collisionPoint;
+        ArrayList<Float> collisionPoints = flashlightModel.getCollisionPoints();
         for (ZWVector ray : rays) {
-            currentFraction = 1337;
+           currentFraction = 1337;
             foundFixture = false;
             rayCast(ray);
+            collisionPoint = flashlightModel.getCollisionPoint();
             if (foundFixture) {
                 ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
@@ -137,8 +110,23 @@ public class Flashlight {
         endPoints.add(playerPosition);
         collisionPoints.clear();
     }
-
     private void rayCast(ZWVector ray) {
+        ZWWorld world = flashlightModel.getWorld();
+        ZWRayCastCallback callback = new ZWRayCastCallback() {
+            @Override
+            public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
+                if (fixture.getCategoryBits()== Constants.COLLISION_OBSTACLE ||
+                        fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
+                    if (fraction < currentFraction) {
+                        currentFraction = fraction;
+                        flashlightModel.setCollisionPoint(point);
+                    }
+                    foundFixture = true;
+                }
+                return 1;
+            }
+        };
+        ZWVector playerPosition = flashlightModel.getPlayerPosition();
         world.rayCast(callback, playerPosition, sum(ray, playerPosition));
     }
     private ZWVector sum(ZWVector v1, ZWVector v2){
@@ -151,12 +139,13 @@ public class Flashlight {
     }
     private void calculateMaxYIndex(){
         float maxY = 0;
-        maxYIndex = -1;
+        flashlightModel.setMaxYIndex(-1);
+        ArrayList<ZWVector> endPoints =flashlightModel.getEndPoints();
         for(int i = 0; i<endPoints.size(); i++){
             float currentY = endPoints.get(i).getY();
             if(currentY>maxY){
                 maxY = currentY;
-                maxYIndex = i;
+                flashlightModel.setMaxYIndex(i);
             }
         }
     }
@@ -164,6 +153,8 @@ public class Flashlight {
         float windowWidth = ZWGameEngine.getWindowWidth();
         float windowHeight = ZWGameEngine.getWindowHeight();
         int tileSize = Constants.TILE_SIZE;
+        ZWVector playerPosition = flashlightModel.getPlayerPosition();
+        float[] corners = new float[8];
         corners[0] = playerPosition.getX() - windowWidth/(tileSize*2);
         corners[1] = windowHeight/tileSize + playerPosition.getY() - windowHeight/(tileSize*2);       //Top left
         corners[2] = playerPosition.getX() - windowWidth/(tileSize*2);
@@ -172,13 +163,25 @@ public class Flashlight {
         corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
         corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
         corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
-
-            }
-            private float[] createArrayOfVertices(){
-                collisionPoints.add(corners[0]);
-                collisionPoints.add(corners[1]);
-                for(int i = maxYIndex; i >= 0; i--) {
-                    collisionPoints.add(endPoints.get(i).getX());
+        flashlightModel.setCorners(corners);
+    }
+    private ZWPolygonRegion createDarkRegion(){
+        float[] vertices = createArrayOfVertices();
+        vertices = scaleVertices(vertices);
+        short[] triangles = calculateTriangles(vertices);
+        ZWTexture darkTexture = flashlightModel.getDarkTexture();
+        ZWPolygonRegion darkness = new ZWPolygonRegion(new ZWTextureRegion(darkTexture), vertices, triangles);
+        return darkness;
+    }
+    private float[] createArrayOfVertices(){
+        ArrayList<Float> collisionPoints = flashlightModel.getCollisionPoints();
+        float[] corners = flashlightModel.getCorners();
+        int maxYIndex = flashlightModel.getMaxYIndex();
+        ArrayList<ZWVector> endPoints = flashlightModel.getEndPoints();
+        collisionPoints.add(corners[0]);
+        collisionPoints.add(corners[1]);
+        for(int i = maxYIndex; i >= 0; i--) {
+            collisionPoints.add(endPoints.get(i).getX());
             collisionPoints.add(endPoints.get(i).getY());
         }
         for(int i =endPoints.size()-1; i >= maxYIndex; i--) {
@@ -189,6 +192,14 @@ public class Flashlight {
         for(float fl: corners)
             collisionPoints.add(fl);
         float[] vertices = convertToArray(collisionPoints);
+        return vertices;
+    }
+    private float[] scaleVertices(float[] vertices){
+        ZWVector playerPosition = flashlightModel.getPlayerPosition();
+        for(int i = 0; i < vertices.length; i= i+ 2) {
+            vertices[i] = vertices[i] * Constants.TILE_SIZE - playerPosition.getX() * Constants.TILE_SIZE + ZWGameEngine.getWindowWidth()/2;
+            vertices[i+1] = vertices[i+1] * Constants.TILE_SIZE - playerPosition.getY() * Constants.TILE_SIZE + ZWGameEngine.getWindowHeight()/2;
+        }
         return vertices;
     }
     private float[] convertToArray(ArrayList<Float> floatList){
@@ -204,37 +215,5 @@ public class Flashlight {
         ZWEarClippingTriangulator ect = new ZWEarClippingTriangulator();
         short[] triangles = ect.computeTriangles(vertices);
         return triangles;
-    }
-    private ZWPolygonRegion createDarkRegion(){
-        float[] vertices = createArrayOfVertices();
-        vertices = scaleVertices(vertices);
-        short[] triangles = calculateTriangles(vertices);
-        ZWPolygonRegion darkness = new ZWPolygonRegion(new ZWTextureRegion(darkTexture), vertices, triangles);
-        return darkness;
-    }
-
-    private float[] scaleVertices(float[] vertices){
-        for(int i = 0; i < vertices.length; i= i+ 2) {
-            vertices[i] = vertices[i] * Constants.TILE_SIZE - playerPosition.getX() * Constants.TILE_SIZE + ZWGameEngine.getWindowWidth()/2;
-            vertices[i+1] = vertices[i+1] * Constants.TILE_SIZE - playerPosition.getY() * Constants.TILE_SIZE + ZWGameEngine.getWindowHeight()/2;
-        }
-        return vertices;
-    }
-    private ZWRayCastCallback createCallback(){
-        ZWRayCastCallback returnCallback = new ZWRayCastCallback() {
-            @Override
-            public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
-                if (fixture.getCategoryBits()== Constants.COLLISION_OBSTACLE ||
-                        fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
-                    if (fraction < currentFraction) {
-                        currentFraction = fraction;
-                        collisionPoint.set(point);
-                    }
-                    foundFixture = true;
-                }
-                return 1;
-            }
-        };
-        return returnCallback;
     }
 }

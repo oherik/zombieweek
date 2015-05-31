@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.Flashlight;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.GameState;
@@ -32,7 +31,7 @@ public class GameModel {
     private ZWRenderer ZWRenderer;
     private ScreenModel screenModel;
     private ZWSprite darknessSprite;
-    private Flashlight flashlight;
+    private FlashlightModel flashlightModel;
     private PlayerType playerType;
     private AimingSystem aimingSystem;
 
@@ -58,7 +57,7 @@ public class GameModel {
         initializeSounds();
         initializeRooms();
         darknessSprite = new ZWSprite(res.getTexture("darkness-overlay"));
-        flashlight = new Flashlight(getRoom().getWorld());
+        flashlightModel = new FlashlightModel(getRoom().getWorld());
         aimingSystem = new AimingSystem(player);
        }
 
@@ -371,8 +370,8 @@ public class GameModel {
 
     public void setScreenModel(ScreenModel screenModel){this.screenModel = screenModel;}
 
-    public Flashlight getFlashlight(){
-        return flashlight;
+    public FlashlightModel getFlashlightModel(){
+        return flashlightModel;
     }
 
     public PlayerType getPlayerType() {

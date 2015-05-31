@@ -22,8 +22,8 @@ public class GameScreen extends ZWScreen{
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
     private ZWBatch batch;
-
-     private ZWShapeRenderer grenadeShapeRenderer = new ZWShapeRenderer();
+    private FlashlightController flashlightController = new FlashlightController();
+    private ZWShapeRenderer grenadeShapeRenderer = new ZWShapeRenderer();
 
     /**
      * Creates a game screen with the default tile size
@@ -190,8 +190,7 @@ public class GameScreen extends ZWScreen{
 
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
-                gameModel.getFlashlight().draw(psb);
-
+                flashlightController.draw(gameModel.getFlashlightModel(),psb);
             } else{
                 darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
                 sb.begin();
