@@ -1,9 +1,11 @@
 package edu.chalmers.zombie.utils;
 
+import com.badlogic.gdx.Game;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.AudioController;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.MenuController;
+import edu.chalmers.zombie.controller.PlayerController;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.ScreenModel;
 import edu.chalmers.zombie.model.actors.Player;
@@ -424,7 +426,11 @@ public class MenuBuilder {
             @Override
             public void clicked(){
                 GameModel.getInstance().setFearOfTheDark(false);
-                MapController.loadLevel(0);
+                GameModel.getInstance().setCurrentLevelIndex(0);
+                GameModel.getInstance().setCurrentRoomIndex(0);
+                GameModel.getInstance().setWorldNeedsUpdate(true);
+
+                PlayerController.genderSwopIfNeeded();
                 ZWGameEngine.setScreen(new GameScreen());
             }
         });
@@ -433,7 +439,11 @@ public class MenuBuilder {
             @Override
             public void clicked(){
                 GameModel.getInstance().setFearOfTheDark(true);
-                MapController.loadLevel(0);
+                GameModel.getInstance().setCurrentLevelIndex(0);
+                GameModel.getInstance().setCurrentRoomIndex(0);
+                GameModel.getInstance().setWorldNeedsUpdate(true);
+
+                PlayerController.genderSwopIfNeeded();
                 ZWGameEngine.setScreen(new GameScreen());
             }
         });
