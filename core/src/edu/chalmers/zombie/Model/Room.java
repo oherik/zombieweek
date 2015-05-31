@@ -106,7 +106,7 @@ public class Room {
      * @return  A copy of the collision grid as a 2d short array.
      */
     public short[][] getCollisionTileGrid(){
-        short[][] dest = new short[collisionTileGrid.length][collisionTileGrid[0].length];
+        short[][] dest = new short[collisionTileGrid.length][collisionTileGrid[0].length];      //TODO onödigt?
         for(int i=0; i<collisionTileGrid.length; i++)
             for(int j=0; j<collisionTileGrid[i].length; j++)
                 dest[i][j]=collisionTileGrid[i][j];
