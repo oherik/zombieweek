@@ -9,7 +9,7 @@ import java.awt.*;
 
 /**
  * Created by neda on 2015-03-31.
- * Modified by Tobias and Erik
+ * Modified by Tobias, Erik and Neda
  */
 public class Player extends Entity implements CreatureInterface {
 
