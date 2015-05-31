@@ -45,6 +45,10 @@ public class MainMenuScreen extends ZWScreen {
                 screenModel.getSettingsStage().act();
                 screenModel.getSettingsStage().draw();
                 break;
+            case CHARACTER_MENU:
+                screenModel.getCharacterStage().act();
+                screenModel.getCharacterStage().draw();
+                break;
         }
     }
 

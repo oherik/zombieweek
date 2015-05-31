@@ -31,6 +31,7 @@ public class MenuController {
         screenModel.setMainStage(MenuBuilder.createMainStage());
         screenModel.setLevelChooserStage(MenuBuilder.createLevelChooserStage());
         screenModel.setSettingsStage(MenuBuilder.createSettingsStage());
+        screenModel.setCharacterStage(MenuBuilder.createCharacterStage());
     }
 
     /**
