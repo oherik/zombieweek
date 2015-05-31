@@ -21,8 +21,9 @@ public class SaveLoadController {
         fileName = "savedGame.properties";
         gameModel = GameModel.getInstance();
         properties = new Properties();
-        loadGame(); //loads current game data from file
+        //loadGame(); //loads current game data from file
     }
+
 
     /**
      * Saves current level, highest reached level, player health and player ammo to file. Will be used at checkpoints.
@@ -52,7 +53,7 @@ public class SaveLoadController {
     /**
      * Loads game if a game has been saved to file.
      */
-    private void loadGame(){
+    public void loadGame(){
 
         try {
             input = new FileInputStream(fileName);

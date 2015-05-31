@@ -15,8 +15,8 @@ public class ZWBody {
     private com.badlogic.gdx.physics.box2d.Body body;
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
-    private Fixture fixture;
-    private PolygonShape shape;
+    private Fixture fixture; //TODO: remove?
+    private PolygonShape shape; //TODO: remove?
 
     public ZWBody(){
         fixtureDef = new FixtureDef();
@@ -28,7 +28,6 @@ public class ZWBody {
         if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
             this.fixture = box2Body.getFixtureList().get(0);
         fixtureDef = body.getFixtureDef();
-        //bodyDef = body.getBodyDef();
     }
 
     public boolean bodyIsInWorld(ZWWorld world){

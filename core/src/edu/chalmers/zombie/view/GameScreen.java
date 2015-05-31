@@ -1,14 +1,11 @@
 package edu.chalmers.zombie.view;
 
 import edu.chalmers.zombie.adapter.*;
-
 import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.PathAlgorithm;
-
-import java.awt.*;
 
 /**
  * The applications game screen
@@ -17,30 +14,17 @@ import java.awt.*;
  * Modified by Erik and Daniel
  */
 public class GameScreen extends ZWScreen{
-    private ZWWorld currentWorld;
-   // private OrthographicCamera camera;
-  //  private OrthogonalTiledMapRenderer mapRenderer;
-  //  private Box2DDebugRenderer boxDebug;
-    //private MapController mapController;
-    private float tileSize;
+
     //HUD variables
     private ZWBitmapFont bitmapFont;
     private ZWSpriteBatch batchHUD;
-    private PathAlgorithm pathFinding; //TODO debug
-    private int steps;
+
     private ZWSpriteBatch sb = new ZWSpriteBatch();
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
 
-
-
-
-  //  private ShapeRenderer shapeRenderer = new ShapeRenderer();
-
-
     private Flashlight flashlight;
-  //  private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
-  //  private ShapeRenderer grenadeShapeRenderer = new ShapeRenderer();
+
     /**
      * Creates a game screen with the default tile size
      */
@@ -53,7 +37,6 @@ public class GameScreen extends ZWScreen{
      * Creates a new screen based on a set tile size, i.e. pixels per meters.
      */
     public GameScreen(float tileSize){
-        this.tileSize = tileSize;
 
         //camera = new OrthographicCamera(width, height);
        // mapController = new MapController();
@@ -123,14 +106,6 @@ public class GameScreen extends ZWScreen{
     */
 
     /**
-     * Sets the screens currently displayed world
-     * @param displayedWorld    The world to be displayed
-     */
-    public void setDisplayedWorld(ZWWorld displayedWorld){
-        this.currentWorld = displayedWorld;
-    }
-
-    /**
      * Resizes the camer view
      * @param width The width in pixels
      * @param height    The height in pixels
@@ -183,7 +158,6 @@ public class GameScreen extends ZWScreen{
         MapController.updateRoomIfNeeded();
         //setMapRenderer(gameModel.getRenderer().getMapRenderer());
         ZWRenderer renderer = gameModel.getZWRenderer();
-        setDisplayedWorld(gameModel.getRoom().getWorld());
         Player player = gameModel.getPlayer();
 
         /* ------ Render the background color ------ */
@@ -208,7 +182,6 @@ public class GameScreen extends ZWScreen{
             renderer.setCameraView();
 
             //mapRenderer.render();
-            steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
             ZWBatch batch = renderer.getBatch();
