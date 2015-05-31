@@ -14,7 +14,7 @@ public class Flashlight {
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
     private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
     private ZWVector playerPosition = new ZWVector();
-    ZWVector collisionPoint = new ZWVector();
+    private ZWVector collisionPoint = new ZWVector();
     private float currentFraction = 1337;
     private boolean foundFixture;
     private ArrayList<Float> collisionPoints = new ArrayList<Float>();
@@ -53,7 +53,7 @@ public class Flashlight {
         this.lengthFraction = lengthFraction;
         initializeRays();
     }
-    public void draw(ZWBatch batch){
+    public void draw(ZWPolygonSpriteBatch polygonSpriteBatch){
         world = GameModel.getInstance().getRoom().getWorld();
         clearAll();
         calculateLength();
@@ -61,13 +61,12 @@ public class Flashlight {
         fetchPlayerPosition();
         calculateEndPoints();
         calculateCollisionPoints();
-       // lengthenRays();
         calculateMaxYIndex();
         calculateCorners();
         ZWPolygonRegion darkness = createDarkRegion();
-        ZWSprite light = createLight();
-        light.draw(batch);
-        batch.drawPolygonRegion(darkness, 0, 0);
+        polygonSpriteBatch.begin();
+        polygonSpriteBatch.drawPolygonRegion(darkness, 0, 0);
+        polygonSpriteBatch.end();
     }
     private void clearAll(){
         endPoints.clear();
@@ -130,7 +129,7 @@ public class Flashlight {
             if (foundFixture) {
                 ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
-                int tempIndex = -1;
+                int tempIndex = endPoints.indexOf(temp);
                 for(int i = 0; i < endPoints.size(); i++) {
                     if(endPoints.get(i).equals(lengthenRay(playerPosition,temp, 0.4f))) {
                         tempIndex = i;
@@ -177,16 +176,16 @@ public class Flashlight {
         corners[2] = playerPosition.getX() - windowWidth/(tileSize*2);
         corners[3] = playerPosition.getY() - windowHeight/(tileSize*2);                          //Bottom left
         corners[4] = windowWidth/tileSize+playerPosition.getX() - windowWidth/(tileSize*2);
-        corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
-        corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
-        corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
+                corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
+                corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
+                corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
 
-    }
-    private float[] createArrayOfVertices(){
-        collisionPoints.add(corners[0]);
-        collisionPoints.add(corners[1]);
-        for(int i = maxYIndex; i >= 0; i--) {
-            collisionPoints.add(endPoints.get(i).getX());
+            }
+            private float[] createArrayOfVertices(){
+                collisionPoints.add(corners[0]);
+                collisionPoints.add(corners[1]);
+                for(int i = maxYIndex; i >= 0; i--) {
+                    collisionPoints.add(endPoints.get(i).getX());
             collisionPoints.add(endPoints.get(i).getY());
         }
         for(int i =endPoints.size()-1; i >= maxYIndex; i--) {
@@ -215,14 +214,20 @@ public class Flashlight {
     }
     private ZWPolygonRegion createDarkRegion(){
         float[] vertices = createArrayOfVertices();
+        vertices = scaleVertices(vertices);
         short[] triangles = calculateTriangles(vertices);
+        //Punkterna som har räknats ut är i spelvärldens format. Vet inte om det alltid har varit så. Men då
+        //Trianglarna stämmer i alla fall.
         ZWPolygonRegion darkness = new ZWPolygonRegion(new ZWTextureRegion(darkTexture), vertices, triangles);
         return darkness;
     }
-    private ZWSprite createLight(){
-        ZWSprite light = new ZWSprite(lightTexture);
-        light.setAlpha(0.2f);
-        return light;
+
+    private float[] scaleVertices(float[] vertices){
+        for(int i = 0; i < vertices.length; i= i+ 2) {
+            vertices[i] = vertices[i] * Constants.TILE_SIZE - playerPosition.getX() * Constants.TILE_SIZE + ZWGameEngine.getWindowWidth()/2;
+            vertices[i+1] = vertices[i+1] * Constants.TILE_SIZE - playerPosition.getY() * Constants.TILE_SIZE + ZWGameEngine.getWindowHeight()/2;
+        }
+        return vertices;
     }
     private ZWRayCastCallback createCallback(){
         ZWRayCastCallback returnCallback = new ZWRayCastCallback() {

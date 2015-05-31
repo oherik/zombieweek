@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import edu.chalmers.zombie.adapter.ZWInputProcessor;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Player;
@@ -14,7 +15,7 @@ import edu.chalmers.zombie.utils.GameState;
  *
  * Created by Tobias on 15-04-01.
  */
-public class InputController implements InputProcessor{
+public class InputController extends ZWInputProcessor {
 
     GameModel gameModel;
     MapController mapController;
