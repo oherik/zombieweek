@@ -30,6 +30,18 @@ The latest release (2015-05-31) contains:
 NOTE: once the second level, third room has been reached there is no way to progress seeing as the third level is not yet available. 
 
 ********************************
+CONTROLS
+********************************
+W - move forward
+A - move left
+S - move backwards
+D - move right
+F - toggle flashlight (in "fear of the dark mode"
+G - toggle grenade
+C - toggle mouse aiming
+LMB - throw projectile when the mouse aiming is on
+
+********************************
 DOCUMENTATION
 ********************************
 The Requirements Analysis Document can be found at \Documentation\RAD\Requirements Analysis Document, final.pdf
