@@ -1,5 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
+import edu.chalmers.zombie.controller.EntityController;
+import edu.chalmers.zombie.controller.ZombieController;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.actors.Player;
@@ -82,7 +84,6 @@ public class Grenade extends Entity {
         System.out.println(this.getX() + ", " + this.getY());
         if ((targetX - 0.1 < this.getX() && this.getX() < targetX + 0.1) &&
                 (targetY - 0.1 < this.getY() && this.getY() < targetY + 0.1)){
-            System.out.print("hej");
             stop();
         }
     }
@@ -121,10 +122,11 @@ public class Grenade extends Entity {
             for (ZWFixture f: fixturesInRadius){
                 if (f.getBodyUserData() instanceof Zombie){
                     Zombie z = (Zombie)f.getBodyUserData();
-
+                    EntityController.knockBack(this, z, 3);
                 }
             }
         }
+        EntityController.remove(this);
     }
     private boolean checkIfInsideRadius(ZWFixture fixture, ZWVector ray){
         ZWVector fixturePosition = fixture.getPosition();

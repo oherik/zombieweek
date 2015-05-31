@@ -106,8 +106,13 @@ public class ContactController {
                         ZombieController.attack(zombie, player);
                         break;
                     case Constants.COLLISION_PROJECTILE:
-                        Book book = (Book) fixtureA.getBodyUserData();
-                        ProjectileController.applyHit(zombie, book);
+                        if (fixtureA.getBodyUserData() instanceof Book){
+                            Book book = (Book) fixtureA.getBodyUserData();
+                            ProjectileController.applyHit(zombie, book);
+                        } else{
+                            Grenade g = (Grenade) fixtureA.getBodyUserData();
+                            g.stop();
+                        }
                         break;
                     default:
                         break;
