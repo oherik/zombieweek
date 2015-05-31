@@ -105,6 +105,9 @@ public class GameModel {
         res.loadTexture("emilia","core/assets/Images/emilia.png");
         res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");
         res.loadTexture("emilia-still","core/assets/Images/emilia-still.png");
+        res.loadTexture("emil","core/assets/Images/emil.png");
+        res.loadTexture("emil-hand","core/assets/Images/emilia-hand.png"); //TODO: add emil hand
+        res.loadTexture("emil-still","core/assets/Images/emil-still.png");
     }
 
     private void initializePotionTextures(){
