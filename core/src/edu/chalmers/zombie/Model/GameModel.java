@@ -386,4 +386,5 @@ public class GameModel {
         this.playerType = playerType;
     }
 
+    public int getAmountOfLevelsInGame(){return levels.size();}
 }
