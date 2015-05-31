@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.*;
+import edu.chalmers.zombie.model.actors.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ZombieType;

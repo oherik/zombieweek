@@ -1,22 +1,22 @@
 package edu.chalmers.zombie.model;
 
-import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Room;
-
 import java.util.ArrayList;
 
 /**
  * A level
  *
  * Created by Tobias on 15-05-20.
- * Modified by Erik
+ * Modified by Erik and Neda
  */
 public class Level {
+
+    private int currentRoomIndex;
 
     private ArrayList<Room> roomList; //keeps list of rooms
 
     public Level(){
         roomList = new ArrayList<Room>();
+        setCurrentRoomIndex(0);
     }
 
     /**
@@ -50,5 +50,23 @@ public class Level {
 
     public ArrayList<Room> getRooms(){
         return roomList;
+    }
+
+    /**
+     * A method which sets which room the player last visited in a level.
+     * @param currentRoomIndex int room number.
+     */
+    public void setCurrentRoomIndex(int currentRoomIndex) {
+
+        this.currentRoomIndex = currentRoomIndex;
+    }
+
+    /**
+     * A method which returns which room the player last visited in a level.
+     * @return currentRoomIndex, room number (int).
+     */
+    public int getCurrentRoomIndex() {
+
+        return currentRoomIndex;
     }
 }

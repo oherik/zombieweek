@@ -2,7 +2,7 @@ package edu.chalmers.zombie.adapter;
 
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class Grenade extends Entity {
             stop();
         }
     }
-    private void stop(){
+    public void stop(){
         force.setLength(0);
         setBodyVelocity(force);
     }

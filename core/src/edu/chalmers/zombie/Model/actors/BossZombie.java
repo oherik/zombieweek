@@ -1,13 +1,11 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWBody;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.ZombieType;
-
-import java.awt.*;
 
 /**
  * A boss zombie has a fairly high resilience and an intermediate speed. It causes a damage of 100 percent.

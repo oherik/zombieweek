@@ -2,7 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.ZWBody;
 import edu.chalmers.zombie.adapter.ZWVector;
-import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.model.GameModel;

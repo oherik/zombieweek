@@ -1,15 +1,13 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
-
-import java.awt.*;
 
 /**
  * A zeta zombie has a low speed and a high resilience. It causes a damage of 100 percent.
- * It has a detection radius of 100, which is high. 
+ * It has a detection radius of 100, which is high.
  *
  * Created by neda on 2015-05-19.
  * Modified by Erik

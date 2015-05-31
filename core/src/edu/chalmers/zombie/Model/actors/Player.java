@@ -1,11 +1,18 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
+
+import edu.chalmers.zombie.controller.AimingController;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PotionType;
 
-import java.awt.*;
+import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.Direction;
+
 
 /**
  * Created by neda on 2015-03-31.
@@ -17,7 +24,6 @@ public class Player extends Entity implements CreatureInterface {
     private int lives;
     private int ammunition;
     private int grenadeAmmo = 5; //TODO: remove?
-    private boolean isAttacked;//TODO: remove?
     private boolean isHidden;
     private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
@@ -26,12 +32,11 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
-    private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
-
+    private int waterTilesTouching;
+    private int sneakTilesTouching;
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
-    private Hand hand = new Hand(this);
+    private AimingController aimingController = new AimingController(this);
 
     private boolean isHit = false;
     private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
@@ -53,6 +58,8 @@ public class Player extends Entity implements CreatureInterface {
         ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
 
+        setWaterTilesTouching(0);
+        setSneakTilesTouching(0);
 
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
@@ -338,20 +345,16 @@ public class Player extends Entity implements CreatureInterface {
      * A method which returns the player's Hand instance.
      * @return hand instance (Hand).
      */
-    public Hand getHand(){
-        return this.hand;
+    public AimingController getAimingController(){
+        return this.aimingController;
     }
 
     //TODO : move to PlayerController
     public void throwBook(){
-        hand.throwBook();
+        aimingController.throwBook();
         getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
 
-    //TODO: move to PlayerController
-    public void throwGrenade(){
-        hand.throwGrenade();
-    } //TODO: remove?
 
     public int getWaterTilesTouching(){
         return waterTilesTouching;

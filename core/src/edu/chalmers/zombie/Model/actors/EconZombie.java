@@ -1,11 +1,9 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
-
-import java.awt.*;
 
 /**
  * An econ zombie - or ballerina zombie - has an intermediate resilience, but high speed. I

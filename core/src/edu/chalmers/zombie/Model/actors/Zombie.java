@@ -1,8 +1,11 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SpawnController;
+import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;

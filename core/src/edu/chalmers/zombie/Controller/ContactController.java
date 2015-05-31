@@ -2,6 +2,8 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.*;
+import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 
 /** A custom contact listener. It registers the different contacts and forward the commands to the other controllers.
@@ -40,12 +42,13 @@ public class ContactController {
         gameModel.clearEntitiesToRemove();
         switch(fixtureB.getCategoryBits()) {
             case Constants.COLLISION_PROJECTILE://Check if the fixture is a projectile, e.g. a book
-                    Book b = (Book) fixtureB.getBodyUserData();
+                if (fixtureB.getBodyUserData() instanceof Book) {
+                    Book b = (Book)fixtureB.getBodyUserData();
                     //Retrieve the book
-                    switch(fixtureA.getCategoryBits()){
+                    switch (fixtureA.getCategoryBits()) {
                         case Constants.COLLISION_PLAYER:
                             Player p = gameModel.getPlayer();
-                                ProjectileController.pickUp(p, b);
+                            ProjectileController.pickUp(p, b);
                             break;
                         case Constants.COLLISION_ZOMBIE:
                             Zombie z = (Zombie) fixtureA.getBodyUserData();
@@ -64,7 +67,12 @@ public class ContactController {
                         default:
                             break;
                     }
-
+                } else{
+                    if(fixtureB.getBodyUserData() instanceof Grenade){
+                        Grenade g = (Grenade) fixtureB.getBodyUserData();
+                        g.stop();
+                    }
+                }
                 break;
 
             case (Constants.COLLISION_WATER):
