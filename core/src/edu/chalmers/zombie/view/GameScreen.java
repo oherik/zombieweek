@@ -1,12 +1,17 @@
 package edu.chalmers.zombie.view;
 
+
 import edu.chalmers.zombie.adapter.*;
+
 import edu.chalmers.zombie.controller.*;
 import edu.chalmers.zombie.model.*;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
+import edu.chalmers.zombie.utils.PathAlgorithm;
+
+import java.awt.*;
 
 /**
  * The applications game screen
@@ -15,21 +20,30 @@ import edu.chalmers.zombie.utils.GameState;
  * Modified by Erik and Daniel
  */
 public class GameScreen extends ZWScreen{
-
-
-    //HUD variables
     private ZWWorld currentWorld;
+   // private OrthographicCamera camera;
+  //  private OrthogonalTiledMapRenderer mapRenderer;
+  //  private Box2DDebugRenderer boxDebug;
+    //private MapController mapController;
     private float tileSize;
     //HUD variables
     private ZWBitmapFont bitmapFont;
     private ZWSpriteBatch batchHUD;
+    private PathAlgorithm pathFinding; //TODO debug
     private int steps;
     private ZWSpriteBatch sb = new ZWSpriteBatch();
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
 
-    private Flashlight flashlight;
 
+
+
+  //  private ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+
+    private Flashlight flashlight;
+  //  private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
+     private ZWShapeRenderer grenadeShapeRenderer = new ZWShapeRenderer();
     /**
      * Creates a game screen with the default tile size
      */
@@ -42,7 +56,9 @@ public class GameScreen extends ZWScreen{
      * Creates a new screen based on a set tile size, i.e. pixels per meters.
      */
     public GameScreen(float tileSize){
-
+        this.tileSize = tileSize;
+        float width = ZWGameEngine.getWindowWidth();
+        float height = ZWGameEngine.getWindowHeight();
         //camera = new OrthographicCamera(width, height);
        // mapController = new MapController();
 
@@ -111,6 +127,14 @@ public class GameScreen extends ZWScreen{
     */
 
     /**
+     * Sets the screens currently displayed world
+     * @param displayedWorld    The world to be displayed
+     */
+    public void setDisplayedWorld(ZWWorld displayedWorld){
+        this.currentWorld = displayedWorld;
+    }
+
+    /**
      * Resizes the camer view
      * @param width The width in pixels
      * @param height    The height in pixels
@@ -163,6 +187,7 @@ public class GameScreen extends ZWScreen{
         MapController.updateRoomIfNeeded();
         //setMapRenderer(gameModel.getRenderer().getMapRenderer());
         ZWRenderer renderer = gameModel.getZWRenderer();
+        setDisplayedWorld(gameModel.getRoom().getWorld());
         Player player = gameModel.getPlayer();
 
         /* ------ Render the background color ------ */
@@ -187,6 +212,7 @@ public class GameScreen extends ZWScreen{
             renderer.setCameraView();
 
             //mapRenderer.render();
+            steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
             ZWBatch batch = renderer.getBatch();
@@ -207,14 +233,14 @@ public class GameScreen extends ZWScreen{
             player.draw(batch);
 
            /* ------ Draw the aimer ------ */
-            player.getHand().drawAimer(batch);
+            player.getAimingController().drawAimer(batch);
             batch.end();
 
 
-            // grenadeShapeRenderer.setAutoShapeType(true);
-            // grenadeShapeRenderer.begin();
-            //    player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
-            //    grenadeShapeRenderer.end();
+            grenadeShapeRenderer.setAutoShapeType(true);
+            grenadeShapeRenderer.begin();
+            player.getAimingController().drawGrenadeAimer(grenadeShapeRenderer);
+            grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
             if (gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
@@ -258,7 +284,7 @@ public class GameScreen extends ZWScreen{
         }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
-/*
+
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
                 if (flashlight==null){
@@ -272,7 +298,7 @@ public class GameScreen extends ZWScreen{
                 sb.end();
             }
 
-*/
+
             drawBlood();
             int[] foregroundLayers = {3};
 
@@ -314,7 +340,21 @@ public class GameScreen extends ZWScreen{
     public void hide(){
 
     }
-    
+
+    /**
+     * Updates the zombie paths to the player.
+     */
+    private void updateZombiePaths() {   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?dddddd
+        GameModel gameModel = GameModel.getInstance();
+        for (Zombie z : gameModel.getZombies()) {
+            if (!z.isKnockedOut()) {
+                Player player = gameModel.getPlayer();
+                Point end = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
+                Point start = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
+                //mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
+            }
+        }
+    }
     /**
      * Dispose the world, player and the renderers.
      */

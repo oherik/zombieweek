@@ -34,4 +34,7 @@ public class ZWShapeRenderer {
             shapeRenderer.setColor(com.badlogic.gdx.graphics.Color.GREEN);
         }
     }
+    public void setAutoShapeType(boolean b){
+        shapeRenderer.setAutoShapeType(b);
+    }
 }
