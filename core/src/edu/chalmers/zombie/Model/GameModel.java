@@ -167,6 +167,7 @@ public class GameModel {
     }
 
     /**
+
      * @return  The current room
      */
     public Room getRoom(){return levels.get(currentLevel).getRoom(currentRoom); }
