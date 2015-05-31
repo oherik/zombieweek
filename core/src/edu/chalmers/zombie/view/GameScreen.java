@@ -277,7 +277,9 @@ public class GameScreen extends ZWScreen{
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
                 if (flashlight==null){
+
                     flashlight = new Flashlight(currentWorld,Constants.PI/4,100,0.9f);
+
                 }
                 flashlight.draw(psb);
             } else{
@@ -366,11 +368,11 @@ public class GameScreen extends ZWScreen{
         sb.dispose();
         psb.dispose();
     }
-    private Blood blood = new Blood();
+    private BloodController bloodController = new BloodController();
  //   private SpriteBatch sb = new SpriteBatch();
     private void drawBlood(){
         sb.begin();
-        blood.draw(sb);
+        bloodController.draw(sb);
         sb.end();
     }
 

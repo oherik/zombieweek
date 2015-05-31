@@ -19,19 +19,8 @@ public class AimingController {
     public AimingController(Player player){
         aimingSystem = new AimingSystem(player);
     }
-    public void throwBook(){
-        GameModel gameModel = GameModel.getInstance();
-        Player player = aimingSystem.getPlayer();
-        Book book = new Book(aimingSystem.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld(), player.getVelocity());
-        book.setInMotion();
-        gameModel.addBook(book);
-    }
-    public void throwGrenade(){
-        GameModel gameModel = GameModel.getInstance();
-        Player player = gameModel.getPlayer();
-        Grenade grenade = new Grenade(aimingSystem.getMouseX(), aimingSystem.getMouseY(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
-        gameModel.addGrenade(grenade);
-    }
+
+
     public void startAimingRight() {
         if (!aimingSystem.isMouseAiming()) {
             aimLeft.stop();
@@ -114,5 +103,8 @@ public class AimingController {
     }
     public boolean isThrowingGrenade(){
         return aimingSystem.isThrowingGrenade();
+    }
+    public AimingSystem getAimingSystem(){
+        return aimingSystem;
     }
 }

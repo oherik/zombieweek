@@ -1,6 +1,7 @@
 package edu.chalmers.zombie.adapter;
 
 import edu.chalmers.zombie.controller.EntityController;
+import edu.chalmers.zombie.controller.ProjectileController;
 import edu.chalmers.zombie.controller.ZombieController;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
@@ -27,6 +28,7 @@ public class Grenade extends Entity {
     private ArrayList<ZWFixture> foundFixtures = new ArrayList<ZWFixture>();
     private ZWWorld world;
     private ZWTimer timer;
+    private int damage = 0;
     public Grenade(int targetX, int targetY, float x, float y, ZWWorld world){
         super(world);
         this.world = world;
@@ -122,6 +124,11 @@ public class Grenade extends Entity {
             for (ZWFixture f: fixturesInRadius){
                 if (f.getBodyUserData() instanceof Zombie){
                     Zombie z = (Zombie)f.getBodyUserData();
+                    z.decHp(damage);
+                    if (z.getHp() <= 0) {
+                        ZombieController.knockOut(z);
+                        GameModel.getInstance().getPlayer().incKillCount();
+                    }
                     EntityController.knockBack(this, z, 3);
                 }
             }
