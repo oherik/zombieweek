@@ -14,7 +14,7 @@ public class Flashlight {
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
     private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
     private ZWVector playerPosition = new ZWVector();
-    ZWVector collisionPoint = new ZWVector();
+    private ZWVector collisionPoint = new ZWVector();
     private float currentFraction = 1337;
     private boolean foundFixture;
     private ArrayList<Float> collisionPoints = new ArrayList<Float>();
@@ -53,7 +53,7 @@ public class Flashlight {
         this.lengthFraction = lengthFraction;
         initializeRays();
     }
-    public void draw(ZWBatch batch){
+    public void draw(ZWSpriteBatch spriteBatch, ZWPolygonSpriteBatch polygonSpriteBatch){
         world = GameModel.getInstance().getRoom().getWorld();
         clearAll();
         calculateLength();
@@ -64,10 +64,14 @@ public class Flashlight {
        // lengthenRays();
         calculateMaxYIndex();
         calculateCorners();
+        //Fram tills hit verkar allt fungera som det borde. Vi får in massa punkter som stämmer i vertices.
+        //Anledningen till att inget ritas ut måste ligga nedan eller i någon av klasserna som används nedan.
+        //Eftersom varken ljusset eller mörkret ritas ut är det mest sannolikt att felet ligger i någon av klasserna
+        //som används för att rita båda. Den enda är ZWTexture. Dock verkar inget problem finnas i ZWTexture. 
         ZWPolygonRegion darkness = createDarkRegion();
         ZWSprite light = createLight();
-        light.draw(batch);
-        batch.drawPolygonRegion(darkness, 0, 0);
+        light.draw(spriteBatch);
+        polygonSpriteBatch.drawPolygonRegion(darkness, 0, 0);
     }
     private void clearAll(){
         endPoints.clear();
@@ -128,9 +132,10 @@ public class Flashlight {
             foundFixture = false;
             rayCast(ray);
             if (foundFixture) {
+                System.out.println("bra");
                 ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
-                int tempIndex = -1;
+                int tempIndex = endPoints.indexOf(temp);
                 for(int i = 0; i < endPoints.size(); i++) {
                     if(endPoints.get(i).equals(lengthenRay(playerPosition,temp, 0.4f))) {
                         tempIndex = i;
@@ -216,6 +221,8 @@ public class Flashlight {
     private ZWPolygonRegion createDarkRegion(){
         float[] vertices = createArrayOfVertices();
         short[] triangles = calculateTriangles(vertices);
+        //Punkterna som har räknats ut är i spelvärldens format. Vet inte om det alltid har varit så. Men då
+        //Trianglarna stämmer i alla fall.
         ZWPolygonRegion darkness = new ZWPolygonRegion(new ZWTextureRegion(darkTexture), vertices, triangles);
         return darkness;
     }

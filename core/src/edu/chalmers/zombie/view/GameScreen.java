@@ -28,6 +28,9 @@ public class GameScreen extends ZWScreen{
     private ZWSpriteBatch batchHUD;
     private PathAlgorithm pathFinding; //TODO debug
     private int steps;
+    private ZWSpriteBatch sb = new ZWSpriteBatch();
+    private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
+    private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
 
 
 
@@ -275,27 +278,29 @@ public class GameScreen extends ZWScreen{
 
         }
                         /* ----------------- TEST FLASHLIGHT -----------------*/
-/*
+
+
             if (gameModel.isFlashlightEnabled()){
-                //ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
-                //ZWSpriteBatch sb = new ZWSpriteBatch();
-                ZWBatch batch = renderer.getBatch();
-                batch.begin();
                 renderer.setCombinedCameraBatch();
-                //psb.setCombinedCamera(renderer);
-               // psb.begin();
                 if (flashlight==null){
                     flashlight = new Flashlight(currentWorld,Constants.PI/4,3,5,0.75f);
                 }
-                flashlight.draw(batch);
-                //psb.end();
-               // sb.end();
-                //psb.dispose();
-                //sb.dispose();
-                batch.end();
+                sb.begin();
+                psb.begin();
+                //flashlight.draw(sb, psb);
+                ZWPolygonRegion p= new ZWPolygonRegion(new ZWTextureRegion(new ZWTexture("core/assets/darkness.png")), new float[]{
+                        0,0,
+                        100,100,        //Jag har ingen aning om varför denna polygonRegionen inte ritas ut???
+                        0,100,          //Antagligen ligger felet i ZWPolygonRegion eller i PolygonSpriteBatch.
+                        100,0
+                }, new short[]{
+                        0,2,3,
+                        1,2,3
+                });
+                psb.drawPolygonRegion(p, 0, 0);
+                sb.end();
+                psb.end();
             } else{
-                ZWSpriteBatch sb = new ZWSpriteBatch();
-                ZWSprite darkness = gameModel.getDarknessOverlay();
                 darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
                 sb.begin();
                 darkness.draw(sb);
@@ -303,7 +308,7 @@ public class GameScreen extends ZWScreen{
                 sb.end();
             }
 
-*/
+
             drawBlood();
             int[] foregroundLayers = {3};
 
@@ -317,8 +322,6 @@ public class GameScreen extends ZWScreen{
         GameModel.getInstance().getScreenModel().getSoundAndSettingStage().draw();
 
     }
-
-
     /**
      * Render game when game is paused
      */
@@ -370,7 +373,8 @@ public class GameScreen extends ZWScreen{
        // currentWorld.dispose();
      //   batchHUD.dispose();
     //    shapeRenderer.dispose();
-    //    sb.dispose();
+        sb.dispose();
+        psb.dispose();
     }
     private Blood blood = new Blood();
  //   private SpriteBatch sb = new SpriteBatch();
