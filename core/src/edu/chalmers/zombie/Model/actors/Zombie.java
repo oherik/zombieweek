@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
  * along with graphical depicition.
  *
  * Created by neda on 2015-03-31.
- * Modified by Erik
+ * Modified by Erik, Neda
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 
@@ -69,7 +68,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
         SpawnController.setCollisionObjects();
-       // MapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn()); //TODO varf�r finns den d�r?
 
                 isKnockedOut = false;
 
