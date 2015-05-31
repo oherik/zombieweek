@@ -7,11 +7,15 @@ import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 
 /**
+ * A basic zombie has a fairly low resilience and low speed. It causes a damage of 20 percent,
+ * which is measured as an hp loss of 2 in the GUI. It has a detection radius of 10,
+ * which is intermediate.
+ *
  * Created by neda on 2015-05-19.
  */
 public class BasicZombie extends Zombie {
 
-    public BasicZombie(/*Sprite sprite,*/ ZWWorld world, int x, int y) {
+    public BasicZombie(ZWWorld world, int x, int y) {
 
         super(GameModel.getInstance().res.getTexture("zombie"),
                 GameModel.getInstance().res.getTexture("zombie-still"),

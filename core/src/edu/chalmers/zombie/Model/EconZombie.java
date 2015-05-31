@@ -8,6 +8,10 @@ import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 
 /**
+ * An econ zombie - or ballerina zombie - has an intermediate resilience, but high speed. I
+ * It causes a damage of 75 percent.It has a detection radius of 10, which is intermediate,
+ * and spins towards the player when having detected them.
+ *
  * Created by neda on 2015-05-19.
  */
 public class EconZombie extends Zombie {

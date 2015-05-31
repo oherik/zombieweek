@@ -8,6 +8,9 @@ import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 
 /**
+ * A machine zombie has a low speed and an intermediate resilience. It causes a damage of 80 percent.
+ * It has a detection radius of 100, which is very high.
+ *
  * Created by neda on 2015-05-19.
  */
 public class MachineZombie extends Zombie {

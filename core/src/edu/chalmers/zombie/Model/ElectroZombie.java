@@ -8,6 +8,9 @@ import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 
 /**
+ * An electro zombie has an intermediate resilience and a high speed. It causes a damage of 80 percent.
+ * It has a detection radius of 10, which is intermediate.
+ *
  * Created by neda on 2015-05-19.
  */
 public class ElectroZombie extends Zombie {
@@ -20,7 +23,7 @@ public class ElectroZombie extends Zombie {
         setType(ZombieType.ELECTRO);
         setDetectionRadius(10);
         setStartingHp(50);
-        setSpeed(50);
+        setSpeed(200);
         setAngularSpeed(50);
         setDamage(80);
     }
