@@ -5,10 +5,10 @@ import com.badlogic.gdx.utils.*;
 
 /**
  * Created by Tobias on 15-05-29.
+ * Modified by Erik
  */
 public class ZWLabel {
     private Label label;
-    private com.badlogic.gdx.utils.StringBuilder stringBuilder;
     private ZWBitmapFont font;
     private com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle;
 

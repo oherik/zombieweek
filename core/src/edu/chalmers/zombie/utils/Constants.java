@@ -8,7 +8,7 @@ public class Constants {
 
     public static final int TILE_SIZE = 32;
     public static final float PIXELS_PER_METER = 32;
-    public static final int PLAYER_SIZE = 28;
+    public static final int PLAYER_SIZE = 32;
 
     //Room
     public static final String META_LAYER = "meta";

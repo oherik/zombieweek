@@ -142,9 +142,10 @@ public class PlayerController {
             keyThread = new Thread() {
                 public void run() {
                     try {
+
                         Thread thread = getPlayer().getKeyThread();
                         thread.sleep(timeSensitiveness); //waiting for new key release
-                        updateMovement();
+                     updateMovement();
                         //if(getWorld().isLocked())     //TODO hack för att inte krascha
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);

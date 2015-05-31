@@ -26,7 +26,6 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private PotionType potion;//TODO: remove?
     private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
     private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
 
@@ -39,12 +38,12 @@ public class Player extends Entity implements CreatureInterface {
 
 
     public Player(ZWTexture texture, ZWWorld world, float x, float y) {
-        super(texture, world, x, y,32);
+        super(texture, world, x, y, Constants.PLAYER_SIZE);
 
         //Set still image frame
         //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
         ZWTexture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
-        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,32,32);
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
         getAnimator().addStillFrame(stillFrame[0]);
 
         //Set overlay image (Hand)
@@ -270,14 +269,6 @@ public class Player extends Entity implements CreatureInterface {
      */
     public ZWVector getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
-    }
-
-    private void setDefaultBody(){
-        if(this.getBody()!=null) {
-            this.removeBody();
-        }
-
-
     }
 
     /**

@@ -15,8 +15,6 @@ public class ZWBody {
     private com.badlogic.gdx.physics.box2d.Body body;
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
-    private Fixture fixture; //TODO: remove?
-    private PolygonShape shape; //TODO: remove?
 
     public ZWBody(){
         fixtureDef = new FixtureDef();
@@ -25,8 +23,6 @@ public class ZWBody {
 
     public ZWBody(Body box2Body, ZWBody body){
         this.body = box2Body;
-        if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
-            this.fixture = box2Body.getFixtureList().get(0);
         fixtureDef = body.getFixtureDef();
     }
 
@@ -38,8 +34,6 @@ public class ZWBody {
 
     public ZWBody(Body box2Body){
         this.body = box2Body;
-        if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
-             this.fixture = box2Body.getFixtureList().get(0);
         fixtureDef = new FixtureDef();
         bodyDef = new BodyDef();
     }
