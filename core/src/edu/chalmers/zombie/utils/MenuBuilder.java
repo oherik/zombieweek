@@ -199,9 +199,14 @@ public class MenuBuilder {
 
         ZWTable table = new ZWTable();
 
+        ZWTextButton continueButton = new ZWTextButton("Continue", skin);
         ZWTextButton newGameButton = new ZWTextButton("New game", skin);
         final ZWTextButton levelButton = new ZWTextButton("Choose level", skin);
         ZWTextButton exitGameButton = new ZWTextButton("Exit game", skin);
+
+        if (!GameModel.getInstance().isFirstTimePlay()){
+            table.add(continueButton,250,50,15);
+        }
 
         table.add(newGameButton,250,50,15);
         table.add(levelButton,250,50,15);
@@ -209,6 +214,13 @@ public class MenuBuilder {
 
         table.setFillParent(true);
         mainStage.addActor(table);
+
+        continueButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                ZWGameEngine.setScreen(new GameScreen());
+            }
+        });
 
         newGameButton.addListener(new ZWClickAction(){
             @Override
@@ -270,6 +282,8 @@ public class MenuBuilder {
                 levelButton.addListener(new ZWClickAction(){
                     @Override
                     public void clicked(){
+                        GameModel.getInstance().setfirstTimePlay(false);
+                        
                         GameModel.getInstance().setCurrentRoomIndex(0);
                         GameModel.getInstance().setCurrentLevelIndex(level);
 
@@ -357,6 +371,7 @@ public class MenuBuilder {
         characterButtonLeft.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
+                GameModel.getInstance().setfirstTimePlay(false);
                 GameModel.getInstance().setPlayerType(PlayerType.EMILIA);
                 ScreenModel screenModel = GameModel.getInstance().getScreenModel();
                 screenModel.setMenuState(ScreenModel.MenuState.GAMEMODE_STATE);
@@ -369,6 +384,7 @@ public class MenuBuilder {
         characterButtonRight.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
+                GameModel.getInstance().setfirstTimePlay(false);
                 GameModel.getInstance().setPlayerType(PlayerType.EMIL);
                 ScreenModel screenModel = GameModel.getInstance().getScreenModel();
                 screenModel.setMenuState(ScreenModel.MenuState.GAMEMODE_STATE);

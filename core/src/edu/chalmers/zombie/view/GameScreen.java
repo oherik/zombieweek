@@ -216,8 +216,8 @@ public class GameScreen extends ZWScreen{
         bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
         bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
-        bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
-        bitmapFont.draw(batchHUD, level, 10, ZWGameEngine.getWindowHeight() - 55);
+        //bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
+        bitmapFont.draw(batchHUD, level, 10, ZWGameEngine.getWindowHeight() - 40);
         batchHUD.end();
 
         /** Render settings and sound buttons **/

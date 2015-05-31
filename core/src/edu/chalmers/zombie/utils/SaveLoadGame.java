@@ -59,10 +59,13 @@ public class SaveLoadGame {
             int highestReachedLevel = getHighestLevelFromProperties();
             GameModel.getInstance().setHighestCompletedLevel(highestReachedLevel);
 
+            GameModel.getInstance().setfirstTimePlay(false);
+
             //TODO: Save properties to gameModel
 
         } catch (IOException e) {
             System.out.println("--- FAILED TO LOAD GAME ---");
+            GameModel.getInstance().setfirstTimePlay(true);
             e.printStackTrace();
         } finally {
             if (input != null) {

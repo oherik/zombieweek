@@ -34,6 +34,7 @@ public class GameModel {
     private FlashlightModel flashlightModel;
     private PlayerType playerType;
     private AimingSystem aimingSystem;
+    private boolean firstTimePlay = true;
     private boolean fearOfTheDark = true;
 
     /**
@@ -397,4 +398,8 @@ public class GameModel {
     public void setFearOfTheDark(boolean b){
         fearOfTheDark = b;
     }
+
+    public void setfirstTimePlay(boolean b){firstTimePlay = b;}
+
+    public boolean isFirstTimePlay(){return firstTimePlay;}
 }
