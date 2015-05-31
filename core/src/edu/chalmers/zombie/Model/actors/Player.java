@@ -1,6 +1,6 @@
 package edu.chalmers.zombie.model.actors;
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.AimingController;
+import edu.chalmers.zombie.model.AimingSystem;
 import edu.chalmers.zombie.utils.*;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
@@ -16,6 +16,7 @@ public class Player extends Entity implements CreatureInterface {
 
     private int killCount;
     private int lives;
+    private int maxLives = 100;
     private int ammunition;
     private int grenadeAmmo = 5; //TODO: remove?
     private boolean isHidden;
@@ -28,7 +29,7 @@ public class Player extends Entity implements CreatureInterface {
     private int waterTilesTouching;
     private int sneakTilesTouching;
     private Thread keyThread; //Keeps track of key releases
-    private AimingController aimingController = new AimingController(this);
+    private AimingSystem aimingSystem = new AimingSystem(this);
 
     private boolean isHit = false;
     private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
@@ -55,7 +56,7 @@ public class Player extends Entity implements CreatureInterface {
 
         killCount = 0;
         ammunition = 5;
-        lives = 100;
+        lives = maxLives;
         force = new ZWVector(0,0);
 
         setBody(body);
@@ -250,9 +251,6 @@ public class Player extends Entity implements CreatureInterface {
      * A method which returns the player's Hand instance.
      * @return hand instance (Hand).
      */
-    public AimingController getAimingController(){
-        return this.aimingController;
-    }
 
     public int getWaterTilesTouching(){
         return waterTilesTouching;
@@ -301,4 +299,13 @@ public class Player extends Entity implements CreatureInterface {
     public int getGrenadeAmmo(){
         return grenadeAmmo;
     }
+
+    public void lifeRefill() {
+        this.lives = maxLives;
+    }
+
+    public float getRadDirection(){
+        return GameModel.getInstance().getAimingSystem().getDirection();
+    }
+
 }

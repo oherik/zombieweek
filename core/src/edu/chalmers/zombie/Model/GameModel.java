@@ -33,6 +33,7 @@ public class GameModel {
     private ZWSprite darknessSprite;
     private FlashlightModel flashlightModel;
     private PlayerType playerType;
+    private AimingSystem aimingSystem;
 
 
     /**
@@ -57,6 +58,7 @@ public class GameModel {
         initializeRooms();
         darknessSprite = new ZWSprite(res.getTexture("darkness-overlay"));
         flashlightModel = new FlashlightModel(getRoom().getWorld());
+        aimingSystem = new AimingSystem(player);
        }
 
     private void initializeRenderTextures(){
@@ -122,6 +124,13 @@ public class GameModel {
         res.loadSound("zombie_sleeping", "core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
     }
 
+    public AimingSystem getAimingSystem(){
+        return aimingSystem;
+    }
+
+    public void setAimingSystem(AimingSystem aimingSystem){
+        this.aimingSystem = aimingSystem;
+    }
 
     /**
      * @return  The current instance of the game model
@@ -338,6 +347,10 @@ public class GameModel {
 
     public int getHighestCompletedRoom(){return highestCompletedRoom;}
 
+    public void setHighestCompletedLevel(int level){this.highestCompletedLevel = level;}
+
+    public int getHighestCompletedLevel(){return highestCompletedLevel;}
+
     public void clearBookList(){
         getRoom().getBooks().clear();
     }
@@ -372,4 +385,5 @@ public class GameModel {
         this.playerType = playerType;
     }
 
+    public int getAmountOfLevelsInGame(){return levels.size();}
 }

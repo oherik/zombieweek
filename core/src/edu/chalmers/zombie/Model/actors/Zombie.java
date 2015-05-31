@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.SpawnController;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
@@ -67,9 +66,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
-        SpawnController.setCollisionObjects();
-
-                isKnockedOut = false;
+        isKnockedOut = false;
 
         //Set system time created
         timeSinceLastPath = System.currentTimeMillis();

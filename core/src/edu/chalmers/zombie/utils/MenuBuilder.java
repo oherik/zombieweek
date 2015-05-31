@@ -6,6 +6,7 @@ import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.MenuController;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.ScreenModel;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
 
@@ -141,7 +142,9 @@ public class MenuBuilder {
         startOverButton.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
-                //TODO:probably needs to do some other stuff here to make "start over" work
+                Player player = GameModel.getInstance().getPlayer();
+                player.lifeRefill();
+                MapController.loadLevel(GameModel.getInstance().getCurrentLevelIndex());
                 ZWGameEngine.setScreen(new GameScreen());
             }
         });
@@ -244,26 +247,31 @@ public class MenuBuilder {
         table.setFillParent(true);
         levelStage.addActor(table);
 
-        int levelsCompleted = GameModel.getInstance().getHighestCompletedRoom();
+        int levelsCompleted = GameModel.getInstance().getHighestCompletedLevel();
 
-        for (int i = 0;i <= levelsCompleted;i++){
-            String buttonName = "Room " + (i+1);
+        int amountOfLevels = GameModel.getInstance().getAmountOfLevelsInGame();
+
+        for (int i = 0;i <= amountOfLevels-1;i++){
+            String buttonName = "Level " + (i+1);
             final int level = i;
-            ZWTextButton levelButton = new ZWTextButton(buttonName, skin);
+            ZWTextButton levelButton;
+
+            if (i>levelsCompleted){ //not completed levels
+                ZWSkin disabledSkin = createMenuSkin();
+                disabledSkin.createDisabledButtons();
+                levelButton = new ZWTextButton(buttonName, disabledSkin);
+            } else { //completed levels
+                levelButton = new ZWTextButton(buttonName, skin);
+                levelButton.addListener(new ZWClickAction(){
+                    @Override
+                    public void clicked(){
+                        MapController.loadLevel(level);
+                        ZWGameEngine.setScreen(new GameScreen());
+                    }
+                });
+            }
+            
             table.add(levelButton,250,50,15);
-
-
-            levelButton.addListener(new ZWClickAction(){
-                @Override
-                public void clicked(){
-                    //MapController mapController = new MapController();
-                    //ZWWorld world = mapController.getRoom(level).getWorld();
-                    //TODO: is this done in the right way?
-                    ZWGameEngine.setScreen(new GameScreen());
-                }
-            });
-
-
         }
 
 

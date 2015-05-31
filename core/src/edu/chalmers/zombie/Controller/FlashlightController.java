@@ -12,6 +12,9 @@ import java.util.ArrayList;
  */
 public class FlashlightController {
     private FlashlightModel flashlightModel;
+     /*
+    *draws a black polygon that is shaped like everything that is not inside the flashlight circle segment.
+     */
     public void draw(FlashlightModel flashlightModel, ZWPolygonSpriteBatch polygonSpriteBatch){
         this.flashlightModel = flashlightModel;
         flashlightModel.setWorld(GameModel.getInstance().getRoom().getWorld());
@@ -43,7 +46,7 @@ public class FlashlightController {
     }
     private void fetchDirection(){
         GameModel gameModel = GameModel.getInstance();
-        float direction = gameModel.getPlayer().getAimingController().getDirection() + Constants.PI/2;
+        float direction = gameModel.getPlayer().getRadDirection() + Constants.PI/2;
         flashlightModel.setDirection(direction);
     }
     private void fetchPlayerPosition(){

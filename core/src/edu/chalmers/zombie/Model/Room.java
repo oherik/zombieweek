@@ -1,7 +1,7 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.controller_adapters.ZWContactListener;
+import edu.chalmers.zombie.adapter.ZWContactListener;
 import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import java.awt.*;
