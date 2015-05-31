@@ -69,7 +69,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
         SpawnController.setCollisionObjects();
-       // MapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn()); //TODO varför finns den där?
+       // MapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn()); //TODO varfï¿½r finns den dï¿½r?
 
                 isKnockedOut = false;
 
@@ -80,17 +80,31 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     }
 
     protected void createBody(float x, float y){
+
+        ZWVector[] vectors = new ZWVector[8];
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
+        for (ZWVector vector:vectors){
+            vector.scl(1f/6.5f);
+        }
+
         short categoryBits = Constants.COLLISION_ZOMBIE;
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER |
                 Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_LEVEL;
 
         ZWBody body = new ZWBody();
         body.createBodyDef(true, x+0.5f, y+0.5f, 20f, 20f);
-        body.setFixtureDef(0.8f, 0, 1, 1, categoryBits, maskBits, false);
+        body.setFixtureDef(0.8f, 0, vectors, categoryBits, maskBits, false);
         //Set body
         super.setBody(body);
         super.getBody().setUserData(this);
-        super.getBody().setAngularDamping(10000);
+        super.getBody().setAngularDamping(10050);
     }
     /**
      * Sets whether the zombie has been attacked or not.

@@ -99,6 +99,7 @@ public class ZWBody {
         fixtureDef.filter.maskBits = maskBits;
         fixtureDef.filter.categoryBits = categoryBits;
         fixtureDef.isSensor = isSensor;
+        fixtureDef.density = 1;
     }
 
     public Body getBody(){
