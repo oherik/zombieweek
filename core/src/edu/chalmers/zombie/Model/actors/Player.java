@@ -17,7 +17,7 @@ public class Player extends Entity implements CreatureInterface {
     private int lives;
     private int maxLives = 100;
     private int ammunition;
-    private int grenadeAmmo = 5; //TODO: remove?
+    private int grenadeAmmo = 5;
     private boolean isHidden;
     private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
@@ -65,7 +65,7 @@ public class Player extends Entity implements CreatureInterface {
      * A method to get current players kill count.
      * @return int killCount.
      */
-    public int getKillCount() { //TODO: remove?
+    public int getKillCount() {
         return killCount;
     }
 
@@ -118,8 +118,6 @@ public class Player extends Entity implements CreatureInterface {
      */
     public float getSpeed(){return this.speed;}
 
-    public void setForceLength(float speed){force.setLength(speed);}//TODO: remove?
-
     public ZWVector getForce(){return this.force;}
 
     /**
@@ -137,15 +135,6 @@ public class Player extends Entity implements CreatureInterface {
     @Override
     public void setBodyVelocity(ZWVector velocity){
         super.setBodyVelocity(velocity);
-    }
-
-    /**
-     * A method used when player is attacking zombie.
-     * @param zombie the zombie that is attacked.
-     */
-    public void attack(Zombie zombie) {//TODO: remove?
-
-        // TODO: fill in with attack of zombie instance
     }
 
     @Override
@@ -171,13 +160,6 @@ public class Player extends Entity implements CreatureInterface {
 
         return super.getBody();
     }
-
-    /**
-     * A method that increases ammuntion.
-     */
-    public void addBook(){
-        ++ammunition;
-    } //TODO: remove?
 
     /**
      * Since the ammunition count can't be negative it checks if it's >0 before decreasing it
@@ -290,6 +272,9 @@ public class Player extends Entity implements CreatureInterface {
         return isHit;
     }
 
+    /**
+     * Decreases grenade ammunition with 1
+     */
     public void decreaseGrenadeAmmunition(){
         this.grenadeAmmo = this.grenadeAmmo - 1;
     }
@@ -298,6 +283,9 @@ public class Player extends Entity implements CreatureInterface {
         return grenadeAmmo;
     }
 
+    /**
+     * Refills life
+     */
     public void lifeRefill() {
         this.lives = maxLives;
     }
