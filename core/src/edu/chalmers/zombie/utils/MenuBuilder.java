@@ -244,10 +244,10 @@ public class MenuBuilder {
         table.setFillParent(true);
         levelStage.addActor(table);
 
-        int levelsCompleted = GameModel.getInstance().getHighestCompletedRoom();
+        int levelsCompleted = GameModel.getInstance().getHighestCompletedLevel();
 
         for (int i = 0;i <= levelsCompleted;i++){
-            String buttonName = "Room " + (i+1);
+            String buttonName = "Level " + (i+1);
             final int level = i;
             ZWTextButton levelButton = new ZWTextButton(buttonName, skin);
             table.add(levelButton,250,50,15);
@@ -256,9 +256,7 @@ public class MenuBuilder {
             levelButton.addListener(new ZWClickAction(){
                 @Override
                 public void clicked(){
-                    //MapController mapController = new MapController();
-                    //ZWWorld world = mapController.getRoom(level).getWorld();
-                    //TODO: is this done in the right way?
+                    MapController.loadLevel(level);
                     ZWGameEngine.setScreen(new GameScreen());
                 }
             });

@@ -350,6 +350,10 @@ public class GameModel {
 
     public int getHighestCompletedRoom(){return highestCompletedRoom;}
 
+    public void setHighestCompletedLevel(int level){this.highestCompletedLevel = level;}
+
+    public int getHighestCompletedLevel(){return highestCompletedLevel;}
+
     public void clearBookList(){
         getRoom().getBooks().clear();
     }
