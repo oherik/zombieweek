@@ -11,9 +11,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * A zombie is an antoagonist, and will pursue and attack the player to different degrees
+ * A zombie is an antagonist, and will pursue and attack the player to different degrees
  * depending on its type. The detection radius, damage done, speed and starting hp varies
- * along with graphical depicition.
+ * along with graphical depiction.
  *
  * Created by neda on 2015-03-31.
  * Modified by Erik, Neda
