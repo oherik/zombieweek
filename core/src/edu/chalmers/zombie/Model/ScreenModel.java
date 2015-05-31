@@ -17,7 +17,8 @@ public class ScreenModel {
     private ZWStage levelChooserStage;
     private ZWStage settingsStage;
     private ZWStage characterStage;
-    public enum MenuState{MAIN_MENU, LEVEL_MENU, SETTINGS_MENU,CHARACTER_MENU}
+   private ZWStage gameModeStage;
+    public enum MenuState{MAIN_MENU, LEVEL_MENU, SETTINGS_MENU,CHARACTER_MENU, GAMEMODE_STATE}
     private MenuState menuState;
 
     public ScreenModel(){}
@@ -93,5 +94,15 @@ public class ScreenModel {
     public void setCharacterStage(ZWStage characterStage) {
         this.characterStage = characterStage;
     }
+
+    public ZWStage getGameModeStage() {
+        return gameModeStage;
+    }
+
+    public void setGameModeStage(ZWStage gameModeStage) {
+        this.gameModeStage = gameModeStage;
+    }
+
+
 
 }

@@ -34,7 +34,7 @@ public class GameModel {
     private FlashlightModel flashlightModel;
     private PlayerType playerType;
     private AimingSystem aimingSystem;
-
+    private boolean fearOfTheDark;
 
     /**
      * Initializes the game model
@@ -386,4 +386,12 @@ public class GameModel {
     }
 
     public int getAmountOfLevelsInGame(){return levels.size();}
+
+    public boolean isFearOfTheDark(){
+        return fearOfTheDark;
+    }
+
+    public void setFearOfTheDark(boolean b){
+        fearOfTheDark = b;
+    }
 }
