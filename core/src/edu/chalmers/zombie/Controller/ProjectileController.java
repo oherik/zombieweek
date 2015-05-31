@@ -46,7 +46,7 @@ public class ProjectileController {
             if (z.getHp() <= 0) {
                 ZombieController.knockOut(z);
             }
-            EntityController.knockBack(b, z, damage / 10);
+            EntityController.knockBack(b, z, (float)damage / 10f);
             hitGround(b);
             // GameModel.getInstance().addEntityToRemove(b);
             //b.markForRemoval();
