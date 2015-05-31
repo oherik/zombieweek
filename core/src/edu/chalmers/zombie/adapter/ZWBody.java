@@ -34,8 +34,6 @@ public class ZWBody {
 
     public ZWBody(Body box2Body){
         this.body = box2Body;
-        if(box2Body.getFixtureList()!=null && box2Body.getFixtureList().size>0)
-             this.fixture = box2Body.getFixtureList().get(0);
         fixtureDef = new FixtureDef();
         bodyDef = new BodyDef();
     }
