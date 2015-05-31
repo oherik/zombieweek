@@ -86,7 +86,7 @@ public class Player extends Entity implements CreatureInterface {
      * A method to get current players kill count.
      * @return int killCount.
      */
-    private int getKillCount() {
+    public int getKillCount() {
 
         return killCount;
     }
@@ -94,7 +94,7 @@ public class Player extends Entity implements CreatureInterface {
     /**
      * A method that increases current player's kill count.
      */
-    private void incKillCount() {
+    public void incKillCount() {
 
         killCount++;
     }
