@@ -54,8 +54,7 @@ public class GameScreen extends ZWScreen{
      */
     public GameScreen(float tileSize){
         this.tileSize = tileSize;
-        float width = ZWGameEngine.getWindowWidth();
-        float height = ZWGameEngine.getWindowHeight();
+
         //camera = new OrthographicCamera(width, height);
        // mapController = new MapController();
 

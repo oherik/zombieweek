@@ -16,7 +16,7 @@ import java.util.List;
 public class GameModel {
 
     private static GameModel instance = new GameModel();
-    public static ResourceManager res;
+    public ResourceManager res;
     private Player player;
     private int currentLevel, currentRoom, highestCompletedLevel, highestCompletedRoom;
     private ArrayList<Level> levels;
@@ -58,7 +58,7 @@ public class GameModel {
         res.loadTexture("darkness-overlay", "core/assets/darkness.png");
     }
 
-    private void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
+    private void initializeRooms(){ //TODO varifrï¿½n ska vi hï¿½mta dessa?
         res.loadTiledMap("level1_room1", "core/assets/Map/Level_1_room_1.tmx");
         res.loadTiledMap("level1_room2", "core/assets/Map/Level_1_room_2.tmx");
         res.loadTiledMap("level1_room3", "core/assets/Map/Level_1_room_3.tmx");
