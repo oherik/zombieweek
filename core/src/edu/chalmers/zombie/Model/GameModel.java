@@ -4,6 +4,7 @@ import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.GameState;
+import edu.chalmers.zombie.utils.PlayerType;
 import edu.chalmers.zombie.utils.ResourceManager;
 import edu.chalmers.zombie.adapter.ZWRenderer;
 
@@ -30,6 +31,7 @@ public class GameModel {
     private ZWRenderer ZWRenderer;
     private ScreenModel screenModel;
     private ZWSprite darknessSprite;
+    private PlayerType playerType;
 
     /**
      * Initializes the game model
@@ -84,7 +86,7 @@ public class GameModel {
         res.loadTexture("zombie-data-still", "core/assets/Images/zombie-data-still.png");
         res.loadTexture("zombie-data-dead", "core/assets/Images/zombie-data-dead.png");
         res.loadTexture("zombie-data", "core/assets/Images/zombie-data.png");
-        res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
+        res.loadTexture("zombie-it-still", "core/assets/Images/zombie-it-still.png");
         res.loadTexture("zombie-it-dead", "core/assets/Images/zombie-it-dead.png");
         res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
         res.loadTexture("zombie-boss-still","core/assets/Images/zombie-boss-still.png");
@@ -114,7 +116,7 @@ public class GameModel {
         res.loadSound("menu_hover", "core/assets/Audio/Sound_effects/menu_hover.mp3");
         res.loadSound("zombie_hit","core/assets/Audio/Sound_effects/zombie_hit.mp3");
         res.loadSound("pick_up_book","core/assets/Audio/Sound_effects/pick_up_book.mp3");
-        res.loadSound("zombie_sleeping","core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
+        res.loadSound("zombie_sleeping", "core/assets/Audio/Sound_effects/zombie_sleeping.mp3");
     }
 
 
@@ -351,6 +353,18 @@ public class GameModel {
     public ScreenModel getScreenModel(){return this.screenModel;}
 
     public void setScreenModel(ScreenModel screenModel){this.screenModel = screenModel;}
+
+    public PlayerType getPlayerType() {
+        if (playerType==null){
+            playerType = PlayerType.EMILIA; //TODO: should already be set
+        }
+        return playerType;
+    }
+
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
+    }
+
 
 
 
