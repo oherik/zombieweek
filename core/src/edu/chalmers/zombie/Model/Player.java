@@ -17,7 +17,6 @@ public class Player extends Entity implements CreatureInterface {
     private int lives;
     private int ammunition;
     private int grenadeAmmo = 5; //TODO: remove?
-    private boolean isAttacked;//TODO: remove?
     private boolean isHidden;
     private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
@@ -26,9 +25,8 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private PotionType potion;//TODO: remove?
-    private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
-    private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
+    private int waterTilesTouching;
+    private int sneakTilesTouching;
 
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
@@ -54,6 +52,8 @@ public class Player extends Entity implements CreatureInterface {
         ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
 
+        setWaterTilesTouching(0);
+        setSneakTilesTouching(0);
 
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är

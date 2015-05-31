@@ -9,7 +9,7 @@ import java.awt.*;
 
 /**
  * A zeta zombie has a low speed and a high resilience. It causes a damage of 100 percent.
- * It has a detection radius of 100, which is high. 
+ * It has a detection radius of 100, which is high.
  *
  * Created by neda on 2015-05-19.
  */
