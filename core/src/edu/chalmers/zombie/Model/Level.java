@@ -16,14 +16,6 @@ public class Level {
 
     public Level(){
         roomList = new ArrayList<Room>();
-
-        GameModel gameModel = GameModel.getInstance();
-
-        roomList.add(new Room(gameModel.res.getTiledMap("room0")));
-        roomList.add(new Room(gameModel.res.getTiledMap("room1")));
-        roomList.add(new Room(gameModel.res.getTiledMap("room2")));
-
-
     }
 
     /**

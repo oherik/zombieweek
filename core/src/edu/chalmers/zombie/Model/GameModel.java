@@ -58,13 +58,14 @@ public class GameModel {
     }
 
     private void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
-        res.loadTiledMap("room0", "core/assets/Map/Level_1_room_1.tmx");
-        res.loadTiledMap("room1", "core/assets/Map/Level_1_room_2.tmx");
-        res.loadTiledMap("room2", "core/assets/Map/Level_1_room_3.tmx");
+        res.loadTiledMap("level1_room1", "core/assets/Map/Level_1_room_1.tmx");
+        res.loadTiledMap("level1_room2", "core/assets/Map/Level_1_room_2.tmx");
+        res.loadTiledMap("level1_room3", "core/assets/Map/Level_1_room_3.tmx");
 
-        addRoom(new Room(res.getTiledMap("room0"))); //0
-        addRoom(new Room(res.getTiledMap("room1"))); //1
-        addRoom(new Room(res.getTiledMap("room2"))); //2
+        levels.add(new Level());
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room1"))); //0
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room2"))); //1
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room3"))); //2
     }
 
     private void initializeZombieTextures(){
@@ -147,10 +148,10 @@ public class GameModel {
     }
 
     /**
-     * Adds a room
+     * Adds a room to a level
      */
-    public void addRoom(Room room){
-        levels.get(currentLevel).addRoom(room);
+    public void addRoom(Level level, Room room){
+        level.addRoom(room);
     }
 
     /**
