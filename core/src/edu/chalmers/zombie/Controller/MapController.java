@@ -118,7 +118,7 @@ public class MapController {
      */
     public static void updatePlayerPosition(Point point){
         GameModel gameModel = GameModel.getInstance();
-               gameModel.getPlayer().setPosition(point);
+               gameModel.getPlayer().setPosition(point.x+0.5f, point.y+0.5f); //+0.5f so it will be placed in the middle of the tile
     }
 
     /**
@@ -296,7 +296,7 @@ public class MapController {
             }
             if(player.getBody() == null||!player.getBody().bodyIsInWorld(getRoom().getWorld())){
                 System.out.println(getPlayerBufferPosition());
-                player.createDefaultBody(currentRoom.getWorld(), getPlayerBufferPosition());
+                player.createDefaultBody(currentRoom.getWorld(), (float) getPlayerBufferPosition().getX()+0.5f, (float) getPlayerBufferPosition().getY()+0.5f); //+0.5 since we want it palced in the middle of the tile
             }
 
             /* ------ Update screen ------ */

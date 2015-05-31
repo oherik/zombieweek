@@ -23,7 +23,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private long timeSinceLastPath;
     private ArrayList<Point> path;
 
-
     /**
      * Creates a new zombie
      * @param walkingTexture    Which texture to use when the zombie is walking
@@ -88,19 +87,21 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     }
 
     /**
-     * Set the zombie as attacked or not
-     * @param isAggressive    true if attacked, false if not
+     * Sets whether the zombie has been attacked or not.
+     * @param isAggressive true if attacked, false if not
      */
     public void setIsAggressive(boolean isAggressive){
         this.isAggressive = isAggressive;
     }
 
     /**
-     * @return true if the zombie is attacked, false otherwise
+     * A method which returns whether a zombie is agressive.
+     * @return true if the zombie has been attacked, false otherwise
      */
     public boolean isAggressive(){
         return isAggressive;
     }
+
     /**
      * @return System time when the last path finding was performed
      */
@@ -131,13 +132,17 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     /**
      * A method which sets the zombie's speed to a new speed.
-     * @param newSpeed
+     * @param newSpeed the desired new speed.
      */
     public void setSpeed(int newSpeed) {
 
         this.speed = newSpeed;
     }
 
+    /**
+     * A method which returns a zombie's speed.
+     * @return speed (int).
+     */
     public int getSpeed() {
 
         return speed;
@@ -145,13 +150,17 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
     /**
      * A method which sets the zombie's angular speed to a new speed.
-     * @param angularSpeed The new angular speed
+     * @param angularSpeed The new angular speed.
      */
     public void setAngularSpeed(int angularSpeed) {
 
         this.angularSpeed = angularSpeed;
     }
 
+    /**
+     * A method which returns a zombie's angular speed.
+     * @return angular speed (int).
+     */
     public int getAngularSpeed() {
 
         return angularSpeed;
@@ -166,30 +175,54 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         hp -= decBy;
     }
 
+    /**
+     * A method which sets a zombie's starting hp.
+     * @param hp the desired starting hp.
+     */
     public void setStartingHp(int hp) {
 
         this.hp = hp;
     }
 
-    public int getHP(){
+    /**
+     * A method which returns a zombie's hp.
+     * @return hp (int).
+     */
+    public int getHp(){
         return hp;
     }
 
+    /**
+     * A method which returns a zombie's type.
+     * @return type (ZombieType).
+     */
     public ZombieType getType() {
 
         return type;
     }
 
+    /**
+     * A method which sets a zombie's type.
+     * @param type desired type.
+     */
     public void setType(ZombieType type) {
 
         this.type = type;
     }
 
+    /**
+     * A method which sets a zombie's position.
+     * @param pos the desired position.
+     */
     public void setZombiePosition(Point pos) {
 
         position = pos;
     }
 
+    /**
+     * A method which returns a zombie's position.
+     * @return position (Point).
+     */
     public Point getZombiePosition() {
 
         return position;
@@ -204,42 +237,68 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         force.setY(speed);
     }
 
+    /**
+     * A method which sets the x-line force applied to zombie.
+     * @param speed desired force.
+     */
     public void setForceX(int speed) {
 
         force.setX(speed);
     }
 
+    /**
+     * A method which sets the size of a zombie's detection span.
+     * @param radius the radius of detection circle.
+     */
     public void setDetectionRadius(float radius) {
 
         this.radius = radius;
     }
 
+    /**
+     * A method which returns the size of a zombies detection span.
+     * @return radius of detection circle (float).
+     */
     public float getDetectionRadius() {
 
         return radius;
     }
 
+    /**
+     * A method which returns the vector force applied to the zombie.
+     * @return force (ZWVector):
+     */
     public ZWVector getForce() {
 
         return force;
     }
 
+    /**
+     * A method which returns the point of applied force on zombie.
+     * @return point (ZWVector).
+     */
     public ZWVector getPoint() {
 
         return point;
     }
 
     /**
-     * Changes the sprite to a sleeping one
+     * A method which sets a zombie as having been knocked out,
+     * coherently changing the zombie sprite to a sleeping one.
      */
     @Override
     public void knockOut() {
         isKnockedOut = true;
     }
 
+    /**
+     * A method which returns whether or not a zombie has been knocked out.
+     * @return true of knocked out, false if not.
+     */
     public boolean isKnockedOut(){
         return isKnockedOut;
     }
+
     @Override
     public boolean hasBeenAttacked() {
 
@@ -255,11 +314,19 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         return isMoving;
     }
 
+    /**
+     * A method which returns whether or not a zombie is moving.
+     * @param isMoving true if moving, false if not.
+     */
     public void setIsMoving(boolean isMoving) {
 
         this.isMoving = isMoving;
     }
 
+    /**
+     * A method which returns the mapController instance specific to a certain zombie.
+     * @return mapController (MapController). 
+     */
     public MapController getThisMapController() {
 
         return mapController;

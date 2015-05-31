@@ -63,46 +63,21 @@ public class Player extends Entity implements CreatureInterface {
         width = Constants.PLAYER_SIZE;
         height = Constants.PLAYER_SIZE;
 
-        ZWBody body = new ZWBody();
+        createDefaultBody(world,x,y);
 
-        body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
-
-        ZWVector[] vectors = new ZWVector[8];
-
-        vectors[0] = new ZWVector(2f,-1.5f);
-        vectors[1] = new ZWVector(3f,-0.5f);
-        vectors[2] = new ZWVector(3f,0.5f);
-        vectors[3] = new ZWVector(2f,1.5f);
-        vectors[4] = new ZWVector(-2f,1.5f);
-        vectors[5] = new ZWVector(-3f,0.5f);
-        vectors[6] = new ZWVector(-3f,-0.5f);
-        vectors[7] = new ZWVector(-2f,-1.5f);
-
-        for (ZWVector vector:vectors){
-            vector.scl(1f/6.5f);
-        }
-
-
-        short categoryBits = Constants.COLLISION_PLAYER;
-        short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
-                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
-
-
-        body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
-
-
-        //Set body
-        super.setBody(body);
         super.scaleSprite(1f / Constants.TILE_SIZE);
         killCount = 0;
         ammunition = 5;
         lives = 100;
         force = new ZWVector(0,0);
-        getBody().setFixedRotation(true);   //Så att spelaren inte roterar
 
 
     }
 
+    /**
+     * Copy constructor for class Player.
+     * @param p the Player instance to be copied.
+     */
     public Player(Player p) {
         this(p.getSprite().getTexture(), p.getWorld(), p.getX(), p.getY());
     }
@@ -121,15 +96,23 @@ public class Player extends Entity implements CreatureInterface {
      */
     private void incKillCount() {
 
-        killCount = killCount + 1;
+        killCount++;
     }
 
+    /**
+     * A method which sets the player's leg power.
+     * @param legPower desired leg power.
+     */
     public void setLegPower(int  legPower){
         this.legPower = legPower;
         speed = legPower;
         updateSpeed();
     }
 
+    /**
+     * A method which returns the player's leg power.
+     * @return leg power (int).
+     */
     public int getLegPower(){
         return legPower;
     }
@@ -170,12 +153,20 @@ public class Player extends Entity implements CreatureInterface {
      */
     public void updateSpeed(){force.setLength(speed);}
 
+    /**
+     * A method which returns the player's speed.
+     * @return speed (float).
+     */
     public float getSpeed(){return this.speed;}
 
     public void setForceLength(float speed){force.setLength(speed);}
 
     public ZWVector getForce(){return this.force;}
 
+    /**
+     * A method which sets the player's current direction.
+     * @param direction
+     */
     public void setDirection(Direction direction){this.direction = direction;}
 
     public Thread getKeyThread(){return this.keyThread;}
@@ -237,6 +228,9 @@ public class Player extends Entity implements CreatureInterface {
             ammunition--;
     }
 
+    /**
+     * A method which increases the player's ammunition by one.
+     */
     public void increaseAmmunition(){
         ammunition++;
     }
@@ -275,23 +269,35 @@ public class Player extends Entity implements CreatureInterface {
         lives += incBy;
     }
 
-
+    /**
+     * A method which returns the player's velocity.
+     * @return velocity (ZWVector).
+     */
     public ZWVector getVelocity(){
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
+    private void setDefaultBody(){
+        if(this.getBody()!=null) {
+            this.removeBody();
+        }
+
+
+    }
+
     /**
      * Creates a new default body at the given position
-     * @param point The point where to create the new body
+     * @param x The x coordinate where to create the new body
+     * @param y The y coordinate where to create the new body
      * @return A new default body
      */
-    public ZWBody createDefaultBody(ZWWorld world, Point point){
+    public ZWBody createDefaultBody(ZWWorld world, float x, float y){
         if(this.getBody()!=null) {
             this.removeBody();
         }
         this.setWorld(world);
         ZWBody body = new ZWBody();
-        body.createBodyDef(true,(float)point.x+0.5f,(float)point.y+0.5f,dampening,dampening);
+        body.createBodyDef(true,x,y,dampening,dampening);
 
         ZWVector[] vectors = new ZWVector[8];
         vectors[0] = new ZWVector(2f,-1.5f);
@@ -314,52 +320,11 @@ public class Player extends Entity implements CreatureInterface {
         body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
 
         this.setBody(body);
-        this.setPosition(point);
+        this.setPosition(x,y);
         getBody().setFixedRotation(true);   //Så att spelaren inte roterar
         return this.getBody();
     }
 
-    /**
-     * Spawns the current player at chosen point.
-     * @param x coordinate.
-     * @param y coordinate.
-     * @return this player.
-     */
-    public Player spawn( int x, int y) {
-
-        this.removeBody();
-        Point p = new Point(x,y);
-        this.setPosition(p);
-
-        ZWBody body = new ZWBody();
-        body.createBodyDef(true,x+0.5f,y+0.5f,dampening,dampening);
-
-        ZWVector[] vectors = new ZWVector[8];
-        vectors[0] = new ZWVector(2f,-1.5f);
-        vectors[1] = new ZWVector(3f,-0.5f);
-        vectors[2] = new ZWVector(3f,0.5f);
-        vectors[3] = new ZWVector(2f,1.5f);
-        vectors[4] = new ZWVector(-2f,1.5f);
-        vectors[5] = new ZWVector(-3f,0.5f);
-        vectors[6] = new ZWVector(-3f,-0.5f);
-        vectors[7] = new ZWVector(-2f,-1.5f);
-        for (ZWVector vector:vectors){
-            vector.scl(1f/6.5f);
-        }
-
-
-        short categoryBits = Constants.COLLISION_PLAYER;
-        short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
-                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
-
-        body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
-
-        this.setBody(body);
-        getBody().setFixedRotation(true);   //Så att spelaren inte roterar
-
-        return this;
-
-    }
 
     /**
      * A method that checks whether Player is hidden or not.
@@ -370,21 +335,36 @@ public class Player extends Entity implements CreatureInterface {
         return isHidden;
     }
 
-    public void setPosition(Point point){
-        getBody().setTransform((float)point.getX() + 0.5f, (float)point.getY() + 0.5f, getBody().getAngle()); //+0.5f because we want it in the middle
+    /**
+     * A method which sets the player's position.
+     * @param x desired x-coordinate.
+     * @param y desired y-coordinate.
+     */
+    public void setPosition(float x, float y){
+        getBody().setTransform(x,y, getBody().getAngle()); //+0.5f because we want it in the middle
         updateRotation();
         //TODO: should be done in controller, method updateRotation will be removed
     }
+
+    /**
+     * A method which returns the player's Hand instance.
+     * @return hand instance (Hand).
+     */
     public Hand getHand(){
         return this.hand;
     }
+
+    //TODO : move to PlayerController
     public void throwBook(){
         hand.throwBook();
         getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
+
+    //TODO: move to PlayerController
     public void throwGrenade(){
         hand.throwGrenade();
     }
+
     public int getWaterTilesTouching(){
         return waterTilesTouching;
     }
@@ -401,14 +381,26 @@ public class Player extends Entity implements CreatureInterface {
         sneakTilesTouching = i;
     }
 
+    /**
+     * A method which sets whether or not the player is hidden.
+     * @param isHidden true if hidden, false if not.
+     */
     public void setHidden(boolean isHidden) {
         this.isHidden = isHidden;
     }
 
-    public void setIsHit(boolean b){
-        isHit = b;
+    /**
+     * A method which sets whether or not the player has been hit.
+     * @param isHit true if hit, false if not.
+     */
+    public void setIsHit(boolean isHit){
+        this.isHit = isHit;
     }
 
+    /**
+     * A method which returns whether or not the player has been hit.
+     * @return true if hit, false if not. 
+     */
     public boolean isHit(){
         return isHit;
     }

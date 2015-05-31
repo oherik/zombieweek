@@ -83,16 +83,15 @@ public class ContactController {
                 break;
 
             case (Constants.COLLISION_ZOMBIE):
+                Zombie zombie = (Zombie) fixtureB.getBodyUserData();
                 switch(fixtureA.getCategoryBits()) {
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
-                        Zombie zombie = (Zombie)fixtureA.getBodyUserData();
                         ZombieController.attack(zombie, player);
                         break;
                     case Constants.COLLISION_PROJECTILE:
-                        Book book = (Book) fixtureB.getBodyUserData();
-                        Zombie z = (Zombie) fixtureA.getBodyUserData();
-                        ProjectileController.applyHit(z, book);
+                        Book book = (Book) fixtureA.getBodyUserData();
+                        ProjectileController.applyHit(zombie, book);
                         break;
 
                 }
@@ -108,7 +107,7 @@ public class ContactController {
                         PlayerController.increaseWaterTilesTouching(player);
                         break;
                     case Constants.COLLISION_ZOMBIE:
-                        Zombie zombie = (Zombie) fixtureA.getBodyUserData();
+                        zombie = (Zombie) fixtureA.getBodyUserData();
                         ZombieController.attack(zombie, player);
                         break;
                     case Constants.COLLISION_POTION:
