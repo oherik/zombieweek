@@ -98,11 +98,12 @@ public class ProjectileController {
         Player player = gameModel.getPlayer();
         AimingSystem aimingSystem = AimingController.getAimingSystem();
         Grenade grenade = new Grenade(aimingSystem.getMouseX(), aimingSystem.getMouseY(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
+        setInMotion(grenade, grenade.getForce(), grenade.getDirection(), 0);
         gameModel.addGrenade(grenade);
     }
     public static void setInMotion(Entity entity, ZWVector force, float direction, float omega){
         force.setAngleRad(direction + Constants.PI*1/2);
         entity.setBodyVelocity(force);
-        entity.setAngularVelocity(0);
+        entity.setAngularVelocity(omega);
     }
 }
