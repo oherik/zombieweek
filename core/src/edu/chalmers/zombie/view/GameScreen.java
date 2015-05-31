@@ -90,11 +90,7 @@ public class GameScreen extends ZWScreen{
 
         
         ZWGameEngine.setInputProcessor(inputMultiplexer);
-
-        //TODO debug
-        MapController.printCollisionTileGrid();
-
-
+        
 
 
     }
