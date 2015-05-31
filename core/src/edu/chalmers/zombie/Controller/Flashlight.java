@@ -222,11 +222,20 @@ public class Flashlight {
     }
     private ZWPolygonRegion createDarkRegion(){
         float[] vertices = createArrayOfVertices();
+        vertices = scaleVertices(vertices);
         short[] triangles = calculateTriangles(vertices);
         //Punkterna som har räknats ut är i spelvärldens format. Vet inte om det alltid har varit så. Men då
         //Trianglarna stämmer i alla fall.
         ZWPolygonRegion darkness = new ZWPolygonRegion(new ZWTextureRegion(darkTexture), vertices, triangles);
         return darkness;
+    }
+
+    private float[] scaleVertices(float[] vertices){
+        for(int i = 0; i < vertices.length; i= i+ 2) {
+            vertices[i] = vertices[i] * Constants.TILE_SIZE - playerPosition.getX() * Constants.TILE_SIZE + ZWGameEngine.getWindowWidth()/2;
+            vertices[i+1] = vertices[i+1] * Constants.TILE_SIZE - playerPosition.getY() * Constants.TILE_SIZE + ZWGameEngine.getWindowHeight()/2;
+        }
+        return vertices;
     }
     private ZWSprite createLight(){
         ZWSprite light = new ZWSprite(lightTexture);
