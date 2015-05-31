@@ -276,12 +276,10 @@ public class GameScreen extends ZWScreen{
 
             if (gameModel.isFlashlightEnabled()){
                 renderer.setCombinedCameraBatch();
-                if (flashlight==null){
 
-                    flashlight = new Flashlight(currentWorld,Constants.PI/4,100,0.9f);
 
-                }
-                flashlight.draw(psb);
+                gameModel.getFlashlight().draw(psb);
+
             } else{
                 darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
                 sb.begin();
