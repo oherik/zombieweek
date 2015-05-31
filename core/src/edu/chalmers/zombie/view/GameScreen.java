@@ -187,17 +187,17 @@ public class GameScreen extends ZWScreen{
 
                         /* ----------------- TEST FLASHLIGHT -----------------*/
 
-
-            if (gameModel.isFlashlightEnabled()){
-                renderer.setCombinedCameraBatch();
-                flashlightController.draw(gameModel.getFlashlightModel(),psb);
-            } else{
-                darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
-                sb.begin();
-                darkness.draw(sb);
-                sb.end();
+            if (gameModel.isFearOfTheDark()) {
+                if (gameModel.isFlashlightEnabled()){
+                    renderer.setCombinedCameraBatch();
+                    flashlightController.draw(gameModel.getFlashlightModel(),psb);
+                } else{
+                    darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
+                    sb.begin();
+                    darkness.draw(sb);
+                    sb.end();
+                }
             }
-
 
 
             drawBlood();
