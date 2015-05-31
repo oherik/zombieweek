@@ -65,8 +65,8 @@ public class Room {
 
     public void destroyBody(ZWBody body){
             this.world.destroyBody(body);
-            body.setBody(null);
-            body = null;
+           // body.setBody(null);
+            //body = null;
     }
 
     public void addBook(Book b){

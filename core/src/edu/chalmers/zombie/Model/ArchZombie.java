@@ -19,7 +19,9 @@ public class ArchZombie extends Zombie {
 
     public ArchZombie(ZWWorld world, int x, int y) {
 
-        super(null,null,null, world, x, y,32);
+        super(GameModel.getInstance().res.getTexture("zombie"),
+                GameModel.getInstance().res.getTexture("zombie-still"),
+                GameModel.getInstance().res.getTexture("zombie-dead"), world, x, y,32);
         setType(ZombieType.ARCH);
         this.world = world;
         this.sprite = sprite;

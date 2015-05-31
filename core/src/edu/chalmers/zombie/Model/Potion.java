@@ -121,8 +121,6 @@ public class Potion extends Entity {
         types.add(PotionType.SUPER_STRENGTH);
         types.add(PotionType.IMMUNITY);
 
-        System.out.println(((int)Math.random()*11) + " "); // <-- For debugging
-
         int i = (((int)Math.random()*11) / 4);
 
         PotionType pt = types.get(i);

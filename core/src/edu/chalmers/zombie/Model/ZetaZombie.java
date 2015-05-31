@@ -18,7 +18,9 @@ public class ZetaZombie extends Zombie {
 
     public ZetaZombie(ZWWorld world, int x, int y) {
 
-        super(null,null,null, world, x, y,32);
+        super(GameModel.getInstance().res.getTexture("zombie"),
+                GameModel.getInstance().res.getTexture("zombie-still"),
+                GameModel.getInstance().res.getTexture("zombie-dead"), world, x, y,32);
         setType(ZombieType.ZETA);
         this.world = world;
         this.sprite = sprite;
