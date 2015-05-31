@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.adapter;
 
+import com.badlogic.gdx.math.Vector2;
 import edu.chalmers.zombie.controller.EntityController;
 import edu.chalmers.zombie.controller.ProjectileController;
 import edu.chalmers.zombie.controller.ZombieController;
@@ -50,18 +51,20 @@ public class Grenade extends Entity {
         super.scaleSprite(1f / Constants.TILE_SIZE);
         getBody().setUserData(this);
         calculateDirection();
-        setInMotion();
         unproject();
         initializeTimer();
+        force.setLength(speed);
     }
     private void calculateDirection(){
         float deltaX = ZWGameEngine.getWindowWidth() / 2 - targetX;
         float deltaY = ZWGameEngine.getWindowHeight() / 2 - targetY;
         direction = (float) Math.atan2((double) deltaY, (double) deltaX) + Constants.PI / 2;
     }
-    private void setInMotion(){
-        force.setLength(speed);
-        ProjectileController.setInMotion(this, force, direction, 0);
+     public float getDirection(){
+        return direction;
+    }
+    public ZWVector getForce(){
+        return force;
     }
     private void unproject(){
         ZWRenderer ZWRenderer = new ZWRenderer();

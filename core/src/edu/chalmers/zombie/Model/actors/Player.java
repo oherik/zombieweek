@@ -1,6 +1,5 @@
 package edu.chalmers.zombie.model.actors;
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.AimingController;
 import edu.chalmers.zombie.utils.*;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;

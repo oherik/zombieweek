@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
-import edu.chalmers.zombie.controller.ProjectileController;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
