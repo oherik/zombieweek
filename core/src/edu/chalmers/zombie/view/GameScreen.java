@@ -18,15 +18,10 @@ import java.awt.*;
  */
 public class GameScreen extends ZWScreen{
     private ZWWorld currentWorld;
-   // private OrthographicCamera camera;
-  //  private OrthogonalTiledMapRenderer mapRenderer;
-  //  private Box2DDebugRenderer boxDebug;
-    //private MapController mapController;
     private float tileSize;
     //HUD variables
     private ZWBitmapFont bitmapFont;
     private ZWSpriteBatch batchHUD;
-    private PathAlgorithm pathFinding; //TODO debug
     private int steps;
     private ZWSpriteBatch sb = new ZWSpriteBatch();
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
