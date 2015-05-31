@@ -16,6 +16,7 @@ public class Player extends Entity implements CreatureInterface {
 
     private int killCount;
     private int lives;
+    private int maxLives = 100;
     private int ammunition;
     private int grenadeAmmo = 5; //TODO: remove?
     private boolean isHidden;
@@ -54,7 +55,7 @@ public class Player extends Entity implements CreatureInterface {
 
         killCount = 0;
         ammunition = 5;
-        lives = 100;
+        lives = maxLives;
         force = new ZWVector(0,0);
 
         setBody(body);
@@ -297,4 +298,9 @@ public class Player extends Entity implements CreatureInterface {
     public int getGrenadeAmmo(){
         return grenadeAmmo;
     }
+
+    public void lifeRefill() {
+        this.lives = maxLives;
+    }
+
 }

@@ -6,6 +6,7 @@ import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.MenuController;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.ScreenModel;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
 
@@ -141,7 +142,9 @@ public class MenuBuilder {
         startOverButton.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
-                //TODO:probably needs to do some other stuff here to make "start over" work
+                Player player = GameModel.getInstance().getPlayer();
+                player.lifeRefill();
+                MapController.loadLevel(GameModel.getInstance().getCurrentLevelIndex());
                 ZWGameEngine.setScreen(new GameScreen());
             }
         });
