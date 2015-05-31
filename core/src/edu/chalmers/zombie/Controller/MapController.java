@@ -25,6 +25,7 @@ public class MapController {
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
     public static Room getRoom(int roomIndex){
+
         GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getRooms().size() -1;
         if(roomIndex<0 ||roomIndex > maxSize)
@@ -36,8 +37,10 @@ public class MapController {
      * @return the current room from the model
      */
     public static Room getRoom(){
+
         GameModel gameModel = GameModel.getInstance();
-        return gameModel.getRoom();}
+        return gameModel.getRoom();
+    }
 
 
     /**
