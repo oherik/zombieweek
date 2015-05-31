@@ -28,7 +28,6 @@ public class Player extends Entity implements CreatureInterface {
     private int waterTilesTouching;
     private int sneakTilesTouching;
     private Thread keyThread; //Keeps track of key releases
-    //The hand is throwing the book and aiming.
     private AimingController aimingController = new AimingController(this);
 
     private boolean isHit = false;

@@ -1,4 +1,4 @@
-package edu.chalmers.zombie.controller;
+package edu.chalmers.zombie.model;
 
 /**
  * Created by daniel on 5/19/2015.
@@ -10,7 +10,7 @@ import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import java.util.ArrayList;
 
-public class Flashlight {
+public class FlashlightModel {
     private ZWWorld world;
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
     private ZWVector playerPosition = new ZWVector();
@@ -29,7 +29,7 @@ public class Flashlight {
     private float[] corners = new float[8];
     private float lengthFraction;
 
-    public Flashlight(@NotNull ZWWorld world) throws NullPointerException{
+    public FlashlightModel(@NotNull ZWWorld world) throws NullPointerException{
         if (world == null){
             throw new NullPointerException("The world is null");
         }
@@ -39,7 +39,7 @@ public class Flashlight {
         lengthFraction = 0.75f;
         initializeRays();
     }
-    public Flashlight(@NotNull ZWWorld world, float width, int numberOfRays, float lengthFraction)throws NullPointerException, IllegalArgumentException{
+    public FlashlightModel(@NotNull ZWWorld world, float width, int numberOfRays, float lengthFraction)throws NullPointerException, IllegalArgumentException{
         if (world == null){
             throw new NullPointerException("The world is null");
         }
@@ -56,21 +56,21 @@ public class Flashlight {
     *draws a black polygon that is shaped like everything that is not inside the flashlight circle segment.
      */
     public void draw(ZWPolygonSpriteBatch polygonSpriteBatch){
-        world = GameModel.getInstance().getRoom().getWorld();
-        clearAll();
-        calculateLength();
-        fetchDirection();
-        fetchPlayerPosition();
-        calculateEndPoints();
-        calculateCollisionPoints();
-        calculateMaxYIndex();
-        calculateCorners();
-        ZWPolygonRegion darkness = createDarkRegion();
-        polygonSpriteBatch.begin();
-        polygonSpriteBatch.drawPolygonRegion(darkness, 0, 0);
-        polygonSpriteBatch.end();
+        //world = GameModel.getInstance().getRoom().getWorld();
+        //clearAll();
+        //calculateLength();
+       // fetchDirection();
+        //fetchPlayerPosition();
+        //calculateEndPoints();
+        //calculateCollisionPoints();
+        //calculateMaxYIndex();
+        //calculateCorners();
+       // ZWPolygonRegion darkness = createDarkRegion();
+     //   polygonSpriteBatch.begin();
+       // polygonSpriteBatch.drawPolygonRegion(darkness, 0, 0);
+       // polygonSpriteBatch.end();
     }
-    private void clearAll(){
+    public void clearAll(){
         endPoints.clear();
     }
     private void calculateLength(){
@@ -174,12 +174,12 @@ public class Flashlight {
         corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
         corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
 
-            }
-            private float[] createArrayOfVertices(){
-                collisionPoints.add(corners[0]);
-                collisionPoints.add(corners[1]);
-                for(int i = maxYIndex; i >= 0; i--) {
-                    collisionPoints.add(endPoints.get(i).getX());
+    }
+    private float[] createArrayOfVertices(){
+        collisionPoints.add(corners[0]);
+        collisionPoints.add(corners[1]);
+        for(int i = maxYIndex; i >= 0; i--) {
+            collisionPoints.add(endPoints.get(i).getX());
             collisionPoints.add(endPoints.get(i).getY());
         }
         for(int i =endPoints.size()-1; i >= maxYIndex; i--) {
@@ -221,7 +221,7 @@ public class Flashlight {
         }
         return vertices;
     }
-    private ZWRayCastCallback createCallback(){
+    public ZWRayCastCallback createCallback(){
         ZWRayCastCallback returnCallback = new ZWRayCastCallback() {
             @Override
             public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
@@ -237,5 +237,93 @@ public class Flashlight {
             }
         };
         return returnCallback;
+    }
+    public void setWorld(ZWWorld world){
+        this.world = world;
+    }
+    public float getLengthFraction(){
+        return lengthFraction;
+    }
+
+    public void setLength(float length) {
+        this.length = length;
+    }
+    public void setDirection(float direction){
+        this.direction = direction;
+    }
+    public void setPlayerPosition(ZWVector playerPosition){
+        this.playerPosition = playerPosition;
+    }
+    public ZWVector[] getRays(){
+        return rays;
+    }
+    public ArrayList<ZWVector> getEndPoints() {
+        return endPoints;
+    }
+    public float getLength() {
+        return length;
+    }
+
+    public int getNumberOfRays() {
+        return numberOfRays;
+    }
+
+    public ZWWorld getWorld() {
+        return world;
+    }
+
+    public ZWTexture getDarkTexture() {
+        return darkTexture;
+    }
+
+
+    public ZWVector getPlayerPosition() {
+        return playerPosition;
+    }
+
+    public ZWVector getCollisionPoint() {
+        return collisionPoint;
+    }
+
+    public float getCurrentFraction() {
+        return currentFraction;
+    }
+
+    public void setCurrentFraction(float currentFraction) {
+        this.currentFraction = currentFraction;
+    }
+
+    public boolean isFoundFixture() {
+        return foundFixture;
+    }
+
+    public ArrayList<Float> getCollisionPoints() {
+        return collisionPoints;
+    }
+
+    public float getDirection() {
+        return direction;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setMaxYIndex(int maxYIndex) {
+        this.maxYIndex = maxYIndex;
+    }
+
+    public void setCorners(float[] corners) {
+        this.corners = corners;
+    }
+    public float[] getCorners(){
+        return corners;
+    }
+    public int getMaxYIndex(){
+        return maxYIndex;
     }
 }
