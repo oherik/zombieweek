@@ -29,4 +29,8 @@ The latest release (2015-05-31) contains:
 
 NOTE: once the second level, third room has been reached there is no way to progress seeing as the third level is not yet available. 
 
-
+********************************
+DOCUMENTATION
+********************************
+The Requirements Analysis Document can be found at \Documentation\RAD\Requirements Analysis Document, final.pdf
+The System Design Document can be found at \Documentation\SDD\System Design Document, final.pdf
