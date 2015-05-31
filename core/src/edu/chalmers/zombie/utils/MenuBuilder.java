@@ -423,6 +423,7 @@ public class MenuBuilder {
         wussModeButton.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
+                GameModel.getInstance().setFearOfTheDark(false);
                 MapController.loadLevel(0);
                 ZWGameEngine.setScreen(new GameScreen());
             }
@@ -431,6 +432,7 @@ public class MenuBuilder {
         fearModeButton.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
+                GameModel.getInstance().setFearOfTheDark(true);
                 MapController.loadLevel(0);
                 ZWGameEngine.setScreen(new GameScreen());
             }
