@@ -104,9 +104,6 @@ public class ZombieController {
             case ELECTRO:
                 zombie = new ElectroZombie(room.getWorld(),x,y);
                 break;
-            case BASIC:
-                zombie = new BasicZombie(room.getWorld(),x,y);
-                break;
             case ARCH:
                 zombie = new ArchZombie(room.getWorld(),x,y);
                 break;

@@ -6,6 +6,7 @@ import edu.chalmers.zombie.utils.Constants;
 
 /** A custom contact listener. It registers the different contacts and forward the commands to the other controllers.
  * Created by Erik on 2015-04-18.
+ * Modified by Neda.
  */
 public class ContactController {
 
@@ -130,6 +131,8 @@ public class ContactController {
                         break;
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -191,7 +194,6 @@ public class ContactController {
      * @param fixtureB  The second fixture
      */
     public static void preSolve(ZWFixture fixtureA, ZWFixture fixtureB){
-        GameModel gameModel = GameModel.getInstance();
         switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_PLAYER):
                 switch (fixtureA.getCategoryBits()){        //Not made as an if-statement if more collision alternatives are to be added
@@ -236,12 +238,4 @@ public class ContactController {
                 break;
         }
     }
-
-
-
-
-
-
-
-
 }
