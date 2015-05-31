@@ -251,9 +251,7 @@ public class PlayerController {
      * @return A new default body
      */
     public static ZWBody createDefaultBody(float x, float y){
-        System.out.println("creates default body");
-
-        float dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
+           float dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
         ZWBody body = new ZWBody();
         body.createBodyDef(true,x,y,dampening,dampening);

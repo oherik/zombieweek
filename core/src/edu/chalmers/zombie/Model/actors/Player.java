@@ -74,7 +74,6 @@ public class Player extends Entity implements CreatureInterface {
 
     public void setOverlayImage(PlayerType type){
         ZWTexture overlayTexture = GameModel.getInstance().res.getTexture(type.getImageOverlayKey());
-        System.out.println(overlayTexture.getTexture());
         ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
     }

@@ -1,6 +1,5 @@
 package edu.chalmers.zombie.utils;
 
-import com.badlogic.gdx.Game;
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.AudioController;
 import edu.chalmers.zombie.controller.MapController;
@@ -11,7 +10,6 @@ import edu.chalmers.zombie.model.ScreenModel;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
-import sun.jvm.hotspot.memory.PlaceholderEntry;
 
 /**
  * Builder to create menus
@@ -61,9 +59,9 @@ public class MenuBuilder {
         soundButton.setSize(40, 40);
 
         settingsButton.setPosition(ZWGameEngine.getWindowWidth() - 50, ZWGameEngine.getWindowHeight() - 50);
-        soundButton.setPosition(ZWGameEngine.getWindowWidth() - 100, ZWGameEngine.getWindowHeight() - 50);
+        soundButton.setPosition(ZWGameEngine.getWindowWidth() - 50, ZWGameEngine.getWindowHeight() - 50);
 
-        soundAndSettingStage.addActor(settingsButton);
+        //soundAndSettingStage.addActor(settingsButton);
         soundAndSettingStage.addActor(soundButton);
 
         soundButton.addListener(new ZWClickAction(){
