@@ -67,9 +67,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
-        SpawnController.setCollisionObjects();
-
-                isKnockedOut = false;
+        isKnockedOut = false;
 
         //Set system time created
         timeSinceLastPath = System.currentTimeMillis();

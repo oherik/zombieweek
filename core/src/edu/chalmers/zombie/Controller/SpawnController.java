@@ -25,12 +25,6 @@ public class SpawnController {
     }
 
     /**
-     * Saves the collision objects with default collision objects
-     */
-    public static void setCollisionObjects(){
-        GameModel.getInstance().setCollisionObjects(createCollisionObjects());
-    }
-    /**
      * Creates the different collision objects (see CollisionObject.java) that represent the physical world and stores
      * them in the model.
      * @return A list of the collision objects
