@@ -14,13 +14,11 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
  * Modified by Erik and Daniel
  */
 public class GameScreen extends ZWScreen{
-    private ZWWorld currentWorld;
-    private float tileSize;
+
     //HUD variables
     private ZWBitmapFont bitmapFont;
     private ZWSpriteBatch batchHUD;
-    private PathAlgorithm pathFinding; //TODO debug
-    private int steps;
+
     private ZWSpriteBatch sb = new ZWSpriteBatch();
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
@@ -39,7 +37,6 @@ public class GameScreen extends ZWScreen{
      * Creates a new screen based on a set tile size, i.e. pixels per meters.
      */
     public GameScreen(float tileSize){
-        this.tileSize = tileSize;
 
         //camera = new OrthographicCamera(width, height);
        // mapController = new MapController();
@@ -109,14 +106,6 @@ public class GameScreen extends ZWScreen{
     */
 
     /**
-     * Sets the screens currently displayed world
-     * @param displayedWorld    The world to be displayed
-     */
-    public void setDisplayedWorld(ZWWorld displayedWorld){
-        this.currentWorld = displayedWorld;
-    }
-
-    /**
      * Resizes the camer view
      * @param width The width in pixels
      * @param height    The height in pixels
@@ -169,7 +158,6 @@ public class GameScreen extends ZWScreen{
         MapController.updateRoomIfNeeded();
         //setMapRenderer(gameModel.getRenderer().getMapRenderer());
         ZWRenderer renderer = gameModel.getZWRenderer();
-        setDisplayedWorld(gameModel.getRoom().getWorld());
         Player player = gameModel.getPlayer();
 
         /* ------ Render the background color ------ */
@@ -194,7 +182,6 @@ public class GameScreen extends ZWScreen{
             renderer.setCameraView();
 
             //mapRenderer.render();
-            steps++; //TODO debug
 
             /* ------ Start rendering the different sprites------ */
             ZWBatch batch = renderer.getBatch();

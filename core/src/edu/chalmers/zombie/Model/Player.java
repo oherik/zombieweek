@@ -16,11 +16,9 @@ public class Player extends Entity implements CreatureInterface {
     private int killCount;
     private int lives;
     private int ammunition;
-    private int grenadeAmmo = 5;
-    private boolean isAttacked;
+    private int grenadeAmmo = 5; //TODO: remove?
+    private boolean isAttacked;//TODO: remove?
     private boolean isHidden;
-    private int width;
-    private int height;
     private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
@@ -28,7 +26,7 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private PotionType potion;
+    private PotionType potion;//TODO: remove?
     private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
     private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
 
@@ -59,9 +57,6 @@ public class Player extends Entity implements CreatureInterface {
 
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
-
-        width = Constants.PLAYER_SIZE;
-        height = Constants.PLAYER_SIZE;
 
         createDefaultBody(world,x,y);
 

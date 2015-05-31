@@ -15,8 +15,8 @@ public class ZWBody {
     private com.badlogic.gdx.physics.box2d.Body body;
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
-    private Fixture fixture;
-    private PolygonShape shape;
+    private Fixture fixture; //TODO: remove?
+    private PolygonShape shape; //TODO: remove?
 
     public ZWBody(){
         fixtureDef = new FixtureDef();

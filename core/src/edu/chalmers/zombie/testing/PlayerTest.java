@@ -12,12 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 public class PlayerTest extends Sprite {
 
     private Vector2 v;  //velocity
-    private float s; //speed
 
     public PlayerTest(Sprite sprite){
         super(sprite);
         v = new Vector2(0,0);
-        s = 64;
     }
 
     @Override
