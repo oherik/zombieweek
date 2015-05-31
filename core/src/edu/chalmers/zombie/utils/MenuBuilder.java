@@ -11,7 +11,7 @@ import edu.chalmers.zombie.model.ScreenModel;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.view.GameScreen;
 import edu.chalmers.zombie.view.MainMenuScreen;
-import sun.jvm.hotspot.memory.PlaceholderEntry;
+
 
 /**
  * Builder to create menus

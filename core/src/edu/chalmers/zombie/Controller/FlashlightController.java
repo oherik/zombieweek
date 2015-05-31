@@ -122,7 +122,10 @@ public class FlashlightController {
                         flashlightModel.setCollisionPoint(point);
                     }
                     foundFixture = true;
+
                 }
+                else
+                    foundFixture = false;
                 return 1;
             }
         };
