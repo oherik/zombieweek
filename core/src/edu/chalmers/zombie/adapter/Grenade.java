@@ -3,6 +3,7 @@ package edu.chalmers.zombie.adapter;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class Grenade extends Entity {
         ZWSprite grenadeSprite = new ZWSprite(grenadeTexture);
         ZWBody body = new ZWBody();
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
-        body.createBodyDef(true, x, y, 0, 0, true);
+        body.createBodyDef(true, x+0.5f, y+0.5f, 0, 0, true);
         body.setFixtureDef(0, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), Constants.COLLISION_PROJECTILE, maskBits, false);
         super.setBody(body);
         super.setSprite(grenadeSprite);
@@ -78,8 +79,10 @@ public class Grenade extends Entity {
     }
 
     public void stopIfNeeded(){
+        System.out.println(this.getX() + ", " + this.getY());
         if ((targetX - 0.1 < this.getX() && this.getX() < targetX + 0.1) &&
                 (targetY - 0.1 < this.getY() && this.getY() < targetY + 0.1)){
+            System.out.print("hej");
             stop();
         }
     }
@@ -90,7 +93,10 @@ public class Grenade extends Entity {
     @Override
     public void draw(ZWBatch batch) {
         super.draw(batch);
-        stopIfNeeded();
+        if (force.len() !=0){
+            stopIfNeeded();
+        }
+
     }
     private ZWVector[] rays;
     public void explode(){
@@ -113,7 +119,10 @@ public class Grenade extends Entity {
                 }
             }
             for (ZWFixture f: fixturesInRadius){
+                if (f.getBodyUserData() instanceof Zombie){
+                    Zombie z = (Zombie)f.getBodyUserData();
 
+                }
             }
         }
     }
