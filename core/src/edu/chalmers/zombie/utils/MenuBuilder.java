@@ -256,8 +256,9 @@ public class MenuBuilder {
             levelButton.addListener(new ZWClickAction(){
                 @Override
                 public void clicked(){
-                    MapController mapController = new MapController();
-                    ZWWorld world = mapController.getRoom(level).getWorld();
+                    //MapController mapController = new MapController();
+                    //ZWWorld world = mapController.getRoom(level).getWorld();
+                    //TODO: is this done in the right way?
                     ZWGameEngine.setScreen(new GameScreen());
                 }
             });
