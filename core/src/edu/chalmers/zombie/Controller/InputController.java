@@ -97,7 +97,11 @@ public class InputController implements InputProcessor{
                         System.out.println("GAME STARTED");
                         gameModel.setGameState(GameState.GAME_RUNNING);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
             }
 
@@ -172,6 +176,8 @@ public class InputController implements InputProcessor{
             case GAME_RUNNING:
                 tryThrowingBook();
                 break;
+            default:
+                break;
         }
         return true;
     }
@@ -191,6 +197,8 @@ public class InputController implements InputProcessor{
         switch (gameModel.getGameState()) {
             case GAME_RUNNING:
                 getPlayer().getHand().setMousePosition(screenX, screenY);
+                break;
+            default:
                 break;
         }
 
