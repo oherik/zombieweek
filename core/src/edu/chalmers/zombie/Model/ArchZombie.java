@@ -8,7 +8,11 @@ import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 
 /**
+ * An arch zombie has a high speed and a high resilience. It causes a damage of 200 percent.
+ * It has a detection radius of 100, which is high.
+ *
  * Created by neda on 2015-05-19.
+ * Modified by Erik
  */
 public class ArchZombie extends Zombie {
 

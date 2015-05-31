@@ -10,7 +10,11 @@ import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 
 /**
+ * A boss zombie has a fairly high resilience and an intermediate speed. It causes a damage of 100 percent.
+ * It has a detection radius of 10, which is intermediate.
+ *
  * Created by neda on 2015-05-20.
+ * Modified by Erik
  */
 public class BossZombie extends Zombie {
 

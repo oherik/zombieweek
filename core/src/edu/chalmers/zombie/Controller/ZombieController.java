@@ -12,6 +12,7 @@ import java.util.Iterator;
 
 /**
  * Created by neda on 2015-05-21.
+ * Modified by Erik
  */
 public class ZombieController {
 

@@ -9,7 +9,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
+ * A zombie is an antoagonist, and will pursue and attack the player to different degrees
+ * depending on its type. The detection radius, damage done, speed and starting hp varies
+ * along with graphical depicition.
+ *
  * Created by neda on 2015-03-31.
+ * Modified by Erik
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 

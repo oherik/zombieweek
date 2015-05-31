@@ -5,6 +5,7 @@ import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Created by daniel on 4/21/2015.
+ * Modified by Erik
  */
 public class Book extends Entity {
     private ZWVector force;

@@ -18,6 +18,7 @@ import java.util.TimerTask;
 /**
  * Created by neda on 2015-05-28.
  * Modified by Neda and Tobias
+ * Modified by Erik
  */
 public class PlayerController {
 
@@ -142,9 +143,10 @@ public class PlayerController {
             keyThread = new Thread() {
                 public void run() {
                     try {
-                        Thread currentThread = getPlayer().getKeyThread();
-                        currentThread.sleep(timeSensitiveness); //waiting for new key release
-                        updateMovement();
+
+                        Thread thread = getPlayer().getKeyThread();
+                        thread.sleep(timeSensitiveness); //waiting for new key release
+                     updateMovement();
                         //if(getWorld().isLocked())     //TODO hack för att inte krascha
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);

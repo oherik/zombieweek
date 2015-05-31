@@ -20,6 +20,7 @@ import java.util.Random;
  *
  * Created by neda on 2015-05-19.
  * Modified by Neda
+ * Modified by Erik
  */
 public class Potion extends Entity {
 

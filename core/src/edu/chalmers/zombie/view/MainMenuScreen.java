@@ -16,7 +16,8 @@ public class MainMenuScreen extends ZWScreen {
     @Override
     public void show() {
         SaveLoadController saveLoadController = new SaveLoadController(); //TODO: should not be instantiated here, but loads saved game to gameModel and therefore needed
-
+        saveLoadController.loadGame();
+        
         MenuController.initializeMenus();
 
         System.out.println("--- MAIN MENU ---");

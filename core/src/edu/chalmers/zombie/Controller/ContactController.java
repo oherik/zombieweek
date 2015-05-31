@@ -73,6 +73,8 @@ public class ContactController {
                         Player player = gameModel.getPlayer();
                         PlayerController.increaseWaterTilesTouching(player);
                         break;
+                    default:
+                        break;
                 }
                 break;
 
@@ -82,8 +84,11 @@ public class ContactController {
                         Player player = gameModel.getPlayer();
                         PlayerController.increaseSneakTilesTouching(player);
                         break;
+                    default:
+                        break;
                 }
                 break;
+
 
             case (Constants.COLLISION_ZOMBIE):
                 Zombie zombie = (Zombie) fixtureB.getBodyUserData();
@@ -96,7 +101,8 @@ public class ContactController {
                         Book book = (Book) fixtureA.getBodyUserData();
                         ProjectileController.applyHit(zombie, book);
                         break;
-
+                    default:
+                        break;
                 }
                 break;
 
