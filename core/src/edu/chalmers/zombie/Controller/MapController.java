@@ -91,8 +91,6 @@ public class MapController {
      * @throws  IndexOutOfBoundsException if the user tries to access a room not in range
      */
     private static void loadRoom(int oldLevelIndex, int newLevelIndex, int oldRoomIndex, int newRoomIndex) {
-        System.out.println("old in" + oldRoomIndex);
-        System.out.println("new in" + newRoomIndex);
         GameModel gameModel = GameModel.getInstance();
         int maxSize = gameModel.getLevel().numberOfRooms() - 1;
         if (newRoomIndex < 0 || newRoomIndex > maxSize){
@@ -346,9 +344,6 @@ public class MapController {
 
             /* ------ Mark as updated ------ */
             setWorldNeedsUpdate(false);
-
-            //TODO debug
-            printCollisionTileGrid();
         }
         /* ------ Update physics ------ */
         stepWorld();
