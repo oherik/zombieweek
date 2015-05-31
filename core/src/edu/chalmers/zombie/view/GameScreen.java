@@ -285,21 +285,7 @@ public class GameScreen extends ZWScreen{
                 if (flashlight==null){
                     flashlight = new Flashlight(currentWorld,Constants.PI/4,3,5,0.75f);
                 }
-                sb.begin();
-                psb.begin();
-                //flashlight.draw(sb, psb);
-                ZWPolygonRegion p= new ZWPolygonRegion(new ZWTextureRegion(new ZWTexture("core/assets/darkness.png")), new float[]{
-                        0,0,
-                        100,100,        //Jag har ingen aning om varför denna polygonRegionen inte ritas ut???
-                        0,100,          //Antagligen ligger felet i ZWPolygonRegion eller i PolygonSpriteBatch.
-                        100,0
-                }, new short[]{
-                        0,2,3,
-                        1,2,3
-                });
-                psb.drawPolygonRegion(p, 0, 0);
-                sb.end();
-                psb.end();
+                flashlight.draw(sb, psb);
             } else{
                 darkness.setSize(ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());
                 sb.begin();

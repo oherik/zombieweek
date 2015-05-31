@@ -67,11 +67,13 @@ public class Flashlight {
         //Fram tills hit verkar allt fungera som det borde. Vi får in massa punkter som stämmer i vertices.
         //Anledningen till att inget ritas ut måste ligga nedan eller i någon av klasserna som används nedan.
         //Eftersom varken ljusset eller mörkret ritas ut är det mest sannolikt att felet ligger i någon av klasserna
-        //som används för att rita båda. Den enda är ZWTexture. Dock verkar inget problem finnas i ZWTexture. 
+        //som används för att rita båda. Den enda är ZWTexture. Dock verkar inget problem finnas i ZWTexture.
         ZWPolygonRegion darkness = createDarkRegion();
         ZWSprite light = createLight();
-        light.draw(spriteBatch);
+        //ight.draw(spriteBatch);
+        polygonSpriteBatch.begin();
         polygonSpriteBatch.drawPolygonRegion(darkness, 0, 0);
+        polygonSpriteBatch.end();
     }
     private void clearAll(){
         endPoints.clear();
@@ -182,16 +184,16 @@ public class Flashlight {
         corners[2] = playerPosition.getX() - windowWidth/(tileSize*2);
         corners[3] = playerPosition.getY() - windowHeight/(tileSize*2);                          //Bottom left
         corners[4] = windowWidth/tileSize+playerPosition.getX() - windowWidth/(tileSize*2);
-        corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
-        corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
-        corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
+                corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
+                corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
+                corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
 
-    }
-    private float[] createArrayOfVertices(){
-        collisionPoints.add(corners[0]);
-        collisionPoints.add(corners[1]);
-        for(int i = maxYIndex; i >= 0; i--) {
-            collisionPoints.add(endPoints.get(i).getX());
+            }
+            private float[] createArrayOfVertices(){
+                collisionPoints.add(corners[0]);
+                collisionPoints.add(corners[1]);
+                for(int i = maxYIndex; i >= 0; i--) {
+                    collisionPoints.add(endPoints.get(i).getX());
             collisionPoints.add(endPoints.get(i).getY());
         }
         for(int i =endPoints.size()-1; i >= maxYIndex; i--) {
