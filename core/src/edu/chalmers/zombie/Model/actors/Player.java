@@ -298,4 +298,8 @@ public class Player extends Entity implements CreatureInterface {
     public void decreaseGrenadeAmmunition(){
         this.grenadeAmmo = this.grenadeAmmo - 1;
     }
+
+    public int getGrenadeAmmo(){
+        return grenadeAmmo;
+    }
 }
