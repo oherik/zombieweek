@@ -2,14 +2,12 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.ZWBody;
 import edu.chalmers.zombie.adapter.ZWVector;
+import edu.chalmers.zombie.adapter.ZWWorld;
 import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.Direction;
-import edu.chalmers.zombie.utils.PotionType;
-import edu.chalmers.zombie.utils.ResourceManager;
+import edu.chalmers.zombie.utils.*;
 
 import java.awt.*;
 import java.util.Timer;
@@ -22,8 +20,53 @@ import java.util.TimerTask;
  */
 public class PlayerController {
 
+    /**
+     * Creates a new player and sets it to the game model
+     * @param world The world
+     * @param x The x coordinate
+     * @param y The y coordinate
+     * @return Player, the created player
+     */
+    public static Player createPlayer(ZWWorld world, float x, float y){
+        Player player = getPlayer();
 
-    //TODO: move moveIfNeeded, updateDirection, updateRotation, and other controlling methods to this class.
+        if(player!=null && player.getBody()!=null) {
+            player.removeBody();
+        }
+
+        ZWBody body = createDefaultBody(x, y);
+        player = new Player(GameModel.getInstance().getPlayerType(),body,world,x,y);
+        GameModel.getInstance().setPlayer(player);
+
+        setPositionAndFixedRotation(player,x,y);
+
+        return player;
+    }
+
+    /**
+     * Sets position and fixed rotation
+     * @param player The player
+     * @param x The x coordinate
+     * @param y The y coordinate
+     */
+    private static void setPositionAndFixedRotation(Player player, float x, float y){
+        setPosition(x, y);
+        player.getBody().setFixedRotation(true);
+    }
+
+    /**
+     * Update world and position of the player. E.g. at room change or level change.
+     * @param world The world
+     * @param x The x coordinate
+     * @param y The y coordinate
+     */
+    public static void setWorldAndPosition(ZWWorld world, float x, float y){
+        ZWBody body = createDefaultBody(x, y);
+        Player player = getPlayer();
+        player.setWorld(world);
+        player.setBody(body);
+        setPositionAndFixedRotation(player,x,y);
+    }
 
     /**
      * A method which moves player in given direction.
@@ -195,9 +238,62 @@ public class PlayerController {
      */
     public static void throwBook(){
         Player player = getPlayer();
-        AimingController aimingController = new AimingController(player);
+        AimingController aimingController = player.getAimingController();
         aimingController.throwBook();
         player.getAnimator().setOverlay(400); //time in millisec of Hand to be shown when trowing
+    }
+
+
+    /**
+     * Creates a new default body at the given position
+     * @param x The x coordinate where to create the new body
+     * @param y The y coordinate where to create the new body
+     * @return A new default body
+     */
+    public static ZWBody createDefaultBody(float x, float y){
+        System.out.println("creates default body");
+
+        float dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
+
+        ZWBody body = new ZWBody();
+        body.createBodyDef(true,x,y,dampening,dampening);
+
+        ZWVector[] vectors = new ZWVector[8];
+        vectors[0] = new ZWVector(2f,-1.5f);
+        vectors[1] = new ZWVector(3f,-0.5f);
+        vectors[2] = new ZWVector(3f,0.5f);
+        vectors[3] = new ZWVector(2f,1.5f);
+        vectors[4] = new ZWVector(-2f,1.5f);
+        vectors[5] = new ZWVector(-3f,0.5f);
+        vectors[6] = new ZWVector(-3f,-0.5f);
+        vectors[7] = new ZWVector(-2f,-1.5f);
+        for (ZWVector vector:vectors){
+            vector.scl(1f/6.5f);
+        }
+
+
+        short categoryBits = Constants.COLLISION_PLAYER;
+        short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
+                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE |
+                Constants.COLLISION_LEVEL;
+
+        body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
+
+        //player.setBody(body);
+        //player.setPosition(x, y);
+        //player.getBody().setFixedRotation(true);   //Så att spelaren inte roterar
+        return body;
+    }
+
+    /**
+     * A method which sets the player's position.
+     * @param x desired x-coordinate.
+     * @param y desired y-coordinate.
+     */
+    public static void setPosition(float x, float y){
+        Player player = getPlayer();
+        player.getBody().setTransform(x,y, player.getBody().getAngle()); //+0.5f because we want it in the middle
+        updateRotation();
     }
 
     /**
@@ -206,7 +302,6 @@ public class PlayerController {
      * @param potion the potion being picked up.
      */
     public static void pickUpPotion(Player player, Potion potion) {
-
         PotionType type = potion.getType();
         Room room = GameModel.getInstance().getRoom();
         switch (type) {
@@ -261,6 +356,7 @@ public class PlayerController {
     public static Player getPlayer(){
         return GameModel.getInstance().getPlayer();
     }
+
     /**
      * Sets the current player
      * @param player The new player
@@ -270,23 +366,23 @@ public class PlayerController {
     }
 
     /**
-     * Creates a new player and sets it in the game model.
-     * @return  The newly created player
+     * Updates the player with the correct world and position and sets it in the game model.
+     * @return  The updated player
      */
-    public static Player createNewPlayer(){
+    public static Player updatePlayer(){
         MapController mapController = new MapController();
-
         GameModel gameModel = GameModel.getInstance();
-        ResourceManager res = gameModel.res;
 
         Point position = mapController.getPlayerBufferPosition();
         Player player;
         try {
-            player = new Player(res.getTexture("emilia"), gameModel.getRoom().getWorld(), position.x, position.y);
+            //player = new Player(type, gameModel.getRoom().getWorld(), position.x, position.y);
+            player = createPlayer(gameModel.getRoom().getWorld(), position.x, position.y); //TODO: setWorldandPosition()?
         }catch (NullPointerException e){
             System.err.println("No buffered position found. Placing player at room spawn.");
             position = GameModel.getInstance().getRoom().getPlayerSpawn();
-            player = new Player(res.getTexture("emilia"),gameModel.getRoom().getWorld(), position.x, position.y);
+            //player = new Player(type,gameModel.getRoom().getWorld(), position.x, position.y);
+            player = createPlayer(gameModel.getRoom().getWorld(), position.x, position.y); //TODO: setWorldandPosition()?
         }
         setPlayer(player); //TODO test);
         return player;

@@ -1,18 +1,12 @@
 package edu.chalmers.zombie.model.actors;
-
 import edu.chalmers.zombie.adapter.*;
-
 import edu.chalmers.zombie.controller.AimingController;
-import edu.chalmers.zombie.utils.Constants;
-import edu.chalmers.zombie.utils.Direction;
-import edu.chalmers.zombie.utils.PotionType;
-
+import edu.chalmers.zombie.utils.*;
 import edu.chalmers.zombie.model.CreatureInterface;
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
-
 
 /**
  * Created by neda on 2015-03-31.
@@ -30,7 +24,6 @@ public class Player extends Entity implements CreatureInterface {
     private Direction direction = Direction.NORTH;
     //Holds the players speed.
     private int speed = 7;
-    private float dampening;
     private int legPower;
     private int waterTilesTouching;
     private int sneakTilesTouching;
@@ -41,19 +34,16 @@ public class Player extends Entity implements CreatureInterface {
     private boolean isHit = false;
     private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
 
-
-    public Player(ZWTexture texture, ZWWorld world, float x, float y) {
-        super(texture, world, x, y, Constants.PLAYER_SIZE);
+    public Player(PlayerType type, ZWBody body, ZWWorld world, float x, float y) {
+        super(GameModel.getInstance().res.getTexture(type.getImageAnimatedKey()), world, x, y, Constants.PLAYER_SIZE);
 
         //Set still image frame
-        //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
-        ZWTexture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
+        ZWTexture stillTexture = GameModel.getInstance().res.getTexture(type.getImageStandingStillKey());
         ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
         getAnimator().addStillFrame(stillFrame[0]);
 
         //Set overlay image (Hand)
-        //GameModel.getInstance().res.loadTexture("emilia-hand","core/assets/Images/emilia-hand.png");//TODO: shouldnt be done here
-        ZWTexture overlayTexture = GameModel.getInstance().res.getTexture("emilia-hand");
+        ZWTexture overlayTexture = GameModel.getInstance().res.getTexture(type.getImageOverlayKey());
         System.out.println(overlayTexture.getTexture());
         ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
@@ -61,26 +51,16 @@ public class Player extends Entity implements CreatureInterface {
         setWaterTilesTouching(0);
         setSneakTilesTouching(0);
 
-        legPower =  150; //Styr maxhastigheten
-        dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
+        legPower =  350; //Styr maxhastigheten
+        //dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
 
-        createDefaultBody(world,x,y);
-
-        super.scaleSprite(1f / Constants.TILE_SIZE);
         killCount = 0;
         ammunition = 5;
         lives = 100;
         force = new ZWVector(0,0);
 
-
-    }
-
-    /**
-     * Copy constructor for class Player.
-     * @param p the Player instance to be copied.
-     */
-    public Player(Player p) {
-        this(p.getSprite().getTexture(), p.getWorld(), p.getX(), p.getY());
+        setBody(body);
+        super.scaleSprite(1f / Constants.TILE_SIZE);
     }
 
     /**
@@ -88,7 +68,6 @@ public class Player extends Entity implements CreatureInterface {
      * @return int killCount.
      */
     public int getKillCount() { //TODO: remove?
-
         return killCount;
     }
 
@@ -96,7 +75,6 @@ public class Player extends Entity implements CreatureInterface {
      * A method that increases current player's kill count.
      */
     public void incKillCount() {
-
         killCount++;
     }
 
@@ -123,24 +101,6 @@ public class Player extends Entity implements CreatureInterface {
     public void setForceX(float speed){force.setX(speed);}
 
     public void setSpeed(int speed){this.speed = speed;}
-
-    /**
-     * Updates Body rotation
-     * TODO: should be removed
-     */
-    public void updateRotation(){
-        GameModel gameModel = GameModel.getInstance();
-        ZWBody body = getBody();
-        float rotation =  direction.getRotation();
-        //Checks if world.step() is running. If it is running it tries again and again until step isn't running.
-        //This is the reason why sometimes the game lags and a StackOverflowError happens.
-        if (!gameModel.isStepping()) {
-            body.setTransform(body.getPosition(), rotation);    //TODO orsakar krash
-        } else{
-            updateRotation();
-            // Commenting the section above causes no issues and fizes the StackOverflowError.
-        }
-    }
 
     /**
      * @return Direction of player
@@ -278,49 +238,6 @@ public class Player extends Entity implements CreatureInterface {
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
-
-    /**
-     * Creates a new default body at the given position
-     * @param x The x coordinate where to create the new body
-     * @param y The y coordinate where to create the new body
-     * @return A new default body
-     */
-    public ZWBody createDefaultBody(ZWWorld world, float x, float y){
-        if(this.getBody()!=null) {
-            this.removeBody();
-        }
-        this.setWorld(world);
-        ZWBody body = new ZWBody();
-        body.createBodyDef(true,x,y,dampening,dampening);
-
-        ZWVector[] vectors = new ZWVector[8];
-        vectors[0] = new ZWVector(2f,-1.5f);
-        vectors[1] = new ZWVector(3f,-0.5f);
-        vectors[2] = new ZWVector(3f,0.5f);
-        vectors[3] = new ZWVector(2f,1.5f);
-        vectors[4] = new ZWVector(-2f,1.5f);
-        vectors[5] = new ZWVector(-3f,0.5f);
-        vectors[6] = new ZWVector(-3f,-0.5f);
-        vectors[7] = new ZWVector(-2f,-1.5f);
-        for (ZWVector vector:vectors){
-            vector.scl(1f/6.5f);
-        }
-
-
-        short categoryBits = Constants.COLLISION_PLAYER;
-        short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
-                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE |
-                Constants.COLLISION_LEVEL;
-
-        body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
-
-        this.setBody(body);
-        this.setPosition(x,y);
-        getBody().setFixedRotation(true);   //Så att spelaren inte roterar
-        return this.getBody();
-    }
-
-
     /**
      * A method that checks whether Player is hidden or not.
      * @return true if hidden, false if not.
@@ -328,17 +245,6 @@ public class Player extends Entity implements CreatureInterface {
     public boolean isHidden() {
 
         return isHidden;
-    }
-
-    /**
-     * A method which sets the player's position.
-     * @param x desired x-coordinate.
-     * @param y desired y-coordinate.
-     */
-    public void setPosition(float x, float y){
-        getBody().setTransform(x,y, getBody().getAngle()); //+0.5f because we want it in the middle
-        updateRotation();
-        //TODO: should be done in controller, method updateRotation will be removed
     }
 
     /**
