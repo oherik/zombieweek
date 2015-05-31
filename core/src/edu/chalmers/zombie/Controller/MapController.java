@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * This controller class makes all the different calculations regarding the maps, rooms, worlds and objects in them.
+ * Created by Erik
  */
 public class MapController {
 

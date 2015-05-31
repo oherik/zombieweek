@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * along with graphical depicition.
  *
  * Created by neda on 2015-03-31.
+ * Modified by Erik
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 

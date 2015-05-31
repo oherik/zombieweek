@@ -13,6 +13,7 @@ import java.awt.*;
  * and spins towards the player when having detected them.
  *
  * Created by neda on 2015-05-19.
+ * Modified by Erik
  */
 public class EconZombie extends Zombie {
 

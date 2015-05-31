@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * A level
  *
  * Created by Tobias on 15-05-20.
+ * Modified by Erik
  */
 public class Level {
 

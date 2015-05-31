@@ -18,6 +18,7 @@ import java.util.TimerTask;
 /**
  * Created by neda on 2015-05-28.
  * Modified by Neda and Tobias
+ * Modified by Erik
  */
 public class PlayerController {
 

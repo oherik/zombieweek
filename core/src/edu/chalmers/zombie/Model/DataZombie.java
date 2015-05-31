@@ -12,6 +12,7 @@ import java.awt.*;
  * It has a detection radius of 1, which is very low, and will only attack if approached or provoked.
  *
  * Created by neda on 2015-05-19.
+ * Modified by Erik
  */
 public class DataZombie extends Zombie {
 

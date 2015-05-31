@@ -12,6 +12,7 @@ import java.awt.*;
  * which is intermediate.
  *
  * Created by neda on 2015-05-19.
+ * * Modified by Erik
  */
 public class BasicZombie extends Zombie {
 
