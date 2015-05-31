@@ -336,21 +336,7 @@ public class GameScreen extends ZWScreen{
     public void hide(){
 
     }
-
-    /**
-     * Updates the zombie paths to the player.
-     */
-    private void updateZombiePaths() {   //TODO gör ingenting nu. Kanske ha en path-variabel i Zombie.java?dddddd
-        GameModel gameModel = GameModel.getInstance();
-        for (Zombie z : gameModel.getZombies()) {
-            if (!z.isKnockedOut()) {
-                Player player = gameModel.getPlayer();
-                Point end = new Point(Math.round(player.getX() - 0.5f), Math.round(player.getY() - 0.5f));
-                Point start = new Point(Math.round(z.getX() - 0.5f), Math.round(z.getY() - 0.5f));
-                //mapController.printPath(mapController.getRoom(), start, end);                 //TODO gör nåt vettigt här istälelt för att bara printa.
-            }
-        }
-    }
+    
     /**
      * Dispose the world, player and the renderers.
      */

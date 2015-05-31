@@ -84,7 +84,7 @@ public class ZWRenderer {
     }
 
     public void resizeCamera(int width, int height){
-        camera.setToOrtho(false, width / Constants.TILE_SIZE, height / Constants.TILE_SIZE);
+        camera.setToOrtho(false, (float)width / (float)Constants.TILE_SIZE, (float)height / (float)Constants.TILE_SIZE);
     }
     public void setCameraPosition(float x, float y){
         camera.position.set(x, y, 0);
