@@ -354,7 +354,9 @@ public class MenuBuilder {
             @Override
             public void clicked(){
                 GameModel.getInstance().setPlayerType(PlayerType.EMILIA);
-                ZWGameEngine.setScreen(new GameScreen());
+                ScreenModel screenModel = GameModel.getInstance().getScreenModel();
+                screenModel.setMenuState(ScreenModel.MenuState.GAMEMODE_STATE);
+                ZWGameEngine.setInputProcessor(screenModel.getGameModeStage());
             }
         });
 
@@ -364,7 +366,9 @@ public class MenuBuilder {
             @Override
             public void clicked(){
                 GameModel.getInstance().setPlayerType(PlayerType.EMIL);
-                ZWGameEngine.setScreen(new GameScreen());
+                ScreenModel screenModel = GameModel.getInstance().getScreenModel();
+                screenModel.setMenuState(ScreenModel.MenuState.GAMEMODE_STATE);
+                ZWGameEngine.setInputProcessor(screenModel.getGameModeStage());
             }
         });
 
@@ -393,6 +397,46 @@ public class MenuBuilder {
         settingsStage.addActor(table);
 
         return settingsStage;
+
+    }
+
+    public static ZWStage createGameModeStage(){
+        ZWStage gameModeStage = new ZWStage();
+
+        ZWSkin skin = createMenuSkin();
+
+        ZWTable table = new ZWTable();
+
+        ZWLabel label = new ZWLabel("Choose Game Mode");
+        label.scale(2f);
+        table.add(label,15);
+        table.setFillParent(true);
+
+        ZWTextButton wussModeButton = new ZWTextButton("Wuss Mode", skin);
+        table.add(wussModeButton,250,50,15);
+
+        ZWTextButton fearModeButton = new ZWTextButton("Fear of the Dark Mode", skin);
+        table.add(fearModeButton,250,50,15);
+
+        gameModeStage.addActor(table);
+
+        wussModeButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                MapController.loadLevel(0);
+                ZWGameEngine.setScreen(new GameScreen());
+            }
+        });
+
+        fearModeButton.addListener(new ZWClickAction(){
+            @Override
+            public void clicked(){
+                MapController.loadLevel(0);
+                ZWGameEngine.setScreen(new GameScreen());
+            }
+        });
+
+        return gameModeStage;
 
     }
 }

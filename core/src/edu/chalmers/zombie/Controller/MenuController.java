@@ -32,6 +32,7 @@ public class MenuController {
         screenModel.setLevelChooserStage(MenuBuilder.createLevelChooserStage());
         screenModel.setSettingsStage(MenuBuilder.createSettingsStage());
         screenModel.setCharacterStage(MenuBuilder.createCharacterStage());
+        screenModel.setGameModeStage(MenuBuilder.createGameModeStage());
     }
 
     /**
