@@ -1,7 +1,6 @@
 package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import edu.chalmers.zombie.adapter.ZWInputProcessor;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.GameModel;
@@ -72,21 +71,21 @@ public class InputController extends ZWInputProcessor {
                 break;
             case Input.Keys.UP:
                 //aim left
-                getPlayer().getHand().startAimingLeft();
+                getPlayer().getAimingController().startAimingLeft();
                 break;
             case Input.Keys.DOWN:
                 //aim right
-                getPlayer().getHand().startAimingRight();
+                getPlayer().getAimingController().startAimingRight();
                 break;
             case Input.Keys.C:
                 //change aiming type
-                getPlayer().getHand().toggleMouseAiming();
+                getPlayer().getAimingController().toggleMouseAiming();
                 break;
             case Input.Keys.F:
                 gameModel.toggleFlashlight();
                 break;
             case Input.Keys.G:
-                gameModel.getPlayer().getHand().toggleGrenadeThrowing();
+                gameModel.getPlayer().getAimingController().toggleGrenadeThrowing();
                 break;
             case Input.Keys.ESCAPE:
                 switch (gameModel.getGameState()) {
@@ -112,12 +111,12 @@ public class InputController extends ZWInputProcessor {
     private void tryThrowingBook(){
         Player player = gameModel.getPlayer();
         float distance = 1f;
-        float angle = player.getHand().getDirection()+Constants.PI*0.5f;
+        float angle = player.getAimingController().getDirection()+Constants.PI*0.5f;
 
         if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(new ZWVector(getPlayer().getBody().getPosition()), mapController.getRoom(),distance,angle) ) {
             player.decreaseAmmunition();
-            if (player.getHand().isThrowingGrenade()){
-                player.getHand().throwGrenade();
+            if (player.getAimingController().isThrowingGrenade()){
+                player.getAimingController().throwGrenade();
             } else{
                 throwBook();
             }
@@ -156,7 +155,7 @@ public class InputController extends ZWInputProcessor {
 
             if(keycode == Input.Keys.UP || keycode == Input.Keys.DOWN){
                 //set aiming force to zero
-                getPlayer().getHand().stopAiming();
+                getPlayer().getAimingController().stopAiming();
             } else {return false;}
         }
         return true;
@@ -191,7 +190,7 @@ public class InputController extends ZWInputProcessor {
     public boolean mouseMoved(int screenX, int screenY) {
         switch (gameModel.getGameState()) {
             case GAME_RUNNING:
-                getPlayer().getHand().setMousePosition(screenX, screenY);
+                getPlayer().getAimingController().setMousePosition(screenX, screenY);
                 break;
         }
 

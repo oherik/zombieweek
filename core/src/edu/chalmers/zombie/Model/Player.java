@@ -1,11 +1,10 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.controller.AimingController;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PotionType;
-
-import java.awt.*;
 
 /**
  * Created by neda on 2015-03-31.
@@ -34,7 +33,7 @@ public class Player extends Entity implements CreatureInterface {
 
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
-    private Hand hand = new Hand(this);
+    private AimingController aimingController = new AimingController(this);
 
     private boolean isHit = false;
     private boolean diagonalStop=false; //if diagonalstop should be on/off, preferably false til bug is fixed
@@ -351,19 +350,19 @@ public class Player extends Entity implements CreatureInterface {
      * A method which returns the player's Hand instance.
      * @return hand instance (Hand).
      */
-    public Hand getHand(){
-        return this.hand;
+    public AimingController getAimingController(){
+        return this.aimingController;
     }
 
     //TODO : move to PlayerController
     public void throwBook(){
-        hand.throwBook();
+        aimingController.throwBook();
         getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
 
     //TODO: move to PlayerController
     public void throwGrenade(){
-        hand.throwGrenade();
+        aimingController.throwGrenade();
     }
 
     public int getWaterTilesTouching(){

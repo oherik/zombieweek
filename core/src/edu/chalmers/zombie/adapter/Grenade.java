@@ -39,7 +39,8 @@ public class Grenade extends Entity {
         ZWBody body = new ZWBody();
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
         body.createBodyDef(true, x, y, 0, 0, true);
-        body.setFixtureDef(0, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), Constants.COLLISION_PROJECTILE, maskBits, false);
+        short s = 0;
+        body.setFixtureDef(0, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), s, maskBits, false);
         super.setBody(body);
         super.setSprite(grenadeSprite);
         super.scaleSprite(1f / Constants.TILE_SIZE);

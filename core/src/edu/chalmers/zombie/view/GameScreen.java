@@ -1,5 +1,6 @@
 package edu.chalmers.zombie.view;
 
+
 import edu.chalmers.zombie.adapter.*;
 
 import edu.chalmers.zombie.controller.*;
@@ -40,7 +41,7 @@ public class GameScreen extends ZWScreen{
 
     private Flashlight flashlight;
   //  private Sprite sprite = new Sprite(new Texture("core/assets/darkness.png"));
-  //  private ShapeRenderer grenadeShapeRenderer = new ShapeRenderer();
+     private ZWShapeRenderer grenadeShapeRenderer = new ZWShapeRenderer();
     /**
      * Creates a game screen with the default tile size
      */
@@ -230,14 +231,14 @@ public class GameScreen extends ZWScreen{
             player.draw(batch);
 
            /* ------ Draw the aimer ------ */
-            player.getHand().drawAimer(batch);
+            player.getAimingController().drawAimer(batch);
             batch.end();
 
 
-            // grenadeShapeRenderer.setAutoShapeType(true);
-            // grenadeShapeRenderer.begin();
-            //    player.getHand().drawGrenadeAimer(grenadeShapeRenderer);
-            //    grenadeShapeRenderer.end();
+            grenadeShapeRenderer.setAutoShapeType(true);
+            grenadeShapeRenderer.begin();
+            player.getAimingController().drawGrenadeAimer(grenadeShapeRenderer);
+            grenadeShapeRenderer.end();
              /* ------Draw the middle layer ------ */
             if (gameModel.getPlayer().isHidden() && gameModel.isFlashlightEnabled()) {
                 int[] middleLayers = {2};
