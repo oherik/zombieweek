@@ -16,10 +16,14 @@ import edu.chalmers.zombie.utils.GameState;
  */
 public class GameScreen extends ZWScreen{
 
+
+    //HUD variables
+    private ZWWorld currentWorld;
+    private float tileSize;
     //HUD variables
     private ZWBitmapFont bitmapFont;
     private ZWSpriteBatch batchHUD;
-
+    private int steps;
     private ZWSpriteBatch sb = new ZWSpriteBatch();
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();

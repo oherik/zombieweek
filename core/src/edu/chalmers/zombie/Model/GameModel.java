@@ -21,7 +21,6 @@ public class GameModel {
     private Player player;
     private int currentLevel, currentRoom, highestCompletedLevel, highestCompletedRoom;
     private ArrayList<Level> levels;
-    private ArrayList<Book> books = new ArrayList<Book>(); //TODO: remove?
     private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
     private ArrayList<CollisionObject> collisionObjects;
     private boolean worldNeedsUpdate, stepping, flashlightEnabled = false, soundOn;
@@ -169,13 +168,7 @@ public class GameModel {
     }
 
     /**
-     * Sets all rooms
-     */
-    private void setRooms(ArrayList<Room> rooms){
-        levels.get(currentLevel).setRooms(rooms);
-    }
 
-    /**
      * @return  The current room
      */
     public Room getRoom(){return levels.get(currentLevel).getRoom(currentRoom); }

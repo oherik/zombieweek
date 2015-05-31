@@ -5,6 +5,7 @@ import edu.chalmers.zombie.adapter.ZWBody;
 /**
  * A class which stores a body definition, a fixture definition, the name of the collision object and, if applicable,
  * a property string.
+ * Created by Erik
  */
 public class CollisionObject implements Cloneable {
     private String name, property;

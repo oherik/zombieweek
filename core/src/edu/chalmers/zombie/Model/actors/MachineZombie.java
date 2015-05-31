@@ -10,6 +10,7 @@ import edu.chalmers.zombie.utils.ZombieType;
  * It has a detection radius of 100, which is very high.
  *
  * Created by neda on 2015-05-19.
+ * Modified by Erik
  */
 public class MachineZombie extends Zombie {
 

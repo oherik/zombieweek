@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Created by daniel on 5/28/2015.
+ * Modified by Erik
  */
 public class ZWBatch {
-    private SpriteBatch spriteBatch;
     private PolygonSpriteBatch polygonSpriteBatch;
     private Batch batch;
     public ZWBatch(Batch batch){
@@ -32,6 +32,7 @@ public class ZWBatch {
         return batch;
     }
     public void dispose(){
+
         polygonSpriteBatch.dispose();
         batch.dispose();
     }

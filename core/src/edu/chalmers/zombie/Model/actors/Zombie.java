@@ -17,6 +17,7 @@ import java.util.ArrayList;
  * along with graphical depicition.
  *
  * Created by neda on 2015-03-31.
+ * Modified by Erik
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 
@@ -26,7 +27,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private boolean isKnockedOut, isMoving, isAggressive;
     private ZWVector force, point;
     private Point position, nextPathTile;
-    private MapController mapController;
     private long timeSinceLastPath;
     private ArrayList<Point> path;
 
@@ -68,9 +68,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
-        mapController = new MapController();
         SpawnController.setCollisionObjects();
-        mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
+       // MapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn()); //TODO varför finns den där?
 
                 isKnockedOut = false;
 
@@ -328,15 +327,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void setIsMoving(boolean isMoving) {
 
         this.isMoving = isMoving;
-    }
-
-    /**
-     * A method which returns the mapController instance specific to a certain zombie.
-     * @return mapController (MapController). 
-     */
-    public MapController getThisMapController() {
-
-        return mapController;
     }
 
     /**

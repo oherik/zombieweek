@@ -10,6 +10,7 @@ import edu.chalmers.zombie.utils.ZombieType;
  * It has a detection radius of 10, which is intermediate.
  *
  * Created by neda on 2015-05-19.
+ * Modified by Erik
  */
 public class ElectroZombie extends Zombie {
 

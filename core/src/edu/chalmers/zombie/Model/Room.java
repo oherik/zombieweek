@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * of the level and its meta data, and a box2d World which handles the physics. It also stores the zombies for the current
  * level. It furthermore stores a 2d short array which hold the collision data for fast collision lookups in path finding
  * and other algorithms.
+ * Created by Erik
  */
 public class Room {
     private ZWWorld world;
