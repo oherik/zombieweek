@@ -249,22 +249,29 @@ public class MenuBuilder {
 
         int levelsCompleted = GameModel.getInstance().getHighestCompletedLevel();
 
-        for (int i = 0;i <= levelsCompleted;i++){
+        int amountOfLevels = GameModel.getInstance().getAmountOfLevelsInGame();
+
+        for (int i = 0;i <= amountOfLevels-1;i++){
             String buttonName = "Level " + (i+1);
             final int level = i;
-            ZWTextButton levelButton = new ZWTextButton(buttonName, skin);
+            ZWTextButton levelButton;
+
+            if (i>levelsCompleted){ //not completed levels
+                ZWSkin disabledSkin = createMenuSkin();
+                disabledSkin.createDisabledButtons();
+                levelButton = new ZWTextButton(buttonName, disabledSkin);
+            } else { //completed levels
+                levelButton = new ZWTextButton(buttonName, skin);
+                levelButton.addListener(new ZWClickAction(){
+                    @Override
+                    public void clicked(){
+                        MapController.loadLevel(level);
+                        ZWGameEngine.setScreen(new GameScreen());
+                    }
+                });
+            }
+            
             table.add(levelButton,250,50,15);
-
-
-            levelButton.addListener(new ZWClickAction(){
-                @Override
-                public void clicked(){
-                    MapController.loadLevel(level);
-                    ZWGameEngine.setScreen(new GameScreen());
-                }
-            });
-
-
         }
 
 
