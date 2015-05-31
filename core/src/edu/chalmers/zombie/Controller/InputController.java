@@ -98,7 +98,11 @@ public class InputController extends ZWInputProcessor {
                         System.out.println("GAME STARTED");
                         gameModel.setGameState(GameState.GAME_RUNNING);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
             }
 
@@ -173,6 +177,8 @@ public class InputController extends ZWInputProcessor {
             case GAME_RUNNING:
                 tryThrowingBook();
                 break;
+            default:
+                break;
         }
         return true;
     }
@@ -192,6 +198,8 @@ public class InputController extends ZWInputProcessor {
         switch (gameModel.getGameState()) {
             case GAME_RUNNING:
                 getPlayer().getHand().setMousePosition(screenX, screenY);
+                break;
+            default:
                 break;
         }
 
