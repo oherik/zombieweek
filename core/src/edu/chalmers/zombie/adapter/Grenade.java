@@ -83,7 +83,6 @@ public class Grenade extends Entity {
     }
 
     public void stopIfNeeded(){
-        System.out.println(this.getX() + ", " + this.getY());
         if ((targetX - 0.1 < this.getX() && this.getX() < targetX + 0.1) &&
                 (targetY - 0.1 < this.getY() && this.getY() < targetY + 0.1)){
             stop();
@@ -103,6 +102,7 @@ public class Grenade extends Entity {
     }
     private ZWVector[] rays;
     public void explode(){
+        stop();
         ZWRayCastCallback callback = createCallback();
         ZWVector grenadePosition = new ZWVector(getX(), getY());
         rays = new ZWVector[100];

@@ -22,7 +22,6 @@ public class AimingSystem {
         aimer.setSize(0.5f, 0.5f);
     }
     public float getDirection(){
-        System.out.println(direction);
         return direction;
     }
     public ZWSprite getSprite(){
