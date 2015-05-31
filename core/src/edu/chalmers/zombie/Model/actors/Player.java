@@ -294,4 +294,8 @@ public class Player extends Entity implements CreatureInterface {
     public boolean isHit(){
         return isHit;
     }
+
+    public void decreaseGrenadeAmmunition(){
+        this.grenadeAmmo = this.grenadeAmmo - 1;
+    }
 }

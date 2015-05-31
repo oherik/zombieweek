@@ -118,11 +118,13 @@ public class InputController extends ZWInputProcessor {
         float angle = player.getAimingController().getDirection()+Constants.PI*0.5f;
 
         if(!GameModel.getInstance().worldNeedsUpdate() && player.getAmmunition()>0 && !MapController.pathObstructed(new ZWVector(getPlayer().getBody().getPosition()), mapController.getRoom(),distance,angle) ) {
-            player.decreaseAmmunition();
+
             if (player.getAimingController().isThrowingGrenade()){
                ProjectileController.throwGrenade();
+                player.decreaseGrenadeAmmunition();
             } else{
                 throwBook();
+                player.decreaseAmmunition();
             }
 
         }
