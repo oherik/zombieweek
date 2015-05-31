@@ -67,8 +67,7 @@ public class MenuBuilder {
         soundButton.addListener(new ZWClickAction(){
             @Override
             public void clicked(){
-                AudioController audioController = new AudioController();
-                audioController.toggleSound();
+                AudioController.toggleSound();
                 MenuController.updateSoundButton(soundButton);
             }
         });
@@ -161,8 +160,6 @@ public class MenuBuilder {
 
     public static ZWStage createNextLevelStage(){
         ZWStage nextLevelStage = new ZWStage();
-
-        ZWSkin skin = (new MenuBuilder()).createMenuSkin(); //only for buttons
 
         ZWTable table = new ZWTable();
 
