@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.Properties;
 
 /**
- * Save and load game
+ * Save and load game using local file on device. If never played before, will create file.
  *
  * Created by Tobias on 15-05-12.
  */
@@ -27,7 +27,6 @@ public class SaveLoadGame {
      */
     public void saveGame(){
         updateProperties();
-
         try {
             output = new FileOutputStream(fileName);
             properties.store(output, null); //saving properties to file
@@ -144,15 +143,10 @@ public class SaveLoadGame {
         return highestReachedLevel;
     }
 
-
     /**
      * @return A copy of the properties stored in file
      */
     public Properties getProperties(){
         return (Properties)properties.clone();
     }
-
-
-
-
 }
