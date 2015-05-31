@@ -22,7 +22,7 @@ public class DataZombie extends Zombie {
         super(GameModel.getInstance().res.getTexture("zombie-data"),
                 GameModel.getInstance().res.getTexture("zombie-data-still"),
                 GameModel.getInstance().res.getTexture("zombie-data-dead"),
-                world, x, y);
+                world, x, y,32);
 
 
 

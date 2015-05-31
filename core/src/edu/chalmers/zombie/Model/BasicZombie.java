@@ -20,7 +20,7 @@ public class BasicZombie extends Zombie {
 
         super(GameModel.getInstance().res.getTexture("zombie"),
                 GameModel.getInstance().res.getTexture("zombie-still"),
-                GameModel.getInstance().res.getTexture("zombie-dead"),world,x,y);
+                GameModel.getInstance().res.getTexture("zombie-dead"),world,x,y,32);
         setType(ZombieType.BASIC);
         this.world = world;
         //this.sprite = sprite;

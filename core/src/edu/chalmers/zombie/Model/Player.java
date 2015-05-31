@@ -41,7 +41,7 @@ public class Player extends Entity implements CreatureInterface {
 
 
     public Player(ZWTexture texture, ZWWorld world, float x, float y) {
-        super(texture, world, x, y);
+        super(texture, world, x, y,32);
 
         //Set still image frame
         //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here

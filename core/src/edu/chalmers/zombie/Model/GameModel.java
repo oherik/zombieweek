@@ -35,8 +35,8 @@ public class GameModel {
      * Initializes the game model
      */
     private GameModel(){
-        currentLevel = 0;
-        currentRoom = 0;   //TODO test
+        currentLevel = 1;
+        currentRoom = 2;   //TODO test
         res = new ResourceManager();
         stepping=false;
         levels = new ArrayList<Level>();
@@ -63,6 +63,8 @@ public class GameModel {
         res.loadTiledMap("level1_room2", "core/assets/Map/Level_1_room_2.tmx");
         res.loadTiledMap("level1_room3", "core/assets/Map/Level_1_room_3.tmx");
         res.loadTiledMap("level2_room1", "core/assets/Map/Level_2_room_1.tmx");
+        res.loadTiledMap("level2_room2", "core/assets/Map/Level_2_room_2.tmx");
+        res.loadTiledMap("level2_room3", "core/assets/Map/Level_2_room_3.tmx");
 
         levels.add(0, new Level());
         addRoom(levels.get(0), new Room(res.getTiledMap("level1_room1")));
@@ -71,6 +73,8 @@ public class GameModel {
 
         levels.add(1, new Level());
         addRoom(levels.get(1), new Room(res.getTiledMap("level2_room1")));
+        addRoom(levels.get(1), new Room(res.getTiledMap("level2_room2")));
+        addRoom(levels.get(1), new Room(res.getTiledMap("level2_room3")));
     }
 
     private void initializeZombieTextures(){
@@ -83,6 +87,10 @@ public class GameModel {
         res.loadTexture("zombie-it-still","core/assets/Images/zombie-it-still.png");
         res.loadTexture("zombie-it-dead", "core/assets/Images/zombie-it-dead.png");
         res.loadTexture("zombie-it", "core/assets/Images/zombie-it.png");
+        res.loadTexture("zombie-boss-still","core/assets/Images/zombie-boss-still.png");
+        res.loadTexture("zombie-boss-dead", "core/assets/Images/zombie-boss-dead.png");
+        res.loadTexture("zombie-boss", "core/assets/Images/zombie-boss.png");
+
     }
 
     private void initializePlayerTextures(){

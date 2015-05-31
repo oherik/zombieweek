@@ -50,9 +50,7 @@ public class MapController {
             throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
         }
         int oldIndex = gameModel.getCurrentLevelIndex();
-        System.out.println(oldIndex);
         gameModel.setCurrentLevelIndex(levelIndex);
-        System.out.println("Level : " + levelIndex);
         int oldRoomIndex = gameModel.getCurrentRoomIndex();
         if(oldIndex>levelIndex) {
             gameModel.setCurrentRoomIndex(gameModel.getLevel(levelIndex).numberOfRooms() - 1);
@@ -60,7 +58,6 @@ public class MapController {
         } else{
             loadRoom(oldIndex, levelIndex,oldRoomIndex, 0);
         }
-        System.out.println(gameModel.getCurrentRoomIndex());
 
     }
 

@@ -32,8 +32,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
      * @param x     The zombie's x coordinate
      * @param y     The zombie's y coordinate
      */
-    public Zombie(ZWTexture walkingTexture, ZWTexture stillTexture, ZWTexture deadTexture, ZWWorld world, float x, float y){
-        super(walkingTexture, world, x, y);
+    public Zombie(ZWTexture walkingTexture, ZWTexture stillTexture, ZWTexture deadTexture, ZWWorld world, float x, float y, int size){
+        super(walkingTexture, world, x, y, size);
 
         if(walkingTexture == null) {
             walkingTexture = GameModel.getInstance().res.getTexture("zombie");
@@ -55,20 +55,13 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         short categoryBits = Constants.COLLISION_ZOMBIE;
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER |
                 Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_LEVEL;
+        createBody(x,y);
 
-        ZWBody body = new ZWBody();
-        body.createBodyDef(true, x+0.5f, y+0.5f, 20f, 20f);
-        body.setFixtureDef(0.8f, 0, 1, 1, categoryBits, maskBits, false);
-        //Set vectors
         force = new ZWVector(0,0);
         point = new ZWVector(0,0);
 
         //Set position
         position = new Point((int)x,(int)y);
-        
-        //Set body
-        super.setBody(body);
-                super.getBody().setUserData(this);
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
@@ -76,9 +69,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         SpawnController.setCollisionObjects();
         mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
 
-        super.getBody().setAngularDamping(10000);
-
-        isKnockedOut = false;
+                isKnockedOut = false;
 
         //Set system time created
         timeSinceLastPath = System.currentTimeMillis();
@@ -86,6 +77,19 @@ public abstract class Zombie extends Entity implements CreatureInterface {
         isAggressive = false;
     }
 
+    protected void createBody(float x, float y){
+        short categoryBits = Constants.COLLISION_ZOMBIE;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER |
+                Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_LEVEL;
+
+        ZWBody body = new ZWBody();
+        body.createBodyDef(true, x+0.5f, y+0.5f, 20f, 20f);
+        body.setFixtureDef(0.8f, 0, 1, 1, categoryBits, maskBits, false);
+        //Set body
+        super.setBody(body);
+        super.getBody().setUserData(this);
+        super.getBody().setAngularDamping(10000);
+    }
     /**
      * Sets whether the zombie has been attacked or not.
      * @param isAggressive true if attacked, false if not
