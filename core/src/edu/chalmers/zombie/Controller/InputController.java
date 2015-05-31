@@ -1,11 +1,10 @@
 package edu.chalmers.zombie.controller;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import edu.chalmers.zombie.adapter.ZWInputProcessor;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.GameState;

@@ -2,6 +2,7 @@ package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.controller_adapters.ZWContactListener;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import java.awt.*;
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public class Room {
      * @return  A copy of the collision grid as a 2d short array.
      */
     public short[][] getCollisionTileGrid(){
-        short[][] dest = new short[collisionTileGrid.length][collisionTileGrid[0].length];      //TODO onödigt?
+        short[][] dest = new short[collisionTileGrid.length][collisionTileGrid[0].length];      //TODO onï¿½digt?
         for(int i=0; i<collisionTileGrid.length; i++)
             for(int j=0; j<collisionTileGrid[i].length; j++)
                 dest[i][j]=collisionTileGrid[i][j];

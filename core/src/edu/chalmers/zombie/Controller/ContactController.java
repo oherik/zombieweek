@@ -2,6 +2,8 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.*;
+import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 
 /** A custom contact listener. It registers the different contacts and forward the commands to the other controllers.

@@ -1,13 +1,14 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
 import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /** Stores the game data. The model implements the singleton pattern
  * Created by Tobias on 15-04-02.

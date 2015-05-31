@@ -1,11 +1,9 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
-
-import java.awt.*;
 
 /**
  * An arch zombie has a high speed and a high resilience. It causes a damage of 200 percent.

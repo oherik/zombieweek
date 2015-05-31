@@ -1,11 +1,11 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
-import edu.chalmers.zombie.utils.PotionType;
-
-import java.awt.*;
 
 /**
  * Created by neda on 2015-03-31.

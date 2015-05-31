@@ -1,11 +1,9 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
-
-import java.awt.*;
 
 /**
  * A data zombie cannot be defeated - it has a super-high resilience and causes a damage of 1000 percent.
