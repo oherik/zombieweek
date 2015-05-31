@@ -54,7 +54,7 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         short categoryBits = Constants.COLLISION_ZOMBIE;
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER |
-                Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+                Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_LEVEL;
 
         ZWBody body = new ZWBody();
         body.createBodyDef(true, x+0.5f, y+0.5f, 20f, 20f);

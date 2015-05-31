@@ -315,7 +315,8 @@ public class Player extends Entity implements CreatureInterface {
 
         short categoryBits = Constants.COLLISION_PLAYER;
         short maskBits = Constants.COLLISION_POTION | Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY |
-                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE;
+                Constants.COLLISION_DOOR | Constants.COLLISION_WATER| Constants.COLLISION_SNEAK | Constants.COLLISION_ACTOR_OBSTACLE |
+                Constants.COLLISION_LEVEL;
 
         body.setFixtureDef(.8f,0,vectors,categoryBits,maskBits,false);
 

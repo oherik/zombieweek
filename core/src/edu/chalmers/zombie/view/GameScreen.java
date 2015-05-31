@@ -265,11 +265,13 @@ public class GameScreen extends ZWScreen{
             String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
             String playerHealth = "Health: " + player.getLives();
             String playerAmmo = "Ammo: " + player.getAmmunition();
+            String level= "Level: " + (gameModel.getCurrentLevelIndex()+1);
             batchHUD.begin();
             bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
             bitmapFont.draw(batchHUD, playerHealth, 10, ZWGameEngine.getWindowHeight() - 10);
             bitmapFont.draw(batchHUD, playerAmmo, 10, ZWGameEngine.getWindowHeight() - 25);
             bitmapFont.draw(batchHUD, playerPos, 10, ZWGameEngine.getWindowHeight() - 40);
+            bitmapFont.draw(batchHUD, level, 10, ZWGameEngine.getWindowHeight() - 55);
             batchHUD.end();
 
 

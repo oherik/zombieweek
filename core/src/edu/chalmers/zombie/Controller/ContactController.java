@@ -180,8 +180,13 @@ public class ContactController {
                 switch (fixtureA.getCategoryBits()){        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_DOOR:
                              CollisionObject door = (CollisionObject) fixtureA.getUserData();
-                            int levelToLoad = Integer.parseInt(door.getProperty());
-                          MapController.loadRoom(levelToLoad);
+                            int roomToLoad = Integer.parseInt(door.getProperty());
+                          MapController.loadRoom(roomToLoad);
+                        break;
+                    case Constants.COLLISION_LEVEL:
+                        CollisionObject level = (CollisionObject) fixtureA.getUserData();
+                        int levelToLoad = Integer.parseInt(level.getProperty());
+                        MapController.loadLevel(levelToLoad);
                         break;
 
                 }
@@ -190,8 +195,17 @@ public class ContactController {
                 switch(fixtureA.getCategoryBits()){
                     case Constants.COLLISION_PLAYER:
                             CollisionObject door = (CollisionObject) fixtureB.getUserData();
-                          int levelToLoad = Integer.parseInt(door.getProperty());
-                         MapController.loadRoom(levelToLoad);
+                            int roomToLoad = Integer.parseInt(door.getProperty());
+                            MapController.loadRoom(roomToLoad);
+                            break;
+                }
+                break;
+            case Constants.COLLISION_LEVEL:
+                switch(fixtureA.getCategoryBits()) {
+                    case Constants.COLLISION_PLAYER:
+                        CollisionObject level = (CollisionObject) fixtureA.getUserData();
+                        int levelToLoad = Integer.parseInt(level.getProperty());
+                        MapController.loadLevel(levelToLoad);
                         break;
                 }
                 break;

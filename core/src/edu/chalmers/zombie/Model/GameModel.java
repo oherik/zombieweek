@@ -35,6 +35,7 @@ public class GameModel {
      * Initializes the game model
      */
     private GameModel(){
+        currentLevel = 0;
         currentRoom = 0;   //TODO test
         res = new ResourceManager();
         stepping=false;
@@ -61,13 +62,15 @@ public class GameModel {
         res.loadTiledMap("level1_room1", "core/assets/Map/Level_1_room_1.tmx");
         res.loadTiledMap("level1_room2", "core/assets/Map/Level_1_room_2.tmx");
         res.loadTiledMap("level1_room3", "core/assets/Map/Level_1_room_3.tmx");
-        res.loadTiledMap("level1_room4", "core/assets/Map/Level_1_room_4.tmx");
+        res.loadTiledMap("level2_room1", "core/assets/Map/Level_2_room_1.tmx");
 
-        levels.add(new Level());
-        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room1"))); //0
-        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room2"))); //1
-        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room3"))); //2
-        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room4"))); //3
+        levels.add(0, new Level());
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room1")));
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room2")));
+        addRoom(levels.get(0), new Room(res.getTiledMap("level1_room3")));
+
+        levels.add(1, new Level());
+        addRoom(levels.get(1), new Room(res.getTiledMap("level2_room1")));
     }
 
     private void initializeZombieTextures(){
@@ -175,8 +178,24 @@ public class GameModel {
     public Room getRoom(int roomIndex) throws IndexOutOfBoundsException{
         if(roomIndex >= levels.get(currentLevel).numberOfRooms())
             throw new IndexOutOfBoundsException("GameModel: the getRoom index exceeds array size");
+        if(roomIndex < 0)
+            throw new IndexOutOfBoundsException("GameModel: the getRoom index must be 0 or greater");
         currentRoom = roomIndex;
         return levels.get(currentLevel).getRoom(roomIndex);
+    }
+
+    /**
+     * Returns a level
+     * @param levelIndex    Which level to get
+     * @return  The level with the specified index
+     * @throws IndexOutOfBoundsException    If the index is non valid
+     */
+    public Level getLevel(int levelIndex) throws IndexOutOfBoundsException{
+        if(levelIndex >= levels.size())
+            throw new IndexOutOfBoundsException("GameModel: the getLevel index exceeds array size");
+        if(levelIndex < 0)
+            throw new IndexOutOfBoundsException("GameModel: the getLevel index must be 0 or greater");
+        return levels.get(levelIndex);
     }
 
     /**
@@ -204,7 +223,7 @@ public class GameModel {
     public void setCurrentLevelIndex(int levelIndex) throws IndexOutOfBoundsException{
         if(levelIndex < 0 || levelIndex >= levels.size())
             throw new IndexOutOfBoundsException("GameModel: current level must be >= 0 and < levels.size()");
-        this.currentRoom = levelIndex;
+        this.currentLevel = levelIndex;
     }
 
     /**

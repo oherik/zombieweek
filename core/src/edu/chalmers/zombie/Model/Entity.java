@@ -263,7 +263,8 @@ public abstract class Entity {
      * null pointer exceptions.
      */
     public void removeBody(){
-        this.world.destroyBody(body);
+        if(body!=null)
+            this.world.destroyBody(body);
         this.body = null;}
 
     public void nullifyBody(){
