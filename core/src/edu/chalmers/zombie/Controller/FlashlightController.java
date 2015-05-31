@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public class FlashlightController {
     private FlashlightModel flashlightModel;
+    private float currentFraction;
+    private boolean foundFixture;
      /*
     *draws a black polygon that is shaped like everything that is not inside the flashlight circle segment.
      */
@@ -82,16 +84,15 @@ public class FlashlightController {
     }
     private void calculateCollisionPoints(){
         ZWVector[] rays = flashlightModel.getRays();
-        float currentFraction = flashlightModel.getCurrentFraction();
-        boolean foundFixture = flashlightModel.isFoundFixture();
         ZWVector playerPosition = flashlightModel.getPlayerPosition();
         ArrayList<ZWVector> endPoints = flashlightModel.getEndPoints();
-        ZWVector collisionPoint = flashlightModel.getCollisionPoint();
+        ZWVector collisionPoint;
         ArrayList<Float> collisionPoints = flashlightModel.getCollisionPoints();
         for (ZWVector ray : rays) {
-            flashlightModel.setCurrentFraction(1337);
+           currentFraction = 1337;
             foundFixture = false;
             rayCast(ray);
+            collisionPoint = flashlightModel.getCollisionPoint();
             if (foundFixture) {
                 ZWVector temp = new ZWVector(ray);
                 temp.add(playerPosition);
@@ -111,7 +112,20 @@ public class FlashlightController {
     }
     private void rayCast(ZWVector ray) {
         ZWWorld world = flashlightModel.getWorld();
-        ZWRayCastCallback callback = flashlightModel.createCallback();
+        ZWRayCastCallback callback = new ZWRayCastCallback() {
+            @Override
+            public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
+                if (fixture.getCategoryBits()== Constants.COLLISION_OBSTACLE ||
+                        fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
+                    if (fraction < currentFraction) {
+                        currentFraction = fraction;
+                        flashlightModel.setCollisionPoint(point);
+                    }
+                    foundFixture = true;
+                }
+                return 1;
+            }
+        };
         ZWVector playerPosition = flashlightModel.getPlayerPosition();
         world.rayCast(callback, playerPosition, sum(ray, playerPosition));
     }

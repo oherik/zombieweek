@@ -17,10 +17,8 @@ public class FlashlightModel {
     private ZWVector playerPosition = new ZWVector();
     private ZWVector collisionPoint = new ZWVector();
     private float currentFraction = 1337;
-    private boolean foundFixture;
     private ArrayList<Float> collisionPoints = new ArrayList<Float>();
     private float direction;
-    private ZWRayCastCallback callback = createCallback();
     private float width;
     private int numberOfRays;
     private float length;
@@ -57,43 +55,11 @@ public class FlashlightModel {
     public void clearAll(){
         endPoints.clear();
     }
-    private void calculateLength(){
-        float tileSize = Constants.TILE_SIZE;
-        float windowHeight = ZWGameEngine.getWindowHeight();
-        float windowWidth = ZWGameEngine.getWindowWidth();
-        float height =  (windowHeight/tileSize - windowHeight/tileSize/2)*lengthFraction;
-        float width = (windowWidth/tileSize - windowWidth/tileSize/2)*lengthFraction;
-        if (height > width){
-            length = width;
-        } else{
-            length = height;
-        }
-    }
-
-
     private void initializeRays(){
         rays = new ZWVector[numberOfRays];
     }
 
 
-
-    public ZWRayCastCallback createCallback(){
-        ZWRayCastCallback returnCallback = new ZWRayCastCallback() {
-            @Override
-            public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
-                if (fixture.getCategoryBits()== Constants.COLLISION_OBSTACLE ||
-                        fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
-                    if (fraction < currentFraction) {
-                        currentFraction = fraction;
-                        collisionPoint.set(point);
-                    }
-                    foundFixture = true;
-                }
-                return 1;
-            }
-        };
-        return returnCallback;
-    }
     public void setWorld(ZWWorld world){
         this.world = world;
     }
@@ -141,16 +107,8 @@ public class FlashlightModel {
         return collisionPoint;
     }
 
-    public float getCurrentFraction() {
-        return currentFraction;
-    }
-
     public void setCurrentFraction(float currentFraction) {
         this.currentFraction = currentFraction;
-    }
-
-    public boolean isFoundFixture() {
-        return foundFixture;
     }
 
     public ArrayList<Float> getCollisionPoints() {
@@ -181,5 +139,9 @@ public class FlashlightModel {
     }
     public int getMaxYIndex(){
         return maxYIndex;
+    }
+
+    public void setCollisionPoint(ZWVector collisionPoint) {
+        this.collisionPoint = collisionPoint;
     }
 }
