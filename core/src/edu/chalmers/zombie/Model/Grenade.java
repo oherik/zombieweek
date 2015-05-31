@@ -29,7 +29,7 @@ public class Grenade extends Entity {
     private float explosionRadius = 3;
     private ArrayList<ZWFixture> foundFixtures = new ArrayList<ZWFixture>();
     private ZWWorld world;
-    private ZWTimer timer;
+
     private int damage = 0;
     public Grenade(int targetX, int targetY, float x, float y, ZWWorld world){
         super(world);
@@ -53,8 +53,13 @@ public class Grenade extends Entity {
         getBody().setUserData(this);
         calculateDirection();
         unproject();
-        initializeTimer();
         force.setLength(speed);
+    }
+    public ZWWorld getWorld(){
+        return world;
+    }
+    public int getDamage(){
+        return damage;
     }
     private void calculateDirection(){
         float deltaX = ZWGameEngine.getWindowWidth() / 2 - targetX;
@@ -94,6 +99,9 @@ public class Grenade extends Entity {
         force.setLength(0);
         setBodyVelocity(force);
     }
+    public float getExplosionRadius(){
+        return  explosionRadius;
+    }
     @Override
     public void draw(ZWBatch batch) {
         super.draw(batch);
@@ -101,75 +109,14 @@ public class Grenade extends Entity {
             stopIfNeeded();
         }
     }
-    private ZWVector[] rays;
-    public void explode(){
-        stop();
-        ZWRayCastCallback callback = createCallback();
-        ZWVector grenadePosition = new ZWVector(getX(), getY());
-        rays = new ZWVector[100];
-        for(int i = 0; i < 100; i++){
-            rays[i] = new ZWVector(1,1);
-            rays[i].setLength(explosionRadius);
-            rays[i].setAngleRad(Constants.PI*2*i/100);
-            rays[i].add(getX(), getY());
-        }
-        ArrayList<ZWFixture> fixturesInRadius = new ArrayList<ZWFixture>();
-        for(ZWVector ray:rays){
-            foundFixtures.clear();
-            world.rayCast(callback, grenadePosition, ray);
-            for (ZWFixture f: foundFixtures){
-                if (checkIfInsideRadius(f, ray)){
-                    fixturesInRadius.add(f);
-                }
-            }
-            for (ZWFixture f: fixturesInRadius){
-                if (f.getBodyUserData() instanceof Zombie){
-                    Zombie z = (Zombie)f.getBodyUserData();
-                    z.decHp(damage);
-                    if (z.getHp() <= 0) {
-                        ZombieController.knockOut(z);
-                        GameModel.getInstance().getPlayer().incKillCount();
-                    }
-                    EntityController.knockBack(this, z, 3);
-                }
-            }
-        }
-        EntityController.remove(this);
-        this.getSprite().setAlpha(0);
+
+    public ArrayList<ZWFixture> getFoundFixtures(){
+        return foundFixtures;
     }
-    private boolean checkIfInsideRadius(ZWFixture fixture, ZWVector ray){
-        ZWVector fixturePosition = fixture.getPosition();
-        return (((getX() < fixturePosition.getX() && fixturePosition.getX() < ray.getX()) ||
-                (ray.getX() < fixturePosition.getX() && fixturePosition.getX() < getX())) &&
-                ((getY() < fixturePosition.getY() && fixturePosition.getY() < ray.getY()) ||
-                        (ray.getY() < fixturePosition.getY() && fixturePosition.getY() < getY())));
-    }
-    private ZWRayCastCallback createCallback(){
-        ZWRayCastCallback callback = new ZWRayCastCallback() {
-            @Override
-            public float reportRayFixture(ZWFixture fixture, ZWVector point, ZWVector normal, float fraction) {
-                if (fixture.getCategoryBits() == Constants.COLLISION_ZOMBIE){
-                    foundFixtures.add(fixture);
-                }
-                return 1;
-            }
-        };
-        return callback;
-    }
-    private void initializeTimer(){
-        timer = new ZWTimer();
-        ZWTask task = createTask();
-        timer.scheduleTask(task, 3);
-        timer.start();
-    }
-    private ZWTask createTask(){
-        ZWTask task = new ZWTask() {
-            @Override
-            public void run() {
-                explode();
-            }
-        };
-        return task;
-    }
+
+
+
+
+
 
 }
