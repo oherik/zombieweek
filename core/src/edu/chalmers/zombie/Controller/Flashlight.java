@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 /**
  * Created by daniel on 5/19/2015.
+ * Modified by Erik
  */
 import com.sun.istack.internal.NotNull;
 import edu.chalmers.zombie.adapter.*;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 public class Flashlight {
     private ZWWorld world;
     private ZWTexture darkTexture = new ZWTexture("core/assets/darkness.png");
-    private ZWTexture lightTexture = new ZWTexture("core/assets/light.png");
     private ZWVector playerPosition = new ZWVector();
     private ZWVector collisionPoint = new ZWVector();
     private float currentFraction = 1337;
@@ -109,12 +109,6 @@ public class Flashlight {
         }
     }
 
-    private void lengthenRays(){
-        for(ZWVector v : rays) {
-            v.set(lengthenRay(playerPosition, v, 0.4f));
-        }
-    }
-
     private ZWVector lengthenRay(ZWVector origin, ZWVector end,float dist){
         float dy = origin.getY()-end.getY();
         float dx = origin.getX()-end.getX();
@@ -138,7 +132,6 @@ public class Flashlight {
                     }
                 }
                 endPoints.remove(tempIndex);
-               // endPoints.remove(lengthenRay(playerPosition,temp,0.4f));
                 endPoints.add(tempIndex, lengthenRay(playerPosition,collisionPoint,0.4f));
             }
 
@@ -178,9 +171,9 @@ public class Flashlight {
         corners[2] = playerPosition.getX() - windowWidth/(tileSize*2);
         corners[3] = playerPosition.getY() - windowHeight/(tileSize*2);                          //Bottom left
         corners[4] = windowWidth/tileSize+playerPosition.getX() - windowWidth/(tileSize*2);
-                corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
-                corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
-                corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
+        corners[5] = playerPosition.getY() - windowHeight/(tileSize*2);           //Bottom right
+        corners[6] = windowWidth/tileSize +playerPosition.getX() - windowWidth/(tileSize*2);
+        corners[7] = windowHeight/tileSize + playerPosition.getY() - windowHeight / (tileSize*2); //Top right
 
             }
             private float[] createArrayOfVertices(){
@@ -218,8 +211,6 @@ public class Flashlight {
         float[] vertices = createArrayOfVertices();
         vertices = scaleVertices(vertices);
         short[] triangles = calculateTriangles(vertices);
-        //Punkterna som har räknats ut är i spelvärldens format. Vet inte om det alltid har varit så. Men då
-        //Trianglarna stämmer i alla fall.
         ZWPolygonRegion darkness = new ZWPolygonRegion(new ZWTextureRegion(darkTexture), vertices, triangles);
         return darkness;
     }

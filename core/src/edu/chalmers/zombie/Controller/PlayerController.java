@@ -238,10 +238,7 @@ public class PlayerController {
      */
     public static void throwBook(){
         Player player = getPlayer();
-
-        AimingController aimingController = new AimingController(player);
         ProjectileController.throwBook();
-
         player.getAnimator().setOverlay(400); //time in millisec of Hand to be shown when trowing
     }
 
