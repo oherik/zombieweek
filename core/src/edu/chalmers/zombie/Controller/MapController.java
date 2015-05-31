@@ -6,6 +6,7 @@ import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
+import edu.chalmers.zombie.utils.SaveLoadGame;
 import edu.chalmers.zombie.utils.TileRayTracing;
 import edu.chalmers.zombie.adapter.ZWRenderer;
 
@@ -55,6 +56,7 @@ public class MapController {
         if (levelIndex < 0 || levelIndex > maxSize){
             throw new IndexOutOfBoundsException("Not a valid room index, must be between " + 0 + " and  " + maxSize);
         }
+
         int oldIndex = gameModel.getCurrentLevelIndex();
         gameModel.setCurrentLevelIndex(levelIndex);
         int oldRoomIndex = gameModel.getCurrentRoomIndex();
@@ -63,6 +65,19 @@ public class MapController {
         } else{
             gameModel.setCurrentRoomIndex(0);
         }
+
+        if (levelIndex>gameModel.getHighestCompletedLevel()){
+            gameModel.setHighestCompletedLevel(levelIndex);
+        }
+
+        System.out.println("Level change to: " + levelIndex);
+
+        /* ------ Save game ------ */
+        SaveLoadGame saveLoadGame = new SaveLoadGame();
+        saveLoadGame.saveGame();
+
+
+
         loadRoom(oldIndex, levelIndex,oldRoomIndex, 0);
     }
 
@@ -330,17 +345,13 @@ public class MapController {
             if(player.getBody() == null||!player.getBody().bodyIsInWorld(getRoom().getWorld())){
                 System.out.println(getPlayerBufferPosition());
 
-                PlayerController.setWorldAndPosition(currentRoom.getWorld(), (float) getPlayerBufferPosition().getX()+0.5f, (float) getPlayerBufferPosition().getY()+0.5f);
+                PlayerController.setWorldAndPosition(currentRoom.getWorld(), (float) getPlayerBufferPosition().getX() + 0.5f, (float) getPlayerBufferPosition().getY() + 0.5f);
             }
 
             /* ------ Update screen ------ */
             if(gameModel.getZWRenderer() == null)
                 gameModel.setZWRenderer(new ZWRenderer(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight()));  //TODO ej här!
             gameModel.getZWRenderer().updateRoom(getRoom(), ZWGameEngine.getWindowWidth(), ZWGameEngine.getWindowHeight());          //TODO ej här!
-
-            /* ------ Save game ------ */
-            SaveLoadController saveLoadController = new SaveLoadController();
-            saveLoadController.saveGame();
 
             /* ------ Mark as updated ------ */
             setWorldNeedsUpdate(false);
