@@ -2,7 +2,7 @@ package edu.chalmers.zombie.adapter;
 
 import edu.chalmers.zombie.model.Entity;
 import edu.chalmers.zombie.model.GameModel;
-import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.utils.Constants;
 
 import java.util.ArrayList;
@@ -39,8 +39,7 @@ public class Grenade extends Entity {
         ZWBody body = new ZWBody();
         short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ZOMBIE;
         body.createBodyDef(true, x, y, 0, 0, true);
-        short s = 0;
-        body.setFixtureDef(0, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), s, maskBits, false);
+        body.setFixtureDef(0, 0, (width/2/ Constants.PIXELS_PER_METER), (height/2/Constants.PIXELS_PER_METER), Constants.COLLISION_PROJECTILE, maskBits, false);
         super.setBody(body);
         super.setSprite(grenadeSprite);
         super.scaleSprite(1f / Constants.TILE_SIZE);

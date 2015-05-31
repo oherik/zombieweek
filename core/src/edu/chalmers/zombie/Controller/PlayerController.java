@@ -2,7 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.ZWBody;
 import edu.chalmers.zombie.adapter.ZWVector;
-import edu.chalmers.zombie.model.Player;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.model.Potion;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.model.GameModel;
@@ -18,6 +18,7 @@ import java.util.TimerTask;
 /**
  * Created by neda on 2015-05-28.
  * Modified by Neda and Tobias
+ * Modified by Erik
  */
 public class PlayerController {
 
@@ -142,8 +143,10 @@ public class PlayerController {
             keyThread = new Thread() {
                 public void run() {
                     try {
-                        getPlayer().getKeyThread().sleep(timeSensitiveness); //waiting for new key release
-                        updateMovement();
+
+                        Thread thread = getPlayer().getKeyThread();
+                        thread.sleep(timeSensitiveness); //waiting for new key release
+                     updateMovement();
                         //if(getWorld().isLocked())     //TODO hack för att inte krascha
                     } catch (InterruptedException e) {
                         System.out.println("------ Key thread interrupted -------\n" + e);
@@ -229,12 +232,12 @@ public class PlayerController {
         int deltaSpeed = newSpeed-originalSpeed;
         p.setLegPower(newSpeed);
         Timer timer = new Timer();
-        timer.schedule(new setSpeed(p.getLegPower() - deltaSpeed), Constants.POTION_SPEED_TIME_MILLIS);//Ej originalSpeed ifall spelaren plockat upp en till
+        timer.schedule(new SetSpeed(p.getLegPower() - deltaSpeed), Constants.POTION_SPEED_TIME_MILLIS);//Ej originalSpeed ifall spelaren plockat upp en till
 
     }
-    static class setSpeed extends TimerTask {
+    static class SetSpeed extends TimerTask {
         private int speed;
-        public setSpeed(int speed){
+        public SetSpeed(int speed){
             this.speed = speed;
         }
         public void run() {

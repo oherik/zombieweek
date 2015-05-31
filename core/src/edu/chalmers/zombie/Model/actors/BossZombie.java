@@ -1,22 +1,20 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWBody;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.ZombieType;
 
-import java.awt.*;
-
 /**
+ * A boss zombie has a fairly high resilience and an intermediate speed. It causes a damage of 100 percent.
+ * It has a detection radius of 10, which is intermediate.
+ *
  * Created by neda on 2015-05-20.
+ * Modified by Erik
  */
 public class BossZombie extends Zombie {
-
-    private Sprite sprite;
-    private ZWWorld world;
-    private Point position;
 
     public BossZombie(ZWWorld world, int x, int y) {
 
@@ -25,9 +23,6 @@ public class BossZombie extends Zombie {
                 GameModel.getInstance().res.getTexture("zombie-boss-dead"), world, x, y,64);
 
         setType(ZombieType.BOSS);
-        this.world = world;
-        this.sprite = sprite;
-        position = new Point(x, y);
         setDetectionRadius(10);
         setStartingHp(200);
         setSpeed(100);

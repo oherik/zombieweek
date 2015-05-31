@@ -1,25 +1,28 @@
 package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.model.Book;
-import edu.chalmers.zombie.model.Player;
-import edu.chalmers.zombie.model.Zombie;
+import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.model.Room;
 import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Created by Erik on 2015-05-29.
+ * Modified by Neda.
  */
 public class ProjectileController {
 
     /**
-     * Performs the calculations necessary for the book to hit the ground. It calls other methods to set the collision detection to players and other books as well and to apply friction.
+     * Performs the calculations necessary for the book to hit the ground. It calls other methods to set the
+     * collision detection to players and other books as well and to apply friction.
      * @param book  The book
      */
     public static void hitGround(Book book){
         book.setOnGround(true);
         //TODO g?ra boken mindre, l?gga till ljud etc
-        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_DOOR;
+        short maskBits = Constants.COLLISION_OBSTACLE | Constants.COLLISION_ENTITY | Constants.COLLISION_WATER
+                | Constants.COLLISION_ACTOR_OBSTACLE | Constants.COLLISION_DOOR;
         EntityController.setMaskBits(book, maskBits);
         EntityController.setFriction(book, 4f, 3f);
     }
@@ -45,8 +48,11 @@ public class ProjectileController {
             z.decHp(damage);
             if (z.getHp() <= 0) {
                 ZombieController.knockOut(z);
+                GameModel.getInstance().getPlayer().incKillCount();
             }
-            EntityController.knockBack(b, z, damage / 10);
+
+            EntityController.knockBack(b, z, damage / 10f);
+
             hitGround(b);
             // GameModel.getInstance().addEntityToRemove(b);
             //b.markForRemoval();

@@ -1,25 +1,30 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
+
 import edu.chalmers.zombie.controller.AimingController;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.Direction;
 import edu.chalmers.zombie.utils.PotionType;
 
+import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.model.GameModel;
+import edu.chalmers.zombie.utils.Constants;
+import edu.chalmers.zombie.utils.Direction;
+
+
 /**
  * Created by neda on 2015-03-31.
- * Modified by Tobias and Erik
+ * Modified by Tobias, Erik and Neda
  */
 public class Player extends Entity implements CreatureInterface {
 
     private int killCount;
     private int lives;
     private int ammunition;
-    private int grenadeAmmo = 5;
-    private boolean isAttacked;
+    private int grenadeAmmo = 5; //TODO: remove?
     private boolean isHidden;
-    private int width;
-    private int height;
     private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
@@ -27,10 +32,8 @@ public class Player extends Entity implements CreatureInterface {
     private int speed = 7;
     private float dampening;
     private int legPower;
-    private PotionType potion;
-    private int waterTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
-    private int sneakTilesTouching = 0; //TODO måste göras på nåt snyggare sätt
-
+    private int waterTilesTouching;
+    private int sneakTilesTouching;
     private Thread keyThread; //Keeps track of key releases
     //The hand is throwing the book and aiming.
     private AimingController aimingController = new AimingController(this);
@@ -40,12 +43,12 @@ public class Player extends Entity implements CreatureInterface {
 
 
     public Player(ZWTexture texture, ZWWorld world, float x, float y) {
-        super(texture, world, x, y,32);
+        super(texture, world, x, y, Constants.PLAYER_SIZE);
 
         //Set still image frame
         //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
         ZWTexture stillTexture = GameModel.getInstance().res.getTexture("emilia-still");
-        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,32,32);
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
         getAnimator().addStillFrame(stillFrame[0]);
 
         //Set overlay image (Hand)
@@ -55,12 +58,11 @@ public class Player extends Entity implements CreatureInterface {
         ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
         getAnimator().setOverlayFrame(overlayFrame);
 
+        setWaterTilesTouching(0);
+        setSneakTilesTouching(0);
 
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
-
-        width = Constants.PLAYER_SIZE;
-        height = Constants.PLAYER_SIZE;
 
         createDefaultBody(world,x,y);
 
@@ -85,7 +87,7 @@ public class Player extends Entity implements CreatureInterface {
      * A method to get current players kill count.
      * @return int killCount.
      */
-    private int getKillCount() {
+    public int getKillCount() { //TODO: remove?
 
         return killCount;
     }
@@ -93,7 +95,7 @@ public class Player extends Entity implements CreatureInterface {
     /**
      * A method that increases current player's kill count.
      */
-    private void incKillCount() {
+    public void incKillCount() {
 
         killCount++;
     }
@@ -158,7 +160,7 @@ public class Player extends Entity implements CreatureInterface {
      */
     public float getSpeed(){return this.speed;}
 
-    public void setForceLength(float speed){force.setLength(speed);}
+    public void setForceLength(float speed){force.setLength(speed);}//TODO: remove?
 
     public ZWVector getForce(){return this.force;}
 
@@ -183,13 +185,13 @@ public class Player extends Entity implements CreatureInterface {
      * A method used when player is attacking zombie.
      * @param zombie the zombie that is attacked.
      */
-    public void attack(Zombie zombie) {
+    public void attack(Zombie zombie) {//TODO: remove?
 
         // TODO: fill in with attack of zombie instance
     }
 
     @Override
-    public void knockOut() {
+    public void knockOut() {//TODO: why is this called?
 
         // TODO: game over
     }
@@ -197,7 +199,7 @@ public class Player extends Entity implements CreatureInterface {
     @Override
     public boolean hasBeenAttacked() {
 
-        return isAttacked;
+        return lives>100;   //TODO ändra hur detta fungerar
     }
 
     @Override
@@ -217,7 +219,7 @@ public class Player extends Entity implements CreatureInterface {
      */
     public void addBook(){
         ++ammunition;
-    }
+    } //TODO: remove?
 
     /**
      * Since the ammunition count can't be negative it checks if it's >0 before decreasing it
@@ -276,13 +278,6 @@ public class Player extends Entity implements CreatureInterface {
         return getBody().getLinearVelocity(); //TODO måste fixas, borde skicka en vector2
     }
 
-    private void setDefaultBody(){
-        if(this.getBody()!=null) {
-            this.removeBody();
-        }
-
-
-    }
 
     /**
      * Creates a new default body at the given position
@@ -360,10 +355,6 @@ public class Player extends Entity implements CreatureInterface {
         getAnimator().setOverlay(500); //time in millisec of Hand to be shown when trowing
     }
 
-    //TODO: move to PlayerController
-    public void throwGrenade(){
-        aimingController.throwGrenade();
-    }
 
     public int getWaterTilesTouching(){
         return waterTilesTouching;

@@ -1,13 +1,14 @@
 package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
+import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ResourceManager;
 import edu.chalmers.zombie.adapter.ZWRenderer;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /** Stores the game data. The model implements the singleton pattern
  * Created by Tobias on 15-04-02.
@@ -16,11 +17,10 @@ import java.util.List;
 public class GameModel {
 
     private static GameModel instance = new GameModel();
-    public static ResourceManager res;
+    public ResourceManager res;
     private Player player;
     private int currentLevel, currentRoom, highestCompletedLevel, highestCompletedRoom;
     private ArrayList<Level> levels;
-    private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
     private ArrayList<CollisionObject> collisionObjects;
     private boolean worldNeedsUpdate, stepping, flashlightEnabled = false, soundOn;
@@ -58,7 +58,7 @@ public class GameModel {
         res.loadTexture("darkness-overlay", "core/assets/darkness.png");
     }
 
-    private void initializeRooms(){ //TODO varifrån ska vi hämta dessa?
+    private void initializeRooms(){ //TODO varifrï¿½n ska vi hï¿½mta dessa?
         res.loadTiledMap("level1_room1", "core/assets/Map/Level_1_room_1.tmx");
         res.loadTiledMap("level1_room2", "core/assets/Map/Level_1_room_2.tmx");
         res.loadTiledMap("level1_room3", "core/assets/Map/Level_1_room_3.tmx");
@@ -168,13 +168,7 @@ public class GameModel {
     }
 
     /**
-     * Sets all rooms
-     */
-    private void setRooms(ArrayList<Room> rooms){
-        levels.get(currentLevel).setRooms(rooms);
-    }
 
-    /**
      * @return  The current room
      */
     public Room getRoom(){return levels.get(currentLevel).getRoom(currentRoom); }

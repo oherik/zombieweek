@@ -3,6 +3,7 @@ package edu.chalmers.zombie.model;
 import edu.chalmers.zombie.adapter.ZWGameEngine;
 import edu.chalmers.zombie.adapter.ZWSprite;
 import edu.chalmers.zombie.adapter.ZWTexture;
+import edu.chalmers.zombie.model.actors.Player;
 import edu.chalmers.zombie.utils.Constants;
 
 /**

@@ -5,6 +5,7 @@ import edu.chalmers.zombie.utils.Constants;
 
 /**
  * Created by daniel on 4/21/2015.
+ * Modified by Erik
  */
 public class Book extends Entity {
     private ZWVector force;
@@ -42,9 +43,6 @@ public class Book extends Entity {
         this.direction=d;
         this.initialVelocity = initialVelocity;
         force = new ZWVector(1,1); //if 0,0 setLength wont work
-
-        //Update position to be in front of player
-        ZWVector position = getUpdatedPosition(x,y);
 
         ZWBody body = new ZWBody();
         body.createBodyDef(true,x+0.5f,y+0.5f,0,0,true);

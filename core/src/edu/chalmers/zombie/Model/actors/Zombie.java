@@ -1,15 +1,23 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.MapController;
 import edu.chalmers.zombie.controller.SpawnController;
+import edu.chalmers.zombie.model.CreatureInterface;
+import edu.chalmers.zombie.model.Entity;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.ZombieType;
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
+ * A zombie is an antoagonist, and will pursue and attack the player to different degrees
+ * depending on its type. The detection radius, damage done, speed and starting hp varies
+ * along with graphical depicition.
+ *
  * Created by neda on 2015-03-31.
+ * Modified by Erik
  */
 public abstract class Zombie extends Entity implements CreatureInterface {
 
@@ -19,7 +27,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     private boolean isKnockedOut, isMoving, isAggressive;
     private ZWVector force, point;
     private Point position, nextPathTile;
-    private MapController mapController;
     private long timeSinceLastPath;
     private ArrayList<Point> path;
 
@@ -35,10 +42,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public Zombie(ZWTexture walkingTexture, ZWTexture stillTexture, ZWTexture deadTexture, ZWWorld world, float x, float y, int size){
         super(walkingTexture, world, x, y, size);
 
-        if(walkingTexture == null) {
-            walkingTexture = GameModel.getInstance().res.getTexture("zombie");
-            setSprite(new ZWSprite(walkingTexture));
-        }
         if(stillTexture == null){
             stillTexture = GameModel.getInstance().res.getTexture("zombie-still");
         }
@@ -65,9 +68,8 @@ public abstract class Zombie extends Entity implements CreatureInterface {
 
         super.scaleSprite(1f / Constants.TILE_SIZE);
 
-        mapController = new MapController();
         SpawnController.setCollisionObjects();
-        mapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn());
+       // MapController.setPlayerBufferPosition(GameModel.getInstance().getRoom().getPlayerSpawn()); //TODO varför finns den där?
 
                 isKnockedOut = false;
 
@@ -325,15 +327,6 @@ public abstract class Zombie extends Entity implements CreatureInterface {
     public void setIsMoving(boolean isMoving) {
 
         this.isMoving = isMoving;
-    }
-
-    /**
-     * A method which returns the mapController instance specific to a certain zombie.
-     * @return mapController (MapController). 
-     */
-    public MapController getThisMapController() {
-
-        return mapController;
     }
 
     /**

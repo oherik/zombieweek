@@ -2,10 +2,12 @@ package edu.chalmers.zombie.adapter;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.Comparator;
+
 /** An adapter class for libGDX's Vector2
  * Modified by Neda
  */
-public class ZWVector {
+public class ZWVector{
 
     private Vector2 vector;
 
@@ -134,8 +136,21 @@ public class ZWVector {
         this.vector.scl(scale);
     }
 
-    public boolean equals(ZWVector other){
-        return this.getLibVector().equals(other.getLibVector());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ZWVector)) return false;
+
+        ZWVector zwVector = (ZWVector) o;
+
+        return !(vector != null ? !vector.equals(zwVector.vector) : zwVector.vector != null);
+
     }
+
+    @Override
+    public int hashCode() {
+        return vector != null ? vector.hashCode() : 0;
+    }
+
 
 }

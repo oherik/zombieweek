@@ -8,7 +8,7 @@ public class Constants {
 
     public static final int TILE_SIZE = 32;
     public static final float PIXELS_PER_METER = 32;
-    public static final int PLAYER_SIZE = 28;
+    public static final int PLAYER_SIZE = 32;
 
     //Room
     public static final String META_LAYER = "meta";
@@ -55,9 +55,9 @@ public class Constants {
     public static final float SQRT_2 = 1.4142f;
 
     //Potions
-    public static int POTION_HEALTH_AMOUNT = 50;
-    public static float POTION_SPEED_SCALE = 3f;
-    public static int POTION_SPEED_TIME_MILLIS = 5000;
+    public static final int POTION_HEALTH_AMOUNT = 50;
+    public static final float POTION_SPEED_SCALE = 3f;
+    public static final int POTION_SPEED_TIME_MILLIS = 5000;
 
 
 }

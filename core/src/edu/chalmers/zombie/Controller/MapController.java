@@ -2,6 +2,8 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.*;
+import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.PathAlgorithm;
 import edu.chalmers.zombie.utils.TileRayTracing;
@@ -13,6 +15,7 @@ import java.util.Map;
 
 /**
  * This controller class makes all the different calculations regarding the maps, rooms, worlds and objects in them.
+ * Created by Erik
  */
 public class MapController {
 
@@ -54,11 +57,10 @@ public class MapController {
         int oldRoomIndex = gameModel.getCurrentRoomIndex();
         if(oldIndex>levelIndex) {
             gameModel.setCurrentRoomIndex(gameModel.getLevel(levelIndex).numberOfRooms() - 1);
-            loadRoom(oldIndex, levelIndex, oldRoomIndex, gameModel.getCurrentRoomIndex());
         } else{
-            loadRoom(oldIndex, levelIndex,oldRoomIndex, 0);
+            gameModel.setCurrentRoomIndex(0);
         }
-
+        loadRoom(oldIndex, levelIndex,oldRoomIndex, 0);
     }
 
     /**
@@ -108,7 +110,13 @@ public class MapController {
         gameModel.setCurrentRoomIndex(newRoomIndex);
        // gameModel.clearBookList();
         SpawnController.traverseRoomIfNeeded(getRoom());
-        if(oldRoomIndex > newRoomIndex || oldLevelIndex > newLevelIndex){
+        if(oldRoomIndex > newRoomIndex && oldLevelIndex >= newLevelIndex){
+            if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
+                setPlayerBufferPosition(getRoom().getPlayerSpawn());
+            else
+                setPlayerBufferPosition(getRoom().getPlayerReturn());
+        }
+        else if(oldLevelIndex > newLevelIndex){
             if(getRoom().getPlayerReturn() == null)        //If the spawn and return points are the same point in the map file
                 setPlayerBufferPosition(getRoom().getPlayerSpawn());
             else
@@ -410,10 +418,6 @@ public class MapController {
             long lifeTime = 5000; //life time for book in millisec
             if (System.currentTimeMillis() - b.getTimeCreated() > airTime && b.getBody()!=null)
                 ProjectileController.hitGround(b);
-            if (System.currentTimeMillis() - b.getTimeCreated() > lifeTime) {
-              //  gameModel.addEntityToRemove(getRoom(),b);
-                //b.markForRemoval(); //TODO ha med?
-            }
             if (b.toRemove())
                 books.remove(i); //Förenklad forsats skulle göra detta svårt
         }

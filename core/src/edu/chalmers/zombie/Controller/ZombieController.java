@@ -2,6 +2,7 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.*;
+import edu.chalmers.zombie.model.actors.*;
 import edu.chalmers.zombie.utils.Constants;
 import edu.chalmers.zombie.utils.GameState;
 import edu.chalmers.zombie.utils.ZombieType;
@@ -12,13 +13,14 @@ import java.util.Iterator;
 
 /**
  * Created by neda on 2015-05-21.
+ * Modified by Erik
  */
 public class ZombieController {
 
     public static void move(Zombie z) {
 
         if (z.getBody() != null) {
-        Point playerPosition = z.getThisMapController().getPlayerPosition();
+        Point playerPosition = MapController.getPlayerPosition();
         Point zombiePosition = z.getZombiePosition();
 
         Player player = GameModel.getInstance().getPlayer();
@@ -103,9 +105,6 @@ public class ZombieController {
                 break;
             case ELECTRO:
                 zombie = new ElectroZombie(room.getWorld(),x,y);
-                break;
-            case BASIC:
-                zombie = new BasicZombie(room.getWorld(),x,y);
                 break;
             case ARCH:
                 zombie = new ArchZombie(room.getWorld(),x,y);

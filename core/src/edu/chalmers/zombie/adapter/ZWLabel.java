@@ -5,10 +5,10 @@ import com.badlogic.gdx.utils.*;
 
 /**
  * Created by Tobias on 15-05-29.
+ * Modified by Erik
  */
 public class ZWLabel {
     private Label label;
-    private com.badlogic.gdx.utils.StringBuilder stringBuilder;
     private ZWBitmapFont font;
     private com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle labelStyle;
 
@@ -27,4 +27,8 @@ public class ZWLabel {
     public void scale(float scale){this.font.getBitmapFont().scale(scale);}
 
     public Label getLabel(){return this.label;}
+
+    public void setLabel(String str){
+        label = new Label(str, labelStyle);
+    }
 }

@@ -17,38 +17,37 @@ public class ZWImageButton {
     private ImageButton imageButton;
     ImageButton.ImageButtonStyle buttonStyle;
 
-    public ZWImageButton(){
+    public ZWImageButton() {
         buttonStyle = new ImageButton.ImageButtonStyle();
         imageButton = new ImageButton(buttonStyle);
     }
 
-    public void setImageUp(ZWTexture zwTexture){
+    public void setImageUp(ZWTexture zwTexture) {
         buttonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(zwTexture.getTexture()));
     }
 
-    public void setImageDown(ZWTexture zwTexture){
+    public void setImageDown(ZWTexture zwTexture) {
         buttonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(zwTexture.getTexture()));
     }
 
-    public void setImageOver(ZWTexture zwTexture){
+    public void setImageOver(ZWTexture zwTexture) {
         buttonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(zwTexture.getTexture()));
     }
 
-    public void setSize(float width, float height){ imageButton.setSize(width,height);}
-
-    public void setPosition(float x, float y){imageButton.setPosition(x,y);}
-
-    public ImageButton getButton(){return this.imageButton;}
-
-    public void addListener(final ZWClickAction zwClickAction){
-        this.imageButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                zwClickAction.clicked();
-            }
-        });
+    public void setSize(float width, float height) {
+        imageButton.setSize(width, height);
     }
 
+    public void setPosition(float x, float y) {
+        imageButton.setPosition(x, y);
+    }
 
+    public ImageButton getButton() {
+        return this.imageButton;
+    }
+
+    public void addListener(final ZWClickAction zwClickAction) {
+        this.imageButton.addListener(new ZWClickListener(zwClickAction));
+    }
 
 }

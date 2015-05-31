@@ -7,6 +7,7 @@ import edu.chalmers.zombie.utils.Constants;
 /**
  * A class which holds a reference to a body and a sprite, as well as the world in which the body resides.
  * Modified by Neda
+ * Modified by Erik
  */
 public abstract class Entity {
 

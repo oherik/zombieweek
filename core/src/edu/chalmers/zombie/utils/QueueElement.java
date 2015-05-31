@@ -77,13 +77,37 @@ public class QueueElement implements Comparable<QueueElement>{
      * @throws NullPointerException if the other element is null
      */
     @Override
-    public int compareTo(QueueElement otherElement) {
-        if (otherElement == null)
-            throw new NullPointerException(
-                    "QueueElement: Cannot compare with something that is null");
-        return Double.compare(this.getCost(), otherElement.getCost());
+    public int compareTo(QueueElement otherElement) {if (otherElement == null)
+        throw new NullPointerException(
+                "QueueElement: Cannot compare with something that is null");
+        if(equals(otherElement))
+            return 0;
+        else
+            return Double.compare(this.getCost(), otherElement.getCost());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof QueueElement)) return false;
+
+        QueueElement that = (QueueElement) o;
+
+        if (g != that.g) return false;
+        if (h != that.h) return false;
+        if (node != null ? !node.equals(that.node) : that.node != null) return false;
+        return !(path != null ? !path.equals(that.path) : that.path != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = node != null ? node.hashCode() : 0;
+        result = 31 * result + g;
+        result = 31 * result + h;
+        result = 31 * result + (path != null ? path.hashCode() : 0);
+        return result;
+    }
 }
 
 

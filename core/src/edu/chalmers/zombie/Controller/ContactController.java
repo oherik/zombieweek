@@ -2,10 +2,13 @@ package edu.chalmers.zombie.controller;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.model.*;
+import edu.chalmers.zombie.model.actors.Player;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 
 /** A custom contact listener. It registers the different contacts and forward the commands to the other controllers.
  * Created by Erik on 2015-04-18.
+ * Modified by Neda.
  */
 public class ContactController {
 
@@ -60,6 +63,8 @@ public class ContactController {
                             //TODO plums
                             EntityController.remove(b);
                             break;
+                        default:
+                            break;
                     }
 
                 break;
@@ -70,6 +75,8 @@ public class ContactController {
                         Player player = gameModel.getPlayer();
                         PlayerController.increaseWaterTilesTouching(player);
                         break;
+                    default:
+                        break;
                 }
                 break;
 
@@ -79,8 +86,11 @@ public class ContactController {
                         Player player = gameModel.getPlayer();
                         PlayerController.increaseSneakTilesTouching(player);
                         break;
+                    default:
+                        break;
                 }
                 break;
+
 
             case (Constants.COLLISION_ZOMBIE):
                 Zombie zombie = (Zombie) fixtureB.getBodyUserData();
@@ -93,7 +103,8 @@ public class ContactController {
                         Book book = (Book) fixtureA.getBodyUserData();
                         ProjectileController.applyHit(zombie, book);
                         break;
-
+                    default:
+                        break;
                 }
                 break;
 
@@ -114,6 +125,8 @@ public class ContactController {
                         Potion potion =  (Potion) fixtureA.getBodyUserData();
                         PlayerController.pickUpPotion(player,potion);
                         break;
+                    default:
+                        break;
                 }
                 break;
             case (Constants.COLLISION_POTION):
@@ -122,7 +135,11 @@ public class ContactController {
                     case Constants.COLLISION_PLAYER:
                         PlayerController.pickUpPotion(gameModel.getPlayer(), potion);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -141,14 +158,20 @@ public class ContactController {
                         Player player = gameModel.getPlayer();
                         PlayerController.decreaseWaterTilesTouching(player);
                         break;
+                    default:
+                        break;
                 }
+                break;
             case (Constants.COLLISION_SNEAK):
                 switch (fixtureA.getCategoryBits()) {        //Not made as an if-statement if more collision alternatives are to be added
                     case Constants.COLLISION_PLAYER:
                         Player player = gameModel.getPlayer();
                         PlayerController.decreaseSneakTilesTouching(player);
                         break;
+                    default:
+                        break;
                 }
+                break;
 
             case (Constants.COLLISION_PLAYER):
                 Player player = gameModel.getPlayer();
@@ -164,7 +187,12 @@ public class ContactController {
                         Player p = gameModel.getPlayer();
                         ProjectileController.pickUp(p, b);
                         break;
+                    default:
+                        break;
                 }
+                 break;
+            default:
+                break;
         }
      }
 
@@ -174,7 +202,6 @@ public class ContactController {
      * @param fixtureB  The second fixture
      */
     public static void preSolve(ZWFixture fixtureA, ZWFixture fixtureB){
-        GameModel gameModel = GameModel.getInstance();
         switch(fixtureB.getCategoryBits()) {
             case (Constants.COLLISION_PLAYER):
                 switch (fixtureA.getCategoryBits()){        //Not made as an if-statement if more collision alternatives are to be added
@@ -188,6 +215,8 @@ public class ContactController {
                         int levelToLoad = Integer.parseInt(level.getProperty());
                         MapController.loadLevel(levelToLoad);
                         break;
+                    default:
+                        break;
 
                 }
                 break;
@@ -198,6 +227,8 @@ public class ContactController {
                             int roomToLoad = Integer.parseInt(door.getProperty());
                             MapController.loadRoom(roomToLoad);
                             break;
+                    default:
+                        break;
                 }
                 break;
             case Constants.COLLISION_LEVEL:
@@ -207,16 +238,12 @@ public class ContactController {
                         int levelToLoad = Integer.parseInt(level.getProperty());
                         MapController.loadLevel(levelToLoad);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
         }
     }
-
-
-
-
-
-
-
-
 }

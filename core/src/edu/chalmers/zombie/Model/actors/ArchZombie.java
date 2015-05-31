@@ -1,29 +1,25 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
 
-import java.awt.*;
-
 /**
+ * An arch zombie has a high speed and a high resilience. It causes a damage of 200 percent.
+ * It has a detection radius of 100, which is high.
+ *
  * Created by neda on 2015-05-19.
+ * Modified by Erik
  */
 public class ArchZombie extends Zombie {
 
-    private Sprite sprite;
-    //private int hp;
-    private ZWWorld world;
-    private Point position;
-
     public ArchZombie(ZWWorld world, int x, int y) {
 
-        super(null,null,null, world, x, y,32);
+        super(GameModel.getInstance().res.getTexture("zombie"),
+                GameModel.getInstance().res.getTexture("zombie-still"),
+                GameModel.getInstance().res.getTexture("zombie-dead"), world, x, y,32);
         setType(ZombieType.ARCH);
-        this.world = world;
-        this.sprite = sprite;
-        position = new Point(x, y);
         setDetectionRadius(100);
         setStartingHp(500);
         setSpeed(800);

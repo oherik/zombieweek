@@ -2,6 +2,7 @@ package edu.chalmers.zombie.model;
 
 import edu.chalmers.zombie.adapter.*;
 import edu.chalmers.zombie.controller.controller_adapters.ZWContactListener;
+import edu.chalmers.zombie.model.actors.Zombie;
 import edu.chalmers.zombie.utils.Constants;
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
  * of the level and its meta data, and a box2d World which handles the physics. It also stores the zombies for the current
  * level. It furthermore stores a 2d short array which hold the collision data for fast collision lookups in path finding
  * and other algorithms.
+ * Created by Erik
  */
 public class Room {
     private ZWWorld world;
@@ -65,8 +67,8 @@ public class Room {
 
     public void destroyBody(ZWBody body){
             this.world.destroyBody(body);
-            body.setBody(null);
-            body = null;
+           // body.setBody(null);
+            //body = null;
     }
 
     public void addBook(Book b){
@@ -103,10 +105,14 @@ public class Room {
     }
 
     /**
-     * @return  The collision grid for the zombies as a 2d short array.
+     * @return  A copy of the collision grid as a 2d short array.
      */
     public short[][] getCollisionTileGrid(){
-        return collisionTileGrid;
+        short[][] dest = new short[collisionTileGrid.length][collisionTileGrid[0].length];      //TODO on�digt?
+        for(int i=0; i<collisionTileGrid.length; i++)
+            for(int j=0; j<collisionTileGrid[i].length; j++)
+                dest[i][j]=collisionTileGrid[i][j];
+        return dest;
     }
 
 

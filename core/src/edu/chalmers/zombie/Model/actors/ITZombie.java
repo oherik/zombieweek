@@ -1,20 +1,17 @@
-package edu.chalmers.zombie.model;
+package edu.chalmers.zombie.model.actors;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import edu.chalmers.zombie.adapter.ZWVector;
 import edu.chalmers.zombie.adapter.ZWWorld;
+import edu.chalmers.zombie.model.GameModel;
 import edu.chalmers.zombie.utils.ZombieType;
 
-import java.awt.*;
-
 /**
+ * An IT zombie has a low speed and an intermediate resilience. It does a damage of 65 percent,
+ * which is fairly high. It has a detection radius of 5, which is intermediate, borderline low.
  * Created by neda on 2015-05-20.
+ * Modified by Erik
  */
 public class ITZombie extends Zombie {
-
-    private Sprite sprite;
-    private ZWWorld world;
-    private Point position;
 
     public ITZombie(ZWWorld world, int x, int y) {
 
@@ -22,9 +19,6 @@ public class ITZombie extends Zombie {
                 GameModel.getInstance().res.getTexture("zombie-it-still"),
                 GameModel.getInstance().res.getTexture("zombie-it-dead"), world, x, y,32);
         setType(ZombieType.IT);
-        this.world = world;
-        this.sprite = sprite;
-        position = new Point(x, y);
         setDetectionRadius(5);
         setStartingHp(100);
         setSpeed(30);
