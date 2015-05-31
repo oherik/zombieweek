@@ -109,12 +109,6 @@ public class Flashlight {
         }
     }
 
-    private void lengthenRays(){
-        for(ZWVector v : rays) {
-            v.set(lengthenRay(playerPosition, v, 0.4f));
-        }
-    }
-
     private ZWVector lengthenRay(ZWVector origin, ZWVector end,float dist){
         float dy = origin.getY()-end.getY();
         float dx = origin.getX()-end.getX();
