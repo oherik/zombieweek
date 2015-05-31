@@ -24,12 +24,10 @@ public class MenuBuilder {
     public static ZWSkin createMenuSkin(){
 
         ZWSkin skin = new ZWSkin();
-
         ZWBitmapFont font = new ZWBitmapFont(); //sets font to 15pt Arial, if we want custom font -> via constructor
+
         skin.add("default", font);
-
         ZWPixmap pixmap = new ZWPixmap((int)(ZWGameEngine.getWindowWidth()/4),(int)(ZWGameEngine.getWindowWidth()/10));
-
 
         //Adding background to button
         skin.add("background",new ZWTexture(pixmap));
@@ -303,9 +301,9 @@ public class MenuBuilder {
         backIconButton.setSize(30,30);
         backIconButton.setPosition(10, ZWGameEngine.getWindowHeight()-40);
 
-        backIconButton.addListener(new ZWClickAction(){
+        backIconButton.addListener(new ZWClickAction() {
             @Override
-            public void clicked(){
+            public void clicked() {
                 ScreenModel screenModel = GameModel.getInstance().getScreenModel();
                 screenModel.setMenuState(ScreenModel.MenuState.MAIN_MENU);
                 ZWGameEngine.setInputProcessor(screenModel.getMainStage());
@@ -323,9 +321,16 @@ public class MenuBuilder {
 
         ZWStage characterStage = new ZWStage();
 
+        ZWTable table = new ZWTable();
+
+        ZWLabel label = new ZWLabel("Choose a character");
+        label.setColor(1f,1f,1f,1f);
+        label.scale(2f);
+        table.add(label,ZWGameEngine.getWindowHeight()-60);
+        table.setFillParent(true);
+
         ZWImageButton characterButtonLeft = new ZWImageButton();
         ZWImageButton characterButtonRight = new ZWImageButton();
-
 
         characterButtonLeft.setImageUp(new ZWTexture("core/assets/Images/emilia-300400.png")); //TODO: should use resource manager
         characterButtonRight.setImageUp(new ZWTexture("core/assets/Images/emil-300400.png"));//TODO: should use resource manager
@@ -368,6 +373,8 @@ public class MenuBuilder {
         ZWImageButton backButton = createBackButton();
         characterStage.addActor(backButton);
 
+
+        characterStage.addActor(table);
 
         return characterStage;
     }
