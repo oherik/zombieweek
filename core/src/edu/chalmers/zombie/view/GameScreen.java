@@ -205,7 +205,7 @@ public class GameScreen extends ZWScreen{
             int[] foregroundLayers = {3};
             renderer.renderMapLayer(foregroundLayers);
 
-            renderer.renderBox2DDebug(gameModel.getRoom().getWorld());  //TODO debug
+        //    renderer.renderBox2DDebug(gameModel.getRoom().getWorld());  //TODO debug
 
             /* ------ Render HUD ------ */
         String playerPos = "X: " + player.getX() + ", Y: " + player.getY();
