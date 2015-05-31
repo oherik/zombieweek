@@ -32,6 +32,17 @@ public class ZWSkin {
         skin.add("default", textButtonStyle);
     }
 
+    public void createDisabledButtons(){
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("background", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
+        textButtonStyle.over = skin.newDrawable("background", Color.DARK_GRAY);
+        skin.add("default", new BitmapFont());
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
+    }
+
     public Skin getSkin(){return this.skin;}
 
 
