@@ -15,13 +15,9 @@ public class ZWTextButton {
     public TextButton getButton(){return this.textButton;}
 
     public void addListener(final ZWClickAction zwClickAction){
-        this.textButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                zwClickAction.clicked();
-            }
-        });
+        this.textButton.addListener(new ZWClickListener(zwClickAction));
     }
+
 
     public void toggle(){this.textButton.toggle();}
 }

@@ -50,17 +50,4 @@ public class ZWImageButton {
         this.imageButton.addListener(new ZWClickListener(zwClickAction));
     }
 
-    static class ZWClickListener extends ClickListener {
-        private ZWClickAction action;
-        public ZWClickListener(ZWClickAction action) {
-            this.action = action;
-        }
-        @Override
-        public void clicked (InputEvent event,float x, float y){
-            action.clicked();
-        }
-}
-
-
-
 }
