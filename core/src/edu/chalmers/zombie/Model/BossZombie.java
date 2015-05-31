@@ -14,10 +14,6 @@ import java.awt.*;
  */
 public class BossZombie extends Zombie {
 
-    private Sprite sprite;
-    private ZWWorld world;
-    private Point position;
-
     public BossZombie(ZWWorld world, int x, int y) {
 
         super(GameModel.getInstance().res.getTexture("zombie-boss"),
@@ -25,9 +21,6 @@ public class BossZombie extends Zombie {
                 GameModel.getInstance().res.getTexture("zombie-boss-dead"), world, x, y,64);
 
         setType(ZombieType.BOSS);
-        this.world = world;
-        this.sprite = sprite;
-        position = new Point(x, y);
         setDetectionRadius(10);
         setStartingHp(200);
         setSpeed(100);

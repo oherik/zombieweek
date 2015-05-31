@@ -12,19 +12,12 @@ import java.awt.*;
  */
 public class ElectroZombie extends Zombie {
 
-    private Sprite sprite;
-    private ZWWorld world;
-    private Point position;
-
     public ElectroZombie(ZWWorld world, int x, int y) {
 
         super(GameModel.getInstance().res.getTexture("zombie"),
                 GameModel.getInstance().res.getTexture("zombie-still"),
                 GameModel.getInstance().res.getTexture("zombie-dead"), world, x, y,32);
         setType(ZombieType.ELECTRO);
-        this.world = world;
-        this.sprite = sprite;
-        position = new Point(x, y);
         setDetectionRadius(10);
         setStartingHp(50);
         setSpeed(50);
