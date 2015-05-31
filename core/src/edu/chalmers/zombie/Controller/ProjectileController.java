@@ -89,7 +89,7 @@ public class ProjectileController {
     public static void throwBook(){
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
-        AimingSystem aimingSystem = player.getAimingController().getAimingSystem();
+        AimingSystem aimingSystem = AimingController.getAimingSystem();
         Book book = new Book(aimingSystem.getDirection(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
         setInMotion(book);
         gameModel.addBook(book);
@@ -97,7 +97,7 @@ public class ProjectileController {
     public static void throwGrenade(){
         GameModel gameModel = GameModel.getInstance();
         Player player = gameModel.getPlayer();
-        AimingSystem aimingSystem = player.getAimingController().getAimingSystem();
+        AimingSystem aimingSystem = AimingController.getAimingSystem();
         Grenade grenade = new Grenade(aimingSystem.getMouseX(), aimingSystem.getMouseY(), player.getX() - 0.5f, player.getY() - 0.5f, player.getWorld());
         gameModel.addGrenade(grenade);
     }

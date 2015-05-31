@@ -17,9 +17,50 @@ public class AimingSystem {
     private boolean throwingGrenade = false;
     private int mouseX;
     private int mouseY;
+    private Thread aimRight;
+    private Thread aimLeft ;
     public AimingSystem(Player player){
         this.player = player;
         aimer.setSize(1f, 1f);
+        aimRight= new Thread() {
+            public void run() {
+                while (true) {
+                    setDirection((float) (getDirection() - 0.1));
+                    try {
+                        this.sleep(50);
+                    } catch (InterruptedException e) {
+
+                    }
+
+                }
+            }
+        };
+        aimLeft = new Thread() {
+            public void run() {
+                while (true) {
+                    setDirection((float) (getDirection() + 0.1));
+                    try {
+                        this.sleep(50);
+                    } catch (InterruptedException e) {
+
+                    }
+
+                }
+            }
+        };
+        aimLeft.start();
+        aimLeft.suspend();
+        aimRight.start();
+        aimRight.suspend();
+    }
+    public void setPlayer(Player player){
+        this.player=player;
+    }
+    public Thread getAimRight(){
+        return aimRight;
+    }
+    public Thread getAimLeft(){
+        return aimLeft;
     }
     public float getDirection(){
         return direction;
