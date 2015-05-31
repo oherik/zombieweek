@@ -36,7 +36,7 @@ W - move forward
 A - move left
 S - move backwards
 D - move right
-F - toggle flashlight (in "fear of the dark mode"
+F - toggle flashlight (in "fear of the dark mode")
 G - toggle grenade
 C - toggle mouse aiming
 LMB - throw projectile when the mouse aiming is on
