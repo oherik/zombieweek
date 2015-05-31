@@ -62,6 +62,15 @@ public class Animator {
     }
 
     /**
+     * Sets a still image for animation at an index
+     * @param stillFrame The still frame
+     * @param index The index
+     */
+    public void setStillFrame(ZWTextureRegion stillFrame, int index){
+        stillFrames.set(index,stillFrame);
+    }
+
+    /**
      * Adds still frame
      * @param stillFrame The frame
      */
