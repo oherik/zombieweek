@@ -14,20 +14,15 @@ import edu.chalmers.zombie.utils.PathAlgorithm;
  * Modified by Erik and Daniel
  */
 public class GameScreen extends ZWScreen{
-<<<<<<< HEAD
+
 
     //HUD variables
-    private ZWBitmapFont bitmapFont;
-    private ZWSpriteBatch batchHUD;
-
-=======
     private ZWWorld currentWorld;
     private float tileSize;
     //HUD variables
     private ZWBitmapFont bitmapFont;
     private ZWSpriteBatch batchHUD;
     private int steps;
->>>>>>> Erik_dev
     private ZWSpriteBatch sb = new ZWSpriteBatch();
     private ZWPolygonSpriteBatch psb = new ZWPolygonSpriteBatch();
     private ZWSprite darkness = GameModel.getInstance().getDarknessOverlay();
