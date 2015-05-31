@@ -20,7 +20,6 @@ public class GameModel {
     private Player player;
     private int currentLevel, currentRoom, highestCompletedLevel, highestCompletedRoom;
     private ArrayList<Level> levels;
-    private ArrayList<Book> books = new ArrayList<Book>();
     private ArrayList<Grenade> grenades = new ArrayList<Grenade>();
     private ArrayList<CollisionObject> collisionObjects;
     private boolean worldNeedsUpdate, stepping, flashlightEnabled = false, soundOn;

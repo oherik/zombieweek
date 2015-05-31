@@ -19,8 +19,6 @@ public class Player extends Entity implements CreatureInterface {
     private int grenadeAmmo = 5;
     private boolean isAttacked;
     private boolean isHidden;
-    private int width;
-    private int height;
     private ZWVector force;
     //Sets the player's starting direction to north so that a thrown book will have a direction.
     private Direction direction = Direction.NORTH;
@@ -41,7 +39,7 @@ public class Player extends Entity implements CreatureInterface {
 
 
     public Player(ZWTexture texture, ZWWorld world, float x, float y) {
-        super(texture, world, x, y,32);
+        super(texture, world, x, y, Constants.PLAYER_SIZE);
 
         //Set still image frame
         //GameModel.getInstance().res.loadTexture("emilia-still","core/assets/Images/emilia-still.png"); //TODO: shouldnt be done here
@@ -59,9 +57,6 @@ public class Player extends Entity implements CreatureInterface {
 
         legPower =  150; //Styr maxhastigheten
         dampening = 30f; //Styr maxhastigheten samt hur snabb accelerationen är
-
-        width = Constants.PLAYER_SIZE;
-        height = Constants.PLAYER_SIZE;
 
         createDefaultBody(world,x,y);
 
