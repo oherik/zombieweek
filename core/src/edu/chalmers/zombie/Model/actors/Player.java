@@ -37,16 +37,13 @@ public class Player extends Entity implements CreatureInterface {
     public Player(PlayerType type, ZWBody body, ZWWorld world, float x, float y) {
         super(GameModel.getInstance().res.getTexture(type.getImageAnimatedKey()), world, x, y, Constants.PLAYER_SIZE);
 
+
+
         //Set still image frame
-        ZWTexture stillTexture = GameModel.getInstance().res.getTexture(type.getImageStandingStillKey());
-        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
-        getAnimator().addStillFrame(stillFrame[0]);
+        addStillImage(type);
 
         //Set overlay image (Hand)
-        ZWTexture overlayTexture = GameModel.getInstance().res.getTexture(type.getImageOverlayKey());
-        System.out.println(overlayTexture.getTexture());
-        ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
-        getAnimator().setOverlayFrame(overlayFrame);
+        setOverlayImage(type);
 
         setWaterTilesTouching(0);
         setSneakTilesTouching(0);
@@ -61,6 +58,25 @@ public class Player extends Entity implements CreatureInterface {
 
         setBody(body);
         super.scaleSprite(1f / Constants.TILE_SIZE);
+    }
+
+    public void addStillImage(PlayerType type){
+        ZWTexture stillTexture = GameModel.getInstance().res.getTexture(type.getImageStandingStillKey());
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
+        getAnimator().addStillFrame(stillFrame[0]);
+    }
+
+    public void setStandingStillImage(PlayerType type){
+        ZWTexture stillTexture = GameModel.getInstance().res.getTexture(type.getImageStandingStillKey());
+        ZWTextureRegion[] stillFrame = ZWTextureRegion.split(stillTexture,Constants.PLAYER_SIZE,Constants.PLAYER_SIZE);
+        getAnimator().setStillFrame(stillFrame[0],0);
+    }
+
+    public void setOverlayImage(PlayerType type){
+        ZWTexture overlayTexture = GameModel.getInstance().res.getTexture(type.getImageOverlayKey());
+        System.out.println(overlayTexture.getTexture());
+        ZWTextureRegion overlayFrame = new ZWTextureRegion(overlayTexture);
+        getAnimator().setOverlayFrame(overlayFrame);
     }
 
     /**
@@ -295,5 +311,7 @@ public class Player extends Entity implements CreatureInterface {
     public float getRadDirection(){
         return GameModel.getInstance().getAimingSystem().getDirection();
     }
+
+
 
 }
